@@ -1,4 +1,4 @@
-SxTranslate
+BikiniTranslate
 ===========
 
-Translation tool which generates translation files in formats .xlib, .mo/.po, json
+Translation tool which generates translation files in formats .xliff, .mo/.po, json
