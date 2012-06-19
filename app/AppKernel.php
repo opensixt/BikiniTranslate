@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
 			new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
 			new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
+            new opensixt\BikiniTranslateBundle\opensixtBikiniTranslateBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
