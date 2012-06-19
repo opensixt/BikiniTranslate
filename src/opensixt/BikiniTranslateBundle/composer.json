@@ -24,11 +24,17 @@
         "php":                            ">=5.3.2",
         "symfony/symfony":                ">=2.0,<2.2-dev",
         "sensio/framework-extra-bundle":  ">=2.0,<2.2-dev",
-        "jms/serializer-bundle":          "0.9.*"
+        "jms/serializer-bundle":          "0.9.*",
+        "doctrine/fixtures":              "*",
+        "doctrine/migrations":            "*"
     },
 
     "autoload": {
-        "psr-0": { "opensixt\\BikiniTranslateBundle": "" }
+        "psr-0": { 
+            "opensixt\\BikiniTranslateBundle": "",
+            "Doctrine\\Common\\DataFixtures": "lib/",
+            "Doctrine\\DBAL\\Migrations": "lib"
+        }
     },
 
     "target-dir": "opensixt/BikiniTranslateBundle",
