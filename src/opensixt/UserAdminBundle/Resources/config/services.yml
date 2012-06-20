@@ -1,0 +1,7 @@
+parameters:
+#    opensixt_user_admin.example.class: opensixt\UserAdminBundle\Example
+
+services:
+#    opensixt_user_admin.example:
+#        class: %opensixt_user_admin.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
