@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Ftxt" table="ftxt">
+    <change-tracking-policy>DEFERRED_IMPLICIT</change-tracking-policy>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="hash" type="string" column="hash" length="32"/>
+    <field name="lng" type="string" column="lng" length="5"/>
+    <field name="msg" type="text" column="msg"/>
+    <field name="ident" type="string" column="ident" length="255"/>
+    <field name="creator" type="string" column="creator" length="255"/>
+    <field name="created" type="date" column="created"/>
+    <lifecycle-callbacks/>
+  </entity>
+</doctrine-mapping>
