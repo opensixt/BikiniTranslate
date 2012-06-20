@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
             new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
+            new opensixt\ContentBundle\opensixtContentBundle(),
             new opensixt\BikiniTranslateBundle\opensixtBikiniTranslateBundle(),
         );
 

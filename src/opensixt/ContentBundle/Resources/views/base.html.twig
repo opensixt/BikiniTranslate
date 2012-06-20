@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{% block title %}Welcome{% endblock %} - opensixt</title>
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        {% block stylesheets %}
+            <link href='http://fonts.googleapis.com/css?family=Cabin+Condensed' rel='stylesheet' type='text/css'>
+            <link href="{{ asset('bundles/opensixtcontent/css/content.css') }}" type="text/css" rel="stylesheet" />
+        {% endblock %}
+        <link rel="shortcut icon" href="{{ asset('bundles/opensixtcontent/images/favicon.ico') }}" />
+    </head>
+    <body>
+
+        <section id="wrapper">
+            <header id="header">
+                <div class="top">
+                    {% block navigation %}
+                        <nav>
+                            <ul class="navigation">
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">About</a></li>
+                                <li><a href="#">Contact</a></li>
+                            </ul>
+                        </nav>
+                    {% endblock %}
+                </div>
+
+                <hgroup>
+                    <h2>{% block blog_title %}<a href="#">opensixt</a>{% endblock %}</h2>
+                    <h3>{% block blog_tagline %}<a href="#">...</a>{% endblock %}</h3>
+                </hgroup>
+            </header>
+
+            <section class="main">
+                {% block body %}{% endblock %}
+            </section>
+            <aside class="sidebar">
+                {% block sidebar %}{% endblock %}
+            </aside>
+
+            <div id="footer">
+                {% block footer %}
+                    <a href="https://github.com/opensixt">opensixt on github</a>
+                {% endblock %}
+            </div>
+        </section>
+
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

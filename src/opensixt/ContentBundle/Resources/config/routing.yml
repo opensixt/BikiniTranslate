@@ -1,0 +1,3 @@
+opensixtContentBundle_homepage:
+    pattern:  /{page}.html
+    defaults: { _controller: opensixtContentBundle:Page:index }
