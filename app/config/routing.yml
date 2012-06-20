@@ -1,5 +1,9 @@
 opensixtContentBundle:
     resource: "@opensixtContentBundle/Resources/config/routing.yml"
+	prefix:   /
+
+opensixtUserAdminBundle:
+    resource: "@opensixtUserAdminBundle/Resources/config/routing.yml"
     prefix:   /
 
 opensixtBikiniTranslateBundle:

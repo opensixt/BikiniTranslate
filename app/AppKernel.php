@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
             new opensixt\ContentBundle\opensixtContentBundle(),
             new opensixt\BikiniTranslateBundle\opensixtBikiniTranslateBundle(),
+            new opensixt\UserAdminBundle\opensixtUserAdminBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

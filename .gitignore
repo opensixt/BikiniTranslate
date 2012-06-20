@@ -6,3 +6,5 @@
 /app/config/parameters.ini
 /nbproject/
 /nbproject/private/
+*.php~
+*.swp
