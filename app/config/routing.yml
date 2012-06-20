@@ -1,6 +1,6 @@
 opensixtContentBundle:
     resource: "@opensixtContentBundle/Resources/config/routing.yml"
-	prefix:   /
+    prefix:   /
 
 opensixtUserAdminBundle:
     resource: "@opensixtUserAdminBundle/Resources/config/routing.yml"
