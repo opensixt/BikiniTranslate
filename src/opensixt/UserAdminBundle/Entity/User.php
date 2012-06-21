@@ -2,6 +2,8 @@
 
 namespace opensixt\UserAdminBundle\Entity;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class User
+class User implements AdvancedUserInterface
 {
     /**
      * @var integer $id
@@ -56,7 +58,32 @@ class User
      */
     private $created;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\JoinTable(name="user_group",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     * )
+     *
+     * @var ArrayCollection $userRoles
+     */
+    protected $userRoles;
 
+    /**
+     * @var string $salt
+     */
+    protected $salt;
+
+    /**
+     * Constructor
+     *
+     * @return void 
+     */
+    public function __construct()
+    { 
+        $this->setSalt('');
+        $this->userRoles = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -166,5 +193,76 @@ class User
     public function getCreated()
     {
         return $this->created;
+    }
+
+    /**
+     * Get userRoles
+     *
+     * @return ArrayCollection A Doctrine ArrayCollection
+     */
+    public function getUserRoles()
+    {
+        return $this->userRoles;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        return $this->getUserRoles()->toArray();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function equals(UserInterface $user)
+    {
+        return md5($this->username) === md5($user->getUsername());
+    }
+
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->isactive;
     }
 }

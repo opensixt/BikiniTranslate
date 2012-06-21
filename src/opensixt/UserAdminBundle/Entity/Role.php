@@ -2,6 +2,7 @@
 
 namespace opensixt\UserAdminBundle\Entity;
 
+use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="role")
  * @ORM\Entity
  */
-class Role
+class Role implements RoleInterface
 {
     /**
      * @var integer $id
@@ -65,6 +66,16 @@ class Role
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Get role 
+     *
+     * @return string 
+     */
+    public function getRole()
+    {
+        return $this->label;
     }
 
     /**
