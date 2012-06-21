@@ -11,6 +11,6 @@ class AdminController extends Controller
     public function indexAction()
     {
         $name = "World";
-        return $this->render('opensixtUserAdminBundle:Default:index.html.twig', array('name' => $name));
+        return $this->render('opensixtUserAdminBundle:UserAdmin:index.html.twig', array('name' => $name));
     }
 }

@@ -21,7 +21,8 @@ security:
                 check_path: /login_check
                 login_path: /login
                 default_target_path: /admin
-            logout: true
+            logout: 
+                target: /admin
             security: true
             anonymous: true
      #   dev:
@@ -47,5 +48,5 @@ security:
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
-        - { path: /admin/.*, roles: ROLE_ADMIN }
+        - { path: /admin/.*, roles: ROLE_USER }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
