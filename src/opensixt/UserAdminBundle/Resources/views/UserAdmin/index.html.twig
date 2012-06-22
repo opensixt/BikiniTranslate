@@ -1,11 +1,11 @@
 {% extends "opensixtUserAdminBundle:UserAdmin:layout.html.twig" %}
- 
+
 {% block title %}
     BikiniTranslate UserAdmin
 {% endblock %}
- 
+
 {% block content %}
-    
+
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <li>
             <a href="{{ path('_user_admin_logout') }}">
@@ -19,15 +19,21 @@
             </a>
         </li>
     {% endif %}
-    <br /><br />   
-        
+    <br /><br />
+
     {% if app.user.username %}
         <div class="message">Hello {{ app.user.username }}!!!</div>
     {% endif %}
-        
-        
-    
-    
+    <br /><br />
+
+    <li>
+        <a href="{{ path('_admin_userlist') }}">
+            Userlist
+        </a>
+    </li>
+
+
+
 
 {% endblock %}
 

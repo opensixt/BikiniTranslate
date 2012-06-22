@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * opensixt\UserAdminBundle\Entity\User
  *
  * @ORM\Table(name="user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\UserRepository")
  */
 class User implements AdvancedUserInterface
 {

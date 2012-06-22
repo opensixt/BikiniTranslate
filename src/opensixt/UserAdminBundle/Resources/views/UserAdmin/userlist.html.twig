@@ -1,0 +1,56 @@
+{% extends "opensixtUserAdminBundle:UserAdmin:layout.html.twig" %}
+
+{% block title %}
+    BikiniTranslate UserAdmin
+{% endblock %}
+
+{% block content %}
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <li>
+            <a href="{{ path('_user_admin_logout') }}">
+                logout
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a href="{{ path('_user_admin_login') }}">
+                login
+            </a>
+        </li>
+    {% endif %}
+    <br />
+
+    <li>
+        <a href="{{ path('_user_admin_home') }}">
+            admin home
+        </a>
+    </li>
+
+    <br /><br />
+
+    <div class="message">Userlist</div>
+
+    <br />
+
+    <table>
+        <tr>
+            <td style="width:150px">name</td>
+            <td style="width:250px">email</td>
+            <td>active</td>
+        </tr>
+        {% for item in userlist %}
+        <tr>
+            <td>{{item.username}}</td>
+            <td>{{item.email}}</td>
+            <td><input type="checkbox" value="1" {% if item.isactive %}checked="checked"{% endif %} /></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3">No users found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock %}
