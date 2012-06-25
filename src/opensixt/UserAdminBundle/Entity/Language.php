@@ -22,11 +22,11 @@ class Language
     private $id;
 
     /**
-     * @var string $name
+     * @var string $locale
      *
-     * @ORM\Column(name="name", type="string", length=45, nullable=false)
+     * @ORM\Column(name="locale", type="string", length=45, nullable=false)
      */
-    private $name;
+    private $locale;
 
     /**
      * @var string $description
@@ -40,7 +40,7 @@ class Language
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -48,23 +48,23 @@ class Language
     }
 
     /**
-     * Set name
+     * Set locale
      *
-     * @param string $name
+     * @param string $locale
      */
-    public function setName($name)
+    public function setLocale($locale)
     {
-        $this->name = $name;
+        $this->locale = $locale;
     }
 
     /**
-     * Get name
+     * Get locale
      *
-     * @return string 
+     * @return string
      */
-    public function getName()
+    public function getLocale()
     {
-        return $this->name;
+        return $this->locale;
     }
 
     /**
@@ -80,7 +80,7 @@ class Language
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {

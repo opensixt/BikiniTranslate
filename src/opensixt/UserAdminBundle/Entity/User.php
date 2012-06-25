@@ -60,7 +60,7 @@ class User implements AdvancedUserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="Role")
-     * @ORM\JoinTable(name="user_group",
+     * @ORM\JoinTable(name="user_role",
      *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      * )
@@ -70,6 +70,17 @@ class User implements AdvancedUserInterface
     protected $userRoles;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Language")
+     * @ORM\JoinTable(name="user_language",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="language_id", referencedColumnName="id")}
+     * )
+     *
+     * @var ArrayCollection $userLanguages
+     */
+    protected $userLanguages;
+
+    /**
      * @var string $salt
      */
     protected $salt;
@@ -77,10 +88,10 @@ class User implements AdvancedUserInterface
     /**
      * Constructor
      *
-     * @return void 
+     * @return void
      */
     public function __construct()
-    { 
+    {
         $this->setSalt('');
         $this->userRoles = new ArrayCollection();
     }
@@ -88,7 +99,7 @@ class User implements AdvancedUserInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -108,7 +119,7 @@ class User implements AdvancedUserInterface
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername()
     {
@@ -128,7 +139,7 @@ class User implements AdvancedUserInterface
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -148,7 +159,7 @@ class User implements AdvancedUserInterface
     /**
      * Get email
      *
-     * @return text 
+     * @return text
      */
     public function getEmail()
     {
@@ -168,7 +179,7 @@ class User implements AdvancedUserInterface
     /**
      * Get isactive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsactive()
     {
@@ -188,7 +199,7 @@ class User implements AdvancedUserInterface
     /**
      * Get created
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreated()
     {
@@ -206,6 +217,16 @@ class User implements AdvancedUserInterface
     }
 
     /**
+     * Get userLanguages
+     *
+     * @return ArrayCollection A Doctrine ArrayCollection
+     */
+    public function getUserLanguages()
+    {
+        return $this->userLanguages;
+    }
+
+    /**
      * Set salt
      *
      * @param string $salt
@@ -214,7 +235,7 @@ class User implements AdvancedUserInterface
     {
         $this->salt = $salt;
     }
-    
+
     /**
      * @inheritDoc
      */

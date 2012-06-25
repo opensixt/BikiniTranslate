@@ -6,7 +6,6 @@
       <generator strategy="IDENTITY"/>
     </id>
     <field name="userId" type="integer" column="user_id"/>
-    <field name="roleId" type="integer" column="role_id"/>
     <field name="groupId" type="integer" column="group_id"/>
     <lifecycle-callbacks/>
   </entity>

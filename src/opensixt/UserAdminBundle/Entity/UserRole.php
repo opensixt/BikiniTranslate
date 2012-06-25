@@ -5,12 +5,12 @@ namespace opensixt\UserAdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * opensixt\UserAdminBundle\Entity\UserGroup
+ * opensixt\UserAdminBundle\Entity\UserRole
  *
- * @ORM\Table(name="user_group")
+ * @ORM\Table(name="user_role")
  * @ORM\Entity
  */
-class UserGroup
+class UserRole
 {
     /**
      * @var bigint $id
@@ -29,11 +29,11 @@ class UserGroup
     private $userId;
 
     /**
-     * @var integer $groupId
+     * @var integer $roleId
      *
-     * @ORM\Column(name="group_id", type="integer", nullable=false)
+     * @ORM\Column(name="role_id", type="integer", nullable=false)
      */
-    private $groupId;
+    private $roleId;
 
 
 
@@ -68,22 +68,23 @@ class UserGroup
     }
 
     /**
-     * Set groupId
+     * Set roleId
      *
-     * @param integer $groupId
+     * @param integer $roleId
      */
-    public function setGroupId($groupId)
+    public function setRoleId($roleId)
     {
-        $this->groupId = $groupId;
+        $this->roleId = $roleId;
     }
 
     /**
-     * Get groupId
+     * Get roleId
      *
      * @return integer
      */
-    public function getGroupId()
+    public function getRoleId()
     {
-        return $this->groupId;
+        return $this->roleId;
     }
+
 }
