@@ -15,3 +15,11 @@ _user_admin_home:
 _admin_userlist:
     pattern: /admin/userlist
     defaults: { _controller: opensixtUserAdminBundle:Admin:userlist }
+
+_admin_user:
+    pattern: /admin/user/{id}
+    defaults: { _controller: opensixtUserAdminBundle:Admin:userdata, id: 0 }
+    requirements:
+        id: \d+
+
+

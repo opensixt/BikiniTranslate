@@ -6,6 +6,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 /**
  * opensixt\UserAdminBundle\Entity\User
  *
@@ -92,8 +95,8 @@ class User implements AdvancedUserInterface
      */
     public function __construct()
     {
-        $this->setSalt('');
-        $this->userRoles = new ArrayCollection();
+        //$this->setSalt('');
+        //$this->userRoles = new ArrayCollection();
     }
 
     /**
@@ -285,5 +288,10 @@ class User implements AdvancedUserInterface
     public function isEnabled()
     {
         return $this->isactive;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('username', new NotBlank());
     }
 }

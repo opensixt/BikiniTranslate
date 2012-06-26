@@ -1,0 +1,53 @@
+{% extends "opensixtUserAdminBundle:UserAdmin:layout.html.twig" %}
+
+{% block title %}
+    BikiniTranslate UserAdmin
+{% endblock %}
+
+{% block content %}
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <li>
+            <a href="{{ path('_user_admin_logout') }}">
+                logout
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a href="{{ path('_user_admin_login') }}">
+                login
+            </a>
+        </li>
+    {% endif %}
+    <br />
+
+    <li>
+        <a href="{{ path('_admin_userlist') }}">
+            user-list
+        </a>
+    </li>
+
+    <br /><br />
+
+    <div class="message">User</div>
+
+    <br />
+
+    <form action="{{ path('_admin_user', {'id':id}) }}" method="post" {{ form_enctype(form) }}>
+        {#{ form_widget(form.user) }#}
+        <div>
+            {{ form_label(form.username) }}
+            {{ form_errors(form.username) }}
+            {{ form_widget(form.username) }}
+        </div>
+        <div>
+            {{ form_label(form.email) }}
+            {{ form_errors(form.email) }}
+            {{ form_widget(form.email) }}
+        </div>
+        {{ form_rest(form) }}
+        <input type="submit" />
+    </form>
+
+{% endblock %}
+

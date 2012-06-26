@@ -29,7 +29,7 @@
 
     <br /><br />
 
-    <div class="message">Userlist</div>
+    <div class="message">Userlist (<a href="{{ path('_admin_user') }}">new</a>)</div>
 
     <br />
 
@@ -41,8 +41,8 @@
         </tr>
         {% for item in userlist %}
         <tr>
-            <td>{{item.username}}</td>
-            <td>{{item.email}}</td>
+            <td><a href="{{ path('_admin_user', {'id':item.id}) }}">{{ item.username }}</a></td>
+            <td>{{ item.email }}</td>
             <td><input type="checkbox" value="1" {% if item.isactive %}checked="checked"{% endif %} /></td>
         </tr>
         {% else %}
