@@ -17,6 +17,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class User implements AdvancedUserInterface
 {
+    const ActiveUser    = 1;
+    const NotActiveUser = 0;
+
     /**
      * @var integer $id
      *
@@ -97,6 +100,8 @@ class User implements AdvancedUserInterface
     {
         //$this->setSalt('');
         //$this->userRoles = new ArrayCollection();
+        $this->setIsactive($this::NotActiveUser);
+        $this->setCreated(new \DateTime());
     }
 
     /**

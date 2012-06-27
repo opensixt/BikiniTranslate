@@ -5,6 +5,9 @@ namespace opensixt\UserAdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use opensixt\UserAdminBundle\Entity\User;
 
+//use Symfony\Component\Validator\Constraints\CallbackValidator;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+
 /**
  * User Administration Controller
  */
@@ -70,6 +73,25 @@ class AdminController extends Controller
             ->add('email', 'email', array(
                 'label' => 'Email: '
             ))
+            //->add('password', 'password')
+            ->add('newPassword', 'password', array(
+                'label' => 'New Password',
+                'property_path' => false))
+            ->add('confirmPassword', 'password', array(
+                'label' => 'Confirm Password',
+                'property_path' => false))
+            /*->addValidator(new CallbackValidator(function($form) use ($user)
+                {
+                    //if($password != $user->getPassword()) {
+                    //    $form['password']->addError(new FormError('Incorrect password'));
+                    //}
+                    if($form['confirmPassword']->getData() != $form['newPassword']->getData()) {
+                        $form['confirmPassword']->addError(new FormError('Passwords must match.'));
+                    }
+                    if($form['newPassword']->getData() == '') {
+                        $form['newPassword']->addError(new FormError('Password cannot be blank.'));
+                    }
+                }))*/
             ->getForm();
 
         if ($request->getMethod() == 'POST') {
@@ -77,6 +99,17 @@ class AdminController extends Controller
             $form->bindRequest($request);
 
             if ($form->isValid()) {
+
+                if ($form->get('newPassword')->getData()) {
+                    if ($form['confirmPassword']->getData() == $form['newPassword']->getData()) {
+                        $encoder = new MessageDigestPasswordEncoder('md5', false, 1);
+                        $password = $encoder->encodePassword(
+                            $form->get('newPassword')->getData(),
+                            $user->getSalt());
+                        $user->setPassword($password);
+                    }
+                }
+
                 // save changes
                 $em->persist($user);
                 $em->flush();
