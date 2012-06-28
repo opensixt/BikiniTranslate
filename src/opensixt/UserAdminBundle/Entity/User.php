@@ -6,6 +6,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -99,7 +100,7 @@ class User implements AdvancedUserInterface
     public function __construct()
     {
         //$this->setSalt('');
-        //$this->userRoles = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
         $this->setIsactive($this::NotActiveUser);
         $this->setCreated(new \DateTime());
     }
@@ -216,6 +217,8 @@ class User implements AdvancedUserInterface
 
     /**
      * Get userRoles
+     * Returns Roles as ArrayCollection, in contrast to the Method getRoles
+     * that returns an array.
      *
      * @return ArrayCollection A Doctrine ArrayCollection
      */

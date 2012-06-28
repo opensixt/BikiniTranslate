@@ -5,7 +5,8 @@ namespace opensixt\UserAdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use opensixt\UserAdminBundle\Entity\User;
 
-//use Symfony\Component\Validator\Constraints\CallbackValidator;
+use Symfony\Component\Form\CallbackValidator;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 /**
@@ -73,14 +74,29 @@ class AdminController extends Controller
             ->add('email', 'email', array(
                 'label' => 'Email: '
             ))
-            //->add('password', 'password')
+            ->add('userroles', 'entity', array(
+                'label'     => 'Roles: ',
+                'class'     => 'opensixtUserAdminBundle:Role',
+                'property'  => 'label',
+                'multiple'  => true,
+                'expanded'  => true
+            ))
+            ->add('userlanguages', 'entity', array(
+                'label'     => 'Languages: ',
+                'class'     => 'opensixtUserAdminBundle:Language',
+                'property'  => 'locale',
+                'multiple'  => true,
+                'expanded'  => true
+            ))
             ->add('newPassword', 'password', array(
-                'label' => 'New Password',
-                'property_path' => false))
+                'label'         => 'New Password: ',
+                'property_path' => false,
+                'required'      => false))
             ->add('confirmPassword', 'password', array(
-                'label' => 'Confirm Password',
-                'property_path' => false))
-            /*->addValidator(new CallbackValidator(function($form) use ($user)
+                'label'         => 'Confirm Password: ',
+                'property_path' => false,
+                'required'      => false))
+            ->addValidator(new CallbackValidator(function($form) use ($user)
                 {
                     //if($password != $user->getPassword()) {
                     //    $form['password']->addError(new FormError('Incorrect password'));
@@ -88,10 +104,10 @@ class AdminController extends Controller
                     if($form['confirmPassword']->getData() != $form['newPassword']->getData()) {
                         $form['confirmPassword']->addError(new FormError('Passwords must match.'));
                     }
-                    if($form['newPassword']->getData() == '') {
+                    /*if($form['newPassword']->getData() == '') {
                         $form['newPassword']->addError(new FormError('Password cannot be blank.'));
-                    }
-                }))*/
+                    }*/
+                }))
             ->getForm();
 
         if ($request->getMethod() == 'POST') {
