@@ -5,21 +5,21 @@ namespace opensixt\UserAdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * opensixt\UserAdminBundle\Entity\Group
+ * opensixt\UserAdminBundle\Entity\Groups
  *
- * @ORM\Table(name="group")
+ * @ORM\Table(name="groups")
  * @ORM\Entity
  */
-class Group
+class Groups
 {
     /**
-     * @var integer $groupId
+     * @var integer $id
      *
-     * @ORM\Column(name="group_id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $groupId;
+    private $id;
 
     /**
      * @var string $name
@@ -38,13 +38,13 @@ class Group
 
 
     /**
-     * Get groupId
+     * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getGroupId()
+    public function getId()
     {
-        return $this->groupId;
+        return $this->id;
     }
 
     /**
@@ -60,7 +60,7 @@ class Group
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -80,7 +80,7 @@ class Group
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
