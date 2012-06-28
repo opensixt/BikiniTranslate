@@ -88,6 +88,13 @@ class AdminController extends Controller
                 'multiple'  => true,
                 'expanded'  => true
             ))
+            ->add('usergroups', 'entity', array(
+                'label'     => 'Groups: ',
+                'class'     => 'opensixtUserAdminBundle:Groups',
+                'property'  => 'name',
+                'multiple'  => true,
+                'expanded'  => true
+            ))
             ->add('newPassword', 'password', array(
                 'label'         => 'New Password: ',
                 'property_path' => false,

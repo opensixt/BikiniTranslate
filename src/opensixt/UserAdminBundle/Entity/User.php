@@ -88,6 +88,17 @@ class User implements AdvancedUserInterface
     protected $userLanguages;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Groups")
+     * @ORM\JoinTable(name="user_group",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * )
+     *
+     * @var ArrayCollection $userGroups
+     */
+    protected $userGroups;
+
+    /**
      * @var string $salt
      */
     protected $salt;
@@ -235,6 +246,16 @@ class User implements AdvancedUserInterface
     public function getUserLanguages()
     {
         return $this->userLanguages;
+    }
+
+    /**
+     * Get userGroups
+     *
+     * @return ArrayCollection A Doctrine ArrayCollection
+     */
+    public function getUserGroups()
+    {
+        return $this->userGroups;
     }
 
     /**
