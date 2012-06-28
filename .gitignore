@@ -4,7 +4,6 @@
 /app/logs/*
 /vendor/
 /app/config/parameters.yml
-app/config/parameters.yml
 /nbproject/
 /nbproject/private/
 *.php~
