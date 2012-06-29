@@ -78,6 +78,34 @@
                 <source>hello %name%</source>
                 <target>Hello %name% !!!</target>
             </trans-unit>
+            <trans-unit id="20">
+                <source>no_groups_found</source>
+                <target>No groups found.</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>new_group</source>
+                <target>new group</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>group</source>
+                <target>Group</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>description</source>
+                <target>Description</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>groupname</source>
+                <target>groupname</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>resources</source>
+                <target>resources</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>group_list</source>
+                <target>group list</target>
+            </trans-unit>
 
         </body>
     </file>

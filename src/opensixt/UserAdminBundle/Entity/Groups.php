@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * opensixt\UserAdminBundle\Entity\Groups
  *
  * @ORM\Table(name="groups")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\GroupsRepository")
  */
 class Groups
 {
@@ -35,7 +35,16 @@ class Groups
      */
     private $description;
 
-
+    /**
+     * @ORM\ManyToMany(targetEntity="Resource")
+     * @ORM\JoinTable(name="group_resource",
+     *     joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="resource_id", referencedColumnName="id")}
+     * )
+     *
+     * @var ArrayCollection $resources
+     */
+    protected $resources;
 
     /**
      * Get id
@@ -85,5 +94,15 @@ class Groups
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Get resources
+     *
+     * @return ArrayCollection
+     */
+    public function getResources()
+    {
+        return $this->resources;
     }
 }

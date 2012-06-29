@@ -22,4 +22,12 @@ _admin_user:
     requirements:
         id: \d+
 
+_admin_grouplist:
+    pattern: /admin/grouplist
+    defaults: { _controller: opensixtUserAdminBundle:Admin:grouplist }
 
+_admin_group:
+    pattern: /admin/group/{id}
+    defaults: { _controller: opensixtUserAdminBundle:Admin:groupdata, id: 0 }
+    requirements:
+        id: \d+
