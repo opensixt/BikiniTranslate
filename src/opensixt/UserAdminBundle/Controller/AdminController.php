@@ -59,6 +59,8 @@ class AdminController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getEntityManager();
 
+        $translator = $this->get('translator');
+
         if ($id) {
             // get user from db
             $user = $em->find('opensixtUserAdminBundle:User', $id);
@@ -69,38 +71,38 @@ class AdminController extends Controller
 
         $form = $this->createFormBuilder($user)
             ->add('username', 'text', array(
-                'label' => 'Username: '
+                'label' =>  $translator->trans('username') . ': ',
             ))
             ->add('email', 'email', array(
-                'label' => 'Email: '
+                'label' => $translator->trans('email') . ': ',
             ))
             ->add('userroles', 'entity', array(
-                'label'     => 'Roles: ',
+                'label'     => $translator->trans('roles') . ': ',
                 'class'     => 'opensixtUserAdminBundle:Role',
                 'property'  => 'label',
                 'multiple'  => true,
                 'expanded'  => true
             ))
             ->add('userlanguages', 'entity', array(
-                'label'     => 'Languages: ',
+                'label'     => $translator->trans('languages') . ': ',
                 'class'     => 'opensixtUserAdminBundle:Language',
                 'property'  => 'locale',
                 'multiple'  => true,
                 'expanded'  => true
             ))
             ->add('usergroups', 'entity', array(
-                'label'     => 'Groups: ',
+                'label'     => $translator->trans('groups') . ': ',
                 'class'     => 'opensixtUserAdminBundle:Groups',
                 'property'  => 'name',
                 'multiple'  => true,
                 'expanded'  => true
             ))
             ->add('newPassword', 'password', array(
-                'label'         => 'New Password: ',
+                'label'         => $translator->trans('new_password') . ': ',
                 'property_path' => false,
                 'required'      => false))
             ->add('confirmPassword', 'password', array(
-                'label'         => 'Confirm Password: ',
+                'label'         => $translator->trans('confirm_password') . ': ',
                 'property_path' => false,
                 'required'      => false))
             ->addValidator(new CallbackValidator(function($form) use ($user)
@@ -109,7 +111,7 @@ class AdminController extends Controller
                     //    $form['password']->addError(new FormError('Incorrect password'));
                     //}
                     if($form['confirmPassword']->getData() != $form['newPassword']->getData()) {
-                        $form['confirmPassword']->addError(new FormError('Passwords must match.'));
+                        $form['confirmPassword']->addError(new FormError($translator->trans('passwords_must_match')));
                     }
                     /*if($form['newPassword']->getData() == '') {
                         $form['newPassword']->addError(new FormError('Password cannot be blank.'));

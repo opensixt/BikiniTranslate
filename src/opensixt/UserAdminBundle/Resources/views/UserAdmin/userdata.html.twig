@@ -9,13 +9,7 @@
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <li>
             <a href="{{ path('_user_admin_logout') }}">
-                logout
-            </a>
-        </li>
-    {% else %}
-        <li>
-            <a href="{{ path('_user_admin_login') }}">
-                login
+                {{ 'logout'|trans }}
             </a>
         </li>
     {% endif %}
@@ -23,13 +17,13 @@
 
     <li>
         <a href="{{ path('_admin_userlist') }}">
-            user-list
+            {{ 'user_list'|trans }}
         </a>
     </li>
 
     <br /><br />
 
-    <div class="message">User</div>
+    <div class="message">{{ 'user'|trans }}</div>
 
     <br />
 
@@ -46,7 +40,7 @@
             {{ form_widget(form.email) }}
         </div>
         {{ form_rest(form) }}
-        <input type="submit" />
+            <input type="submit" value="{{ 'submit'|trans }}"/>
     </form>
 
 {% endblock %}

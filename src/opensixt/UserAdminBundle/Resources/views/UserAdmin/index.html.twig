@@ -9,26 +9,27 @@
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <li>
             <a href="{{ path('_user_admin_logout') }}">
-                logout
+                {{ 'logout'|trans }}
             </a>
         </li>
     {% else %}
         <li>
             <a href="{{ path('_user_admin_login') }}">
-                login
+                {{ 'login'|trans }}
             </a>
         </li>
     {% endif %}
     <br /><br />
 
     {% if app.user.username %}
-        <div class="message">Hello {{ app.user.username }}!!!</div>
+        {% set name = app.user.username %}
+        <div class="message">{% trans %} hello %name% {% endtrans %}</div>
     {% endif %}
     <br /><br />
 
     <li>
         <a href="{{ path('_admin_userlist') }}">
-            Userlist
+            {{ 'user_list'|trans }}
         </a>
     </li>
 

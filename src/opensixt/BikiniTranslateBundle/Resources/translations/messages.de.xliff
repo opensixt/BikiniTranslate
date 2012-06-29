@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>username</source>
+                <target>Benutzername</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>password</source>
+                <target>Passwort</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>new_password</source>
+                <target>Neues Passwort</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>confirm_password</source>
+                <target>Passwort bestätigen</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>languages</source>
+                <target>Sprachen</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>groups</source>
+                <target>Gruppen</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>roles</source>
+                <target>Rollen</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>submit</source>
+                <target>Speichern</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>logout</source>
+                <target>Auslogen</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>login</source>
+                <target>Einlogen</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>user_list</source>
+                <target>Benutzerliste</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>user</source>
+                <target>Benutzer</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>passwords_must_match</source>
+                <target>Passwörten sind nicht gleich</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>no_users_found</source>
+                <target>Keine Benutzer gefunden.</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>new_user</source>
+                <target>neuer Benutzer hinzufügen</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>active</source>
+                <target>Aktiv</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>admin_home</source>
+                <target>admin home</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>hello %name%</source>
+                <target>Hallo %name% !!!</target>
+            </trans-unit>
+
+
+        </body>
+    </file>
+</xliff>

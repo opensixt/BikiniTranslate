@@ -9,13 +9,13 @@
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <li>
             <a href="{{ path('_user_admin_logout') }}">
-                logout
+                {{ 'logout'|trans }}
             </a>
         </li>
     {% else %}
         <li>
             <a href="{{ path('_user_admin_login') }}">
-                login
+                {{ 'login'|trans }}
             </a>
         </li>
     {% endif %}
@@ -23,21 +23,21 @@
 
     <li>
         <a href="{{ path('_user_admin_home') }}">
-            admin home
+            {{ 'admin_home'|trans }}
         </a>
     </li>
 
     <br /><br />
 
-    <div class="message">Userlist (<a href="{{ path('_admin_user') }}">new</a>)</div>
+    <div class="message">{{ 'user_list'|trans }} (<a href="{{ path('_admin_user') }}">{{ 'new_user'|trans }}</a>)</div>
 
     <br />
 
     <table>
         <tr>
-            <td style="width:150px">name</td>
-            <td style="width:250px">email</td>
-            <td>active</td>
+            <td style="width:150px">{{ 'username'|trans }}</td>
+            <td style="width:250px">{{ 'email'|trans }}</td>
+            <td>{{ 'active'|trans }}</td>
         </tr>
         {% for item in userlist %}
         <tr>
@@ -47,7 +47,7 @@
         </tr>
         {% else %}
         <tr>
-            <td colspan="3">No users found.</td>
+            <td colspan="3">{{ 'no_users_found'|trans }}</td>
         </tr>
         {% endfor %}
     </table>

@@ -1,19 +1,19 @@
 {% extends "opensixtUserAdminBundle:UserAdmin:layout.html.twig" %}
- 
+
 {% block title %}
     BikiniTranslate UserAdmin
 {% endblock %}
- 
+
 {% block content %}
     {% if error %}
         <div class="error">{{ error.message }}</div>
     {% endif %}
- 
+
     <form action="{{ path('_user_admin_check') }}" method="POST">
         <table>
             <tr>
                 <td>
-                    <label for="username">Username:</label>
+                    <label for="username">{{ 'username'|trans }}: </label>
                 </td>
                 <td>
                     <input type="text" id="username" name="_username" value="{{ last_username }}" />
@@ -21,13 +21,13 @@
             </tr>
             <tr>
                 <td>
-                    <label for="password">Password:</label>
+                    <label for="password">{{ 'password'|trans }}: </label>
                 </td>
                 <td>
                     <input type="password" id="password" name="_password" />
                 </td>
             </tr>
         </table>
-        <input type="submit" name="login" value="Login" />
+        <input type="submit" name="login" value="{{ 'login'|trans }}" />
     </form>
 {% endblock %}

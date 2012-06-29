@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>username</source>
+                <target>Username</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>password</source>
+                <target>Password</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>new_password</source>
+                <target>New Password</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>confirm_password</source>
+                <target>Confirm Password</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>languages</source>
+                <target>Languages</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>groups</source>
+                <target>Groups</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>roles</source>
+                <target>Roles</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>submit</source>
+                <target>Save</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>logout</source>
+                <target>logout</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>login</source>
+                <target>Login</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>user_list</source>
+                <target>Userlist</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>user</source>
+                <target>User</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>passwords_must_match</source>
+                <target>Passwords must match</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>no_users_found</source>
+                <target>No users found.</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>new_user</source>
+                <target>new user</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>active</source>
+                <target>active</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>admin_home</source>
+                <target>admin home</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>hello %name%</source>
+                <target>Hello %name% !!!</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>
