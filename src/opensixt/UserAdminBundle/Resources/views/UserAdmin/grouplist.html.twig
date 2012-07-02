@@ -1,0 +1,49 @@
+{% extends "opensixtUserAdminBundle:UserAdmin:layout.html.twig" %}
+
+{% block title %}
+    BikiniTranslate UserAdmin
+{% endblock %}
+
+{% block content %}
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <li>
+            <a href="{{ path('_user_admin_logout') }}">
+                {{ 'logout'|trans }}
+            </a>
+        </li>
+    {% endif %}
+    <br />
+
+    <li>
+        <a href="{{ path('_user_admin_home') }}">
+            {{ 'admin_home'|trans }}
+        </a>
+    </li>
+
+    <br /><br />
+
+    <div class="message">{{ 'groups'|trans }} (<a href="{{ path('_admin_group') }}">{{ 'new_group'|trans }}</a>)</div>
+
+    <br />
+
+    <table>
+        <tr>
+            <td style="width:150px">{{ 'group'|trans }}</td>
+            <td style="width:350px">{{ 'description'|trans }}</td>
+        </tr>
+        {% for item in grouplist %}
+        <tr>
+            <td><a href="{{ path('_admin_group', {'id':item.id}) }}">{{ item.name }}</a></td>
+            <td>{{ item.description }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3">{{ 'no_groups_found'|trans }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock %}
+

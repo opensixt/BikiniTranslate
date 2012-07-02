@@ -18,7 +18,7 @@ class UserRepository extends EntityRepository
      * @param type $limit
      * @return array
      */
-    public function getUserData($limit = null)
+    public function getUserList($limit = null)
     {
         /*if (isset($this->userid) && $this->userid) {
             $query = $this->createQueryBuilder('u')

@@ -239,6 +239,16 @@ class User implements AdvancedUserInterface
     }
 
     /**
+     * Set userLanguages
+     *
+     * @param ArrayCollection $userLanguages
+     */
+    public function setUserLanguages($userLanguages)
+    {
+        $this->userLanguages = $userLanguages;
+    }
+
+    /**
      * Get userLanguages
      *
      * @return ArrayCollection A Doctrine ArrayCollection
@@ -246,6 +256,16 @@ class User implements AdvancedUserInterface
     public function getUserLanguages()
     {
         return $this->userLanguages;
+    }
+
+    /**
+     * Set userGroups
+     *
+     * @param ArrayCollection $userGroups
+     */
+    public function setUserGroups($userGroups)
+    {
+        $this->userGroups = $userGroups;
     }
 
     /**

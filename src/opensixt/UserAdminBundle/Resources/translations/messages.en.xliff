@@ -4,51 +4,51 @@
         <body>
             <trans-unit id="1">
                 <source>username</source>
-                <target>Benutzername</target>
+                <target>Username</target>
             </trans-unit>
             <trans-unit id="2">
                 <source>password</source>
-                <target>Passwort</target>
+                <target>Password</target>
             </trans-unit>
             <trans-unit id="3">
                 <source>new_password</source>
-                <target>Neues Passwort</target>
+                <target>New Password</target>
             </trans-unit>
             <trans-unit id="4">
                 <source>confirm_password</source>
-                <target>Passwort bestätigen</target>
+                <target>Confirm Password</target>
             </trans-unit>
             <trans-unit id="5">
                 <source>languages</source>
-                <target>Sprachen</target>
+                <target>Languages</target>
             </trans-unit>
             <trans-unit id="6">
                 <source>groups</source>
-                <target>Gruppen</target>
+                <target>Groups</target>
             </trans-unit>
             <trans-unit id="7">
                 <source>roles</source>
-                <target>Rollen</target>
+                <target>Roles</target>
             </trans-unit>
             <trans-unit id="8">
                 <source>submit</source>
-                <target>Speichern</target>
+                <target>Save</target>
             </trans-unit>
             <trans-unit id="9">
                 <source>logout</source>
-                <target>Auslogen</target>
+                <target>logout</target>
             </trans-unit>
             <trans-unit id="10">
                 <source>login</source>
-                <target>Einlogen</target>
+                <target>Login</target>
             </trans-unit>
             <trans-unit id="11">
                 <source>user_list</source>
-                <target>Benutzerliste</target>
+                <target>Userlist</target>
             </trans-unit>
             <trans-unit id="12">
                 <source>user</source>
-                <target>Benutzer</target>
+                <target>User</target>
             </trans-unit>
             <trans-unit id="13">
                 <source>email</source>
@@ -56,19 +56,19 @@
             </trans-unit>
             <trans-unit id="14">
                 <source>passwords_must_match</source>
-                <target>Passwörten sind nicht gleich</target>
+                <target>Passwords must match.</target>
             </trans-unit>
             <trans-unit id="15">
                 <source>no_users_found</source>
-                <target>Keine Benutzer gefunden.</target>
+                <target>No users found.</target>
             </trans-unit>
             <trans-unit id="16">
                 <source>new_user</source>
-                <target>neuer Benutzer hinzufügen</target>
+                <target>new user</target>
             </trans-unit>
             <trans-unit id="17">
                 <source>active</source>
-                <target>Aktiv</target>
+                <target>active</target>
             </trans-unit>
             <trans-unit id="18">
                 <source>admin_home</source>
@@ -76,9 +76,36 @@
             </trans-unit>
             <trans-unit id="19">
                 <source>hello %name%</source>
-                <target>Hallo %name% !!!</target>
+                <target>Hello %name% !!!</target>
             </trans-unit>
-
+            <trans-unit id="20">
+                <source>no_groups_found</source>
+                <target>No groups found.</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>new_group</source>
+                <target>new group</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>group</source>
+                <target>Group</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>description</source>
+                <target>Description</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>groupname</source>
+                <target>groupname</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>resources</source>
+                <target>resources</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>group_list</source>
+                <target>group list</target>
+            </trans-unit>
 
         </body>
     </file>

@@ -29,18 +29,18 @@ class GroupResource
     private $groupId;
 
     /**
-     * @var integer $moduleId
+     * @var integer $resourceId
      *
-     * @ORM\Column(name="module_id", type="integer", nullable=false)
+     * @ORM\Column(name="resource_id", type="integer", nullable=false)
      */
-    private $moduleId;
+    private $resourceId;
 
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -60,7 +60,7 @@ class GroupResource
     /**
      * Get groupId
      *
-     * @return integer 
+     * @return integer
      */
     public function getGroupId()
     {
@@ -72,18 +72,18 @@ class GroupResource
      *
      * @param integer $moduleId
      */
-    public function setModuleId($moduleId)
+    public function setResourceId($resourceId)
     {
-        $this->moduleId = $moduleId;
+        $this->resourceId = $resourceId;
     }
 
     /**
-     * Get moduleId
+     * Get resourceId
      *
-     * @return integer 
+     * @return integer
      */
-    public function getModuleId()
+    public function getResourceId()
     {
-        return $this->moduleId;
+        return $this->resourceId;
     }
 }
