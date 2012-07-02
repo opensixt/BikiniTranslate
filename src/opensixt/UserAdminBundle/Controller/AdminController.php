@@ -31,7 +31,7 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $ur = $em->getRepository('opensixtUserAdminBundle:User');
 
-        $userlist = $ur->getUserData();
+        $userlist = $ur->getUserList();
 
         return $this->render('opensixtUserAdminBundle:UserAdmin:userlist.html.twig',
             array('userlist' => $userlist));
@@ -94,7 +94,7 @@ class AdminController extends Controller
                 'label'         => $translator->trans('confirm_password') . ': ',
                 'property_path' => false,
                 'required'      => false))
-            ->addValidator(new CallbackValidator(function($form) use ($user)
+            ->addValidator(new CallbackValidator(function($form) use ($user, $translator)
                 {
                     //if($password != $user->getPassword()) {
                     //    $form['password']->addError(new FormError('Incorrect password'));

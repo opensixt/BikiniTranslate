@@ -56,7 +56,7 @@
             </trans-unit>
             <trans-unit id="14">
                 <source>passwords_must_match</source>
-                <target>Passwörten sind nicht gleich</target>
+                <target>Passwörter sind nicht gleich.</target>
             </trans-unit>
             <trans-unit id="15">
                 <source>no_users_found</source>
