@@ -13,8 +13,10 @@ _user_admin_home:
     defaults: { _controller: opensixtUserAdminBundle:Admin:index }
 
 _admin_userlist:
-    pattern: /admin/userlist
-    defaults: { _controller: opensixtUserAdminBundle:Admin:userlist }
+    pattern: /admin/userlist/{page}
+    defaults: { _controller: opensixtUserAdminBundle:Admin:userlist, page: 1 }
+    requirements:
+        page: \d+
 
 _admin_user:
     pattern: /admin/user/{id}

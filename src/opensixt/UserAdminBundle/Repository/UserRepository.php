@@ -15,52 +15,32 @@ class UserRepository extends EntityRepository
     /**
      * Get list of users from the DB
      *
-     * @param type $limit
+     * @param string $search
+     * @param int $page pagination offset
      * @return array
      */
-    public function getUserList($limit = null)
+    public function getUserListWithPagination($page = 1, $limit, $offset)
     {
-        /*if (isset($this->userid) && $this->userid) {
-            $query = $this->createQueryBuilder('u')
-                ->select('u, r, l')
-                ->leftJoin('u.userRoles', 'r')
-                ->leftJoin('u.userLanguages', 'l')
-                ->where('u.id = ' . $this->userid);
-        } else {*/
-        $query = $this->createQueryBuilder('u')
-            ->select('u, r')
-            ->leftJoin('u.userRoles', 'r')
-            ->addOrderBy('u.username', 'ASC');
-        //}
-
-        if (false === is_null($limit)) {
-            $query->setMaxResults($limit);
-        }
-
-        return $query->getQuery()
-            ->getResult();
+        $list = $this->findBy(
+            array(),                     // search criteria
+            array('id' => 'asc'),        // order by
+            $limit,                // limit
+            $offset);              // offset
+        return $list;
     }
 
     /**
-     * Update User Table with Request fields
+     * Get count of records in User table
      *
-     * @param User $user
+     * @return int
      */
-    /*public function updateUser($user)
+    public function getUserCount()
     {
-        if ($this->userid) {
-            $this->createQueryBuilder('u')
-                ->update()
-                ->set('u.username', '?1')
-                ->set('u.email', '?2')
-                ->where('u.id = ?3')
-                ->setParameter(1, $user->getUsername())
-                ->setParameter(2, $user->getEmail())
-                ->setParameter(3, $this->userid)
-                ->getQuery()
-                ->execute();
-
-        }
-    }*/
+        $count = $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->getQuery()
+            ->getSingleScalarResult();
+        return $count;
+    }
 
 }

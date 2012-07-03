@@ -10,11 +10,24 @@ use Symfony\Component\Form\CallbackValidator;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
+use opensixt\UserAdminBundle\Helpers\PaginationBar;
+
 /**
  * User Administration Controller
  */
 class AdminController extends Controller
 {
+
+    /**
+     * Pagination limit
+     * @var int
+     */
+    private $paginationLimit;
+
+    public function __construct() {
+        $this->paginationLimit = 5;
+    }
+
 
     public function indexAction()
     {
@@ -24,17 +37,30 @@ class AdminController extends Controller
     /**
      * Controller Action: userlist
      *
+     * @param $page
      * @return Response A Response instance
      */
-    public function userlistAction()
+    public function userlistAction($page = 1)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $ur = $em->getRepository('opensixtUserAdminBundle:User');
 
-        $userlist = $ur->getUserList();
+        $userCount = $ur->getUserCount();
+
+        $pagination = new PaginationBar($userCount, $this->paginationLimit, $page);
+        $paginationBar = $pagination->getPaginationBar();
+
+        $userlist = $ur->getUserListWithPagination(
+            $page,
+            $this->paginationLimit,
+            $pagination->getOffset());
 
         return $this->render('opensixtUserAdminBundle:UserAdmin:userlist.html.twig',
-            array('userlist' => $userlist));
+            array(
+                'userlist' => $userlist,
+                'paginationbar' => $paginationBar,
+                )
+            );
     }
 
     /**
