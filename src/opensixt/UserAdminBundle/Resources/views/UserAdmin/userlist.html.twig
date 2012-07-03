@@ -1,10 +1,10 @@
-{% extends "opensixtUserAdminBundle:UserAdmin:layout.html.twig" %}
+{% extends "opensixtContentBundle::layout.html.twig" %}
 
 {% block title %}
     BikiniTranslate UserAdmin
 {% endblock %}
 
-{% block content %}
+{% block body %}
 
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <li>
@@ -43,7 +43,7 @@
         <tr>
             <td><a href="{{ path('_admin_user', {'id':item.id}) }}">{{ item.username }}</a></td>
             <td>{{ item.email }}</td>
-            <td><input type="checkbox" value="1" {% if item.isactive %}checked="checked"{% endif %} /></td>
+            <td><input type="checkbox" disabled="disabled" {% if item.isactive %}checked="checked"{% endif %} /></td>
         </tr>
         {% else %}
         <tr>

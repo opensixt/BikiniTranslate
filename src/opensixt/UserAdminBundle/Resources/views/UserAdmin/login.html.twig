@@ -1,10 +1,10 @@
-{% extends "opensixtUserAdminBundle:UserAdmin:layout.html.twig" %}
+{% extends "opensixtContentBundle::layout.html.twig" %}
 
 {% block title %}
     BikiniTranslate UserAdmin
 {% endblock %}
 
-{% block content %}
+{% block body %}
     {% if error %}
         <div class="error">{{ error.message }}</div>
     {% endif %}
