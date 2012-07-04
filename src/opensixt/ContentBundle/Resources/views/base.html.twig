@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>{% block title %}Welcome{% endblock %} - opensixt</title>
+        <title>{% block title %}{{ 'welcome'|trans }}{% endblock %} :: opensixt/BikiniTranslate</title>
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -25,7 +25,7 @@
                                 <li class="left"><a href="#">{{ 'contact'|trans }}</a></li>
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                 <li class="right"><a href="{{ path('_user_admin_logout') }}">{{ 'logout'|trans }}</a></li>
-                                <li class="right"><a href="{{ path('_user_admin_home') }}">{{ 'admin'|trans }}</a></li>
+                                <li class="right"><a href="{{ path('_user_admin_home') }}">{{ 'admin_home'|trans }}</a></li>
                             {% else %}
                                 <li class="right"><a href="{{ path('_user_admin_login') }}">{{ 'login'|trans }}</a></li>
                             {% endif %}
@@ -49,7 +49,7 @@
 
             <div id="footer">
                 {% block footer %}
-                    <a href="https://github.com/opensixt">opensixt on github</a>
+                    <a href="https://github.com/opensixt/">opensixt on github</a>
                 {% endblock %}
             </div>
         </section>

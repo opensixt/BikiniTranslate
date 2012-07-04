@@ -1,32 +1,13 @@
 {% extends "opensixtContentBundle::layout.html.twig" %}
 
 {% block title %}
-    BikiniTranslate UserAdmin
+    {{ 'resource'|trans }}
 {% endblock %}
 
 {% block body %}
 
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <li>
-            <a href="{{ path('_user_admin_logout') }}">
-                {{ 'logout'|trans }}
-            </a>
-        </li>
-    {% endif %}
-    <br />
-
-    <li>
-        <a href="{{ path('_admin_reslist') }}">
-            {{ 'resource_list'|trans }}
-        </a>
-    </li>
-
-    <br /><br />
-
-    <div class="message">{{ 'resource'|trans }}</div>
-
-    <br />
-
+    <h3>{{ 'resource'|trans }}</h3>
+    
     <form action="{{ path('_admin_resource', {'id':id}) }}" method="post" {{ form_enctype(form) }}>
         <div>
             {{ form_label(form.name) }}
@@ -39,9 +20,14 @@
             {{ form_widget(form.description) }}
         </div>
         {{ form_rest(form) }}
-            <input type="submit" value="{{ 'submit'|trans }}"/>
+        <input type="submit" value="{{ 'submit'|trans }}"/>
     </form>
 
 {% endblock %}
 
-
+{% block sidebar %}
+    <ul>
+        <li class="backhome"><a href="{{ path('_user_admin_home') }}">{{ 'admin_home'|trans }}</a></li>
+        <li class="back"><a href="{{ path('_admin_reslist') }}">{{ 'resource_list'|trans }}</a></li>
+    </ul>
+{% endblock %}

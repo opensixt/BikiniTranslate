@@ -1,17 +1,23 @@
 {% extends "opensixtContentBundle::layout.html.twig" %}
 
 {% block title %}
-    BikiniTranslate UserAdmin
+    {{ 'admin_home'|trans }}
 {% endblock %}
 
-{% block body %}
+{% block body %}    
+    
+    <h2>{{ 'admin_home'|trans }}</h2>
 
     {% if app.user.username %}
         {% set name = app.user.username %}
         <div class="message">{% trans %} hello %name% {% endtrans %}</div>
     {% endif %}
-    <br /><br />
+    
+{% endblock %}    
+    
+{% block sidebar %}
 
+<ul>
     <li>
         <a href="{{ path('_admin_userlist') }}">
             {{ 'user_list'|trans }}
@@ -32,9 +38,6 @@
             {{ 'resources'|trans }}
         </a>
     </li>
-
-
-
+</ul>
 
 {% endblock %}
-

@@ -72,7 +72,7 @@
             </trans-unit>
             <trans-unit id="18">
                 <source>admin_home</source>
-                <target>admin home</target>
+                <target>Dashboard</target>
             </trans-unit>
             <trans-unit id="19">
                 <source>hello %name%</source>

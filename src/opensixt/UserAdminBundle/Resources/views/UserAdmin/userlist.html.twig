@@ -1,56 +1,48 @@
 {% extends "opensixtContentBundle::layout.html.twig" %}
 
 {% block title %}
-    BikiniTranslate UserAdmin
+    {{ 'user_list'|trans }}
 {% endblock %}
 
 {% block body %}
 
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <li>
-            <a href="{{ path('_user_admin_logout') }}">
-                {{ 'logout'|trans }}
-            </a>
-        </li>
-    {% else %}
-        <li>
-            <a href="{{ path('_user_admin_login') }}">
-                {{ 'login'|trans }}
-            </a>
-        </li>
-    {% endif %}
-    <br />
-
-    <li>
-        <a href="{{ path('_user_admin_home') }}">
-            {{ 'admin_home'|trans }}
-        </a>
-    </li>
-
-    <br /><br />
-
-    <div class="message">{{ 'user_list'|trans }} (<a href="{{ path('_admin_user') }}">{{ 'new_user'|trans }}</a>)</div>
-
-    <br />
+    <h3>{{ 'user_list'|trans }}</h3>
 
     <table>
-        <tr>
-            <td style="width:150px">{{ 'username'|trans }}</td>
-            <td style="width:250px">{{ 'email'|trans }}</td>
-            <td>{{ 'active'|trans }}</td>
-        </tr>
+        <thead>
+            <tr>
+                <th style="width:150px">{{ 'username'|trans }}</th>
+                <th style="width:250px">{{ 'email'|trans }}</th>
+                <th>{{ 'active'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for item in userlist %}
-        <tr>
-            <td><a href="{{ path('_admin_user', {'id':item.id}) }}">{{ item.username }}</a></td>
-            <td>{{ item.email }}</td>
-            <td><input type="checkbox" disabled="disabled" {% if item.isactive %}checked="checked"{% endif %} /></td>
-        </tr>
+            <tr>
+                <td><a href="{{ path('_admin_user', {'id':item.id}) }}">{{ item.username }}</a></td>
+                <td>{{ item.email }}</td>
+                <td><input type="checkbox" disabled="disabled" {% if item.isactive %}checked="checked"{% endif %} /></td>
+            </tr>
         {% else %}
-        <tr>
-            <td colspan="3">{{ 'no_users_found'|trans }}</td>
-        </tr>
+            <tr>
+                <td colspan="3">{{ 'no_users_found'|trans }}</td>
+            </tr>
+        </tbody>
         {% endfor %}
+        <tfoot>
+            <tr>
+                <td colspan="3">
+                    {% include 'opensixtUserAdminBundle:UserAdmin:paginationbar.html.twig' with {'target_route': '_admin_userlist', 'paginationbar' : paginationbar} %}
+                </td>
+            </tr>
+        </tfoot>
     </table>
+    
+{% endblock %}
 
-    {% include 'opensixtUserAdminBundle:UserAdmin:paginationbar.html.twig' with {'target_route': '_admin_userlist', 'paginationbar' : paginationbar} %}
+{% block sidebar %}
+    <ul>
+        <li class="backhome"><a href="{{ path('_user_admin_home') }}">{{ 'admin_home'|trans }}</a></li>
+        <li class="new"><a href="{{ path('_admin_user') }}">{{ 'new_user'|trans }}</a></li>
+    </ul>
 {% endblock %}

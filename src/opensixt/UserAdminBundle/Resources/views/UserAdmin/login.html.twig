@@ -1,7 +1,7 @@
 {% extends "opensixtContentBundle::layout.html.twig" %}
 
 {% block title %}
-    BikiniTranslate UserAdmin
+    {{ 'login'|trans }}
 {% endblock %}
 
 {% block body %}
@@ -9,6 +9,8 @@
         <div class="error">{{ error.message }}</div>
     {% endif %}
 
+    <h3>{{ 'login'|trans }}</h3>
+        
     <form action="{{ path('_user_admin_check') }}" method="POST">
         <table>
             <tr>
