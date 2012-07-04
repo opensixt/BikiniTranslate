@@ -25,8 +25,8 @@ _admin_user:
         id: \d+
 
 _admin_grouplist:
-    pattern: /admin/grouplist
-    defaults: { _controller: opensixtUserAdminBundle:Admin:grouplist }
+    pattern: /admin/grouplist/{page}
+    defaults: { _controller: opensixtUserAdminBundle:Admin:grouplist, page: 1 }
 
 _admin_group:
     pattern: /admin/group/{id}

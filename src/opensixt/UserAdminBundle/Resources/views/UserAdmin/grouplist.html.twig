@@ -44,6 +44,8 @@
         {% endfor %}
     </table>
 
+    {% include 'opensixtUserAdminBundle:UserAdmin:paginationbar.html.twig' with {'target_route': '_admin_grouplist', 'paginationbar' : paginationbar} %}
+
 
 {% endblock %}
 

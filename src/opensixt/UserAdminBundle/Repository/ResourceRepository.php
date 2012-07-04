@@ -9,17 +9,16 @@ use Doctrine\ORM\EntityRepository;
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
-class ResourceRepository  extends EntityRepository
+class ResourceRepository extends EntityRepository
 {
     /**
      * Get list of resources from the DB
      *
-     * @param int $page pagination current page
      * @param int $limit
      * @param int $offset
      * @return array
      */
-    public function getResourceListWithPagination($page = 1, $limit, $offset)
+    public function getResourceListWithPagination($limit, $offset)
     {
         $list = $this->findBy(
             array(),                // search criteria

@@ -19,11 +19,11 @@ class UserRepository extends EntityRepository
      * @param int $page pagination offset
      * @return array
      */
-    public function getUserListWithPagination($page = 1, $limit, $offset)
+    public function getUserListWithPagination($limit, $offset)
     {
         $list = $this->findBy(
-            array(),                     // search criteria
-            array('id' => 'asc'),        // order by
+            array(),               // search criteria
+            array('id' => 'asc'),  // order by
             $limit,                // limit
             $offset);              // offset
         return $list;

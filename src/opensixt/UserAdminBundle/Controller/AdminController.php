@@ -53,7 +53,6 @@ class AdminController extends Controller
         $paginationBar = $pagination->getPaginationBar();
 
         $userlist = $ur->getUserListWithPagination(
-            $page,
             $this->_paginationLimit,
             $pagination->getOffset());
 
@@ -175,17 +174,29 @@ class AdminController extends Controller
     /**
      * Controller Action: grouplist
      *
+     * @param int $page
      * @return Response A Response instance
      */
-    public function grouplistAction()
+    public function grouplistAction($page)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $gr = $em->getRepository('opensixtUserAdminBundle:Groups');
 
-        $grouplist = $gr->getGroupList();
+        $groupCount = $gr->getGroupCount();
+
+        $pagination = new PaginationBar($groupCount, $this->_paginationLimit, $page);
+        $paginationBar = $pagination->getPaginationBar();
+
+        $grouplist = $gr->getGroupListWithPagination(
+            $this->_paginationLimit,
+            $pagination->getOffset());
 
         return $this->render('opensixtUserAdminBundle:UserAdmin:grouplist.html.twig',
-            array('grouplist' => $grouplist));
+            array(
+                'grouplist' => $grouplist,
+                'paginationbar' => $paginationBar,
+                )
+            );
     }
 
     /**
@@ -266,7 +277,6 @@ class AdminController extends Controller
         $paginationBar = $pagination->getPaginationBar();
 
         $langList = $lr->getLangListWithPagination(
-            $page,
             $this->_paginationLimit,
             $pagination->getOffset());
 
@@ -349,7 +359,6 @@ class AdminController extends Controller
         $paginationBar = $pagination->getPaginationBar();
 
         $resList = $rr->getResourceListWithPagination(
-            $page,
             $this->_paginationLimit,
             $pagination->getOffset());
 
