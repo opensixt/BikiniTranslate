@@ -91,6 +91,11 @@ class AdminController extends Controller
             ->add('email', 'email', array(
                 'label' => $translator->trans('email') . ': ',
             ))
+            ->add('isactive', 'checkbox', array(
+                'label'    => $translator->trans('active') . ': ',
+                'value'    => 1,
+                'required' => false
+            ))
             ->add('userroles', 'entity', array(
                 'label'     => $translator->trans('roles') . ': ',
                 'class'     => 'opensixtUserAdminBundle:Role',

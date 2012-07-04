@@ -68,7 +68,7 @@
             </trans-unit>
             <trans-unit id="17">
                 <source>active</source>
-                <target>active</target>
+                <target>Active</target>
             </trans-unit>
             <trans-unit id="18">
                 <source>admin_home</source>
