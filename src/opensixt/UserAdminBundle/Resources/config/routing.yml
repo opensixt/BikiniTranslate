@@ -33,3 +33,15 @@ _admin_group:
     defaults: { _controller: opensixtUserAdminBundle:Admin:groupdata, id: 0 }
     requirements:
         id: \d+
+
+_admin_langlist:
+    pattern: /admin/langlist/{page}
+    defaults: { _controller: opensixtUserAdminBundle:Admin:langlist, page: 1 }
+    requirements:
+        page: \d+
+
+_admin_lang:
+    pattern: /admin/lang/{id}
+    defaults: { _controller: opensixtUserAdminBundle:Admin:langdata, id: 0 }
+    requirements:
+        id: \d+

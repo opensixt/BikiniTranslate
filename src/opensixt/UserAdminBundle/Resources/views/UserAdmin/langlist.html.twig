@@ -1,0 +1,50 @@
+{% extends "opensixtContentBundle::layout.html.twig" %}
+
+{% block title %}
+    BikiniTranslate UserAdmin
+{% endblock %}
+
+{% block body %}
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <li>
+            <a href="{{ path('_user_admin_logout') }}">
+                {{ 'logout'|trans }}
+            </a>
+        </li>
+    {% endif %}
+    <br />
+
+    <li>
+        <a href="{{ path('_user_admin_home') }}">
+            {{ 'admin_home'|trans }}
+        </a>
+    </li>
+
+    <br /><br />
+
+    <div class="message">{{ 'languages'|trans }} (<a href="{{ path('_admin_lang') }}">{{ 'new_language'|trans }}</a>)</div>
+
+    <br />
+
+    <table>
+        <tr>
+            <td style="width:150px">{{ 'language'|trans }}</td>
+            <td style="width:350px">{{ 'description'|trans }}</td>
+        </tr>
+        {% for item in langlist %}
+        <tr>
+            <td><a href="{{ path('_admin_lang', {'id':item.id}) }}">{{ item.locale }}</a></td>
+            <td>{{ item.description }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3">{{ 'no_languages_found'|trans }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% include 'opensixtUserAdminBundle:UserAdmin:paginationbar.html.twig' with {'target_route': '_admin_langlist', 'paginationbar' : paginationbar} %}
+
+{% endblock %}
+

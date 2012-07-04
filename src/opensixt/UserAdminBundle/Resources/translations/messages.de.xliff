@@ -106,6 +106,23 @@
                 <source>group_list</source>
                 <target>Gruppenliste</target>
             </trans-unit>
+            <trans-unit id="27">
+                <source>language</source>
+                <target>Locale</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>no_languages_found</source>
+                <target>Keine Lokalisierungen gefunden.</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>new_language</source>
+                <target>Neues Locale hinzufügen</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>language_list</source>
+                <target>Sprachenliste</target>
+            </trans-unit>
+
 
         </body>
     </file>

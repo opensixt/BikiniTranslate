@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * opensixt\UserAdminBundle\Entity\Language
  *
  * @ORM\Table(name="language")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\LanguageRepository")
  */
 class Language
 {

@@ -5,6 +5,7 @@ namespace opensixt\UserAdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use opensixt\UserAdminBundle\Entity\User;
 use opensixt\UserAdminBundle\Entity\Groups;
+use opensixt\UserAdminBundle\Entity\Language;
 
 use Symfony\Component\Form\CallbackValidator;
 use Symfony\Component\Form\FormError;
@@ -22,10 +23,10 @@ class AdminController extends Controller
      * Pagination limit
      * @var int
      */
-    private $paginationLimit;
+    private $_paginationLimit;
 
     public function __construct() {
-        $this->paginationLimit = 5;
+        $this->_paginationLimit = 10;
     }
 
 
@@ -47,12 +48,12 @@ class AdminController extends Controller
 
         $userCount = $ur->getUserCount();
 
-        $pagination = new PaginationBar($userCount, $this->paginationLimit, $page);
+        $pagination = new PaginationBar($userCount, $this->_paginationLimit, $page);
         $paginationBar = $pagination->getPaginationBar();
 
         $userlist = $ur->getUserListWithPagination(
             $page,
-            $this->paginationLimit,
+            $this->_paginationLimit,
             $pagination->getOffset());
 
         return $this->render('opensixtUserAdminBundle:UserAdmin:userlist.html.twig',
@@ -244,6 +245,87 @@ class AdminController extends Controller
                 ));
     }
 
+    /**
+     * Controller Action: langlist - Languages
+     *
+     * @param int $page
+     * @return Response A Response instance
+     */
+    public function langlistAction($page = 1)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $lr = $em->getRepository('opensixtUserAdminBundle:Language');
 
+        $langCount = $lr->getLangCount();
+
+        $pagination = new PaginationBar(
+            $langCount,
+            $this->_paginationLimit,
+            $page);
+        $paginationBar = $pagination->getPaginationBar();
+
+        $langList = $lr->getLangListWithPagination(
+            $page,
+            $this->_paginationLimit,
+            $pagination->getOffset());
+
+        return $this->render('opensixtUserAdminBundle:UserAdmin:langlist.html.twig',
+            array(
+                'langlist' => $langList,
+                'paginationbar' => $paginationBar,
+                )
+            );
+    }
+
+    /**
+     * Controller Action: langdata
+     *
+     * @param int $id
+     * @return Response a Response instance
+     */
+    public function langdataAction($id)
+    {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $translator = $this->get('translator');
+
+        if ($id) {
+            // get language from db
+            $lang = $em->find('opensixtUserAdminBundle:Language', $id);
+        } else {
+            // new language
+            $lang = new Language();
+        }
+
+        $form = $this->createFormBuilder($lang)
+            ->add('locale', 'text', array(
+                'label'     =>  $translator->trans('language') . ': ',
+            ))
+            ->add('description', 'text', array(
+                'label'     => $translator->trans('description') . ': ',
+                'required'  => false
+            ))
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            // the controller binds the submitted data to the form
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+                // save changes
+                $em->persist($lang);
+                $em->flush();
+            } else {
+                var_dump($form->getErrors());
+            }
+        }
+
+        return $this->render('opensixtUserAdminBundle:UserAdmin:langdata.html.twig',
+            array(
+                'form' => $form->createView(),
+                'id' => $id,
+                ));
+    }
 
 }
