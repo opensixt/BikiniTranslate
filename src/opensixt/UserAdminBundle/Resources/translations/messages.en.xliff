@@ -96,7 +96,7 @@
             </trans-unit>
             <trans-unit id="24">
                 <source>groupname</source>
-                <target>groupname</target>
+                <target>Name</target>
             </trans-unit>
             <trans-unit id="25">
                 <source>resources</source>
@@ -121,6 +121,34 @@
             <trans-unit id="30">
                 <source>language_list</source>
                 <target>languages list</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>language_name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>resources</source>
+                <target>Resources</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>new_resource</source>
+                <target>new resource</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>resource_list</source>
+                <target>resources list</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>resource</source>
+                <target>Resource</target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>no_resources_found</source>
+                <target>No resources found.</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>resource_name</source>
+                <target>Name</target>
             </trans-unit>
 
         </body>

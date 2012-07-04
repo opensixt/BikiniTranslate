@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use opensixt\UserAdminBundle\Entity\User;
 use opensixt\UserAdminBundle\Entity\Groups;
 use opensixt\UserAdminBundle\Entity\Language;
+use opensixt\UserAdminBundle\Entity\Resource;
 
 use Symfony\Component\Form\CallbackValidator;
 use Symfony\Component\Form\FormError;
@@ -300,7 +301,7 @@ class AdminController extends Controller
 
         $form = $this->createFormBuilder($lang)
             ->add('locale', 'text', array(
-                'label'     =>  $translator->trans('language') . ': ',
+                'label'     =>  $translator->trans('language_name') . ': ',
             ))
             ->add('description', 'text', array(
                 'label'     => $translator->trans('description') . ': ',
@@ -322,6 +323,89 @@ class AdminController extends Controller
         }
 
         return $this->render('opensixtUserAdminBundle:UserAdmin:langdata.html.twig',
+            array(
+                'form' => $form->createView(),
+                'id' => $id,
+                ));
+    }
+
+    /**
+     * Controller Action: reslist - Resources
+     *
+     * @param int $page
+     * @return Response A Response instance
+     */
+    public function reslistAction($page = 1)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $rr = $em->getRepository('opensixtUserAdminBundle:Resource');
+
+        $resCount = $rr->getResourceCount();
+
+        $pagination = new PaginationBar(
+            $resCount,
+            $this->_paginationLimit,
+            $page);
+        $paginationBar = $pagination->getPaginationBar();
+
+        $resList = $rr->getResourceListWithPagination(
+            $page,
+            $this->_paginationLimit,
+            $pagination->getOffset());
+
+        return $this->render('opensixtUserAdminBundle:UserAdmin:reslist.html.twig',
+            array(
+                'reslist' => $resList,
+                'paginationbar' => $paginationBar,
+                )
+            );
+    }
+
+    /**
+     * Controller Action: resdata
+     *
+     * @param int $id
+     * @return Response a Response instance
+     */
+    public function resdataAction($id)
+    {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $translator = $this->get('translator');
+
+        if ($id) {
+            // get $resource from db
+            $resource = $em->find('opensixtUserAdminBundle:Resource', $id);
+        } else {
+            // new resource
+            $resource = new Resource();
+        }
+
+        $form = $this->createFormBuilder($resource)
+            ->add('name', 'text', array(
+                'label'     =>  $translator->trans('resource_name') . ': ',
+            ))
+            ->add('description', 'text', array(
+                'label'     => $translator->trans('description') . ': ',
+                'required'  => false
+            ))
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            // the controller binds the submitted data to the form
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+                // save changes
+                $em->persist($resource);
+                $em->flush();
+            } else {
+                var_dump($form->getErrors());
+            }
+        }
+
+        return $this->render('opensixtUserAdminBundle:UserAdmin:resdata.html.twig',
             array(
                 'form' => $form->createView(),
                 'id' => $id,

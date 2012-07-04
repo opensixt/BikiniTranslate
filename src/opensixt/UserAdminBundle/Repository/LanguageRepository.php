@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class LanguageRepository extends EntityRepository
 {
-
     /**
      * Get list of locales from the DB
      *
@@ -31,7 +30,7 @@ class LanguageRepository extends EntityRepository
     }
 
     /**
-     * Get count of records in User table
+     * Get count of records in language table
      *
      * @return int
      */

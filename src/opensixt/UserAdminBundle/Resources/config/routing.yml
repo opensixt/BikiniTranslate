@@ -45,3 +45,15 @@ _admin_lang:
     defaults: { _controller: opensixtUserAdminBundle:Admin:langdata, id: 0 }
     requirements:
         id: \d+
+
+_admin_reslist:
+    pattern: /admin/reslist/{page}
+    defaults: { _controller: opensixtUserAdminBundle:Admin:reslist, page: 1 }
+    requirements:
+        page: \d+
+
+_admin_resource:
+    pattern: /admin/resource/{id}
+    defaults: { _controller: opensixtUserAdminBundle:Admin:resdata, id: 0 }
+    requirements:
+        id: \d+

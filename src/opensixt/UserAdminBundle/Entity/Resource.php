@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * opensixt\UserAdminBundle\Entity\Resource
  *
  * @ORM\Table(name="resource")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\ResourceRepository")
  */
 class Resource
 {
@@ -40,7 +40,7 @@ class Resource
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -60,7 +60,7 @@ class Resource
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -80,7 +80,7 @@ class Resource
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
