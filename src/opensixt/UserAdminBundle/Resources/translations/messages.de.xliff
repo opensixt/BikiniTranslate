@@ -36,11 +36,11 @@
             </trans-unit>
             <trans-unit id="9">
                 <source>logout</source>
-                <target>Auslogen</target>
+                <target>Ausloggen</target>
             </trans-unit>
             <trans-unit id="10">
                 <source>login</source>
-                <target>Einlogen</target>
+                <target>Einloggen</target>
             </trans-unit>
             <trans-unit id="11">
                 <source>user_list</source>
@@ -64,7 +64,7 @@
             </trans-unit>
             <trans-unit id="16">
                 <source>new_user</source>
-                <target>neuer Benutzer hinzufügen</target>
+                <target>neuen Benutzer hinzufügen</target>
             </trans-unit>
             <trans-unit id="17">
                 <source>active</source>
