@@ -1,16 +1,16 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Entity;
+namespace opensixt\BikiniTranslateBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * opensixt\UserAdminBundle\Entity\Resource
+ * opensixt\BikiniTranslateBundle\Entity\Groups
  *
- * @ORM\Table(name="resource")
- * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\ResourceRepository")
+ * @ORM\Table(name="groups")
+ * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\GroupsRepository")
  */
-class Resource
+class Groups
 {
     /**
      * @var integer $id
@@ -24,7 +24,7 @@ class Resource
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=150, nullable=true)
+     * @ORM\Column(name="name", type="string", length=100, nullable=true)
      */
     private $name;
 
@@ -35,7 +35,16 @@ class Resource
      */
     private $description;
 
-
+    /**
+     * @ORM\ManyToMany(targetEntity="opensixt\BikiniTranslateBundle\Entity\Resource")
+     * @ORM\JoinTable(name="group_resource",
+     *     joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="resource_id", referencedColumnName="id")}
+     * )
+     *
+     * @var ArrayCollection $resources
+     */
+    protected $resources;
 
     /**
      * Get id
@@ -85,5 +94,15 @@ class Resource
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Get resources
+     *
+     * @return ArrayCollection
+     */
+    public function getResources()
+    {
+        return $this->resources;
     }
 }

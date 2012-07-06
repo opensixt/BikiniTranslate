@@ -77,7 +77,7 @@ class User implements AdvancedUserInterface
     protected $userRoles;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Language")
+     * @ORM\ManyToMany(targetEntity="opensixt\BikiniTranslateBundle\Entity\Language")
      * @ORM\JoinTable(name="user_language",
      *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="language_id", referencedColumnName="id")}
@@ -88,7 +88,7 @@ class User implements AdvancedUserInterface
     protected $userLanguages;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Groups")
+     * @ORM\ManyToMany(targetEntity="opensixt\BikiniTranslateBundle\Entity\Groups")
      * @ORM\JoinTable(name="user_group",
      *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}

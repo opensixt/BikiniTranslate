@@ -1,11 +1,11 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Entity;
+namespace opensixt\BikiniTranslateBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * opensixt\UserAdminBundle\Entity\GroupResource
+ * opensixt\BikiniTranslateBundle\Entity\GroupResource
  *
  * @ORM\Table(name="group_resource")
  * @ORM\Entity

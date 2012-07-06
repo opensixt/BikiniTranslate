@@ -1,11 +1,11 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Entity;
+namespace opensixt\BikiniTranslateBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * opensixt\UserAdminBundle\Entity\UserLanguage
+ * opensixt\BikiniTranslateBundle\Entity\UserLanguage
  *
  * @ORM\Table(name="user_language")
  * @ORM\Entity
@@ -40,7 +40,7 @@ class UserLanguage
     /**
      * Get id
      *
-     * @return bigint 
+     * @return bigint
      */
     public function getId()
     {
@@ -60,7 +60,7 @@ class UserLanguage
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -80,7 +80,7 @@ class UserLanguage
     /**
      * Get languageId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLanguageId()
     {

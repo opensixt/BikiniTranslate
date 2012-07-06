@@ -1,24 +1,24 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Repository;
+namespace opensixt\BikiniTranslateBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Groups Admin Model
+ * Resources Admin Model
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
-class GroupsRepository extends EntityRepository
+class ResourceRepository extends EntityRepository
 {
     /**
-     * Get list of groups from the DB
+     * Get list of resources from the DB
      *
      * @param int $limit
      * @param int $offset
      * @return array
      */
-    public function getGroupListWithPagination($limit, $offset)
+    public function getResourceListWithPagination($limit, $offset)
     {
         $list = $this->findBy(
             array(),                // search criteria
@@ -29,14 +29,14 @@ class GroupsRepository extends EntityRepository
     }
 
     /**
-     * Get count of records in Groups table
+     * Get count of records in Resource table
      *
      * @return int
      */
-    public function getGroupCount()
+    public function getResourceCount()
     {
-        $count = $this->createQueryBuilder('g')
-            ->select('COUNT(g)')
+        $count = $this->createQueryBuilder('r')
+            ->select('COUNT(r)')
             ->getQuery()
             ->getSingleScalarResult();
         return $count;

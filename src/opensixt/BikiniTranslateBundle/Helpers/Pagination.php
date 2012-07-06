@@ -1,16 +1,17 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Helpers;
+namespace opensixt\BikiniTranslateBundle\Helpers;
 
 /**
- * Description of Pagination
+ * Pagination
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
-class PaginationBar {
+class Pagination
+{
 
     /**
-     * Count all elements in a data array
+     * Count of all elements in a data array
      * @var int
      */
     private $count;
@@ -32,6 +33,13 @@ class PaginationBar {
      */
     private $paginationBar;
 
+    /**
+     * Pagination
+     *
+     * @param int $count Count of all elements
+     * @param int $limit Pagination limit
+     * @param int $page Current page
+     */
     public function __construct($count, $limit, $page)
     {
         $this->setCount($count);
@@ -40,22 +48,43 @@ class PaginationBar {
         $this->paginationBar = array();
     }
 
+    /**
+     * Set a count of all elements
+     *
+     * @param int $count
+     */
     public function setCount($count)
     {
         $this->count = $count;
     }
 
+    /**
+     * Set a current page
+     *
+     * @param int $page
+     */
     public function setPage($page)
     {
         if (!$page) $page = 1;
         $this->page = $page;
     }
 
+    /**
+     * Set a pagination limit
+     *
+     * @param int $limit
+     */
     public function setLimit($limit)
     {
         $this->limit = $limit > 0 ? $limit : 1;
     }
 
+    /**
+     * Generate data for pagination bar:
+     * first-, last-, next-, current-, previous-page etc.
+     *
+     * @return array Pagination bar data
+     */
     public function getPaginationBar()
     {
 
@@ -75,6 +104,7 @@ class PaginationBar {
             $prev = 1;
         }
 
+        // list with a current page, and two previous and next pages
         $pages = array();
         if ($this->count > 1) {
             // $i: -2, -1, 0, 1, 2

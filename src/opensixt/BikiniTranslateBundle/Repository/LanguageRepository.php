@@ -1,6 +1,6 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Repository;
+namespace opensixt\BikiniTranslateBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 

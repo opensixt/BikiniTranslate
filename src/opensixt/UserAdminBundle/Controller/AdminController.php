@@ -4,15 +4,21 @@ namespace opensixt\UserAdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use opensixt\UserAdminBundle\Entity\User;
-use opensixt\UserAdminBundle\Entity\Groups;
-use opensixt\UserAdminBundle\Entity\Language;
-use opensixt\UserAdminBundle\Entity\Resource;
+use opensixt\BikiniTranslateBundle\Entity\Groups;
+use opensixt\BikiniTranslateBundle\Entity\Language;
+use opensixt\BikiniTranslateBundle\Entity\Resource;
 
 use Symfony\Component\Form\CallbackValidator;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-use opensixt\UserAdminBundle\Helpers\PaginationBar;
+use opensixt\BikiniTranslateBundle\Helpers\Pagination;
+
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+
 
 /**
  * User Administration Controller
@@ -49,7 +55,7 @@ class AdminController extends Controller
 
         $userCount = $ur->getUserCount();
 
-        $pagination = new PaginationBar($userCount, $this->_paginationLimit, $page);
+        $pagination = new Pagination($userCount, $this->_paginationLimit, $page);
         $paginationBar = $pagination->getPaginationBar();
 
         $userlist = $ur->getUserListWithPagination(
@@ -106,14 +112,14 @@ class AdminController extends Controller
             ))
             ->add('userlanguages', 'entity', array(
                 'label'     => $translator->trans('languages') . ': ',
-                'class'     => 'opensixtUserAdminBundle:Language',
+                'class'     => 'opensixtBikiniTranslateBundle:Language',
                 'property'  => 'locale',
                 'multiple'  => true,
                 'expanded'  => true
             ))
             ->add('usergroups', 'entity', array(
                 'label'     => $translator->trans('groups') . ': ',
-                'class'     => 'opensixtUserAdminBundle:Groups',
+                'class'     => 'opensixtBikiniTranslateBundle:Groups',
                 'property'  => 'name',
                 'multiple'  => true,
                 'expanded'  => true
@@ -180,11 +186,11 @@ class AdminController extends Controller
     public function grouplistAction($page)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $gr = $em->getRepository('opensixtUserAdminBundle:Groups');
+        $gr = $em->getRepository('opensixtBikiniTranslateBundle:Groups');
 
         $groupCount = $gr->getGroupCount();
 
-        $pagination = new PaginationBar($groupCount, $this->_paginationLimit, $page);
+        $pagination = new Pagination($groupCount, $this->_paginationLimit, $page);
         $paginationBar = $pagination->getPaginationBar();
 
         $grouplist = $gr->getGroupListWithPagination(
@@ -214,7 +220,7 @@ class AdminController extends Controller
 
         if ($id) {
             // get group from db
-            $group = $em->find('opensixtUserAdminBundle:Groups', $id);
+            $group = $em->find('opensixtBikiniTranslateBundle:Groups', $id);
         } else {
             // new group
             $group = new Groups();
@@ -230,7 +236,7 @@ class AdminController extends Controller
             ))
             ->add('resources', 'entity', array(
                 'label'     => $translator->trans('resources') . ': ',
-                'class'     => 'opensixtUserAdminBundle:Resource',
+                'class'     => 'opensixtBikiniTranslateBundle:Resource',
                 'property'  => 'name',
                 'multiple'  => true,
                 'expanded'  => true
@@ -266,11 +272,11 @@ class AdminController extends Controller
     public function langlistAction($page = 1)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $lr = $em->getRepository('opensixtUserAdminBundle:Language');
+        $lr = $em->getRepository('opensixtBikiniTranslateBundle:Language');
 
         $langCount = $lr->getLangCount();
 
-        $pagination = new PaginationBar(
+        $pagination = new Pagination(
             $langCount,
             $this->_paginationLimit,
             $page);
@@ -303,7 +309,7 @@ class AdminController extends Controller
 
         if ($id) {
             // get language from db
-            $lang = $em->find('opensixtUserAdminBundle:Language', $id);
+            $lang = $em->find('opensixtBikiniTranslateBundle:Language', $id);
         } else {
             // new language
             $lang = new Language();
@@ -348,11 +354,11 @@ class AdminController extends Controller
     public function reslistAction($page = 1)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $rr = $em->getRepository('opensixtUserAdminBundle:Resource');
+        $rr = $em->getRepository('opensixtBikiniTranslateBundle:Resource');
 
         $resCount = $rr->getResourceCount();
 
-        $pagination = new PaginationBar(
+        $pagination = new Pagination(
             $resCount,
             $this->_paginationLimit,
             $page);
@@ -385,7 +391,7 @@ class AdminController extends Controller
 
         if ($id) {
             // get $resource from db
-            $resource = $em->find('opensixtUserAdminBundle:Resource', $id);
+            $resource = $em->find('opensixtBikiniTranslateBundle:Resource', $id);
         } else {
             // new resource
             $resource = new Resource();

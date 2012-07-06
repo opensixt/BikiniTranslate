@@ -3,6 +3,7 @@
 namespace opensixt\UserAdminBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * User Administration Model
@@ -13,6 +14,15 @@ class UserRepository extends EntityRepository
 {
 
     /**
+     * @var SecurityContext
+     */
+    private $_securityContext;
+
+    public function setSecurityContext(SecurityContext $securityContext) {
+        $this->_securityContext = $securityContext;
+    }
+
+    /**
      * Get list of users from the DB
      *
      * @param string $search
@@ -21,8 +31,10 @@ class UserRepository extends EntityRepository
      */
     public function getUserListWithPagination($limit, $offset)
     {
+        $criteria = $this->checkLogedUser();
+
         $list = $this->findBy(
-            array(),               // search criteria
+            $criteria,             // search criteria
             array('id' => 'asc'),  // order by
             $limit,                // limit
             $offset);              // offset
@@ -36,11 +48,30 @@ class UserRepository extends EntityRepository
      */
     public function getUserCount()
     {
-        $count = $this->createQueryBuilder('u')
-            ->select('COUNT(u)')
-            ->getQuery()
-            ->getSingleScalarResult();
+        $criteria = $this->checkLogedUser();
+
+        if (isset($criteria['id'])) {
+            // user without ROLE_ADMIN can view only himself
+            $count = 1;
+        } else {
+            $count = $this->createQueryBuilder('u')
+                ->select('COUNT(u)')
+                ->getQuery()
+                ->getSingleScalarResult();
+        }
         return $count;
+    }
+
+    private function checkLogedUser()
+    {
+        $criteria = array();
+        // user without ROLE_ADMIN can view only himself
+        if (false === $this->_securityContext->isGranted('ROLE_ADMIN')) {
+            //$userdata = $this->_securityContext->getToken()->getUser();
+            //$criteria['id'] = $userdata->getId();
+        }
+
+        return $criteria;
     }
 
 }

@@ -1,16 +1,16 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Entity;
+namespace opensixt\BikiniTranslateBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * opensixt\UserAdminBundle\Entity\Language
+ * opensixt\BikiniTranslateBundle\Entity\Resource
  *
- * @ORM\Table(name="language")
- * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\LanguageRepository")
+ * @ORM\Table(name="resource")
+ * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\ResourceRepository")
  */
-class Language
+class Resource
 {
     /**
      * @var integer $id
@@ -22,16 +22,16 @@ class Language
     private $id;
 
     /**
-     * @var string $locale
+     * @var string $name
      *
-     * @ORM\Column(name="locale", type="string", length=45, nullable=false)
+     * @ORM\Column(name="name", type="string", length=150, nullable=true)
      */
-    private $locale;
+    private $name;
 
     /**
      * @var string $description
      *
-     * @ORM\Column(name="description", type="string", length=100, nullable=false)
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
     private $description;
 
@@ -48,23 +48,23 @@ class Language
     }
 
     /**
-     * Set locale
+     * Set name
      *
-     * @param string $locale
+     * @param string $name
      */
-    public function setLocale($locale)
+    public function setName($name)
     {
-        $this->locale = $locale;
+        $this->name = $name;
     }
 
     /**
-     * Get locale
+     * Get name
      *
      * @return string
      */
-    public function getLocale()
+    public function getName()
     {
-        return $this->locale;
+        return $this->name;
     }
 
     /**
