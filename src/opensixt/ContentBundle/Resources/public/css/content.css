@@ -48,16 +48,16 @@ body { line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px;
 .main h3 { line-height: 1.2em; font-size: 24px; margin-bottom: 10px; font-weight: normal; color: #F48A00; }
 .main p { line-height: 1.5em; margin-bottom: 20px; }
 
-.main table tbody tr:hover {
+.main table.list tbody tr:hover {
     background: #eee;
 }
 
-.main th, .main td {
+.main table.list th, .main td {
     padding: 5px;
     text-align: left;
 }
 
-.main th {
+.main table.list th {
     font-weight: bold;
 }
 
