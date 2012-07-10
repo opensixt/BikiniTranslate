@@ -1,12 +1,12 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Entity;
+namespace opensixt\BikiniTranslateBundle\Entity;
 
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * opensixt\UserAdminBundle\Entity\Role
+ * opensixt\BikiniTranslateBundle\Entity\Role
  *
  * @ORM\Table(name="role")
  * @ORM\Entity
@@ -41,7 +41,7 @@ class Role implements RoleInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -61,7 +61,7 @@ class Role implements RoleInterface
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -69,9 +69,9 @@ class Role implements RoleInterface
     }
 
     /**
-     * Get role 
+     * Get role
      *
-     * @return string 
+     * @return string
      */
     public function getRole()
     {
@@ -91,7 +91,7 @@ class Role implements RoleInterface
     /**
      * Get label
      *
-     * @return string 
+     * @return string
      */
     public function getLabel()
     {

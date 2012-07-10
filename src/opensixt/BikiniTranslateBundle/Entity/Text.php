@@ -96,7 +96,7 @@ class Gtxt
     /**
      * Get id
      *
-     * @return bigint 
+     * @return bigint
      */
     public function getId()
     {
@@ -116,7 +116,7 @@ class Gtxt
     /**
      * Get hash
      *
-     * @return string 
+     * @return string
      */
     public function getHash()
     {
@@ -136,7 +136,7 @@ class Gtxt
     /**
      * Get msgid
      *
-     * @return text 
+     * @return text
      */
     public function getMsgid()
     {
@@ -156,7 +156,7 @@ class Gtxt
     /**
      * Get msgstr
      *
-     * @return text 
+     * @return text
      */
     public function getMsgstr()
     {
@@ -176,7 +176,7 @@ class Gtxt
     /**
      * Get module
      *
-     * @return string 
+     * @return string
      */
     public function getModule()
     {
@@ -196,7 +196,7 @@ class Gtxt
     /**
      * Get locale
      *
-     * @return string 
+     * @return string
      */
     public function getLocale()
     {
@@ -216,7 +216,7 @@ class Gtxt
     /**
      * Get user
      *
-     * @return string 
+     * @return string
      */
     public function getUser()
     {
@@ -236,7 +236,7 @@ class Gtxt
     /**
      * Get exp
      *
-     * @return date 
+     * @return date
      */
     public function getExp()
     {
@@ -256,7 +256,7 @@ class Gtxt
     /**
      * Get rel
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getRel()
     {
@@ -276,7 +276,7 @@ class Gtxt
     /**
      * Get hts
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getHts()
     {
@@ -296,7 +296,7 @@ class Gtxt
     /**
      * Get block
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getBlock()
     {

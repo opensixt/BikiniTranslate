@@ -68,7 +68,7 @@ class Ftxt
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -88,7 +88,7 @@ class Ftxt
     /**
      * Get hash
      *
-     * @return string 
+     * @return string
      */
     public function getHash()
     {
@@ -108,7 +108,7 @@ class Ftxt
     /**
      * Get lng
      *
-     * @return string 
+     * @return string
      */
     public function getLng()
     {
@@ -128,7 +128,7 @@ class Ftxt
     /**
      * Get msg
      *
-     * @return text 
+     * @return text
      */
     public function getMsg()
     {
@@ -148,7 +148,7 @@ class Ftxt
     /**
      * Get ident
      *
-     * @return string 
+     * @return string
      */
     public function getIdent()
     {
@@ -168,7 +168,7 @@ class Ftxt
     /**
      * Get creator
      *
-     * @return string 
+     * @return string
      */
     public function getCreator()
     {
@@ -188,7 +188,7 @@ class Ftxt
     /**
      * Get created
      *
-     * @return date 
+     * @return date
      */
     public function getCreated()
     {

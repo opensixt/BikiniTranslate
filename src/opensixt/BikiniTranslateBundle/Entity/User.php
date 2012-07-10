@@ -1,6 +1,6 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Entity;
+namespace opensixt\BikiniTranslateBundle\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * opensixt\UserAdminBundle\Entity\User
+ * opensixt\BikiniTranslateBundle\Entity\User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\UserRepository")
@@ -66,7 +66,7 @@ class User implements AdvancedUserInterface
     private $created;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\ManyToMany(targetEntity="opensixt\BikiniTranslateBundle\Entity\Role")
      * @ORM\JoinTable(name="user_role",
      *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}

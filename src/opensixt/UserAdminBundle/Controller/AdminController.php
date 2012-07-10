@@ -3,7 +3,7 @@
 namespace opensixt\UserAdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use opensixt\UserAdminBundle\Entity\User;
+use opensixt\BikiniTranslateBundle\Entity\User;
 use opensixt\BikiniTranslateBundle\Entity\Groups;
 use opensixt\BikiniTranslateBundle\Entity\Language;
 use opensixt\BikiniTranslateBundle\Entity\Resource;
@@ -51,7 +51,9 @@ class AdminController extends Controller
     public function userlistAction($page = 1)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $ur = $em->getRepository('opensixtUserAdminBundle:User');
+        $ur = $em->getRepository('opensixtBikiniTranslateBundle:User');
+
+        //$ur->setSecurityContext($this->get('security.context'));
 
         $userCount = $ur->getUserCount();
 
@@ -85,7 +87,17 @@ class AdminController extends Controller
 
         if ($id) {
             // get user from db
-            $user = $em->find('opensixtUserAdminBundle:User', $id);
+            $user = $em->find('opensixtBikiniTranslateBundle:User', $id);
+
+            /*$securityContext = $this->get('security.context');
+
+            //***** check for edit access
+            if (false === $securityContext->isGranted('VIEW', $user))
+            {
+                throw new AccessDeniedException();
+         } */
+            //****
+
         } else {
             // new user
             $user = new User();
@@ -105,7 +117,7 @@ class AdminController extends Controller
             ))
             ->add('userroles', 'entity', array(
                 'label'     => $translator->trans('roles') . ': ',
-                'class'     => 'opensixtUserAdminBundle:Role',
+                'class'     => 'opensixtBikiniTranslateBundle:Role',
                 'property'  => 'label',
                 'multiple'  => true,
                 'expanded'  => true

@@ -1,11 +1,11 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Entity;
+namespace opensixt\BikiniTranslateBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * opensixt\UserAdminBundle\Entity\UserRole
+ * opensixt\BikiniTranslateBundle\Entity\UserRole
  *
  * @ORM\Table(name="user_role")
  * @ORM\Entity
