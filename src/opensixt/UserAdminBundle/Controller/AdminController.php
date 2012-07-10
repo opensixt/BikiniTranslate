@@ -14,11 +14,11 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 use opensixt\BikiniTranslateBundle\Helpers\Pagination;
 
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+/*use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-
+*/
 
 /**
  * User Administration Controller

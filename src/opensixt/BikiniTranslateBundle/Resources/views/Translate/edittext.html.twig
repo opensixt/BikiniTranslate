@@ -1,0 +1,51 @@
+{% extends "opensixtContentBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ 'languages'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ 'translation_tool'|trans }}</h3>
+
+    <table class="list">
+        <thead>
+            <tr>
+                <th style="width:200px">{{ 'source_lang'|trans }}</th>
+                <th style="width:200px">{{ 'english'|trans }}</th>
+                <th style="width:300px">{{ 'translation'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in texts %}
+            <tr>
+                <td>{{ item.source }}</td>
+                <td>TRANSLATE_ME</td>
+                <td>{{ item.target }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">{{ 'no_languages_found'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    {#% include 'opensixtUserAdminBundle:UserAdmin:paginationbar.html.twig' with {'target_route': '_admin_langlist', 'paginationbar' : paginationbar} %#}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+
+
+{% endblock %}
+
+
+{% block sidebar %}
+    <ul>
+        <li class="backhome"><a href="{{ path('_translate_home') }}">{{ 'admin_home'|trans }}</a></li>
+
+    </ul>
+{% endblock %}

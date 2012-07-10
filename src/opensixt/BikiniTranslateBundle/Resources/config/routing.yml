@@ -1,3 +1,13 @@
-opensixtBikiniTranslateBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: opensixtBikiniTranslateBundle:Default:index }
+#opensixtBikiniTranslateBundle_homepage:
+#    pattern:  /hello/{name}
+#    defaults: { _controller: opensixtBikiniTranslateBundle:Default:index }
+
+_translate_home:
+    pattern: /translate/
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:index }
+
+_translate_edittext:
+    pattern: /translate/edittext
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:edittext, page: 1 }
+    requirements:
+        page: \d+

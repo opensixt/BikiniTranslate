@@ -31,7 +31,8 @@ class UserRepository extends EntityRepository
      */
     public function getUserListWithPagination($limit, $offset)
     {
-        $criteria = $this->checkLogedUser();
+        //$criteria = $this->checkLogedUser();
+        $criteria = array();
 
         $list = $this->findBy(
             $criteria,             // search criteria
@@ -48,21 +49,21 @@ class UserRepository extends EntityRepository
      */
     public function getUserCount()
     {
-        $criteria = $this->checkLogedUser();
+        $criteria = array(); //$this->checkLoggedUser();
 
-        if (isset($criteria['id'])) {
+        /*if (isset($criteria['id'])) {
             // user without ROLE_ADMIN can view only himself
             $count = 1;
-        } else {
-            $count = $this->createQueryBuilder('u')
-                ->select('COUNT(u)')
-                ->getQuery()
-                ->getSingleScalarResult();
-        }
+        } else {*/
+        $count = $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->getQuery()
+            ->getSingleScalarResult();
+        //}
         return $count;
     }
 
-    private function checkLogedUser()
+    /*private function checkLoggedUser()
     {
         $criteria = array();
         // user without ROLE_ADMIN can view only himself
@@ -72,6 +73,8 @@ class UserRepository extends EntityRepository
         }
 
         return $criteria;
-    }
+    }*/
+
+
 
 }

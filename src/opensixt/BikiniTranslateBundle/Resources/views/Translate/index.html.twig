@@ -1,1 +1,43 @@
-Hello {{ name }}!
+{% extends "opensixtContentBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ 'admin_home'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h2>{{ 'admin_home'|trans }}</h2>
+
+    {% if app.user.username %}
+        {% set name = app.user.username %}
+        <div class="message">{% trans %} hello %name% {% endtrans %}</div>
+    {% endif %}
+
+{% endblock %}
+
+{% block sidebar %}
+
+<ul>
+    <li>
+        <a href="{{ path('_translate_edittext') }}">
+            {{ 'translate'|trans }}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('_translate_home') }}">
+            {{ 'Translate Link 2'|trans }}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('_translate_home') }}">
+            {{ 'Translate Link 3'|trans }}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('_translate_home') }}">
+            {{ 'Translate Link 4'|trans }}
+        </a>
+    </li>
+</ul>
+
+{% endblock %}

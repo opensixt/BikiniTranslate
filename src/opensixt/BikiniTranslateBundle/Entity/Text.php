@@ -1,16 +1,16 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Entity;
+namespace opensixt\BikiniTranslateBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * opensixt\UserAdminBundle\Entity\Gtxt
+ * opensixt\BikiniTranslateBundle\Entity\Text
  *
- * @ORM\Table(name="gtxt")
- * @ORM\Entity
+ * @ORM\Table(name="text")
+ * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\TextRepository")
  */
-class Gtxt
+class Text
 {
     /**
      * @var bigint $id
@@ -24,42 +24,66 @@ class Gtxt
     /**
      * @var string $hash
      *
-     * @ORM\Column(name="hash", type="string", length=32, nullable=true)
+     * @ORM\Column(name="hash", type="string", length=32, nullable=false)
      */
     private $hash;
 
     /**
-     * @var text $msgid
+     * @var text $source
      *
-     * @ORM\Column(name="msgid", type="text", nullable=true)
+     * @ORM\Column(name="source", type="text", nullable=false)
      */
-    private $msgid;
+    private $source;
 
     /**
-     * @var text $msgstr
+     * @var text $target
      *
-     * @ORM\Column(name="msgstr", type="text", nullable=true)
+     * @ORM\Column(name="target", type="text", nullable=false)
      */
-    private $msgstr;
+    private $target;
 
     /**
-     * @var string $module
+     * @var string $resourceId
      *
-     * @ORM\Column(name="module", type="string", length=255, nullable=true)
+     * @ORM\Column(name="resource_id", type="string", length=255, nullable=false)
      */
-    private $module;
+    private $resourceId;
 
     /**
-     * @var string $locale
+     * @ORM\ManyToOne(targetEntity="opensixt\BikiniTranslateBundle\Entity\Resource")
+     * @ORM\JoinColumn(name="resource_id", referencedColumnName="id")
      *
-     * @ORM\Column(name="locale", type="string", length=5, nullable=true)
+     * @var ArrayCollection $resource
+     */
+    private $resource;
+
+    /**
+     * @var string $localeId
+     *
+     * @ORM\Column(name="locale_id", type="integer", nullable=false)
+     */
+    private $localeId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="opensixt\BikiniTranslateBundle\Entity\Language")
+     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
+     *
+     * @var ArrayCollection $locale
      */
     private $locale;
 
     /**
-     * @var string $user
+     * @var string $userId
      *
-     * @ORM\Column(name="user", type="string", length=32, nullable=true)
+     * @ORM\Column(name="user_id", type="string", length=32, nullable=false)
+     */
+    private $userId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="opensixt\BikiniTranslateBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *
+     * @var ArrayCollection $user
      */
     private $user;
 
@@ -124,69 +148,109 @@ class Gtxt
     }
 
     /**
-     * Set msgid
+     * Set source
      *
-     * @param text $msgid
+     * @param text $source
      */
-    public function setMsgid($msgid)
+    public function setSource($source)
     {
-        $this->msgid = $msgid;
+        $this->source = $source;
     }
 
     /**
-     * Get msgid
-     *
-     * @return text
-     */
-    public function getMsgid()
-    {
-        return $this->msgid;
-    }
-
-    /**
-     * Set msgstr
-     *
-     * @param text $msgstr
-     */
-    public function setMsgstr($msgstr)
-    {
-        $this->msgstr = $msgstr;
-    }
-
-    /**
-     * Get msgstr
+     * Get source
      *
      * @return text
      */
-    public function getMsgstr()
+    public function getSource()
     {
-        return $this->msgstr;
+        return $this->source;
     }
 
     /**
-     * Set module
+     * Set target
      *
-     * @param string $module
+     * @param text $target
      */
-    public function setModule($module)
+    public function setTarget($target)
     {
-        $this->module = $module;
+        $this->target = $target;
     }
 
     /**
-     * Get module
+     * Get target
+     *
+     * @return text
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
+     * Set resourceId
+     *
+     * @param string $resourceId
+     */
+    public function setResourceId($resourceId)
+    {
+        $this->resourceId = $resourceId;
+    }
+
+    /**
+     * Get resourceId
      *
      * @return string
      */
-    public function getModule()
+    public function getResourceId()
     {
-        return $this->module;
+        return $this->resourceId;
+    }
+
+    /**
+     * Set resource
+     *
+     * @param string $resource
+     */
+    public function setResource($resource)
+    {
+        $this->resource = $resource;
+    }
+
+    /**
+     * Get resource
+     *
+     * @return string
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
+     * Set localeId
+     *
+     * @param string $localeId
+     */
+    public function setLocaleId($localeId)
+    {
+        $this->localeId = $localeId;
+    }
+
+    /**
+     * Get localeId
+     *
+     * @return string
+     */
+    public function getLocaleId()
+    {
+        return $this->localeId;
     }
 
     /**
      * Set locale
      *
-     * @param string $locale
+     * @param ArrayCollection $locale
      */
     public function setLocale($locale)
     {
@@ -196,11 +260,31 @@ class Gtxt
     /**
      * Get locale
      *
-     * @return string
+     * @return ArrayCollection A Doctrine ArrayCollection
      */
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * Set userId
+     *
+     * @param string $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    }
+
+    /**
+     * Get user
+     *
+     * @return string
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     /**
