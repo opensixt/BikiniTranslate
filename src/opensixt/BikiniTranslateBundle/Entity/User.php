@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+
 /**
  * opensixt\BikiniTranslateBundle\Entity\User
  *
@@ -153,7 +155,9 @@ class User implements AdvancedUserInterface
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        $encoder = new MessageDigestPasswordEncoder('md5', false, 1);
+
+        $this->password = $encoder->encodePassword($password, $this->getSalt());
     }
 
     /**
@@ -224,6 +228,25 @@ class User implements AdvancedUserInterface
     public function getCreated()
     {
         return $this->created;
+    }
+
+    /**
+     * adds a role to userRoles ArrayCollection
+     *
+     * @return boolean
+     */
+    public function addUserRole($role)
+    {
+        return $this->userRoles->add($role);
+    }
+
+    /**
+     * set userRoles
+     * Set Roles as ArrayCollection
+     */
+    public function setUserRoles(array $roles = array())
+    {
+        $this->userRoles = new ArrayCollection($roles);
     }
 
     /**

@@ -10,7 +10,6 @@ use opensixt\BikiniTranslateBundle\Entity\Resource;
 
 use Symfony\Component\Form\CallbackValidator;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 use opensixt\BikiniTranslateBundle\Helpers\Pagination;
 
@@ -166,11 +165,7 @@ class AdminController extends Controller
 
                 if ($form->get('newPassword')->getData()) {
                     if ($form['confirmPassword']->getData() == $form['newPassword']->getData()) {
-                        $encoder = new MessageDigestPasswordEncoder('md5', false, 1);
-                        $password = $encoder->encodePassword(
-                            $form->get('newPassword')->getData(),
-                            $user->getSalt());
-                        $user->setPassword($password);
+                        $user->setPassword($form['newPassword']->getData());
                     }
                 }
 
