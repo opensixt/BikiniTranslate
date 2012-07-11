@@ -5,7 +5,7 @@ namespace opensixt\BikiniTranslateBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use opensixt\BikiniTranslateBundle\Helpers\Pagination;
-
+use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
 class TranslateController extends Controller
 {
@@ -17,7 +17,7 @@ class TranslateController extends Controller
     private $_paginationLimit;
 
     public function __construct() {
-        $this->_paginationLimit = 20;
+        $this->_paginationLimit = 5;
     }
 
     public function indexAction()
@@ -37,29 +37,51 @@ class TranslateController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
 
-        /*$queryParameters = array(
-            '' =>
-        );
-        $tr->setQueryParameters();*/
+        $textCount = $tr->getTextCount(TextRepository::MISSING_TRANS_BY_LANG);
 
-        $texts = $tr->getMissingTranslations('', 3, 2, 4);
+        $pagination = new Pagination($textCount, $this->_paginationLimit, $page);
+        $paginationBar = $pagination->getPaginationBar();
+
+        $texts = $tr->getMissingTranslations(
+            '',
+            3,
+            $this->_paginationLimit,
+            $pagination->getOffset());
 //print_r ($texts);
+//print_r($this->getAvailableResourcesForUser());
         return $this->render('opensixtBikiniTranslateBundle:Translate:edittext.html.twig',
             array(
                 'texts' => $texts,
+                'paginationbar' => $paginationBar,
             ));
     }
 
     /**
-     * Returns array of locales for loged user
+     * Returns array of locales for logged user
      *
      * @return array
      */
-    private function getLocaleForLoggedUser()
+    private function getLocalesForUser()
     {
-       $userdata = $this->get('security.context')->getToken()->getUser();
-       $locale = $userdata->getUserLanguages()->toArray();
-       return $locale;
+        $userdata = $this->get('security.context')->getToken()->getUser();
+        $locales = $userdata->getUserLanguages()->toArray();
+        return $locales;
+    }
+
+    /**
+     * Returns array of available resources for logged user
+     */
+    private function getAvailableResourcesForUser()
+    {
+        $result = array();
+        $userdata = $this->get('security.context')->getToken()->getUser();
+        $resources = $userdata->getUserGroups()->toArray();
+        foreach ($resources as $res) {
+            //echo "*";
+            $result[] = $res->getResources();
+        }
+
+        return $result;
     }
 
 }

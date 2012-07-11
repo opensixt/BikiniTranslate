@@ -1,14 +1,14 @@
 {% extends "opensixtContentBundle::layout.html.twig" %}
 
 {% block title %}
-    {{ 'languages'|trans }}
+    {{ 'translation_tool'|trans }}
 {% endblock %}
 
 {% block body %}
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
-    <table class="list">
+    <table class="list" style="border:1px;">
         <thead>
             <tr>
                 <th style="width:200px">{{ 'source_lang'|trans }}</th>
@@ -19,7 +19,7 @@
         <tbody>
         {% for item in texts %}
             <tr>
-                <td>{{ item.source }}</td>
+                <td>{{ item.resource.name }}<br/>{{ item.source }}</td>
                 <td>TRANSLATE_ME</td>
                 <td>{{ item.target }}</td>
             </tr>
@@ -32,7 +32,7 @@
         <tfoot>
             <tr>
                 <td colspan="2">
-                    {#% include 'opensixtUserAdminBundle:UserAdmin:paginationbar.html.twig' with {'target_route': '_admin_langlist', 'paginationbar' : paginationbar} %#}
+                    {% include 'opensixtUserAdminBundle:UserAdmin:paginationbar.html.twig' with {'target_route': '_translate_edittext', 'paginationbar' : paginationbar} %}
                 </td>
             </tr>
         </tfoot>
