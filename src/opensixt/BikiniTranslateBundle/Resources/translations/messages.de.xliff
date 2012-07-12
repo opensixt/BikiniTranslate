@@ -22,6 +22,19 @@
                 <source>translation</source>
                 <target>Übersetzung</target>
             </trans-unit>
+            <trans-unit id="25">
+                <source>no_translation_found</source>
+                <target>Keine Übersetzungen gefunden.</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>please_choose_locale</source>
+                <target>Bitte Sprache wählen</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>save_locale</source>
+                <target>Ok</target>
+            </trans-unit>
+
 
         </body>
     </file>

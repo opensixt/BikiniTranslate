@@ -16,9 +16,9 @@ class TextRepository extends EntityRepository
     const FIELD_HASH      = 't.hash';
     const FIELD_SOURCE    = 't.source';
     const FIELD_TARGET    = 't.target';
-    const FIELD_RESOURCE  = 't.resource_id';
+    const FIELD_RESOURCE  = 't.resourceId';
     const FIELD_LOCALE    = 't.localeId';
-    const FIELD_USER      = 't.user_id';
+    const FIELD_USER      = 't.userId';
     const FIELD_EXP       = 't.exp';
     const FIELD_REL       = 't.rel';
     const FIELD_HTS       = 't.hts';
@@ -27,31 +27,56 @@ class TextRepository extends EntityRepository
     const MISSING_TRANS_BY_LANG = 0;
 
     /**
-     *
      * @var string
      */
     private $_task;
+
+    /**
+     * @var array
+     */
+    private $_resources;
+
+    /**
+     * @var int
+     */
+    private $_hts;
 
 
     /**
      *
      * @param string $task
      */
-    public function setTask ($task)
+    public function setTask($task)
     {
         $this->_task = $task;
     }
 
     /**
+     *
+     * @param array $resources
+     */
+    public function setResources($resources)
+    {
+        $this->_resources = $resources;
+    }
+
+    /**
+     *
+     * @param int $hts
+     */
+    public function setHts($hts)
+    {
+        $this->_hts = $hts;
+    }
+
+    /**
      * Gets list of texts without translations
      *
-     * @param array $resources Resource Ids
      * @param int $locale Locale Id
      * @param int $limit Pagination limit
      * @param int $offset Pagination offset
-     * @param int $hts
      */
-    public function getMissingTranslations($resource, $locale, $limit, $offset, $hts = false)
+    public function getMissingTranslations($locale, $limit, $offset)
     {
 
         $query = $this->createQueryBuilder('t')
@@ -78,21 +103,9 @@ class TextRepository extends EntityRepository
             ->getArrayResult();
                 /*
 
-        # additional filters
-        if (!empty($this->available_modules)) {
-            $sql .= ' AND ' . self::FIELD_MODULE . " IN ('$this->available_modules')";
-        }
 
-        if (isset($params['domain']) && $params['domain']) {
-            $sql .= ' AND ' . self::FIELD_MODULE . "= '$params[domain]'";
-        }
 
-        // just get the unflagged translations
-        // 0 = open state
-        // 1 = already sent to hts
-        if ($params['hts'] === true) {
-            $sql .= ' AND ' . self::FIELD_HTS . ' IS NULL';
-        }
+
 */
 
     }
@@ -102,9 +115,11 @@ class TextRepository extends EntityRepository
      *
      * @return int
      */
-    public function getTextCount($task)
+    public function getTextCount($task, $resources, $hts = false)
     {
         $this->setTask($task);
+        $this->setResources($resources);
+        $this->setHts($hts);
 
         $query = $this->createQueryBuilder('t')
             ->select('COUNT(t)');
@@ -127,13 +142,20 @@ class TextRepository extends EntityRepository
         switch ($this->_task) {
         default:
         case self::MISSING_TRANS_BY_LANG:
-            $query//->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
-                ->where(self::FIELD_EXP . ' IS NULL')
+            $query->where(self::FIELD_RESOURCE . ' IN (' . implode(',', $this->_resources) . ')')
+                //->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
+                ->andWhere(self::FIELD_EXP . ' IS NULL')
                 ->andWhere(self::FIELD_REL . ' IS NOT NULL');
+
+            // just get the unflagged translations
+            // 0 = open state
+            // 1 = already sent to hts
+            if ($this->_hts === true) {
+                $query->addWhere(self::FIELD_HTS . ' IS NULL');
+            }
             break;
 
         }
-
     }
 
 

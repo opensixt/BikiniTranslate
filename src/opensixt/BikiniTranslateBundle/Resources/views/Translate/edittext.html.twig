@@ -25,19 +25,18 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="2">{{ 'no_languages_found'|trans }}</td>
+                <td colspan="2">{{ 'no_translation_found'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="2">
-                    {% include 'opensixtUserAdminBundle:UserAdmin:paginationbar.html.twig' with {'target_route': '_translate_edittext', 'paginationbar' : paginationbar} %}
+                    {% include 'opensixtBikiniTranslateBundle:Translate:paginationbar.html.twig' with {'target_route': '_translate_edittext', 'paginationbar' : paginationbar, 'locale': locale } %}
                 </td>
             </tr>
         </tfoot>
     </table>
-
 
 
 {% endblock %}

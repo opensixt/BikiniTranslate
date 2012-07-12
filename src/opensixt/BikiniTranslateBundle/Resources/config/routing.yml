@@ -2,8 +2,12 @@ _translate_home:
     pattern: /translate/
     defaults: { _controller: opensixtBikiniTranslateBundle:Translate:index }
 
+_translate_setlocale:
+    pattern: /translate/setlocale/
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:setlocale }
+
 _translate_edittext:
-    pattern: /translate/edittext/{page}
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:edittext, page: 1 }
+    pattern: /translate/edittext/{locale}/{page}
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:edittext, locale: 'empty', page: 1 }
     requirements:
         page: \d+

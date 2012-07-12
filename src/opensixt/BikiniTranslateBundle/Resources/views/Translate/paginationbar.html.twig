@@ -1,0 +1,17 @@
+        <div class="paginator">
+            {% if paginationbar.last > 1 %}
+                <a href="{{ path(target_route, {'page':paginationbar.first, 'locale':locale}) }}">&lt;&lt;</a>&nbsp;
+                <a href="{{ path(target_route, {'page':paginationbar.prev, 'locale':locale}) }}">&lt;</a>&nbsp;
+                ...&nbsp;
+                {% for page in paginationbar.pages %}
+                    {% if page != paginationbar.current %}
+                        <a href="{{ path(target_route, {'page':page, 'locale':locale}) }}">{{ page }}</a>&nbsp;
+                    {% else %}
+                        {{ page }}&nbsp;
+                    {% endif %}
+                {% endfor %}
+                ...&nbsp;
+                <a href="{{ path(target_route, {'page':paginationbar.next, 'locale':locale}) }}">&gt;</a>&nbsp;
+                <a href="{{ path(target_route, {'page':paginationbar.last, 'locale':locale}) }}">&gt;&gt;</a>&nbsp;
+            {% endif %}
+        </div>
