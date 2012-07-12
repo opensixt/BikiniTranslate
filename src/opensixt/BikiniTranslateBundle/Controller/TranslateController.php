@@ -42,9 +42,20 @@ class TranslateController extends Controller
      */
     public function edittextAction($locale, $resources = 0, $page = 1)
     {
+        $session = $this->get('session');
         if (!$locale || $locale == 'empty') {
-            $session = $this->get('session');
+            // if $locale is not set, redirect to setlocale action
+
             // store an attribute for reuse during a later user request
+            $session->set('targetRoute', '_translate_edittext');
+            return $this->redirect($this->generateUrl('_translate_setlocale'));
+        } else {
+            // get language id with locale
+            $userLang = array_flip($this->getUserLocales());
+            $languageId = isset($userLang[$locale]) ? $userLang[$locale] : 0;
+        }
+
+        if (!$languageId) {
             $session->set('targetRoute', '_translate_edittext');
             return $this->redirect($this->generateUrl('_translate_setlocale'));
         }
@@ -56,18 +67,18 @@ class TranslateController extends Controller
             $resources = $this->getUserResources(); // available resources
         }
 
-
         $textCount = $tr->getTextCount(
             TextRepository::MISSING_TRANS_BY_LANG,
+            $languageId,
             $resources);
 
         $pagination = new Pagination($textCount, $this->_paginationLimit, $page);
         $paginationBar = $pagination->getPaginationBar();
 
         $texts = $tr->getMissingTranslations(
-            3,
             $this->_paginationLimit,
-            $pagination->getOffset());
+            $pagination->getOffset()
+            );
 
         return $this->render('opensixtBikiniTranslateBundle:Translate:edittext.html.twig',
             array(
@@ -90,23 +101,18 @@ class TranslateController extends Controller
         if (count($locales) == 1) {
             return $this->redirect($this->generateUrl(
                 $session->get('targetRoute') ? : '_translate_home',
-                array('locale' => $locales[0]->getLocale())
+                array('locale' => $locales[0])
                 ));
         }
 
         $request = $this->getRequest();
         $translator = $this->get('translator');
 
-        $data = array();
-        foreach ($locales as $locale) {
-            $data[$locale->getId()] = $locale->getLocale();
-        }
-
         $form = $this->createFormBuilder()
             ->add('locale', 'choice', array(
                     'label'     => $translator->trans('please_choose_locale') . ': ',
                     'empty_value' => '',
-                    'choices'   => $data,
+                    'choices'   => $locales,
                 ))
             ->getForm();
 
@@ -119,7 +125,7 @@ class TranslateController extends Controller
                 if ($form->get('locale')->getData()) {
                     //echo $form->get('locale')->getData();
                     $localeId = $form->get('locale')->getData();
-                    $locale = isset($data[$localeId]) ? $data[$localeId] : '';
+                    $locale = isset($locales[$localeId]) ? $locales[$localeId] : '';
 
                     return $this->redirect($this->generateUrl(
                         $session->get('targetRoute') ? : '_translate_home',
@@ -132,13 +138,9 @@ class TranslateController extends Controller
             }
         }
 
-
         return $this->render('opensixtBikiniTranslateBundle:Translate:setlocale.html.twig',
             array(
                 'form' => $form->createView(),
-                /*'texts' => $texts,
-                'paginationbar' => $paginationBar,
-                'locale' => $locale,*/
             ));
     }
 
@@ -150,8 +152,13 @@ class TranslateController extends Controller
     private function getUserLocales()
     {
         $userdata = $this->get('security.context')->getToken()->getUser();
-        $locales = $userdata->getUserLanguages()->toArray();
-        return $locales;
+        $locales = $userdata->getUserLanguages();
+
+        foreach ($locales as $locale) {
+            $userLang[$locale->getId()] = $locale->getLocale();
+        }
+
+        return $userLang;
     }
 
     /**

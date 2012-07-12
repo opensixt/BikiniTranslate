@@ -41,6 +41,11 @@ class TextRepository extends EntityRepository
      */
     private $_hts;
 
+    /**
+     * @var int
+     */
+    private $_locale;
+
 
     /**
      *
@@ -70,13 +75,22 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     * Sets locale
+     *
+     * @param int $locale
+     */
+    public function setLocale($locale)
+    {
+        $this->_locale = $locale;
+    }
+
+    /**
      * Gets list of texts without translations
      *
-     * @param int $locale Locale Id
      * @param int $limit Pagination limit
      * @param int $offset Pagination offset
      */
-    public function getMissingTranslations($locale, $limit, $offset)
+    public function getMissingTranslations($limit, $offset)
     {
 
         $query = $this->createQueryBuilder('t')
@@ -86,38 +100,28 @@ class TextRepository extends EntityRepository
                 ->leftJoin('t.user', 'u');
 
         $this->setQueryParameters($query);
-                //->leftJoin('t.target4english', 't', '', 't.localeId=')
-                //->where(self::FIELD_LOCALE . ' = ?1')
-                //->andWhere(self::FIELD_TARGET . ' = \'TRANSLATE_ME\'')
-      //          ->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
-      //          ->andWhere(self::FIELD_EXP . ' IS NULL')
-      //          ->andWhere(self::FIELD_REL . ' IS NOT NULL')
 
-                //->setParameter(1, $locale)
+        // pagination limit and offset
+        $query->setMaxResults($limit)
+            ->setFirstResult($offset);
 
-                $query->setMaxResults($limit)
-                ->setFirstResult($offset);
-
-        return $query->getQuery()
-            //->getResult();//
+        return $query->getQuery() //->getResult();//
             ->getArrayResult();
-                /*
-
-
-
-
-*/
-
     }
 
     /**
      * Get count of records in text table
      *
-     * @return int
+     * @param int $task
+     * @param int locale id
+     * @param array $resources
+     * @param int $hts
+     * @return int texts count
      */
-    public function getTextCount($task, $resources, $hts = false)
+    public function getTextCount($task, $locale, $resources, $hts = false)
     {
         $this->setTask($task);
+        $this->setLocale($locale);
         $this->setResources($resources);
         $this->setHts($hts);
 
@@ -143,7 +147,9 @@ class TextRepository extends EntityRepository
         default:
         case self::MISSING_TRANS_BY_LANG:
             $query->where(self::FIELD_RESOURCE . ' IN (' . implode(',', $this->_resources) . ')')
+                ->andWhere(self::FIELD_LOCALE . "=" . (int)$this->_locale)
                 //->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
+                //->andWhere(self::FIELD_TARGET . ' = \'TRANSLATE_ME\'')
                 ->andWhere(self::FIELD_EXP . ' IS NULL')
                 ->andWhere(self::FIELD_REL . ' IS NOT NULL');
 

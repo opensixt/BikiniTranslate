@@ -38,7 +38,7 @@ class AdminController extends Controller
 
     public function indexAction()
     {
-        return $this->render('opensixtUserAdminBundle:UserAdmin:index.html.twig');
+        return $this->render('opensixtBikiniTranslateBundle:Translate:index.html.twig');
     }
 
     /**

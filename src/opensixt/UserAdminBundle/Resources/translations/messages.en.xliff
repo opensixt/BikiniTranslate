@@ -150,6 +150,10 @@
                 <source>resource_name</source>
                 <target>Name</target>
             </trans-unit>
+            <trans-unit id="185">
+                <source>administration</source>
+                <target>Administration</target>
+            </trans-unit>
 
         </body>
     </file>

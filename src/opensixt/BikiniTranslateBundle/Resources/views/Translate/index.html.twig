@@ -19,6 +19,9 @@
 
 <ul>
     <li>
+        {{ 'translation_tool'|trans }}
+    </li>
+    <li>
         <a href="{{ path('_translate_edittext') }}">
             {{ 'translate'|trans }}
         </a>
@@ -36,6 +39,34 @@
     <li>
         <a href="{{ path('_translate_home') }}">
             {{ 'Translate Link 4'|trans }}
+        </a>
+    </li>
+</ul>
+
+<br/>
+
+<ul>
+    <li>
+        {{ 'administration'|trans }}
+    </li>
+    <li>
+        <a href="{{ path('_admin_userlist') }}">
+            {{ 'user_list'|trans }}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('_admin_grouplist') }}">
+            {{ 'groups'|trans }}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('_admin_langlist') }}">
+            {{ 'languages'|trans }}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('_admin_reslist') }}">
+            {{ 'resources'|trans }}
         </a>
     </li>
 </ul>
