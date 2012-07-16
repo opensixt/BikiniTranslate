@@ -67,10 +67,10 @@ class UserRepository extends EntityRepository
     {
         $criteria = array();
         // user without ROLE_ADMIN can view only himself
-        if (false === $this->_securityContext->isGranted('ROLE_ADMIN')) {
+        //if (false === $this->_securityContext->isGranted('ROLE_ADMIN')) {
             //$userdata = $this->_securityContext->getToken()->getUser();
             //$criteria['id'] = $userdata->getId();
-        }
+        //}
 
         return $criteria;
     }*/
