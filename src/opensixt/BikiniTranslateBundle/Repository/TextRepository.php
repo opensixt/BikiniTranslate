@@ -3,7 +3,6 @@
 namespace opensixt\BikiniTranslateBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Text Model
@@ -12,8 +11,6 @@ use Symfony\Component\DependencyInjection\Container;
  */
 class TextRepository extends EntityRepository
 {
-    //const TABLE_NAME    = 'text';
-
     const FIELD_ID        = 't.id';
     const FIELD_HASH      = 't.hash';
     const FIELD_SOURCE    = 't.source';
@@ -51,7 +48,12 @@ class TextRepository extends EntityRepository
     /**
      * @var string
      */
-    private $_container;
+    private $_commonLanguage;
+
+    /**
+     * @var int
+     */
+    private $_commonLanguageId;
 
 
     /**
@@ -93,11 +95,12 @@ class TextRepository extends EntityRepository
 
     /**
      *
-     * @param Container $locale
+     * @param string $locale
      */
-    public function setContainer(Container $container)
+    public function setCommonLanguage($locale)
     {
-        $this->_container = $container;
+        $this->_commonLanguage = $locale;
+        $this->_commonLanguageId = $this->getIdByLocale($locale);
     }
 
     /**
@@ -109,7 +112,6 @@ class TextRepository extends EntityRepository
      */
     public function getMissingTranslations($limit, $offset)
     {
-
         $query = $this->createQueryBuilder('t')
              ->select('t, l, r, u')
              ->leftJoin('t.locale', 'l')
@@ -126,24 +128,24 @@ class TextRepository extends EntityRepository
             ->getArrayResult();
 
         // set messages in common language for any text in $translations
-        $commonLanguage = $this->_container->getParameter('common_language');
-        $this->getMessagesByLanguage($translations, $commonLanguage);
+        $this->setMessagesInCommonLanguage($translations);
 
         return $translations;
     }
 
-
     /**
-     * Get messages in $lang language for any hash from $texts
-     * and set it in $texts
+     * Get messages in $locale language for any hash from $texts
+     * and return it like array
      *
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $texts
      * @param string $locale
+     * @return array
      */
-    public function getMessagesByLanguage(&$texts, $locale)
+    public function getMessagesByLanguage($texts, $locale)
     {
         $langId = $this->getIdByLocale($locale); // language id by locale
+        $textsLang = array();
 
         if (count($texts) && $langId){
             $hashes = array();
@@ -155,10 +157,26 @@ class TextRepository extends EntityRepository
             $query = $this->createQueryBuilder('t')
                 ->select('t')
                 ->where(self::FIELD_HASH . ' IN (?1)')
-                ->andWhere(self::FIELD_LOCALE . '=' . $langId)
-                ->setParameter(1, $hashes);
+                ->andWhere(self::FIELD_LOCALE . '= ?2')
+                ->setParameter(1, $hashes)
+                ->setParameter(2, $langId);
             $textsLang = $query->getQuery()->getArrayResult();
+        }
 
+        return $textsLang;
+    }
+
+    /**
+     * Set messages in $locale language for any hash from $texts
+     * if current locale not equal common language
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param array $texts
+     */
+    private function setMessagesInCommonLanguage(&$texts)
+    {
+        if ($this->_locale != $this->_commonLanguageId) {
+            $textsLang = $this->getMessagesByLanguage($texts, $this->_commonLanguage);
             foreach ($texts as &$text) {
                 $mess = '';
                 foreach ($textsLang as $textLang) {
@@ -169,7 +187,6 @@ class TextRepository extends EntityRepository
                 }
                 $text['commonLang'] = $mess;
             }
-
         }
     }
 
@@ -212,13 +229,14 @@ class TextRepository extends EntityRepository
         switch ($this->_task) {
         default:
         case self::MISSING_TRANS_BY_LANG:
-            $query->where(self::FIELD_RESOURCE . ' IN (' . implode(',', $this->_resources) . ')')
-                ->andWhere(self::FIELD_LOCALE . "=" . (int)$this->_locale)
+            $query->where(self::FIELD_RESOURCE . ' IN (?1)')
+                ->andWhere(self::FIELD_LOCALE . ' = ?2')
                 //->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
                 ->andWhere(self::FIELD_TARGET . ' = \'TRANSLATE_ME\'')
                 ->andWhere(self::FIELD_EXP . ' IS NULL')
-                ->andWhere(self::FIELD_REL . ' IS NOT NULL');
-
+                ->andWhere(self::FIELD_REL . ' IS NOT NULL')
+                ->setParameter(1, $this->_resources)
+                ->setParameter(2, $this->_locale);
             // just get the unflagged translations
             // 0 = open state
             // 1 = already sent to hts

@@ -12,16 +12,20 @@
     <table class="list">
         <thead>
             <tr>
-                <th style="width:200px">{{ 'source_lang'|trans }}</th>
-                <th style="width:200px">{{ 'english'|trans }}</th>
-                <th style="width:300px">{{ 'translation'|trans }}</th>
+                <th>{{ 'source_lang'|trans }}</th>
+                {% if not currentLangIsCommonLang %}
+                <th>{{ 'english'|trans }}</th>
+                {% endif %}
+                <th>{{ 'translation'|trans }}</th>
             </tr>
         </thead>
         <tbody>
         {% for item in texts %}
             <tr>
                 <td>{{ item.resource.name }}<br/>{{ item.source }}</td>
+                {% if not currentLangIsCommonLang %}
                 <td>{{ item.commonLang }}</td>
+                {% endif %}
                 <td><textarea style="width:300px;" name="texts[{{ item.id }}]"></textarea></td>
             </tr>
         {% else %}
@@ -49,7 +53,6 @@
 {% block sidebar %}
     <ul>
         <li class="backhome"><a href="{{ path('_translate_home') }}">{{ 'admin_home'|trans }}</a></li>
-
     </ul>
 {% endblock %}
 

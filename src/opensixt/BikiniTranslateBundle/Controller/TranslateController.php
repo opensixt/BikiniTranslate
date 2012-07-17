@@ -35,9 +35,9 @@ class TranslateController extends Controller
     /**
      * edittext Action
      *
-     * @param type $locale
-     * @param type $resources
-     * @param type $page
+     * @param string $locale
+     * @param array $resources
+     * @param int $page
      * @return Response A Response instance
      */
     public function edittextAction($locale, $resources = 0, $page = 1)
@@ -65,8 +65,13 @@ class TranslateController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
 
-        // TODO: Find a better solution
-        $tr->setContainer($this->container);
+        $commonLang = $this->container->getParameter('common_language');
+        $tr->setCommonLanguage($commonLang);
+
+        $currentLangIsCommonLang = false;
+        if ($commonLang == $locale) {
+            $currentLangIsCommonLang = true;
+        }
 
         // Update texts with entered values
         if ($request->getMethod() == 'POST') {
@@ -81,7 +86,7 @@ class TranslateController extends Controller
         }
 
         if (!$resources) {
-            $resources = $this->getUserResources(); // available resources
+            $resources = array_keys($this->getUserResources()); // available resources
         }
 
         $textCount = $tr->getTextCount(
@@ -102,6 +107,7 @@ class TranslateController extends Controller
                 'texts' => $texts,
                 'paginationbar' => $paginationBar,
                 'locale' => $locale,
+                'currentLangIsCommonLang' => $currentLangIsCommonLang,
             ));
     }
 
@@ -189,7 +195,7 @@ class TranslateController extends Controller
         foreach ($groups as $grp) {
             $resources = $grp->getResources();
             foreach ($resources as $res) {
-                $result[] = $res->getId();
+                $result[$res->getId()] = $res->getName();
             }
         }
 
