@@ -8,7 +8,8 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
-    <table class="list" style="border:1px;">
+    <form action="{{ path('_translate_edittext', {'locale':locale, 'page':paginationbar.current}) }}" method="post">
+    <table class="list">
         <thead>
             <tr>
                 <th style="width:200px">{{ 'source_lang'|trans }}</th>
@@ -20,8 +21,8 @@
         {% for item in texts %}
             <tr>
                 <td>{{ item.resource.name }}<br/>{{ item.source }}</td>
-                <td>TRANSLATE_ME</td>
-                <td>{{ item.target }}</td>
+                <td>{{ item.commonLang }}</td>
+                <td><textarea style="width:300px;" name="texts[{{ item.id }}]"></textarea></td>
             </tr>
         {% else %}
             <tr>
@@ -38,6 +39,9 @@
         </tfoot>
     </table>
 
+    <input type="submit" value="{{ 'save'|trans }}">
+
+    </form>
 
 {% endblock %}
 

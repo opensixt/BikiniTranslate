@@ -43,6 +43,8 @@ class TranslateController extends Controller
     public function edittextAction($locale, $resources = 0, $page = 1)
     {
         $session = $this->get('session');
+        $request = $this->getRequest();
+
         if (!$locale || $locale == 'empty') {
             // if $locale is not set, redirect to setlocale action
 
@@ -62,6 +64,21 @@ class TranslateController extends Controller
 
         $em = $this->getDoctrine()->getEntityManager();
         $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+
+        // TODO: Find a better solution
+        $tr->setContainer($this->container);
+
+        // Update texts with entered values
+        if ($request->getMethod() == 'POST') {
+            $texts = $request->request->get('texts');
+            if (isset($texts)) {
+                foreach ($texts as $key=>$value) {
+                    if ($value) {
+                        $tr->updateText($key, $value);
+                    }
+                }
+            }
+        }
 
         if (!$resources) {
             $resources = $this->getUserResources(); // available resources

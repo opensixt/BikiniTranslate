@@ -3,6 +3,7 @@
 namespace opensixt\BikiniTranslateBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Text Model
@@ -13,6 +14,7 @@ class TextRepository extends EntityRepository
 {
     //const TABLE_NAME    = 'text';
 
+    const FIELD_ID        = 't.id';
     const FIELD_HASH      = 't.hash';
     const FIELD_SOURCE    = 't.source';
     const FIELD_TARGET    = 't.target';
@@ -45,6 +47,11 @@ class TextRepository extends EntityRepository
      * @var int
      */
     private $_locale;
+
+    /**
+     * @var string
+     */
+    private $_container;
 
 
     /**
@@ -85,8 +92,18 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     *
+     * @param Container $locale
+     */
+    public function setContainer(Container $container)
+    {
+        $this->_container = $container;
+    }
+
+    /**
      * Gets list of texts without translations
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $limit Pagination limit
      * @param int $offset Pagination offset
      */
@@ -94,10 +111,10 @@ class TextRepository extends EntityRepository
     {
 
         $query = $this->createQueryBuilder('t')
-                ->select('t, l, r, u')
-                ->leftJoin('t.locale', 'l')
-                ->leftJoin('t.resource', 'r')
-                ->leftJoin('t.user', 'u');
+             ->select('t, l, r, u')
+             ->leftJoin('t.locale', 'l')
+             ->leftJoin('t.resource', 'r')
+             ->leftJoin('t.user', 'u');
 
         $this->setQueryParameters($query);
 
@@ -105,13 +122,61 @@ class TextRepository extends EntityRepository
         $query->setMaxResults($limit)
             ->setFirstResult($offset);
 
-        return $query->getQuery() //->getResult();//
+        $translations = $query->getQuery() //->getResult();//
             ->getArrayResult();
+
+        // set messages in common language for any text in $translations
+        $commonLanguage = $this->_container->getParameter('common_language');
+        $this->getMessagesByLanguage($translations, $commonLanguage);
+
+        return $translations;
+    }
+
+
+    /**
+     * Get messages in $lang language for any hash from $texts
+     * and set it in $texts
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param array $texts
+     * @param string $locale
+     */
+    public function getMessagesByLanguage(&$texts, $locale)
+    {
+        $langId = $this->getIdByLocale($locale); // language id by locale
+
+        if (count($texts) && $langId){
+            $hashes = array();
+            foreach ($texts as $text) {
+                $hashes[] = $text['hash'];
+            }
+            array_unique($hashes);
+
+            $query = $this->createQueryBuilder('t')
+                ->select('t')
+                ->where(self::FIELD_HASH . ' IN (?1)')
+                ->andWhere(self::FIELD_LOCALE . '=' . $langId)
+                ->setParameter(1, $hashes);
+            $textsLang = $query->getQuery()->getArrayResult();
+
+            foreach ($texts as &$text) {
+                $mess = '';
+                foreach ($textsLang as $textLang) {
+                    if ($text['hash'] == $textLang['hash']) {
+                        $mess = $textLang['target'];
+                        break;
+                    }
+                }
+                $text['commonLang'] = $mess;
+            }
+
+        }
     }
 
     /**
      * Get count of records in text table
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $task
      * @param int locale id
      * @param array $resources
@@ -138,6 +203,7 @@ class TextRepository extends EntityRepository
 
     /**
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $parameters
      */
     private function setQueryParameters($query)
@@ -149,7 +215,7 @@ class TextRepository extends EntityRepository
             $query->where(self::FIELD_RESOURCE . ' IN (' . implode(',', $this->_resources) . ')')
                 ->andWhere(self::FIELD_LOCALE . "=" . (int)$this->_locale)
                 //->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
-                //->andWhere(self::FIELD_TARGET . ' = \'TRANSLATE_ME\'')
+                ->andWhere(self::FIELD_TARGET . ' = \'TRANSLATE_ME\'')
                 ->andWhere(self::FIELD_EXP . ' IS NULL')
                 ->andWhere(self::FIELD_REL . ' IS NOT NULL');
 
@@ -164,6 +230,42 @@ class TextRepository extends EntityRepository
         }
     }
 
+    /**
+     * Updates text table: set target = $text for $id
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param int $id
+     * @param string $text
+     */
+    public function updateText ($id, $text)
+    {
+        if ($id) {
+            $this->createQueryBuilder('t')
+                ->update()
+                ->set(self::FIELD_TARGET, '?1')
+                ->where(self::FIELD_ID . ' = ?2')
+                ->setParameter(1, trim($text))
+                ->setParameter(2, $id)
+                ->getQuery()
+                ->execute();
+        }
+    }
 
+    /**
+     * Get language id from table Languages by locale
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param string $langId
+     */
+    private function getIdByLocale($locale)
+    {
+        if ($locale) {
+            $repository = $this->getEntityManager()
+                ->getRepository('opensixtBikiniTranslateBundle:Language');
+
+            $langData = $repository->findBy(array('locale' => $locale));
+            return $langData[0]->getId();
+        }
+    }
 
 }

@@ -3,7 +3,7 @@
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="1">
-                <source>translate</source>
+                <source>mnu_translate</source>
                 <target>Übersetzen</target>
             </trans-unit>
             <trans-unit id="5">
@@ -33,6 +33,18 @@
             <trans-unit id="35">
                 <source>save_locale</source>
                 <target>Ok</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>mnu_search</source>
+                <target>Suchen</target>
+            </trans-unit>
+            <trans-unit id="45">
+                <source>mnu_change</source>
+                <target>Ändern</target>
+            </trans-unit>
+            <trans-unit id="50">
+                <source>save</source>
+                <target>Speichern</target>
             </trans-unit>
 
 

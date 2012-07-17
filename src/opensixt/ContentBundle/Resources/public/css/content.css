@@ -55,6 +55,7 @@ body { line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px;
 .main table.list th, .main td {
     padding: 5px;
     text-align: left;
+    vertical-align: top;
 }
 
 .main table.list th {
