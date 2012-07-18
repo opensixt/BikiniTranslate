@@ -24,6 +24,10 @@ class TextRepository extends EntityRepository
     const FIELD_BLOCK     = 't.block';
 
     const MISSING_TRANS_BY_LANG = 0;
+    const SEARCH_PHRASE_BY_LANG = 1;
+
+    const SEARCH_EXACT = 0;
+    const SEARCH_LIKE = 1;
 
     /**
      * @var string
@@ -54,6 +58,11 @@ class TextRepository extends EntityRepository
      * @var int
      */
     private $_commonLanguageId;
+
+    /**
+     * @var string
+     */
+    private $_searchString;
 
 
     /**
@@ -104,6 +113,56 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     *
+     * @param string $searchString
+     */
+    public function setSearchString($searchString)
+    {
+        $this->_searchString = $searchString;
+    }
+
+    /**
+     * Sets class attributes
+     *
+     * @param int $task
+     * @param int $locale locale id
+     * @param array $resources
+     * @param bool $hts
+     */
+    public function init($task, $locale, $resources, $hts = false)
+    {
+        $this->setTask($task);
+        $this->setLocale($locale);
+        $this->setResources($resources);
+        $this->setHts($hts);
+    }
+
+    /**
+     * Get count of records in text table
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param int $task
+     * @param int $locale locale id
+     * @param array $resources
+     * @param int $hts
+     * @return int texts count
+     */
+    public function getTextCount($task, $locale, $resources, $hts = false)
+    {
+        $this->init($task, $locale, $resources, $hts);
+
+        $query = $this->createQueryBuilder('t')
+            ->select('COUNT(t)');
+
+        $this->setQueryParameters($query);
+
+        $count = $query->getQuery()
+            ->getSingleScalarResult();
+
+        return $count;
+    }
+
+    /**
      * Gets list of texts without translations
      *
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
@@ -113,10 +172,10 @@ class TextRepository extends EntityRepository
     public function getMissingTranslations($limit, $offset)
     {
         $query = $this->createQueryBuilder('t')
-             ->select('t, l, r, u')
-             ->leftJoin('t.locale', 'l')
-             ->leftJoin('t.resource', 'r')
-             ->leftJoin('t.user', 'u');
+            ->select('t, l, r, u')
+            ->leftJoin('t.locale', 'l')
+            ->leftJoin('t.resource', 'r')
+            ->leftJoin('t.user', 'u');
 
         $this->setQueryParameters($query);
 
@@ -134,6 +193,36 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     *
+     * @param type $searchPhrase
+     * @param type $mode
+     * @return type
+     */
+    public function getSearchResults($searchPhrase, $mode)
+    {
+        $query = $this->createQueryBuilder('t')
+            ->select('t, r, l')
+            ->leftJoin('t.resource', 'r')
+            ->leftJoin('t.locale', 'l');
+
+        if ($mode == self::SEARCH_LIKE) {
+            $searchPhrase = preg_replace('/\s+/', ' ', $searchPhrase);
+            $searchPhrase = '%' . str_replace(' ', '%', $searchPhrase) . '%';
+        }
+        //TODO: sanitize input, fulltext search (MATCH...AGAINST....)
+        $this->setSearchString($searchPhrase);
+
+        $this->setQueryParameters($query);
+
+        $query->setMaxResults(25);
+
+        $results = $query->getQuery() //->getResult();//
+            ->getArrayResult();
+
+        return $results;
+    }
+
+    /**
      * Get messages in $locale language for any hash from $texts
      * and return it like array
      *
@@ -142,7 +231,7 @@ class TextRepository extends EntityRepository
      * @param string $locale
      * @return array
      */
-    public function getMessagesByLanguage($texts, $locale)
+    private function getMessagesByLanguage($texts, $locale)
     {
         $langId = $this->getIdByLocale($locale); // language id by locale
         $textsLang = array();
@@ -191,44 +280,27 @@ class TextRepository extends EntityRepository
     }
 
     /**
-     * Get count of records in text table
-     *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
-     * @param int $task
-     * @param int locale id
-     * @param array $resources
-     * @param int $hts
-     * @return int texts count
-     */
-    public function getTextCount($task, $locale, $resources, $hts = false)
-    {
-        $this->setTask($task);
-        $this->setLocale($locale);
-        $this->setResources($resources);
-        $this->setHts($hts);
-
-        $query = $this->createQueryBuilder('t')
-            ->select('COUNT(t)');
-
-        $this->setQueryParameters($query);
-
-        $count = $query->getQuery()
-            ->getSingleScalarResult();
-
-        return $count;
-    }
-
-    /**
      *
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $parameters
      */
     private function setQueryParameters($query)
     {
-        //$this->_queryParameters = $parameters;
         switch ($this->_task) {
-        default:
+
+        case self::SEARCH_PHRASE_BY_LANG:
+            $query->where(self::FIELD_TARGET . ' LIKE ?1')
+                ->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
+                ->andWhere(self::FIELD_LOCALE . ' = ?3')
+                ->andWhere(self::FIELD_EXP . ' IS NULL')
+                ->setParameter(1, $this->_searchString)
+                ->setParameter(2, $this->_resources)
+                ->setParameter(3, $this->_locale);
+
+            break;
+
         case self::MISSING_TRANS_BY_LANG:
+        default:
             $query->where(self::FIELD_RESOURCE . ' IN (?1)')
                 ->andWhere(self::FIELD_LOCALE . ' = ?2')
                 //->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
@@ -243,8 +315,8 @@ class TextRepository extends EntityRepository
             if ($this->_hts === true) {
                 $query->addWhere(self::FIELD_HTS . ' IS NULL');
             }
-            break;
 
+            break;
         }
     }
 
@@ -275,7 +347,7 @@ class TextRepository extends EntityRepository
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param string $langId
      */
-    private function getIdByLocale($locale)
+    public function getIdByLocale($locale)
     {
         if ($locale) {
             $repository = $this->getEntityManager()

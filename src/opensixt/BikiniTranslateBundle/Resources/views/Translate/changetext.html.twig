@@ -1,0 +1,28 @@
+{% extends "opensixtContentBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ 'translation_tool'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ 'translation_tool'|trans }}</h3>
+
+    <form action="{{ path('_translate_searchstring') }}" method="post" {{ form_enctype(form) }}>
+
+        {{ form_label(form.search) }} {{ form_widget(form.search) }}
+        {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
+        {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
+        <input type="submit" value="{{ 'save_locale'|trans }}"/>
+        {{ form_rest(form) }}
+    </form>
+
+{% endblock %}
+
+{% block sidebar %}
+    <ul>
+        <li class="backhome"><a href="{{ path('_translate_home') }}">{{ 'admin_home'|trans }}</a></li>
+        <br/>
+        {% include 'opensixtBikiniTranslateBundle:Translate:translationtool_menu.html.twig' %}
+    </ul>
+{% endblock %}

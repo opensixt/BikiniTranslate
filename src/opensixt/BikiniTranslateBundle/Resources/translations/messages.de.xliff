@@ -46,7 +46,34 @@
                 <source>save</source>
                 <target>Speichern</target>
             </trans-unit>
-
+            <trans-unit id="55">
+                <source>all_values</source>
+                <target>alle</target>
+            </trans-unit>
+            <trans-unit id="60">
+                <source>search_by</source>
+                <target>Suche nach</target>
+            </trans-unit>
+            <trans-unit id="65">
+                <source>with_resource</source>
+                <target>im Modul</target>
+            </trans-unit>
+            <trans-unit id="70">
+                <source>with_language</source>
+                <target>in der Sprache</target>
+            </trans-unit>
+            <trans-unit id="75">
+                <source>exact_match</source>
+                <target>exakt</target>
+            </trans-unit>
+            <trans-unit id="80">
+                <source>like</source>
+                <target>ähnlich</target>
+            </trans-unit>
+            <trans-unit id="85">
+                <source>search_method</source>
+                <target>Suchmethode</target>
+            </trans-unit>
 
         </body>
     </file>

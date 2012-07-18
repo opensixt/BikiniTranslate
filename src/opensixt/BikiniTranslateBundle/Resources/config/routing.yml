@@ -11,3 +11,12 @@ _translate_edittext:
     defaults: { _controller: opensixtBikiniTranslateBundle:Translate:edittext, locale: 'empty', page: 1 }
     requirements:
         page: \d+
+
+_translate_searchstring:
+    pattern: /translate/searchstring/
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:searchstring }
+
+_translate_changetext:
+    pattern: /translate/changetext/
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:changetext }
+

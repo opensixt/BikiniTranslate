@@ -180,6 +180,119 @@ class TranslateController extends Controller
     }
 
     /**
+     * searchstring Action
+     *
+     * @return Response A Response instance
+     */
+    public function searchstringAction()
+    {
+        $request    = $this->getRequest();
+        $translator = $this->get('translator');
+
+        $resources = $this->getUserResources();
+        $locales = $this->getUserLocales();
+        $searchMode = array(
+            TextRepository::SEARCH_EXACT => $translator->trans('exact_match'),
+            TextRepository::SEARCH_LIKE  => $translator->trans('like'),
+        );
+
+        $formData = $request->request->get('form'); // form fields
+        $searcResults = array();
+        $searchPhrase = '';
+
+        if (isset($formData['searchPhrase'])) {
+            $searchPhrase = $formData['searchPhrase'];
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+
+            // use tool_language for search
+            $toolLang = $this->container->getParameter('tool_language');
+
+            if (isset($formData['resource']) && $formData['resource']) {
+                $searchResources = array ($formData['resource']);
+            } else {
+                $searchResources = array_keys($resources);
+            }
+
+            $tr->init(
+                TextRepository::SEARCH_PHRASE_BY_LANG,
+                $tr->getIdByLocale($toolLang),
+                $searchResources);
+
+            // det search results
+            $searcResults = $tr->getSearchResults(
+                $formData['searchPhrase'],
+                $formData['searchMode']);
+            //print_r($searcResults);
+        }
+
+        $form = $this->createFormBuilder()
+            ->add('searchPhrase', 'text', array(
+                    'label'       => $translator->trans('search_by') . ': ',
+                    'trim'        => true,
+                    'data'        => $formData['searchPhrase']
+                ))
+            ->add('resource', 'choice', array(
+                    'label'       => $translator->trans('with_resource') . ': ',
+                    'empty_value' => $translator->trans('all_values'),
+                    'choices'     => $resources,
+                    'required'    => false,
+                    'data'        => $formData['resource']
+                ))
+            ->add('searchMode', 'choice', array(
+                    'label'       => $translator->trans('search_method') . ': ',
+                    'empty_value' => '',
+                    'choices'     => $searchMode,
+                    'data'        => $formData['searchMode']
+                ))
+            ->getForm();
+
+        return $this->render('opensixtBikiniTranslateBundle:Translate:searchstring.html.twig',
+            array(
+                'form' => $form->createView(),
+                'searchResults' => $searcResults,
+                'searchPhrase' => $searchPhrase,
+            ));
+    }
+
+    /**
+     * changetext Action
+     *
+     * @return Response A Response instance
+     */
+    public function changetextAction()
+    {
+        $translator = $this->get('translator');
+
+        $resources = $this->getUserResources();
+        $locales = $this->getUserLocales();
+
+        $form = $this->createFormBuilder()
+            ->add('search', 'text', array(
+                    'label'       => $translator->trans('search_by') . ': ',
+                    'trim'        => true,
+                ))
+            ->add('resource', 'choice', array(
+                    'label'       => $translator->trans('with_resource') . ': ',
+                    'empty_value' => $translator->trans('all_values'),
+                    'choices'     => $resources,
+                    'required'    => false,
+                ))
+            ->add('locale', 'choice', array(
+                    'label'       => $translator->trans('with_language') . ': ',
+                    'empty_value' => '',
+                    'choices'     => $locales,
+                ))
+            ->getForm();
+
+        return $this->render('opensixtBikiniTranslateBundle:Translate:changetext.html.twig',
+            array(
+                'form' => $form->createView(),
+            ));
+    }
+
+    /**
      * Returns array of locales for logged user
      *
      * @return array

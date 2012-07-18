@@ -46,6 +46,34 @@
                 <source>save</source>
                 <target>Save</target>
             </trans-unit>
+            <trans-unit id="55">
+                <source>all_values</source>
+                <target>all</target>
+            </trans-unit>
+            <trans-unit id="60">
+                <source>search_by</source>
+                <target>Search</target>
+            </trans-unit>
+            <trans-unit id="65">
+                <source>with_resource</source>
+                <target>with resource</target>
+            </trans-unit>
+            <trans-unit id="70">
+                <source>with_language</source>
+                <target>with locale</target>
+            </trans-unit>
+            <trans-unit id="75">
+                <source>exact_match</source>
+                <target>exact match</target>
+            </trans-unit>
+            <trans-unit id="80">
+                <source>like</source>
+                <target>like</target>
+            </trans-unit>
+            <trans-unit id="85">
+                <source>search_method</source>
+                <target>Search method</target>
+            </trans-unit>
 
         </body>
     </file>
