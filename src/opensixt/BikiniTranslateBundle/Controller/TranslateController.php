@@ -75,11 +75,12 @@ class TranslateController extends Controller
 
         // Update texts with entered values
         if ($request->getMethod() == 'POST') {
-            $texts = $request->request->get('texts');
-            if (isset($texts)) {
-                foreach ($texts as $key=>$value) {
-                    if ($value) {
-                        $tr->updateText($key, $value);
+            $formData = $request->request->get('form');
+
+            if (isset($formData)) {
+                foreach ($formData as $key => $value) {
+                    if (preg_match("/text_([0-9]+)/", $key, $matches) && strlen($value)) {
+                        $tr->updateText($matches[1], $value);
                     }
                 }
             }
@@ -102,8 +103,19 @@ class TranslateController extends Controller
             $pagination->getOffset()
             );
 
+        // define textareas for any text
+        $formBuilder = $this->createFormBuilder();
+        foreach ($texts as $txt) {
+            $formBuilder->add('text_' . $txt['id'] , 'textarea', array(
+                'trim' => true,
+                'required' => false,
+            ));
+        }
+        $form = $formBuilder->getForm();
+
         return $this->render('opensixtBikiniTranslateBundle:Translate:edittext.html.twig',
             array(
+                'form' => $form->createView(),
                 'texts' => $texts,
                 'paginationbar' => $paginationBar,
                 'locale' => $locale,
