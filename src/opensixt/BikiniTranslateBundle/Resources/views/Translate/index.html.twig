@@ -17,31 +17,7 @@
 
 {% block sidebar %}
 
-<ul>
-    <li>
-        {{ 'translation_tool'|trans }}
-    </li>
-    <li>
-        <a href="{{ path('_translate_edittext') }}">
-            {{ 'mnu_translate'|trans }}
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('_translate_home') }}">
-            {{ 'mnu_search'|trans }}
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('_translate_home') }}">
-            {{ 'mnu_change'|trans }}
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('_translate_home') }}">
-            {{ 'Translate Link 4'|trans }}
-        </a>
-    </li>
-</ul>
+{% include 'opensixtBikiniTranslateBundle:Translate:translationtool_menu.html.twig' %}
 
 <br/>
 

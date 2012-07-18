@@ -18,6 +18,7 @@
 {% block sidebar %}
     <ul>
         <li class="backhome"><a href="{{ path('_translate_home') }}">{{ 'admin_home'|trans }}</a></li>
-
+        <br/>
+        {% include 'opensixtBikiniTranslateBundle:Translate:translationtool_menu.html.twig' %}
     </ul>
 {% endblock %}
