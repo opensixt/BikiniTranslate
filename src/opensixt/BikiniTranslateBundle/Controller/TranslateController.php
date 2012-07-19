@@ -16,9 +16,16 @@ class TranslateController extends Controller
      */
     private $_paginationLimit;
 
+    /**
+     * Pagination limit for searchstring
+     * @var int
+     */
+    private $_paginationLimitSearch;
+
 
     public function __construct() {
-        $this->_paginationLimit = 5;
+        $this->_paginationLimit = 15;
+        $this->_paginationLimitSearch = 15;
     }
 
     /**
@@ -182,78 +189,117 @@ class TranslateController extends Controller
     /**
      * searchstring Action
      *
+     * @param int $page
      * @return Response A Response instance
      */
-    public function searchstringAction()
+    public function searchstringAction($page = 1)
     {
         $request    = $this->getRequest();
         $translator = $this->get('translator');
 
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
-        $searchMode = array(
+        $mode = array(
             TextRepository::SEARCH_EXACT => $translator->trans('exact_match'),
             TextRepository::SEARCH_LIKE  => $translator->trans('like'),
         );
 
-        $formData = $request->request->get('form'); // form fields
-        $searcResults = array();
         $searchPhrase = '';
+        $searchResource = '';
+        $searchMode = '';
 
-        if (isset($formData['searchPhrase'])) {
-            $searchPhrase = $formData['searchPhrase'];
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->get('form'); // form fields
+            if (!empty($formData['searchPhrase']) && !empty($formData['searchMode'])) {
+                $searchPhrase = $formData['searchPhrase'];
+                $searchMode = $formData['searchMode'];
+            }
+        } elseif ($request->getMethod() == 'GET') {
+            if ($request->query->get('search') && $request->query->get('mode')) {
+                $searchPhrase = urldecode($request->query->get('search'));
+                $searchMode = $request->query->get('mode');
+            }
+        }
 
+        if (strlen($searchPhrase)) {
+            $searchResults = array();
             $em = $this->getDoctrine()->getEntityManager();
             $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
 
-            // use tool_language for search
+            // use tool_language (default language) for search
             $toolLang = $this->container->getParameter('tool_language');
 
-            if (isset($formData['resource']) && $formData['resource']) {
-                $searchResources = array ($formData['resource']);
+            if (!empty($formData['resource'])) {
+                $searchResources = array($formData['resource']);
+                $searchResource = $formData['resource'];
+            } elseif ($request->query->get('resource')) {
+                $searchResources = array($request->query->get('resource'));
+                $searchResource = $request->query->get('resource');
             } else {
                 $searchResources = array_keys($resources);
             }
 
-            $tr->init(
+            $tr->setSearchParameters(
+                $searchPhrase,
+                $searchMode);
+
+            $textCount = $tr->getTextCount(
                 TextRepository::SEARCH_PHRASE_BY_LANG,
                 $tr->getIdByLocale($toolLang),
                 $searchResources);
 
-            // det search results
-            $searcResults = $tr->getSearchResults(
-                $formData['searchPhrase'],
-                $formData['searchMode']);
-            //print_r($searcResults);
+            $pagination = new Pagination(
+                $textCount,
+                $this->_paginationLimitSearch,
+                $page);
+            $paginationBar = $pagination->getPaginationBar();
+
+            // get search results
+            $searchResults = $tr->getSearchResults(
+                $this->_paginationLimitSearch,
+                $pagination->getOffset());
+            //print_r($searchResults);
         }
 
         $form = $this->createFormBuilder()
             ->add('searchPhrase', 'text', array(
                     'label'       => $translator->trans('search_by') . ': ',
                     'trim'        => true,
-                    'data'        => $formData['searchPhrase']
+                    'data'        => $searchPhrase
                 ))
             ->add('resource', 'choice', array(
                     'label'       => $translator->trans('with_resource') . ': ',
                     'empty_value' => $translator->trans('all_values'),
                     'choices'     => $resources,
                     'required'    => false,
-                    'data'        => $formData['resource']
+                    'data'        => $searchResource
                 ))
             ->add('searchMode', 'choice', array(
                     'label'       => $translator->trans('search_method') . ': ',
                     'empty_value' => '',
-                    'choices'     => $searchMode,
-                    'data'        => $formData['searchMode']
+                    'choices'     => $mode,
+                    'data'        => $searchMode
                 ))
             ->getForm();
 
+        $templateParam = array(
+            'form'          => $form->createView(),
+            'search'        => urlencode($searchPhrase),
+            'searchPhrase'  => $searchPhrase,
+            'mode'          => $searchMode,
+            'resource'      => $searchResource,
+        );
+
+        if (isset($paginationBar)) {
+            $templateParam['paginationbar'] = $paginationBar;
+        }
+
+        if (isset($searchResults)) {
+            $templateParam['searchResults'] = $searchResults;
+        }
+
         return $this->render('opensixtBikiniTranslateBundle:Translate:searchstring.html.twig',
-            array(
-                'form' => $form->createView(),
-                'searchResults' => $searcResults,
-                'searchPhrase' => $searchPhrase,
-            ));
+            $templateParam);
     }
 
     /**

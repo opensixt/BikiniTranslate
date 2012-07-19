@@ -13,8 +13,8 @@ _translate_edittext:
         page: \d+
 
 _translate_searchstring:
-    pattern: /translate/searchstring/
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:searchstring }
+    pattern: /translate/searchstring/{page}
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:searchstring, page: 1 }
 
 _translate_changetext:
     pattern: /translate/changetext/

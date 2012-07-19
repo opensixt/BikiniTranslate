@@ -17,7 +17,7 @@
         {{ form_rest(form) }}
     </form>
 
-
+    {% if searchResults is defined %}
     <table class="list">
         <thead>
             <tr>
@@ -25,6 +25,7 @@
             </tr>
         </thead>
         <tbody>
+
         {% for item in searchResults %}
             <tr>
                 <td>"{{ searchPhrase }}" ({{ item.resource.name }}): {{item.target}} ({{ item.locale.locale}})</td>
@@ -37,7 +38,19 @@
         {% endfor %}
         </tbody>
 
+        {% if paginationbar is defined %}
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    {% set param = {'target_route': '_translate_searchstring', 'paginationbar' : paginationbar } %}
+                    {% set param = param|merge({'search': search, 'mode': mode, 'resource': resource}) %}
+                    {% include 'opensixtBikiniTranslateBundle:Translate:paginationbar.html.twig' with param %}
+                </td>
+            </tr>
+        </tfoot>
+        {% endif %}
     </table>
+    {% endif %}
 
 {% endblock %}
 

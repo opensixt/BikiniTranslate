@@ -26,8 +26,8 @@ class TextRepository extends EntityRepository
     const MISSING_TRANS_BY_LANG = 0;
     const SEARCH_PHRASE_BY_LANG = 1;
 
-    const SEARCH_EXACT = 0;
-    const SEARCH_LIKE = 1;
+    const SEARCH_EXACT = 1;
+    const SEARCH_LIKE = 2;
 
     /**
      * @var string
@@ -193,28 +193,25 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     * Get search results
      *
-     * @param type $searchPhrase
-     * @param type $mode
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param int $limit Pagination limit
+     * @param int $offset Pagination offset
      * @return type
      */
-    public function getSearchResults($searchPhrase, $mode)
+    public function getSearchResults($limit, $offset)
     {
         $query = $this->createQueryBuilder('t')
             ->select('t, r, l')
             ->leftJoin('t.resource', 'r')
             ->leftJoin('t.locale', 'l');
 
-        if ($mode == self::SEARCH_LIKE) {
-            $searchPhrase = preg_replace('/\s+/', ' ', $searchPhrase);
-            $searchPhrase = '%' . str_replace(' ', '%', $searchPhrase) . '%';
-        }
-        //TODO: sanitize input, fulltext search (MATCH...AGAINST....)
-        $this->setSearchString($searchPhrase);
-
         $this->setQueryParameters($query);
 
-        $query->setMaxResults(25);
+        // pagination limit and offset
+        $query->setMaxResults($limit)
+            ->setFirstResult($offset);
 
         $results = $query->getQuery() //->getResult();//
             ->getArrayResult();
@@ -318,6 +315,23 @@ class TextRepository extends EntityRepository
 
             break;
         }
+    }
+
+    /**
+     * Set search parameters: searchPhrase and search mode
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param string $searchPhrase
+     * @param int $mode
+     */
+    public function setSearchParameters($searchPhrase, $searchMode)
+    {
+        if ($searchMode == self::SEARCH_LIKE) {
+            $searchPhrase = preg_replace('/\s+/', ' ', $searchPhrase);
+            $searchPhrase = '%' . str_replace(' ', '%', $searchPhrase) . '%';
+        }
+        //TODO: sanitize input, fulltext search (MATCH...AGAINST....)
+        $this->setSearchString($searchPhrase);
     }
 
     /**

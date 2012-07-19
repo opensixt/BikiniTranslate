@@ -1,17 +1,40 @@
+        {% set first = {'page':paginationbar.first} %}
+        {% set prev = {'page':paginationbar.prev} %}
+        {% set next = {'page': paginationbar.next} %}
+        {% set last = {'page':paginationbar.last} %}
+
+        {% if locale is defined %}
+            {% set first = first|merge({'locale': locale}) %}
+            {% set prev = prev|merge({'locale': locale}) %}
+            {% set next = next|merge({'locale': locale}) %}
+            {% set last = last|merge({'locale': locale}) %}
+        {% elseif search is defined and mode is defined %}
+            {% set first = first|merge({'search': search, 'mode': mode, 'resource': resource}) %}
+            {% set prev = prev|merge({'search': search, 'mode': mode, 'resource': resource}) %}
+            {% set next = next|merge({'search': search, 'mode': mode, 'resource': resource}) %}
+            {% set last = last|merge({'search': search, 'mode': mode, 'resource': resource}) %}
+        {% endif %}
+
         <div class="paginator">
             {% if paginationbar.last > 1 %}
-                <a href="{{ path(target_route, {'page':paginationbar.first, 'locale':locale}) }}">&lt;&lt;</a>&nbsp;
-                <a href="{{ path(target_route, {'page':paginationbar.prev, 'locale':locale}) }}">&lt;</a>&nbsp;
+                <a href="{{ path(target_route, first) }}">&lt;&lt;</a>&nbsp;
+                <a href="{{ path(target_route, prev) }}">&lt;</a>&nbsp;
                 ...&nbsp;
                 {% for page in paginationbar.pages %}
                     {% if page != paginationbar.current %}
-                        <a href="{{ path(target_route, {'page':page, 'locale':locale}) }}">{{ page }}</a>&nbsp;
+                        {% set page_param = {'page':page} %}
+                        {% if locale is defined %}
+                            {% set page_param = page_param|merge({'locale': locale}) %}
+                        {% elseif search is defined and mode is defined %}
+                            {% set page_param = page_param|merge({'search': search, 'mode': mode, 'resource': resource}) %}
+                        {% endif %}
+                        <a href="{{ path(target_route, page_param) }}">{{ page }}</a>&nbsp;
                     {% else %}
                         {{ page }}&nbsp;
                     {% endif %}
                 {% endfor %}
                 ...&nbsp;
-                <a href="{{ path(target_route, {'page':paginationbar.next, 'locale':locale}) }}">&gt;</a>&nbsp;
-                <a href="{{ path(target_route, {'page':paginationbar.last, 'locale':locale}) }}">&gt;&gt;</a>&nbsp;
+                <a href="{{ path(target_route, next) }}">&gt;</a>&nbsp;
+                <a href="{{ path(target_route, last) }}">&gt;&gt;</a>&nbsp;
             {% endif %}
         </div>
