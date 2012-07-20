@@ -194,7 +194,6 @@ class TranslateController extends Controller
      */
     public function searchstringAction($page = 1)
     {
-        $request    = $this->getRequest();
         $translator = $this->get('translator');
 
         $resources = $this->getUserResources();
@@ -204,21 +203,15 @@ class TranslateController extends Controller
             TextRepository::SEARCH_LIKE  => $translator->trans('like'),
         );
 
-        $searchPhrase = '';
-        $searchResource = '';
-        $searchMode = '';
+        // retrieve request parameters
+        $searchPhrase = $this->getFieldFromRequest('search');
+        $searchResource = $this->getFieldFromRequest('resource');
+        $searchMode = $this->getFieldFromRequest('mode');
 
-        if ($request->getMethod() == 'POST') {
-            $formData = $request->request->get('form'); // form fields
-            if (!empty($formData['searchPhrase']) && !empty($formData['searchMode'])) {
-                $searchPhrase = $formData['searchPhrase'];
-                $searchMode = $formData['searchMode'];
-            }
-        } elseif ($request->getMethod() == 'GET') {
-            if ($request->query->get('search') && $request->query->get('mode')) {
-                $searchPhrase = urldecode($request->query->get('search'));
-                $searchMode = $request->query->get('mode');
-            }
+        if (strlen($searchResource)) {
+            $searchResources = array($searchResource);
+        } else {
+            $searchResources = array_keys($resources);
         }
 
         if (strlen($searchPhrase)) {
@@ -228,20 +221,8 @@ class TranslateController extends Controller
             // use tool_language (default language) for search
             $toolLang = $this->container->getParameter('tool_language');
 
-            if (!empty($formData['resource'])) {
-                $searchResources = array($formData['resource']);
-                $searchResource = $formData['resource'];
-            } elseif ($request->query->get('resource')) {
-                $searchResources = array($request->query->get('resource'));
-                $searchResource = $request->query->get('resource');
-            } else {
-                // all available resources
-                $searchResources = array_keys($resources);
-            }
-
-            $tr->setSearchParameters(
-                $searchPhrase,
-                $searchMode);
+            // set search parameters
+            $tr->setSearchParameters($searchPhrase, $searchMode);
 
             $textCount = $tr->getTextCount(
                 TextRepository::SEARCH_PHRASE_BY_LANG,
@@ -262,7 +243,7 @@ class TranslateController extends Controller
         }
 
         $form = $this->createFormBuilder()
-            ->add('searchPhrase', 'search', array(
+            ->add('search', 'search', array(
                     'label'       => $translator->trans('search_by') . ': ',
                     'trim'        => true,
                     'data'        => $searchPhrase
@@ -274,7 +255,7 @@ class TranslateController extends Controller
                     'required'    => false,
                     'data'        => $searchResource
                 ))
-            ->add('searchMode', 'choice', array(
+            ->add('mode', 'choice', array(
                     'label'       => $translator->trans('search_method') . ': ',
                     'empty_value' => '',
                     'choices'     => $mode,
@@ -305,37 +286,91 @@ class TranslateController extends Controller
     /**
      * changetext Action
      *
+     * @param int $page
      * @return Response A Response instance
      */
-    public function changetextAction()
+    public function changetextAction($page)
     {
         $translator = $this->get('translator');
 
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
 
+        // retrieve request parameters
+        $searchPhrase = $this->getFieldFromRequest('search');
+        $searchLocale = $this->getFieldFromRequest('locale');
+        $searchResource = $this->getFieldFromRequest('resource');
+
+        if (strlen($searchResource)) {
+            $searchResources = array($searchResource);
+        } else {
+            $searchResources = array_keys($resources);
+        }
+
+        if (strlen($searchPhrase)) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+
+            // set search parameters
+            $tr->setSearchParameters($searchPhrase);
+
+            $textCount = $tr->getTextCount(
+                TextRepository::SEARCH_PHRASE_BY_LANG,
+                $searchLocale,
+                $searchResources);
+
+            $pagination = new Pagination(
+                $textCount,
+                $this->_paginationLimitSearch,
+                $page);
+            $paginationBar = $pagination->getPaginationBar();
+
+            // get search results
+            $searchResults = $tr->getSearchResults(
+                $this->_paginationLimitSearch,
+                $pagination->getOffset());
+        }
+
         $form = $this->createFormBuilder()
             ->add('search', 'text', array(
                     'label'       => $translator->trans('search_by') . ': ',
                     'trim'        => true,
+                    'data'        => $searchPhrase,
                 ))
             ->add('resource', 'choice', array(
                     'label'       => $translator->trans('with_resource') . ': ',
                     'empty_value' => $translator->trans('all_values'),
                     'choices'     => $resources,
+                    'data'        => $searchResource,
                     'required'    => false,
                 ))
             ->add('locale', 'choice', array(
                     'label'       => $translator->trans('with_language') . ': ',
                     'empty_value' => '',
                     'choices'     => $locales,
+                    'data'        => $searchLocale
                 ))
             ->getForm();
 
+        $templateParam = array(
+            'form'          => $form->createView(),
+            'search'        => urlencode($searchPhrase),
+            'searchPhrase'  => $searchPhrase,
+            'locale'        => $searchLocale,
+            'resource'      => $searchResource,
+        );
+
+        if (isset($paginationBar)) {
+            $templateParam['paginationbar'] = $paginationBar;
+        }
+
+        if (isset($searchResults)) {
+            $templateParam['searchResults'] = $searchResults;
+        }
+
         return $this->render('opensixtBikiniTranslateBundle:Translate:changetext.html.twig',
-            array(
-                'form' => $form->createView(),
-            ));
+            $templateParam
+            );
     }
 
     /**
@@ -371,6 +406,31 @@ class TranslateController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * Retrieves a field value from Request by fieldname
+     *
+     * @param string $fieldName
+     * @return mixed
+     */
+    private function getFieldFromRequest($fieldName)
+    {
+        $request = $this->getRequest();
+
+        $fieldValue = '';
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->get('form'); // form fields
+            if (!empty($formData[$fieldName])) {
+                $fieldValue = $formData[$fieldName];
+            }
+        } elseif ($request->getMethod() == 'GET') {
+            if ($request->query->get($fieldName)) {
+                $fieldValue = urldecode($request->query->get($fieldName));
+            }
+        }
+
+        return $fieldValue;
     }
 
 }

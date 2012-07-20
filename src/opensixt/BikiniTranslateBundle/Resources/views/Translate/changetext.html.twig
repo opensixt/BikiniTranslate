@@ -8,7 +8,7 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
-    <form action="{{ path('_translate_searchstring') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('_translate_changetext') }}" method="post" {{ form_enctype(form) }}>
 
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
@@ -16,6 +16,42 @@
         <input type="submit" value="{{ 'save_locale'|trans }}"/>
         {{ form_rest(form) }}
     </form>
+
+    {% if searchResults is defined %}
+    <table class="list">
+        <thead>
+            <tr>
+                <th >{{ 'original_text'|trans }}</th>
+                <th >{{ 'new_text'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        {% for item in searchResults %}
+            <tr>
+                <td>{{ item.resource.name }} ({{ item.locale.locale}}):<br/><br/> {{item.target}} </td>
+                <td><textarea></textarea></td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">{{ 'no_translation_found'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+        {% if paginationbar is defined %}
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    {% set param = {'target_route': '_translate_changetext', 'paginationbar' : paginationbar } %}
+                    {% set param = param|merge({'search': search, 'locale': locale, 'resource': resource}) %}
+                    {% include 'opensixtBikiniTranslateBundle:Translate:paginationbar.html.twig' with param %}
+                </td>
+            </tr>
+        </tfoot>
+        {% endif %}
+    </table>
+    {% endif %}
 
 {% endblock %}
 

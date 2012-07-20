@@ -1,11 +1,15 @@
         {% set param = [] %}
         {% if locale is defined %}
-            {% set param = {'locale': locale} %}
-        {% elseif search is defined %}
-            {% set param = {'search': search} %}
-            {% if mode is defined and resource is defined %}
-                {% set param = param|merge({'mode': mode, 'resource': resource}) %}
-            {% endif %}
+            {% set param = param|merge({'locale': locale}) %}
+        {% endif %}
+        {% if search is defined %}
+            {% set param = param|merge({'search': search}) %}
+        {% endif %}
+        {% if resource is defined %}
+            {% set param = param|merge({'resource': resource}) %}
+        {% endif %}
+        {% if mode is defined %}
+            {% set param = param|merge({'mode': mode}) %}
         {% endif %}
 
         {% set first = param|merge({'page':paginationbar.first}) %}

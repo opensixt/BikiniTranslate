@@ -15,8 +15,12 @@ _translate_edittext:
 _translate_searchstring:
     pattern: /translate/searchstring/{page}
     defaults: { _controller: opensixtBikiniTranslateBundle:Translate:searchstring, page: 1 }
+    requirements:
+        page: \d+
 
 _translate_changetext:
-    pattern: /translate/changetext/
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:changetext }
+    pattern: /translate/changetext/{page}
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:changetext, page: 1 }
+    requirements:
+        page: \d+
 

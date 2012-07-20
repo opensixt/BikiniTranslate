@@ -154,6 +154,18 @@
                 <source>administration</source>
                 <target>Verwaltung</target>
             </trans-unit>
+            <trans-unit id="190">
+                <source>results</source>
+                <target>Suchergebnisse</target>
+            </trans-unit>
+            <trans-unit id="195">
+                <source>original_text</source>
+                <target>Original</target>
+            </trans-unit>
+            <trans-unit id="200">
+                <source>new_text</source>
+                <target>Änderung</target>
+            </trans-unit>
 
 
         </body>

@@ -348,7 +348,7 @@ class TextRepository extends EntityRepository
      * @param string $searchPhrase
      * @param int $mode
      */
-    public function setSearchParameters($searchPhrase, $searchMode)
+    public function setSearchParameters($searchPhrase, $searchMode = self::SEARCH_EXACT)
     {
         if ($searchMode == self::SEARCH_LIKE) {
             $searchPhrase = preg_replace('/\s+/', ' ', $searchPhrase);

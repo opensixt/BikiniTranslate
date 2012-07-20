@@ -10,9 +10,9 @@
 
     <form action="{{ path('_translate_searchstring') }}" method="post" {{ form_enctype(form) }}>
 
-        {{ form_label(form.searchPhrase) }} {{ form_widget(form.searchPhrase) }}
+        {{ form_label(form.search) }} {{ form_widget(form.search) }}
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
-        {{ form_label(form.searchMode) }} {{ form_widget(form.searchMode) }}
+        {{ form_label(form.mode) }} {{ form_widget(form.mode) }}
         <input type="submit" value="{{ 'save_locale'|trans }}"/>
         {{ form_rest(form) }}
     </form>
@@ -21,7 +21,7 @@
     <table class="list">
         <thead>
             <tr>
-                <th>{{ 'Results'|trans }}</th>
+                <th>{{ 'results'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -29,7 +29,6 @@
         {% for item in searchResults %}
             <tr>
                 <td>"{{ searchPhrase }}" ({{ item.resource.name }}): {{item.target}} ({{ item.locale.locale}})</td>
-
             </tr>
         {% else %}
             <tr>
