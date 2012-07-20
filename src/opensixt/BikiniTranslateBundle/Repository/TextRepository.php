@@ -288,7 +288,7 @@ class TextRepository extends EntityRepository
     private function setQueryParameters($query)
     {
         // Exceptions
-        if (!$this->_task) {
+        if (!isset($this->_task)) {
             throw new \Exception(__METHOD__ . ': _task is not set. Please set it with ' . __CLASS__ . '::init() !');
         }
 
