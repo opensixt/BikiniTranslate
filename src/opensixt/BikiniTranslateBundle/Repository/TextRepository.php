@@ -261,6 +261,10 @@ class TextRepository extends EntityRepository
      */
     private function setMessagesInCommonLanguage(&$texts)
     {
+        if (!$this->_commonLanguageId) {
+            throw new \Exception(__METHOD__ . ': _commonLangauge is not set. Please set it with ' . __CLASS__ . '::setCommonLanguage() !');
+        }
+
         if ($this->_locale != $this->_commonLanguageId) {
             $textsLang = $this->getMessagesByLanguage($texts, $this->_commonLanguage);
             foreach ($texts as &$text) {
@@ -283,6 +287,26 @@ class TextRepository extends EntityRepository
      */
     private function setQueryParameters($query)
     {
+        // Exceptions
+        if (!$this->_task) {
+            throw new \Exception(__METHOD__ . ': _task is not set. Please set it with ' . __CLASS__ . '::init() !');
+        }
+
+        if ($this->_task == self::SEARCH_PHRASE_BY_LANG || $this->_task == self::MISSING_TRANS_BY_LANG) {
+            if (!$this->_locale) {
+                throw new \Exception(__METHOD__ . ': _locale is not set. Please set it with ' . __CLASS__ . '::init() !');
+            }
+            if (empty($this->_resources)) {
+                throw new \Exception(__METHOD__ . ': _resources is not set. Please set it with ' . __CLASS__ . '::init() !');
+            }
+        }
+
+        if ($this->_task == self::SEARCH_PHRASE_BY_LANG) {
+            if (!$this->_searchString) {
+                throw new \Exception(__METHOD__ . ': _searchString is not set. Please set it with ' . __CLASS__ . '::setSearchParameters() !');
+            }
+        }
+
         switch ($this->_task) {
 
         case self::SEARCH_PHRASE_BY_LANG:
@@ -328,8 +352,9 @@ class TextRepository extends EntityRepository
     {
         if ($searchMode == self::SEARCH_LIKE) {
             $searchPhrase = preg_replace('/\s+/', ' ', $searchPhrase);
-            $searchPhrase = '%' . str_replace(' ', '%', $searchPhrase) . '%';
+            $searchPhrase = str_replace(' ', '%', $searchPhrase);
         }
+        $searchPhrase = '%' . $searchPhrase . '%';
         //TODO: sanitize input, fulltext search (MATCH...AGAINST....)
         $this->setSearchString($searchPhrase);
     }

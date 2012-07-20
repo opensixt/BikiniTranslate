@@ -222,7 +222,6 @@ class TranslateController extends Controller
         }
 
         if (strlen($searchPhrase)) {
-            $searchResults = array();
             $em = $this->getDoctrine()->getEntityManager();
             $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
 
@@ -236,6 +235,7 @@ class TranslateController extends Controller
                 $searchResources = array($request->query->get('resource'));
                 $searchResource = $request->query->get('resource');
             } else {
+                // all available resources
                 $searchResources = array_keys($resources);
             }
 
@@ -262,7 +262,7 @@ class TranslateController extends Controller
         }
 
         $form = $this->createFormBuilder()
-            ->add('searchPhrase', 'text', array(
+            ->add('searchPhrase', 'search', array(
                     'label'       => $translator->trans('search_by') . ': ',
                     'trim'        => true,
                     'data'        => $searchPhrase
