@@ -1,19 +1,17 @@
-        {% set first = {'page':paginationbar.first} %}
-        {% set prev = {'page':paginationbar.prev} %}
-        {% set next = {'page': paginationbar.next} %}
-        {% set last = {'page':paginationbar.last} %}
-
+        {% set param = [] %}
         {% if locale is defined %}
-            {% set first = first|merge({'locale': locale}) %}
-            {% set prev = prev|merge({'locale': locale}) %}
-            {% set next = next|merge({'locale': locale}) %}
-            {% set last = last|merge({'locale': locale}) %}
-        {% elseif search is defined and mode is defined %}
-            {% set first = first|merge({'search': search, 'mode': mode, 'resource': resource}) %}
-            {% set prev = prev|merge({'search': search, 'mode': mode, 'resource': resource}) %}
-            {% set next = next|merge({'search': search, 'mode': mode, 'resource': resource}) %}
-            {% set last = last|merge({'search': search, 'mode': mode, 'resource': resource}) %}
+            {% set param = {'locale': locale} %}
+        {% elseif search is defined %}
+            {% set param = {'search': search} %}
+            {% if mode is defined and resource is defined %}
+                {% set param = param|merge({'mode': mode, 'resource': resource}) %}
+            {% endif %}
         {% endif %}
+
+        {% set first = param|merge({'page':paginationbar.first}) %}
+        {% set prev = param|merge({'page':paginationbar.prev}) %}
+        {% set next = param|merge({'page': paginationbar.next}) %}
+        {% set last = param|merge({'page':paginationbar.last}) %}
 
         <div class="paginator">
             {% if paginationbar.last > 1 %}
@@ -23,11 +21,7 @@
                 {% for page in paginationbar.pages %}
                     {% if page != paginationbar.current %}
                         {% set page_param = {'page':page} %}
-                        {% if locale is defined %}
-                            {% set page_param = page_param|merge({'locale': locale}) %}
-                        {% elseif search is defined and mode is defined %}
-                            {% set page_param = page_param|merge({'search': search, 'mode': mode, 'resource': resource}) %}
-                        {% endif %}
+                        {% set page_param = page_param|merge(param) %}
                         <a href="{{ path(target_route, page_param) }}">{{ page }}</a>&nbsp;
                     {% else %}
                         {{ page }}&nbsp;
