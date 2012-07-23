@@ -132,7 +132,9 @@ class Pagination
      */
     public function getOffset()
     {
-        return ($this->page - 1) * $this->limit;
+        $offset = ($this->page - 1) * $this->limit;
+        if ($offset > $this->count) $offset = 0;
+        return $offset;
     }
 
 }
