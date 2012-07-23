@@ -1,6 +1,24 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "name": "opensixt/BikiniTranslate",
+    "description": "The \"opensixt/BikiniTranslate\" distribution",
+    "authors": [
+        {
+            "name": "Dmitri Mansilia",
+            "email": "dmitri.mansilia@sixt.com",
+            "homepage": "http://www.opensixt.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Uwe Pries",
+            "email": "uwe.pries@sixt.com",
+            "homepage": "http://www.opensixt.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "support@opensixt.com",
+        "irc": "irc://irc.freenode.org/opensixt"
+    },
     "autoload": {
         "psr-0": { "": "src/" }
     },
