@@ -9,6 +9,10 @@
     <h3>{{ 'translation_tool'|trans }}</h3>
 
     <form action="{{ path('_translate_edittext', {'locale':locale, 'page':paginationbar.current}) }}" method="post">
+
+    {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
+    <input id="btnSearch" type="button" value="{{ 'submit_page'|trans }}"/>
+
     <table class="list">
         <thead>
             <tr>
@@ -37,13 +41,17 @@
         <tfoot>
             <tr>
                 <td colspan="2">
-                    {% include 'opensixtBikiniTranslateBundle:Translate:paginationbar.html.twig' with {'target_route': '_translate_edittext', 'paginationbar' : paginationbar, 'locale': locale } %}
+                    {% set param = {'target_route': '_translate_edittext', 'paginationbar' : paginationbar, 'locale': locale } %}
+                    {% if resource is defined %}
+                        {% set param = param|merge({'resource': resource}) %}
+                    {% endif %}
+                    {% include 'opensixtBikiniTranslateBundle:Translate:paginationbar.html.twig' with param %}
                 </td>
             </tr>
         </tfoot>
     </table>
 
-    <input type="submit" value="{{ 'save'|trans }}">
+    <input type="button" value="{{ 'save'|trans }}" id="btnSaveTranslations">
 
     </form>
 
@@ -62,6 +70,18 @@
     <script type="text/javascript">
     jQuery(document).ready(function($) {
         // no conflict mode, use $ in here
+
+        $('#btnSaveTranslations').click(function() {
+            $('#form_action').val('save');
+            $(this.form).submit();
+            });
+
+        $('#btnSearch').click(function() {
+            $('#form_action').val('search');
+            $(this.form).submit();
+            });
+
     });
+
     </script>
 {% endblock %}

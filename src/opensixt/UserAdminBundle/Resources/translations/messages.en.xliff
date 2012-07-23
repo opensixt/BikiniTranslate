@@ -158,14 +158,6 @@
                 <source>results</source>
                 <target>Results</target>
             </trans-unit>
-            <trans-unit id="195">
-                <source>original_text</source>
-                <target>Original</target>
-            </trans-unit>
-            <trans-unit id="200">
-                <source>new_text</source>
-                <target>Change</target>
-            </trans-unit>
 
         </body>
     </file>

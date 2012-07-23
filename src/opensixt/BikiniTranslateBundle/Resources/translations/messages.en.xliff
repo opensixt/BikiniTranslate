@@ -74,6 +74,18 @@
                 <source>search_method</source>
                 <target>Search method</target>
             </trans-unit>
+            <trans-unit id="90">
+                <source>original_text</source>
+                <target>Original</target>
+            </trans-unit>
+            <trans-unit id="95">
+                <source>new_text</source>
+                <target>Change</target>
+            </trans-unit>
+            <trans-unit id="100">
+                <source>submit_page</source>
+                <target>Ok</target>
+            </trans-unit>
 
         </body>
     </file>

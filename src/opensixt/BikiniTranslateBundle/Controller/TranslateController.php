@@ -43,18 +43,15 @@ class TranslateController extends Controller
      * edittext Action
      *
      * @param string $locale
-     * @param array $resources
      * @param int $page
      * @return Response A Response instance
      */
-    public function edittextAction($locale, $resources = 0, $page = 1)
+    public function edittextAction($locale, $page = 1)
     {
         $session = $this->get('session');
-        $request = $this->getRequest();
 
+        // if $locale is not set, redirect to setlocale action
         if (!$locale || $locale == 'empty') {
-            // if $locale is not set, redirect to setlocale action
-
             // store an attribute for reuse during a later user request
             $session->set('targetRoute', '_translate_edittext');
             return $this->redirect($this->generateUrl('_translate_setlocale'));
@@ -68,6 +65,9 @@ class TranslateController extends Controller
             $session->set('targetRoute', '_translate_edittext');
             return $this->redirect($this->generateUrl('_translate_setlocale'));
         }
+
+        $request = $this->getRequest();
+        $translator = $this->get('translator');
 
         $em = $this->getDoctrine()->getEntityManager();
         $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
@@ -83,24 +83,35 @@ class TranslateController extends Controller
         // Update texts with entered values
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->get('form');
-
             if (isset($formData)) {
-                foreach ($formData as $key => $value) {
-                    if (preg_match("/text_([0-9]+)/", $key, $matches) && strlen($value)) {
-                        $tr->updateText($matches[1], $value);
+                if (isset($formData['action']) && $formData['action'] == 'search') {
+                    $page = 1;
+                }
+
+                if (isset($formData['action']) && $formData['action'] == 'save') {
+                    foreach ($formData as $key => $value) {
+                        // for all textareas with name 'text_[number]'
+                        if (preg_match("/text_([0-9]+)/", $key, $matches) && strlen($value)) {
+                            $tr->updateText($matches[1], $value);
+                        }
                     }
                 }
             }
         }
 
-        if (!$resources) {
-            $resources = array_keys($this->getUserResources()); // available resources
+        $resources = $this->getUserResources(); // all available resources
+
+        $searchResource = $this->getFieldFromRequest('resource');
+        if ($searchResource) {
+            $searchResources = array($searchResource);
+        } else {
+            $searchResources = array_keys($resources);
         }
 
         $textCount = $tr->getTextCount(
             TextRepository::MISSING_TRANS_BY_LANG,
             $languageId,
-            $resources);
+            $searchResources);
 
         $pagination = new Pagination($textCount, $this->_paginationLimit, $page);
         $paginationBar = $pagination->getPaginationBar();
@@ -110,8 +121,18 @@ class TranslateController extends Controller
             $pagination->getOffset()
             );
 
-        // define textareas for any text
         $formBuilder = $this->createFormBuilder();
+        $formBuilder
+            ->add('resource', 'choice', array(
+                  'label'       => $translator->trans('resource') . ': ',
+                  'empty_value' => $translator->trans('all_values'),
+                  'choices'     => $resources,
+                  'required'    => false,
+                  'data'        => $searchResource
+                ))
+            ->add('action', 'hidden');
+
+        // define textareas for any text
         foreach ($texts as $txt) {
             $formBuilder->add('text_' . $txt['id'] , 'textarea', array(
                 'trim' => true,
@@ -120,14 +141,21 @@ class TranslateController extends Controller
         }
         $form = $formBuilder->getForm();
 
+        $templateParam = array(
+            'form'                    => $form->createView(),
+            'texts'                   => $texts,
+            'paginationbar'           => $paginationBar,
+            'locale'                  => $locale,
+            'currentLangIsCommonLang' => $currentLangIsCommonLang,
+        );
+
+        if ($searchResource) {
+            $templateParam['resource'] = $searchResource;
+        }
+
         return $this->render('opensixtBikiniTranslateBundle:Translate:edittext.html.twig',
-            array(
-                'form' => $form->createView(),
-                'texts' => $texts,
-                'paginationbar' => $paginationBar,
-                'locale' => $locale,
-                'currentLangIsCommonLang' => $currentLangIsCommonLang,
-            ));
+            $templateParam
+            );
     }
 
     /**
