@@ -24,7 +24,7 @@ class TranslateController extends Controller
 
 
     public function __construct() {
-        $this->_paginationLimit = 1;
+        $this->_paginationLimit = 15;
         $this->_paginationLimitSearch = 15;
     }
 
