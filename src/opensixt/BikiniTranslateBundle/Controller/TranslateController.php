@@ -24,7 +24,7 @@ class TranslateController extends Controller
 
 
     public function __construct() {
-        $this->_paginationLimit = 15;
+        $this->_paginationLimit = 1;
         $this->_paginationLimitSearch = 15;
     }
 
@@ -359,8 +359,20 @@ class TranslateController extends Controller
                 $pagination->getOffset());
         }
 
-        $form = $this->createFormBuilder()
-            ->add('search', 'text', array(
+
+        $formBuilder = $this->createFormBuilder();
+
+        // define textareas for any text
+        if (!empty($searchResults)){
+            foreach ($searchResults as $txt) {
+                $formBuilder->add('text_' . $txt['id'] , 'textarea', array(
+                    'trim' => true,
+                    'required' => false,
+                ));
+            }
+        }
+
+        $formBuilder->add('search', 'text', array(
                     'label'       => $translator->trans('search_by') . ': ',
                     'trim'        => true,
                     'data'        => $searchPhrase,
@@ -377,8 +389,8 @@ class TranslateController extends Controller
                     'empty_value' => '',
                     'choices'     => $locales,
                     'data'        => $searchLocale
-                ))
-            ->getForm();
+                ));
+        $form = $formBuilder->getForm();
 
         $templateParam = array(
             'form'          => $form->createView(),
