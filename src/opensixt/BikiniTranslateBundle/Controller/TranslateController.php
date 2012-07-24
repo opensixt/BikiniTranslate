@@ -75,6 +75,9 @@ class TranslateController extends Controller
         $commonLang = $this->container->getParameter('common_language');
         $tr->setCommonLanguage($commonLang);
 
+        $textRevisionControl = $this->container->getParameter('text_revision_control');
+        $tr->setTextRevisionControl($textRevisionControl);
+
         $currentLangIsCommonLang = false;
         if ($commonLang == $locale) {
             $currentLangIsCommonLang = true;

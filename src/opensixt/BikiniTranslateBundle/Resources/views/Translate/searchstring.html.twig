@@ -28,7 +28,7 @@
 
         {% for item in searchResults %}
             <tr>
-                <td>"{{ searchPhrase }}" ({{ item.resource.name }}): {{item.target}} ({{ item.locale.locale}})</td>
+                <td>"{{ searchPhrase }}" ({{ item.resource.name }}): {{ item.target.target }} ({{ item.locale.locale }})</td>
             </tr>
         {% else %}
             <tr>

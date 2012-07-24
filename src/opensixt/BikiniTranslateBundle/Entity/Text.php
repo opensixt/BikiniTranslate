@@ -36,9 +36,17 @@ class Text
     private $source;
 
     /**
-     * @var text $target
+     * @var int $textRevisionId
      *
-     * @ORM\Column(name="target", type="text", nullable=false)
+     * @ORM\Column(name="text_revision_id", type="integer", nullable=false)
+     */
+    private $textRevisionId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="opensixt\BikiniTranslateBundle\Entity\TextRevision")
+     * @ORM\JoinColumn(name="text_revision_id", referencedColumnName="id")
+     *
+     * @var ArrayCollection $target
      */
     private $target;
 
@@ -168,9 +176,29 @@ class Text
     }
 
     /**
+     * Set textRevisionId
+     *
+     * @param int $textRevisionId
+     */
+    public function setTextRevisionId($textRevisionId)
+    {
+        $this->textRevisionId = $textRevisionId;
+    }
+
+    /**
+     * Get textRevisionId
+     *
+     * @return int
+     */
+    public function getTextRevisionId()
+    {
+        return $this->textRevisionId;
+    }
+
+    /**
      * Set target
      *
-     * @param text $target
+     * @param ArrayCollection $target
      */
     public function setTarget($target)
     {
@@ -180,7 +208,7 @@ class Text
     /**
      * Get target
      *
-     * @return text
+     * @return ArrayCollection
      */
     public function getTarget()
     {

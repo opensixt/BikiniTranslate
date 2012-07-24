@@ -3,6 +3,9 @@
 namespace opensixt\BikiniTranslateBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
+
+use opensixt\BikiniTranslateBundle\Entity\TextRevision;
 
 /**
  * Text Model
@@ -11,17 +14,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class TextRepository extends EntityRepository
 {
-    const FIELD_ID        = 't.id';
-    const FIELD_HASH      = 't.hash';
-    const FIELD_SOURCE    = 't.source';
-    const FIELD_TARGET    = 't.target';
-    const FIELD_RESOURCE  = 't.resourceId';
-    const FIELD_LOCALE    = 't.localeId';
-    const FIELD_USER      = 't.userId';
-    const FIELD_EXP       = 't.exp';
-    const FIELD_REL       = 't.rel';
-    const FIELD_HTS       = 't.hts';
-    const FIELD_BLOCK     = 't.block';
+    const FIELD_ID          = 't.id';
+    const FIELD_HASH        = 't.hash';
+    const FIELD_SOURCE      = 't.source';
+    const FIELD_TARGET      = 't.target';
+    const FIELD_REVISION_ID = 't.textRevisionId';
+    const FIELD_RESOURCE    = 't.resourceId';
+    const FIELD_LOCALE      = 't.localeId';
+    const FIELD_USER        = 't.userId';
+    const FIELD_EXP         = 't.exp';
+    const FIELD_REL         = 't.rel';
+    const FIELD_HTS         = 't.hts';
+    const FIELD_BLOCK       = 't.block';
 
     const MISSING_TRANS_BY_LANG = 0;
     const SEARCH_PHRASE_BY_LANG = 1;
@@ -58,6 +62,11 @@ class TextRepository extends EntityRepository
      * @var int
      */
     private $_commonLanguageId;
+
+    /**
+     * @var string
+     */
+    private $_textRevisionControl;
 
     /**
      * @var string
@@ -110,6 +119,15 @@ class TextRepository extends EntityRepository
     {
         $this->_commonLanguage = $locale;
         $this->_commonLanguageId = $this->getIdByLocale($locale);
+    }
+
+    /**
+     *
+     * @param string $textRevisionControl
+     */
+    public function setTextRevisionControl($textRevisionControl)
+    {
+        $this->_textRevisionControl = $textRevisionControl;
     }
 
     /**
@@ -172,7 +190,7 @@ class TextRepository extends EntityRepository
     public function getMissingTranslations($limit, $offset)
     {
         $query = $this->createQueryBuilder('t')
-            ->select('t, l, r, u')
+            ->select('t, l, r, u, tr')
             ->leftJoin('t.locale', 'l')
             ->leftJoin('t.resource', 'r')
             ->leftJoin('t.user', 'u');
@@ -203,7 +221,7 @@ class TextRepository extends EntityRepository
     public function getSearchResults($limit, $offset)
     {
         $query = $this->createQueryBuilder('t')
-            ->select('t, r, l')
+            ->select('t, r, l, tr')
             ->leftJoin('t.resource', 'r')
             ->leftJoin('t.locale', 'l');
 
@@ -241,7 +259,8 @@ class TextRepository extends EntityRepository
             array_unique($hashes);
 
             $query = $this->createQueryBuilder('t')
-                ->select('t')
+                ->select('t, tr')
+                ->join('t.target', 'tr')
                 ->where(self::FIELD_HASH . ' IN (?1)')
                 ->andWhere(self::FIELD_LOCALE . '= ?2')
                 ->setParameter(1, $hashes)
@@ -271,7 +290,7 @@ class TextRepository extends EntityRepository
                 $mess = '';
                 foreach ($textsLang as $textLang) {
                     if ($text['hash'] == $textLang['hash']) {
-                        $mess = $textLang['target'];
+                        $mess = $textLang['target']['target'];
                         break;
                     }
                 }
@@ -310,7 +329,7 @@ class TextRepository extends EntityRepository
         switch ($this->_task) {
 
         case self::SEARCH_PHRASE_BY_LANG:
-            $query->where(self::FIELD_TARGET . ' LIKE ?1')
+            $query->join('t.target', 'tr', Join::WITH , "tr.target LIKE ?1")
                 ->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
                 ->andWhere(self::FIELD_LOCALE . ' = ?3')
                 ->andWhere(self::FIELD_EXP . ' IS NULL')
@@ -322,10 +341,10 @@ class TextRepository extends EntityRepository
 
         case self::MISSING_TRANS_BY_LANG:
         default:
-            $query->where(self::FIELD_RESOURCE . ' IN (?1)')
+            $query->join('t.target', 'tr', Join::WITH , "tr.target = 'TRANSLATE_ME'")
+                ->where(self::FIELD_RESOURCE . ' IN (?1)')
                 ->andWhere(self::FIELD_LOCALE . ' = ?2')
                 //->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
-                ->andWhere(self::FIELD_TARGET . ' = \'TRANSLATE_ME\'')
                 ->andWhere(self::FIELD_EXP . ' IS NULL')
                 ->andWhere(self::FIELD_REL . ' IS NOT NULL')
                 ->setParameter(1, $this->_resources)
@@ -368,15 +387,46 @@ class TextRepository extends EntityRepository
      */
     public function updateText ($id, $text)
     {
+        // Exception
+        if (!isset($this->_textRevisionControl)) {
+            throw new \Exception(__METHOD__ . ': _textRevisionControl is not set. Please set it with ' . __CLASS__ . '::setTextRevisionControl() !');
+        }
+
         if ($id) {
-            $this->createQueryBuilder('t')
-                ->update()
-                ->set(self::FIELD_TARGET, '?1')
-                ->where(self::FIELD_ID . ' = ?2')
-                ->setParameter(1, trim($text))
-                ->setParameter(2, $id)
-                ->getQuery()
-                ->execute();
+            $textRevisionRep = $this->_em->getRepository('opensixtBikiniTranslateBundle:TextRevision');
+
+            if ($this->_textRevisionControl == 'off') {
+                // if text_revision_control is 'off', than update table with new data
+                $objTextRevision = $textRevisionRep->find($id);
+                if (!empty($objTextRevision)) {
+                    $objTextRevision->setTarget($text);
+                    $this->_em->persist($objTextRevision);
+                    $this->_em->flush();
+                }
+
+            } else {
+                /* if text_revision_control is 'on', than insert a new record into
+                 * TextRevision table, and update a pointer field in Text */
+                $objTextRevision = new TextRevision();
+                $objTextRevision->setTextId($id);
+                $objTextRevision->setTarget($text);
+
+                $this->_em->persist($objTextRevision);
+                $this->_em->flush();
+                $newTextId = $objTextRevision->getId();
+
+                if ($newTextId) {
+                    // TODO: use ORM
+                    $this->createQueryBuilder('t')
+                        ->update()
+                        ->set(self::FIELD_REVISION_ID, '?1')
+                        ->where(self::FIELD_ID . ' = ?2')
+                        ->setParameter(1, $newTextId)
+                        ->setParameter(2, $id)
+                        ->getQuery()
+                        ->execute();
+                }
+            }
         }
     }
 
