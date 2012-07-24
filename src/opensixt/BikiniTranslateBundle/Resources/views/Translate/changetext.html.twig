@@ -13,7 +13,7 @@
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
         {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        <input type="submit" value="{{ 'submit'|trans }}"/>
+        <input type="submit" value="{{ 'submit_page'|trans }}"/>
 
         {% if searchResults is defined %}
         <table class="list">
