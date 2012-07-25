@@ -2,18 +2,21 @@
 
 namespace opensixt\BikiniTranslateBundle\Entity;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * opensixt\BikiniTranslateBundle\Entity\Groups
  *
  * @ORM\Table(name="groups")
+ * @UniqueEntity("name")
  * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\GroupsRepository")
  */
 class Groups
 {
     /**
-     * @var integer $id
+     * @var int $id
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -96,6 +99,15 @@ class Groups
         return $this->description;
     }
 
+    /**
+     * Set resources
+     *
+     * @param array $resources
+     */
+    public function setResources($resources)
+    {
+        $this->resources = $resources;
+    }
     /**
      * Get resources
      *

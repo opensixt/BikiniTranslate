@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Resource
 {
     /**
-     * @var integer $id
+     * @var int $id
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id

@@ -16,22 +16,29 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface {
         $admin->setUsername('admin');
         $admin->setPassword('admin');
         $admin->setEmail('admin@bikinitranslate');
-        $admin->setIsactive(1);
+        $admin->setIsactive(User::ActiveUser);
         $admin->addUserRole($manager->merge($this->getReference('role-1')));
+        $admin->setUserLanguages(array(
+            $manager->merge($this->getReference('language-en_GB')),
+            $manager->merge($this->getReference('language-de_DE')),
+        ));
+        $admin->setUserGroups(array($manager->merge($this->getReference('groups-dummy'))));
         $manager->persist($admin);
 
         $user = new User;
         $user->setUsername('user');
         $user->setPassword('user');
         $user->setEmail('user@bikinitranslate');
-        $user->setIsactive(1);
+        $user->setIsactive(User::ActiveUser);
         $user->addUserRole($manager->merge($this->getReference('role-3')));
+        $user->setUserLanguages(array($manager->merge($this->getReference('language-de_DE'))));
+        $user->setUserGroups(array($manager->merge($this->getReference('groups-dummy'))));
         $manager->persist($user);
-        
+
         $manager->flush();
     }
-    
+
     public function getOrder() {
-        return 2;
+        return 5;
     }
 }

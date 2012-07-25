@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Language
 {
     /**
-     * @var integer $id
+     * @var int $id
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -24,7 +24,7 @@ class Language
     /**
      * @var string $locale
      *
-     * @ORM\Column(name="locale", type="string", length=45, nullable=false)
+     * @ORM\Column(name="locale", type="string", length=5, nullable=false)
      */
     private $locale;
 

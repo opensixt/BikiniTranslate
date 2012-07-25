@@ -13,9 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Text
 {
     /**
-     * @var bigint $id
+     * @var int $id
      *
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -51,9 +51,9 @@ class Text
     private $target;
 
     /**
-     * @var string $resourceId
+     * @var int $resourceId
      *
-     * @ORM\Column(name="resource_id", type="string", length=255, nullable=false)
+     * @ORM\Column(name="resource_id", type="integer", nullable=false)
      */
     private $resourceId;
 
@@ -66,7 +66,7 @@ class Text
     private $resource;
 
     /**
-     * @var string $localeId
+     * @var int $localeId
      *
      * @ORM\Column(name="locale_id", type="integer", nullable=false)
      */
@@ -81,9 +81,9 @@ class Text
     private $locale;
 
     /**
-     * @var string $userId
+     * @var integer $userId
      *
-     * @ORM\Column(name="user_id", type="string", length=32, nullable=false)
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
@@ -123,7 +123,12 @@ class Text
      */
     private $block;
 
-
+    /**
+     * @var boolean dont_translate
+     *
+     * @ORM\Column(name="dont_translate", type="boolean", nullable=true)
+     */
+    private $dontTranslate;
 
     /**
      * Get id

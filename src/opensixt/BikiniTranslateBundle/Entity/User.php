@@ -6,6 +6,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -16,6 +19,8 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
  * opensixt\BikiniTranslateBundle\Entity\User
  *
  * @ORM\Table(name="user")
+ * @UniqueEntity("username")
+ * @UniqueEntity("email")
  * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\UserRepository")
  */
 class User implements AdvancedUserInterface
@@ -24,7 +29,7 @@ class User implements AdvancedUserInterface
     const NotActiveUser = 0;
 
     /**
-     * @var integer $id
+     * @var int $id
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -35,7 +40,7 @@ class User implements AdvancedUserInterface
     /**
      * @var string $username
      *
-     * @ORM\Column(name="username", type="string", length=32, nullable=false)
+     * @ORM\Column(name="username", type="string", length=32, nullable=false, unique=true)
      */
     private $username;
 
@@ -49,7 +54,8 @@ class User implements AdvancedUserInterface
     /**
      * @var text $email
      *
-     * @ORM\Column(name="email", type="text", nullable=false)
+     * @ORM\Column(name="email", type="string", length=255, nullable=false, unique=true)
+     * @Assert\Email()
      */
     private $email;
 
