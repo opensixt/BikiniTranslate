@@ -86,6 +86,30 @@
                 <source>submit_page</source>
                 <target>Ok</target>
             </trans-unit>
+            <trans-unit id="105">
+                <source>mnu_copylanguage</source>
+                <target>Copy language content</target>
+            </trans-unit>
+            <trans-unit id="110">
+                <source>copy_lang_content_from</source>
+                <target>Copy language content from</target>
+            </trans-unit>
+            <trans-unit id="115">
+                <source>copy_lang_content_to</source>
+                <target>to</target>
+            </trans-unit>
+            <trans-unit id="120">
+                <source>copy_lang_content_text</source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="125">
+                <source>copy_success %count%</source>
+                <target>Language contents copied successfully. (%count% updates)</target>
+            </trans-unit>
+            <trans-unit id="130">
+                <source>copy_nothing</source>
+                <target>Nothing to translate.</target>
+            </trans-unit>
 
         </body>
     </file>

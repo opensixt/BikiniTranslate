@@ -27,8 +27,11 @@ class TextRepository extends EntityRepository
     const FIELD_HTS         = 't.hts';
     const FIELD_BLOCK       = 't.block';
 
+    const TEXT_EMPTY_VALUE  = 'TRANSLATE_ME';
+
     const MISSING_TRANS_BY_LANG = 0;
     const SEARCH_PHRASE_BY_LANG = 1;
+    const ALL_CONTENT_BY_LANG   = 2;
 
     const SEARCH_EXACT = 1;
     const SEARCH_LIKE = 2;
@@ -238,20 +241,103 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     *
+     * @param int $langFrom
+     * @param int $langTo
+     * @param array $resources
+     * @return int
+     */
+    public function copyLanguageContent($langFrom, $langTo, $resources)
+    {
+        $translationsCount = 0;
+        if (count($resources)) {
+            $this->setResources($resources);
+
+            // get source data
+            $sourceData = $this->getAllByLanguage($langFrom);
+
+            // set data for destination locale
+            $translationsCount = $this->updateEmptyTranslations($sourceData, $langTo);
+        }
+        return $translationsCount;
+    }
+
+    /**
+     * Get all contents from Text table by language
+     *
+     * @param int $locale language id
+     */
+    protected function getAllByLanguage($locale)
+    {
+        $contents = array();
+        if (!empty($locale)) {
+            $this->setTask(self::ALL_CONTENT_BY_LANG);
+            $this->setLocale($locale);
+
+            $query = $this->createQueryBuilder('t')
+                ->select('t, r, tr')
+                ->leftJoin('t.resource', 'r');
+
+            $this->setQueryParameters($query);
+
+            $contents = $query->getQuery()->getArrayResult();
+        }
+        return $contents;
+    }
+
+    /**
+     * Copy translations from sourceData for destLocale language
+     *
+     * @param array $sourceData
+     * @param int $destLocale
+     */
+    protected function updateEmptyTranslations($sourceData, $destLocale)
+    {
+        $textsDestLang = $this->getMessagesByLanguage($sourceData, $destLocale);
+
+        $changesCount = 0;
+        // merge all empty translations in destination language
+        foreach ($textsDestLang as $txt) {
+            if ($txt['target']['target'] == self::TEXT_EMPTY_VALUE) {
+                $txtId = $txt['id'];
+
+                // if destination text belongs to available resource
+                if (in_array($txt['resourceId'], $this->_resources)) {
+                    // get text from $sourceData by hash and resource
+                    $translation = '';
+                    foreach ($sourceData as $src) {
+                        if (($src['hash'] == $txt['hash'])
+                                && ($src['resourceId'] == $txt['resourceId'])) {
+                            $translation = $src['target']['target'];
+                            break;
+                        }
+                    }
+                    // if text found, update destination
+                    if (!empty($translation)) {
+                        $changesCount++;
+                        $this->updateText ($txtId, $translation);
+                    }
+                }
+            }
+        }
+
+        return $changesCount;
+    }
+
+    /**
      * Get messages in $locale language for any hash from $texts
      * and return it like array
      *
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $texts
-     * @param string $locale
+     * @param int $locale
      * @return array
      */
-    private function getMessagesByLanguage($texts, $locale)
+    protected function getMessagesByLanguage($texts, $locale)
     {
-        $langId = $this->getIdByLocale($locale); // language id by locale
         $textsLang = array();
 
-        if (count($texts) && $langId){
+        if (count($texts) && $locale){
             $hashes = array();
             foreach ($texts as $text) {
                 $hashes[] = $text['hash'];
@@ -264,7 +350,7 @@ class TextRepository extends EntityRepository
                 ->where(self::FIELD_HASH . ' IN (?1)')
                 ->andWhere(self::FIELD_LOCALE . '= ?2')
                 ->setParameter(1, $hashes)
-                ->setParameter(2, $langId);
+                ->setParameter(2, $locale);
             $textsLang = $query->getQuery()->getArrayResult();
         }
 
@@ -278,14 +364,14 @@ class TextRepository extends EntityRepository
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $texts
      */
-    private function setMessagesInCommonLanguage(&$texts)
+    protected function setMessagesInCommonLanguage(&$texts)
     {
         if (!$this->_commonLanguageId) {
             throw new \Exception(__METHOD__ . ': _commonLangauge is not set. Please set it with ' . __CLASS__ . '::setCommonLanguage() !');
         }
 
         if ($this->_locale != $this->_commonLanguageId) {
-            $textsLang = $this->getMessagesByLanguage($texts, $this->_commonLanguage);
+            $textsLang = $this->getMessagesByLanguage($texts, $this->_commonLanguageId);
             foreach ($texts as &$text) {
                 $mess = '';
                 foreach ($textsLang as $textLang) {
@@ -304,14 +390,15 @@ class TextRepository extends EntityRepository
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $parameters
      */
-    private function setQueryParameters($query)
+    protected function setQueryParameters($query)
     {
         // Exceptions
         if (!isset($this->_task)) {
             throw new \Exception(__METHOD__ . ': _task is not set. Please set it with ' . __CLASS__ . '::init() !');
         }
 
-        if ($this->_task == self::SEARCH_PHRASE_BY_LANG || $this->_task == self::MISSING_TRANS_BY_LANG) {
+        if ($this->_task == self::SEARCH_PHRASE_BY_LANG || $this->_task == self::MISSING_TRANS_BY_LANG
+                || $this->_task == self::ALL_CONTENT_BY_LANG) {
             if (!$this->_locale) {
                 throw new \Exception(__METHOD__ . ': _locale is not set. Please set it with ' . __CLASS__ . '::init() !');
             }
@@ -323,6 +410,12 @@ class TextRepository extends EntityRepository
         if ($this->_task == self::SEARCH_PHRASE_BY_LANG) {
             if (!$this->_searchString) {
                 throw new \Exception(__METHOD__ . ': _searchString is not set. Please set it with ' . __CLASS__ . '::setSearchParameters() !');
+            }
+        }
+
+        if ($this->_task == self::ALL_CONTENT_BY_LANG) {
+            if (!$this->_commonLanguageId) {
+                throw new \Exception(__METHOD__ . ': _commonLanguageId is not set. Please set it with ' . __CLASS__ . '::setCommonLanguage() !');
             }
         }
 
@@ -339,16 +432,33 @@ class TextRepository extends EntityRepository
 
             break;
 
+        case self::ALL_CONTENT_BY_LANG:
+            $query->join('t.target', 'tr', Join::WITH , "tr.target != ?1")
+                ->where(self::FIELD_RESOURCE . ' IN (?2)')
+                ->andWhere(self::FIELD_LOCALE . ' = ?3')
+                ->andWhere(self::FIELD_EXP . ' IS NULL')
+                ->setParameter(1, self::TEXT_EMPTY_VALUE)
+                ->setParameter(2, $this->_resources)
+                ->setParameter(3, $this->_locale);
+
+            if ($this->_locale == $this->_commonLanguageId) {
+                $query->andWhere(self::FIELD_REL . ' IS NOT NULL');
+            }
+
+            break;
+
+
         case self::MISSING_TRANS_BY_LANG:
         default:
-            $query->join('t.target', 'tr', Join::WITH , "tr.target = 'TRANSLATE_ME'")
-                ->where(self::FIELD_RESOURCE . ' IN (?1)')
-                ->andWhere(self::FIELD_LOCALE . ' = ?2')
+            $query->join('t.target', 'tr', Join::WITH , "tr.target = ?1")
+                ->where(self::FIELD_RESOURCE . ' IN (?2)')
+                ->andWhere(self::FIELD_LOCALE . ' = ?3')
                 //->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
                 ->andWhere(self::FIELD_EXP . ' IS NULL')
                 ->andWhere(self::FIELD_REL . ' IS NOT NULL')
-                ->setParameter(1, $this->_resources)
-                ->setParameter(2, $this->_locale);
+                ->setParameter(1, self::TEXT_EMPTY_VALUE)
+                ->setParameter(2, $this->_resources)
+                ->setParameter(3, $this->_locale);
             // just get the unflagged translations
             // 0 = open state
             // 1 = already sent to hts

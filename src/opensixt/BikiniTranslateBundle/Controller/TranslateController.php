@@ -1,5 +1,4 @@
 <?php
-
 namespace opensixt\BikiniTranslateBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -415,6 +414,78 @@ class TranslateController extends Controller
             $templateParam
             );
     }
+
+    /**
+     * copylanguage Action
+     *
+     * @return Response A Response instance
+     */
+    public function copylanguageAction()
+    {
+        $translator = $this->get('translator');
+
+        $resources = $this->getUserResources(); // available resources
+        $locales = $this->getUserLocales(); // available languages
+
+        // request values
+        $lang['from'] = $this->getFieldFromRequest('lang_from');
+        $lang['to']   = $this->getFieldFromRequest('lang_to');
+
+        if (!empty($lang['from']) && !empty($lang['to'])
+                && $lang['from'] != $lang['to']) {
+            // if set source and destination locale
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+
+            // set common language
+            $commonLang = $this->container->getParameter('common_language');
+            $tr->setCommonLanguage($commonLang);
+
+            // text revision controle
+            $textRevisionControl = $this->container->getParameter('text_revision_control');
+            $tr->setTextRevisionControl($textRevisionControl);
+
+            $translationsCount = $tr->copyLanguageContent(
+                $lang['from'],
+                $lang['to'],
+                array_keys($resources));
+
+            $translateMade = 'done';
+        }
+
+        $form = $this->createFormBuilder()
+            ->add('lang_from', 'choice', array(
+                    'label'       => $translator->trans('copy_lang_content_from') . ': ',
+                    'empty_value' => '',
+                    'choices'     => $locales,
+                    'required'    => true,
+                    'data'        => $lang['from']
+                ))
+            ->add('lang_to', 'choice', array(
+                    'label'       => $translator->trans('copy_lang_content_to') . ': ',
+                    'empty_value' => '',
+                    'choices'     => $locales,
+                    'required'    => true,
+                    'data'        => $lang['to']
+                ))
+            ->getForm();
+
+        $templateParam = array(
+            'form'          => $form->createView(),
+        );
+
+        if (!empty($translationsCount)) {
+            $templateParam['translationsCount'] = $translationsCount;
+        }
+        if (!empty($translateMade)) {
+            $templateParam['translateMade'] = $translateMade;
+        }
+
+        return $this->render('opensixtBikiniTranslateBundle:Translate:copylanguage.html.twig',
+            $templateParam);
+    }
+
 
     /**
      * Returns array of locales for logged user

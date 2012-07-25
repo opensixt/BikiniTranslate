@@ -24,3 +24,7 @@ _translate_changetext:
     requirements:
         page: \d+
 
+_translate_copylanguage:
+    pattern: /translate/copylanguage/
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:copylanguage }
+
