@@ -110,6 +110,23 @@
                 <source>copy_nothing</source>
                 <target>Keine Inhalte zum Kopieren gefunden.</target>
             </trans-unit>
+            <trans-unit id="170">
+                <source>edittext_explanation</source>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. </target>
+            </trans-unit>
+            <trans-unit id="175">
+                <source>searchstring_explanation</source>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. </target>
+            </trans-unit>
+            <trans-unit id="180">
+                <source>changetext_explanation</source>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
+            </trans-unit>
+            <trans-unit id="185">
+                <source>copylanguage_explanation</source>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

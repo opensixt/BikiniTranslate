@@ -8,6 +8,8 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
+    <div class="textblock">{{ 'copylanguage_explanation'|trans }}</div>
+
     <form action="{{ path('_translate_copylanguage') }}" method="post" {{ form_enctype(form) }}>
 
         {{ form_label(form.lang_from) }} {{ form_widget(form.lang_from) }}

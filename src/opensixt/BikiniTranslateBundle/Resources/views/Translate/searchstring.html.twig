@@ -8,6 +8,8 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
+    <div class="textblock">{{ 'searchstring_explanation'|trans }}</div>
+
     <form action="{{ path('_translate_searchstring') }}" method="post" {{ form_enctype(form) }}>
 
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
