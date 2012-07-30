@@ -10,3 +10,5 @@
 *.swp
 /composer.lock
 src/opensixt/ContentBundle/Resources/public/icons/*
+
+/vagrant/Vagrantfile

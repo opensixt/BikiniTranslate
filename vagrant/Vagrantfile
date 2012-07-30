@@ -1,0 +1,25 @@
+include_personalization = File.expand_path("../Personalization", __FILE__)
+load include_personalization if File.exist?(include_personalization)
+
+Vagrant::Config.run do |config|
+  # BASEBOX 
+  config.vm.box = "opensixt"
+  config.vm.box_url = "/home/seiffert/.vagrant/boxes/opensixt.box"
+
+  # NETWORK
+  config.vm.network :hostonly, "192.168.10.55"
+
+  # SHARED FOLDERS
+  config.vm.share_folder "opensixt_bikini", "/srv/www/vhosts/bikini", "../", :nfs => true
+
+  # MEMORY
+  config.vm.customize do |vm|
+    vm.memory_size = 768
+  end
+
+  # PUPPET CONFIGURATION
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file  = "opensixt.pp"
+  end
+end
