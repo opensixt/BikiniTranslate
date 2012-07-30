@@ -233,10 +233,14 @@ class TranslateController extends Controller
             TextRepository::SEARCH_LIKE  => $translator->trans('like'),
         );
 
+        // use tool_language (default language) for search
+        $toolLang = $this->container->getParameter('tool_language');
+
         // retrieve request parameters
-        $searchPhrase = $this->getFieldFromRequest('search');
+        $searchPhrase   = $this->getFieldFromRequest('search');
         $searchResource = $this->getFieldFromRequest('resource');
-        $searchMode = $this->getFieldFromRequest('mode');
+        $searchMode     = $this->getFieldFromRequest('mode');
+        $searchLanguage = $this->getFieldFromRequest('locale');
 
         if (strlen($searchResource)) {
             $searchResources = array($searchResource);
@@ -244,19 +248,16 @@ class TranslateController extends Controller
             $searchResources = array_keys($resources);
         }
 
-        if (strlen($searchPhrase)) {
+        if (strlen($searchPhrase) && !empty($searchLanguage)) {
             $em = $this->getDoctrine()->getEntityManager();
             $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
-
-            // use tool_language (default language) for search
-            $toolLang = $this->container->getParameter('tool_language');
 
             // set search parameters
             $tr->setSearchParameters($searchPhrase, $searchMode);
 
             $textCount = $tr->getTextCount(
                 TextRepository::SEARCH_PHRASE_BY_LANG,
-                $tr->getIdByLocale($toolLang),
+                $searchLanguage,
                 $searchResources);
 
             $pagination = new Pagination(
@@ -269,7 +270,13 @@ class TranslateController extends Controller
             $searchResults = $tr->getSearchResults(
                 $this->_paginationLimitSearch,
                 $pagination->getOffset());
-            //print_r($searchResults);
+        }
+
+        // set default search language
+        $locales_flip = array_flip($locales);
+        $preferredChoices = array();
+        if (!empty($toolLang) && isset($locales_flip[$toolLang])) {
+            $preferredChoices = array($locales_flip[$toolLang]);
         }
 
         $form = $this->createFormBuilder()
@@ -285,6 +292,14 @@ class TranslateController extends Controller
                     'required'    => false,
                     'data'        => $searchResource
                 ))
+            ->add('locale', 'choice', array(
+                    'label'       => $translator->trans('with_language') . ': ',
+                    'empty_value' => (!empty($defaultSearchLang)) ? false : '',
+                    'choices'     => $locales,
+                    'preferred_choices' => $preferredChoices,
+                    'required'    => true,
+                    'data'        => $searchLanguage
+                ))
             ->add('mode', 'choice', array(
                     'label'       => $translator->trans('search_method') . ': ',
                     'empty_value' => '',
@@ -299,6 +314,7 @@ class TranslateController extends Controller
             'searchPhrase'  => $searchPhrase,
             'mode'          => $searchMode,
             'resource'      => $searchResource,
+            'locale'        => $searchLanguage,
         );
 
         if (isset($paginationBar)) {
