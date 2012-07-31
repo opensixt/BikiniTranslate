@@ -1,14 +1,24 @@
 class opensixt::mysql {
-    package {"mysql-cluster-server":
+
+    include mysqldb
+
+    package {"mysql-server":
         ensure  => present,
     }
 
-    package {"mysql-cluster-client":
+    package {"mysql-client":
         ensure  => present,
     }
 
     service {"mysqld":
         ensure => running,
-        require => Package["mysql-cluster-server"],
+        require => Package["mysql-server"],
+    }
+
+    mysqldb::create { "bikini":
+        schema => "bikini",
+        user => "bikini",
+        password => "",
+        require => Service["mysqld"],
     }
 }
