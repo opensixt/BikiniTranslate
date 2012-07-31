@@ -3,7 +3,8 @@ class opensixt::tools {
               "zip",
               "unzip",
               "strace",
-              "patch"]:
+              "patch",
+              "git"]:
         ensure => present,
     }
 
