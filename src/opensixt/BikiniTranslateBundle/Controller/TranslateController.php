@@ -508,6 +508,94 @@ class TranslateController extends Controller
             $templateParam);
     }
 
+    /**
+     * copyresource Action
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @return Response A Response instance
+     */
+    public function copyresourceAction()
+    {
+        $translator = $this->get('translator');
+
+        $resources = $this->getUserResources(); // available resources
+        $locales = $this->getUserLocales(); // available languages
+
+        // request values
+        $res['from'] = $this->getFieldFromRequest('res_from');
+        $res['to']   = $this->getFieldFromRequest('res_to');
+        $lang        = $this->getFieldFromRequest('lang');
+
+        if (!empty($res['from']) && !empty($res['to'])
+                && $res['from'] != $res['to']) {
+            // if set source and destination locale
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $tr = $em->getRepository(self::ENTITY_TEXT);
+
+            // set common language
+            $commonLang = $this->container->getParameter('common_language');
+            $tr->setCommonLanguage($commonLang);
+
+            // set text revision mode
+            $textRevisionControl = $this->container->getParameter('text_revision_control');
+            $tr->setTextRevisionControl($textRevisionControl);
+
+            // set available resources
+            $tr->setResources(array_keys($resources));
+
+            if (!empty($lang)) {
+                $arrLang = array($lang);
+            } else {
+                $arrLang = array_keys($locales);
+            }
+
+            $translationsCount = $tr->copyResourceContent(
+                $res['from'],
+                $res['to'],
+                $arrLang);
+
+            $translateMade = 'done';
+        }
+
+        $form = $this->createFormBuilder()
+            ->add('res_from', 'choice', array(
+                    'label'       => $translator->trans('copy_res_content_from') . ': ',
+                    'empty_value' => '',
+                    'choices'     => $resources,
+                    'required'    => true,
+                    'data'        => $res['from']
+                ))
+            ->add('res_to', 'choice', array(
+                    'label'       => $translator->trans('copy_res_content_to') . ': ',
+                    'empty_value' => '',
+                    'choices'     => $resources,
+                    'required'    => true,
+                    'data'        => $res['to']
+                ))
+            ->add('lang', 'choice', array(
+                    'label'       => $translator->trans('copy_res_content_lang') . ': ',
+                    'empty_value' => $translator->trans('all_values'),
+                    'choices'     => $locales,
+                    'required'    => false,
+                    'data'        => $lang
+                ))
+            ->getForm();
+
+        $templateParam = array(
+            'form'          => $form->createView(),
+        );
+
+        if (!empty($translationsCount)) {
+            $templateParam['translationsCount'] = $translationsCount;
+        }
+        if (!empty($translateMade)) {
+            $templateParam['translateMade'] = $translateMade;
+        }
+
+        return $this->render('opensixtBikiniTranslateBundle:Translate:copyresource.html.twig',
+            $templateParam);
+    }
 
     /**
      * Returns array of locales for logged user

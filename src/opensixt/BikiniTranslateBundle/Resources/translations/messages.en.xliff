@@ -99,16 +99,32 @@
                 <target>to</target>
             </trans-unit>
             <trans-unit id="120">
-                <source>copy_lang_content_text</source>
-                <target></target>
-            </trans-unit>
-            <trans-unit id="125">
-                <source>copy_success %count%</source>
+                <source>copy_lang_success %count%</source>
                 <target>Language contents copied successfully. (%count% updates)</target>
             </trans-unit>
-            <trans-unit id="130">
+            <trans-unit id="125">
                 <source>copy_nothing</source>
                 <target>Nothing to translate.</target>
+            </trans-unit>
+            <trans-unit id="130">
+                <source>mnu_copyresource</source>
+                <target>Copy resource content</target>
+            </trans-unit>
+            <trans-unit id="135">
+                <source>copy_res_content_from</source>
+                <target>Copy resource content from</target>
+            </trans-unit>
+            <trans-unit id="140">
+                <source>copy_res_content_to</source>
+                <target>to</target>
+            </trans-unit>
+            <trans-unit id="145">
+                <source>copy_res_content_lang</source>
+                <target>in</target>
+            </trans-unit>
+            <trans-unit id="150">
+                <source>copy_res_success %count%</source>
+                <target>Resource contents copied successfully. (%count% updates)</target>
             </trans-unit>
             <trans-unit id="170">
                 <source>edittext_explanation</source>

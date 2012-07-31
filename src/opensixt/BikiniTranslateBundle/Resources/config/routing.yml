@@ -28,3 +28,6 @@ _translate_copylanguage:
     pattern: /translate/copylanguage/
     defaults: { _controller: opensixtBikiniTranslateBundle:Translate:copylanguage }
 
+_translate_copyresource:
+    pattern: /translate/copyresource/
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:copyresource }
