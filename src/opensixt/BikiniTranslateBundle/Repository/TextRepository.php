@@ -241,11 +241,14 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     * Copy language ($langFrom) contents to another language ($langTo)
+     * for available resources.
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $langFrom
      * @param int $langTo
      * @param array $resources
-     * @return int
+     * @return int count of updated records
      */
     public function copyLanguageContent($langFrom, $langTo, $resources)
     {
@@ -265,7 +268,9 @@ class TextRepository extends EntityRepository
     /**
      * Get all contents from Text table by language
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $locale language id
+     * @return array
      */
     protected function getAllByLanguage($locale)
     {
@@ -495,7 +500,7 @@ class TextRepository extends EntityRepository
      * @param int $id
      * @param string $text
      */
-    public function updateText ($id, $text)
+    public function updateText($id, $text)
     {
         // Exception
         if (!isset($this->_textRevisionControl)) {
@@ -516,7 +521,7 @@ class TextRepository extends EntityRepository
 
             } else {
                 /* if text_revision_control is 'on', than insert a new record into
-                 * TextRevision table, and update a pointer field in Text */
+                   TextRevision table, and update a pointer field in Text */
                 $objTextRevision = new TextRevision();
                 $objTextRevision->setTextId($id);
                 $objTextRevision->setTarget($text);

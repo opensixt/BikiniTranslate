@@ -42,6 +42,7 @@ class TranslateController extends Controller
     /**
      * edittext Action
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param string $locale
      * @param int $page
      * @return Response A Response instance
@@ -164,6 +165,7 @@ class TranslateController extends Controller
     /**
      * setlocale Action
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return Response A Response instance
      */
     public function setlocaleAction()
@@ -220,6 +222,7 @@ class TranslateController extends Controller
     /**
      * searchstring Action
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $page
      * @return Response A Response instance
      */
@@ -333,6 +336,7 @@ class TranslateController extends Controller
     /**
      * changetext Action
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $page
      * @return Response A Response instance
      */
@@ -435,6 +439,7 @@ class TranslateController extends Controller
     /**
      * copylanguage Action
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return Response A Response instance
      */
     public function copylanguageAction()
@@ -459,7 +464,7 @@ class TranslateController extends Controller
             $commonLang = $this->container->getParameter('common_language');
             $tr->setCommonLanguage($commonLang);
 
-            // text revision controle
+            // set text revision mode
             $textRevisionControl = $this->container->getParameter('text_revision_control');
             $tr->setTextRevisionControl($textRevisionControl);
 
@@ -507,6 +512,7 @@ class TranslateController extends Controller
     /**
      * Returns array of locales for logged user
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return array
      */
     private function getUserLocales()
@@ -523,6 +529,9 @@ class TranslateController extends Controller
 
     /**
      * Returns array of available resources for logged user
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @return array
      */
     private function getUserResources()
     {
@@ -541,7 +550,9 @@ class TranslateController extends Controller
 
     /**
      * Retrieves a field value from Request by fieldname
+     * if it doesn't exist, return empty string
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param string $fieldName
      * @return mixed
      */
