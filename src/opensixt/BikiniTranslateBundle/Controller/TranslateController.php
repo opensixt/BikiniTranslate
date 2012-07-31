@@ -8,6 +8,7 @@ use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
 class TranslateController extends Controller
 {
+    const ENTITY_TEXT  = 'opensixtBikiniTranslateBundle:Text';
 
     /**
      * Pagination limit
@@ -69,7 +70,7 @@ class TranslateController extends Controller
         $translator = $this->get('translator');
 
         $em = $this->getDoctrine()->getEntityManager();
-        $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+        $tr = $em->getRepository(self::ENTITY_TEXT);
 
         $commonLang = $this->container->getParameter('common_language');
         $tr->setCommonLanguage($commonLang);
@@ -250,7 +251,7 @@ class TranslateController extends Controller
 
         if (strlen($searchPhrase) && !empty($searchLanguage)) {
             $em = $this->getDoctrine()->getEntityManager();
-            $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+            $tr = $em->getRepository(self::ENTITY_TEXT);
 
             // set search parameters
             $tr->setSearchParameters($searchPhrase, $searchMode);
@@ -355,7 +356,7 @@ class TranslateController extends Controller
 
         if (strlen($searchPhrase)) {
             $em = $this->getDoctrine()->getEntityManager();
-            $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+            $tr = $em->getRepository(self::ENTITY_TEXT);
 
             // set search parameters
             $tr->setSearchParameters($searchPhrase);
@@ -452,7 +453,7 @@ class TranslateController extends Controller
             // if set source and destination locale
 
             $em = $this->getDoctrine()->getEntityManager();
-            $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+            $tr = $em->getRepository(self::ENTITY_TEXT);
 
             // set common language
             $commonLang = $this->container->getParameter('common_language');
