@@ -7,7 +7,7 @@
 {% block body %}
 
     <h3>{{ 'resources'|trans }}</h3>
-    
+
     <table class="list">
         <thead>
             <tr>
@@ -36,7 +36,7 @@
         </tfoot>
     </table>
 
-    
+
 
 {% endblock %}
 
@@ -45,4 +45,7 @@
         <li class="backhome"><a href="{{ path('_user_admin_home') }}">{{ 'admin_home'|trans }}</a></li>
         <li class="new"><a href="{{ path('_admin_resource') }}">{{ 'new_resource'|trans }}</a></li>
     </ul>
+
+    <br/>
+    {% include 'opensixtBikiniTranslateBundle:Translate:useradmin_menu.html.twig' %}
 {% endblock %}

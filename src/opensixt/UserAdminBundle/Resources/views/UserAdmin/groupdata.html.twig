@@ -7,7 +7,7 @@
 {% block body %}
 
     <h3>{{ 'group'|trans }}</h3>
-    
+
     <form action="{{ path('_admin_group', {'id':id}) }}" method="post" {{ form_enctype(form) }}>
         {#{ form_widget(form.user) }#}
         <div>
@@ -31,4 +31,7 @@
         <li class="backhome"><a href="{{ path('_user_admin_home') }}">{{ 'admin_home'|trans }}</a></li>
         <li class="back"><a href="{{ path('_admin_grouplist') }}">{{ 'group_list'|trans }}</a></li>
     </ul>
+
+    <br/>
+    {% include 'opensixtBikiniTranslateBundle:Translate:useradmin_menu.html.twig' %}
 {% endblock %}

@@ -17,34 +17,10 @@
 
 {% block sidebar %}
 
-{% include 'opensixtBikiniTranslateBundle:Translate:translationtool_menu.html.twig' %}
+    {% include 'opensixtBikiniTranslateBundle:Translate:translationtool_menu.html.twig' %}
 
-<br/>
+    <br/>
 
-<ul>
-    <li>
-        {{ 'administration'|trans }}
-    </li>
-    <li>
-        <a href="{{ path('_admin_userlist') }}">
-            {{ 'user_list'|trans }}
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('_admin_grouplist') }}">
-            {{ 'groups'|trans }}
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('_admin_langlist') }}">
-            {{ 'languages'|trans }}
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('_admin_reslist') }}">
-            {{ 'resources'|trans }}
-        </a>
-    </li>
-</ul>
+    {% include 'opensixtBikiniTranslateBundle:Translate:useradmin_menu.html.twig' %}
 
 {% endblock %}

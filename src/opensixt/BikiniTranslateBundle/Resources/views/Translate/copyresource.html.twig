@@ -8,12 +8,11 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
-    <div class="textblock">{{ 'copylanguage_explanation'|trans }}</div>
+    <form action="{{ path('_translate_copyresource') }}" method="post" {{ form_enctype(form) }}>
 
-    <form action="{{ path('_translate_copylanguage') }}" method="post" {{ form_enctype(form) }}>
-
-        {{ form_label(form.lang_from) }} {{ form_widget(form.lang_from) }}
-        {{ form_label(form.lang_to) }} {{ form_widget(form.lang_to) }}
+        {{ form_label(form.res_from) }} {{ form_widget(form.res_from) }}
+        {{ form_label(form.lang) }} {{ form_widget(form.lang) }}
+        {{ form_label(form.res_to) }} {{ form_widget(form.res_to) }}
         <input type="submit" value="{{ 'submit_page'|trans }}"/>
 
         {% if translateMade is defined and translateMade == 'done' %}
@@ -22,7 +21,7 @@
             <div class="message">
             {% if translationsCount is defined and translationsCount > 0 %}
                 {% set count = translationsCount %}
-                {% trans %}copy_lang_success %count%{% endtrans %}
+                {% trans %}copy_res_success %count%{% endtrans %}
             {% else %}
                 {{ 'copy_nothing'|trans }}
             {% endif %}

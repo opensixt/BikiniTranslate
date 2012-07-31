@@ -8,6 +8,8 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
+    <div class="textblock">{{ 'edittext_explanation'|trans }}</div>
+
     <form action="{{ path('_translate_edittext', {'locale':locale, 'page':paginationbar.current}) }}" method="post">
 
     {{ form_label(form.resource) }} {{ form_widget(form.resource) }}

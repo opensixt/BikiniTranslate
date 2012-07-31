@@ -8,6 +8,7 @@ use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
 class TranslateController extends Controller
 {
+    const ENTITY_TEXT  = 'opensixtBikiniTranslateBundle:Text';
 
     /**
      * Pagination limit
@@ -41,6 +42,7 @@ class TranslateController extends Controller
     /**
      * edittext Action
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param string $locale
      * @param int $page
      * @return Response A Response instance
@@ -69,7 +71,7 @@ class TranslateController extends Controller
         $translator = $this->get('translator');
 
         $em = $this->getDoctrine()->getEntityManager();
-        $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+        $tr = $em->getRepository(self::ENTITY_TEXT);
 
         $commonLang = $this->container->getParameter('common_language');
         $tr->setCommonLanguage($commonLang);
@@ -163,6 +165,7 @@ class TranslateController extends Controller
     /**
      * setlocale Action
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return Response A Response instance
      */
     public function setlocaleAction()
@@ -219,6 +222,7 @@ class TranslateController extends Controller
     /**
      * searchstring Action
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $page
      * @return Response A Response instance
      */
@@ -233,10 +237,14 @@ class TranslateController extends Controller
             TextRepository::SEARCH_LIKE  => $translator->trans('like'),
         );
 
+        // use tool_language (default language) for search
+        $toolLang = $this->container->getParameter('tool_language');
+
         // retrieve request parameters
-        $searchPhrase = $this->getFieldFromRequest('search');
+        $searchPhrase   = $this->getFieldFromRequest('search');
         $searchResource = $this->getFieldFromRequest('resource');
-        $searchMode = $this->getFieldFromRequest('mode');
+        $searchMode     = $this->getFieldFromRequest('mode');
+        $searchLanguage = $this->getFieldFromRequest('locale');
 
         if (strlen($searchResource)) {
             $searchResources = array($searchResource);
@@ -244,19 +252,16 @@ class TranslateController extends Controller
             $searchResources = array_keys($resources);
         }
 
-        if (strlen($searchPhrase)) {
+        if (strlen($searchPhrase) && !empty($searchLanguage)) {
             $em = $this->getDoctrine()->getEntityManager();
-            $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
-
-            // use tool_language (default language) for search
-            $toolLang = $this->container->getParameter('tool_language');
+            $tr = $em->getRepository(self::ENTITY_TEXT);
 
             // set search parameters
             $tr->setSearchParameters($searchPhrase, $searchMode);
 
             $textCount = $tr->getTextCount(
                 TextRepository::SEARCH_PHRASE_BY_LANG,
-                $tr->getIdByLocale($toolLang),
+                $searchLanguage,
                 $searchResources);
 
             $pagination = new Pagination(
@@ -269,7 +274,13 @@ class TranslateController extends Controller
             $searchResults = $tr->getSearchResults(
                 $this->_paginationLimitSearch,
                 $pagination->getOffset());
-            //print_r($searchResults);
+        }
+
+        // set default search language
+        $locales_flip = array_flip($locales);
+        $preferredChoices = array();
+        if (!empty($toolLang) && isset($locales_flip[$toolLang])) {
+            $preferredChoices = array($locales_flip[$toolLang]);
         }
 
         $form = $this->createFormBuilder()
@@ -285,6 +296,14 @@ class TranslateController extends Controller
                     'required'    => false,
                     'data'        => $searchResource
                 ))
+            ->add('locale', 'choice', array(
+                    'label'       => $translator->trans('with_language') . ': ',
+                    'empty_value' => (!empty($defaultSearchLang)) ? false : '',
+                    'choices'     => $locales,
+                    'preferred_choices' => $preferredChoices,
+                    'required'    => true,
+                    'data'        => $searchLanguage
+                ))
             ->add('mode', 'choice', array(
                     'label'       => $translator->trans('search_method') . ': ',
                     'empty_value' => '',
@@ -299,6 +318,7 @@ class TranslateController extends Controller
             'searchPhrase'  => $searchPhrase,
             'mode'          => $searchMode,
             'resource'      => $searchResource,
+            'locale'        => $searchLanguage,
         );
 
         if (isset($paginationBar)) {
@@ -316,6 +336,7 @@ class TranslateController extends Controller
     /**
      * changetext Action
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $page
      * @return Response A Response instance
      */
@@ -339,7 +360,7 @@ class TranslateController extends Controller
 
         if (strlen($searchPhrase)) {
             $em = $this->getDoctrine()->getEntityManager();
-            $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+            $tr = $em->getRepository(self::ENTITY_TEXT);
 
             // set search parameters
             $tr->setSearchParameters($searchPhrase);
@@ -418,6 +439,7 @@ class TranslateController extends Controller
     /**
      * copylanguage Action
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return Response A Response instance
      */
     public function copylanguageAction()
@@ -436,13 +458,13 @@ class TranslateController extends Controller
             // if set source and destination locale
 
             $em = $this->getDoctrine()->getEntityManager();
-            $tr = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+            $tr = $em->getRepository(self::ENTITY_TEXT);
 
             // set common language
             $commonLang = $this->container->getParameter('common_language');
             $tr->setCommonLanguage($commonLang);
 
-            // text revision controle
+            // set text revision mode
             $textRevisionControl = $this->container->getParameter('text_revision_control');
             $tr->setTextRevisionControl($textRevisionControl);
 
@@ -486,10 +508,99 @@ class TranslateController extends Controller
             $templateParam);
     }
 
+    /**
+     * copyresource Action
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @return Response A Response instance
+     */
+    public function copyresourceAction()
+    {
+        $translator = $this->get('translator');
+
+        $resources = $this->getUserResources(); // available resources
+        $locales = $this->getUserLocales(); // available languages
+
+        // request values
+        $res['from'] = $this->getFieldFromRequest('res_from');
+        $res['to']   = $this->getFieldFromRequest('res_to');
+        $lang        = $this->getFieldFromRequest('lang');
+
+        if (!empty($res['from']) && !empty($res['to'])
+                && $res['from'] != $res['to']) {
+            // if set source and destination locale
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $tr = $em->getRepository(self::ENTITY_TEXT);
+
+            // set common language
+            $commonLang = $this->container->getParameter('common_language');
+            $tr->setCommonLanguage($commonLang);
+
+            // set text revision mode
+            $textRevisionControl = $this->container->getParameter('text_revision_control');
+            $tr->setTextRevisionControl($textRevisionControl);
+
+            // set available resources
+            $tr->setResources(array_keys($resources));
+
+            if (!empty($lang)) {
+                $arrLang = array($lang);
+            } else {
+                $arrLang = array_keys($locales);
+            }
+
+            $translationsCount = $tr->copyResourceContent(
+                $res['from'],
+                $res['to'],
+                $arrLang);
+
+            $translateMade = 'done';
+        }
+
+        $form = $this->createFormBuilder()
+            ->add('res_from', 'choice', array(
+                    'label'       => $translator->trans('copy_res_content_from') . ': ',
+                    'empty_value' => '',
+                    'choices'     => $resources,
+                    'required'    => true,
+                    'data'        => $res['from']
+                ))
+            ->add('res_to', 'choice', array(
+                    'label'       => $translator->trans('copy_res_content_to') . ': ',
+                    'empty_value' => '',
+                    'choices'     => $resources,
+                    'required'    => true,
+                    'data'        => $res['to']
+                ))
+            ->add('lang', 'choice', array(
+                    'label'       => $translator->trans('copy_res_content_lang') . ': ',
+                    'empty_value' => $translator->trans('all_values'),
+                    'choices'     => $locales,
+                    'required'    => false,
+                    'data'        => $lang
+                ))
+            ->getForm();
+
+        $templateParam = array(
+            'form'          => $form->createView(),
+        );
+
+        if (!empty($translationsCount)) {
+            $templateParam['translationsCount'] = $translationsCount;
+        }
+        if (!empty($translateMade)) {
+            $templateParam['translateMade'] = $translateMade;
+        }
+
+        return $this->render('opensixtBikiniTranslateBundle:Translate:copyresource.html.twig',
+            $templateParam);
+    }
 
     /**
      * Returns array of locales for logged user
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return array
      */
     private function getUserLocales()
@@ -506,6 +617,9 @@ class TranslateController extends Controller
 
     /**
      * Returns array of available resources for logged user
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @return array
      */
     private function getUserResources()
     {
@@ -524,7 +638,9 @@ class TranslateController extends Controller
 
     /**
      * Retrieves a field value from Request by fieldname
+     * if it doesn't exist, return empty string
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param string $fieldName
      * @return mixed
      */

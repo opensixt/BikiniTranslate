@@ -32,7 +32,7 @@ class AdminController extends Controller
     private $_paginationLimit;
 
     public function __construct() {
-        $this->_paginationLimit = 5;
+        $this->_paginationLimit = 15;
     }
 
 
