@@ -1,0 +1,19 @@
+<VirtualHost *:80>
+	ServerAdmin test@example.com
+
+	ServerName pma.bikini.dev
+
+	DocumentRoot /srv/www/vhosts/pma
+
+	<Directory /srv/www/vhosts/pma/>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/pma_error.log
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/pma_access.log combined
+</VirtualHost>

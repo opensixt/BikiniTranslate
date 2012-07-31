@@ -25,6 +25,25 @@ class opensixt::apache {
         ensure => link,
         target => "/etc/apache2/sites-available/bikini",
         require => File["/etc/apache2/sites-available/bikini"],
-        notify => Service["apache2"]
+        notify => Service["apache2"],
+    }
+
+    exec {"install_pma":
+        command => "/bin/sh -c 'cd /tmp && export http_proxy=wp.sixt.de:8080 && git clone http://github.com/phpmyadmin/phpmyadmin.git && cd phpmyadmin && git checkout STABLE && rm -fr .git && cd .. && cp -R phpmyadmin /srv/www/vhosts/pma'",
+        require => Package["php5"],
+        unless => "test -d /srv/www/vhosts/pma",
+    }
+
+    file {"/etc/apache2/sites-available/pma":
+        ensure => present,
+        source => "/vagrant/files/etc/apache2/sites-available/pma",
+        require => [Package["apache2"], Exec["install_pma"]],
+    }
+
+    file {"/etc/apache2/sites-enabled/pma":
+        ensure => link,
+        target => "/etc/apache2/sites-available/pma",
+        require => File["/etc/apache2/sites-available/pma"],
+        notify => Service["apache2"],
     }
 }

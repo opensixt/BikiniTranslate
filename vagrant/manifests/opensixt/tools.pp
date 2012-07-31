@@ -4,7 +4,8 @@ class opensixt::tools {
               "unzip",
               "strace",
               "patch",
-              "git"]:
+              "git",
+              "vim"]:
         ensure => present,
     }
 
