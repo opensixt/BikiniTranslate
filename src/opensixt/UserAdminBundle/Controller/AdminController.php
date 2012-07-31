@@ -145,21 +145,21 @@ class AdminController extends Controller
             ))
             ->add('userroles', 'entity', array(
                 'label'     => $translator->trans('roles') . ': ',
-                'class'     => 'opensixtBikiniTranslateBundle:Role',
+                'class'     => 'opensixt\BikiniTranslateBundle\Entity\Role',
                 'property'  => 'label',
                 'multiple'  => true,
                 'expanded'  => true
             ))
             ->add('userlanguages', 'entity', array(
                 'label'     => $translator->trans('languages') . ': ',
-                'class'     => 'opensixtBikiniTranslateBundle:Language',
+                'class'     => 'opensixt\BikiniTranslateBundle\Entity\Language',
                 'property'  => 'locale',
                 'multiple'  => true,
                 'expanded'  => true
             ))
             ->add('usergroups', 'entity', array(
                 'label'     => $translator->trans('groups') . ': ',
-                'class'     => 'opensixtBikiniTranslateBundle:Groups',
+                'class'     => 'opensixt\BikiniTranslateBundle\Entity\Groups',
                 'property'  => 'name',
                 'multiple'  => true,
                 'expanded'  => true
