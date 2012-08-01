@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use opensixt\BikiniTranslateBundle\Helpers\Pagination;
 use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
+use opensixt\BikiniTranslateBundle\Services\HandleText;
+
 class TranslateController extends Controller
 {
     const ENTITY_TEXT  = 'opensixtBikiniTranslateBundle:Text';
@@ -113,7 +115,7 @@ class TranslateController extends Controller
         }
 
         $textCount = $tr->getTextCount(
-            TextRepository::MISSING_TRANS_BY_LANG,
+            TextRepository::TASK_MISSING_TRANS_BY_LANG,
             $languageId,
             $searchResources);
 
@@ -233,8 +235,8 @@ class TranslateController extends Controller
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
         $mode = array(
-            TextRepository::SEARCH_EXACT => $translator->trans('exact_match'),
-            TextRepository::SEARCH_LIKE  => $translator->trans('like'),
+            HandleText::SEARCH_EXACT => $translator->trans('exact_match'),
+            HandleText::SEARCH_LIKE  => $translator->trans('like'),
         );
 
         // use tool_language (default language) for search
@@ -253,27 +255,17 @@ class TranslateController extends Controller
         }
 
         if (strlen($searchPhrase) && !empty($searchLanguage)) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $tr = $em->getRepository(self::ENTITY_TEXT);
+            $searcher = $this->get('opensixt_searchstring');
 
             // set search parameters
-            $tr->setSearchParameters($searchPhrase, $searchMode);
+            $searcher->setSearchParameters($searchPhrase, $searchMode);
 
-            $textCount = $tr->getTextCount(
-                TextRepository::SEARCH_PHRASE_BY_LANG,
-                $searchLanguage,
-                $searchResources);
+            $searcher->setLocale($searchLanguage);
+            $searcher->setResources($searchResources);
 
-            $pagination = new Pagination(
-                $textCount,
-                $this->_paginationLimitSearch,
-                $page);
-            $paginationBar = $pagination->getPaginationBar();
+            $searcher->setPaginationPage($page);
 
-            // get search results
-            $searchResults = $tr->getSearchResults(
-                $this->_paginationLimitSearch,
-                $pagination->getOffset());
+            $results = $searcher->getData();
         }
 
         // set default search language
@@ -298,7 +290,7 @@ class TranslateController extends Controller
                 ))
             ->add('locale', 'choice', array(
                     'label'       => $translator->trans('with_language') . ': ',
-                    'empty_value' => (!empty($defaultSearchLang)) ? false : '',
+                    'empty_value' => (!empty($preferredChoices)) ? false : '',
                     'choices'     => $locales,
                     'preferred_choices' => $preferredChoices,
                     'required'    => true,
@@ -321,12 +313,11 @@ class TranslateController extends Controller
             'locale'        => $searchLanguage,
         );
 
-        if (isset($paginationBar)) {
-            $templateParam['paginationbar'] = $paginationBar;
+        if (!empty($results['paginationBar'])) {
+            $templateParam['paginationbar'] = $results['paginationBar'];
         }
-
-        if (isset($searchResults)) {
-            $templateParam['searchResults'] = $searchResults;
+        if (!empty($results['searchResults'])) {
+            $templateParam['searchResults'] = $results['searchResults'];
         }
 
         return $this->render('opensixtBikiniTranslateBundle:Translate:searchstring.html.twig',
@@ -366,7 +357,7 @@ class TranslateController extends Controller
             $tr->setSearchParameters($searchPhrase);
 
             $textCount = $tr->getTextCount(
-                TextRepository::SEARCH_PHRASE_BY_LANG,
+                TextRepository::TASK_SEARCH_PHRASE_BY_LANG,
                 $searchLocale,
                 $searchResources);
 

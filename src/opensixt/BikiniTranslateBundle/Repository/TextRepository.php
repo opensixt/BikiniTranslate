@@ -29,9 +29,9 @@ class TextRepository extends EntityRepository
 
     const TEXT_EMPTY_VALUE  = 'TRANSLATE_ME';
 
-    const MISSING_TRANS_BY_LANG = 0;
-    const SEARCH_PHRASE_BY_LANG = 1;
-    const ALL_CONTENT_BY_LANG   = 2;
+    const TASK_MISSING_TRANS_BY_LANG = 0;
+    const TASK_SEARCH_PHRASE_BY_LANG = 1;
+    const TASK_ALL_CONTENT_BY_LANG   = 2;
     const ALL_CONTENT_BY_RES    = 3;
 
     const SEARCH_EXACT = 1;
@@ -349,7 +349,7 @@ class TextRepository extends EntityRepository
     {
         $contents = array();
         if (!empty($locale)) {
-            $this->setTask(self::ALL_CONTENT_BY_LANG);
+            $this->setTask(self::TASK_ALL_CONTENT_BY_LANG);
             $this->setLocales(array($locale));
 
             $query = $this->createQueryBuilder('t')
@@ -499,7 +499,7 @@ class TextRepository extends EntityRepository
     /**
      *
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
-     * @param array $parameters
+     * @param QueryBuilder $query
      */
     protected function setQueryParameters($query)
     {
@@ -508,7 +508,7 @@ class TextRepository extends EntityRepository
             throw new \Exception(__METHOD__ . ': _task is not set. Please set it with ' . __CLASS__ . '::init() !');
         }
 
-        if ($this->_task == self::SEARCH_PHRASE_BY_LANG || $this->_task == self::MISSING_TRANS_BY_LANG) {
+        if ($this->_task == self::TASK_MISSING_TRANS_BY_LANG) {
             if (!$this->_locale) {
                 throw new \Exception(__METHOD__ . ': _locale is not set. Please set it with ' . __CLASS__ . '::init() !');
             }
@@ -517,13 +517,7 @@ class TextRepository extends EntityRepository
             }
         }
 
-        if ($this->_task == self::SEARCH_PHRASE_BY_LANG) {
-            if (!$this->_searchString) {
-                throw new \Exception(__METHOD__ . ': _searchString is not set. Please set it with ' . __CLASS__ . '::setSearchParameters() !');
-            }
-        }
-
-        if ($this->_task == self::ALL_CONTENT_BY_LANG || $this->_task == self::ALL_CONTENT_BY_RES) {
+        if ($this->_task == self::TASK_ALL_CONTENT_BY_LANG || $this->_task == self::ALL_CONTENT_BY_RES) {
             if (!$this->_commonLanguageId) {
                 throw new \Exception(__METHOD__ . ': _commonLanguageId is not set. Please set it with ' . __CLASS__ . '::setCommonLanguage() !');
             }
@@ -534,7 +528,7 @@ class TextRepository extends EntityRepository
 
         switch ($this->_task) {
 
-        case self::SEARCH_PHRASE_BY_LANG:
+        case self::TASK_SEARCH_PHRASE_BY_LANG:
             $query->join('t.target', 'tr', Join::WITH , "tr.target LIKE ?1")
                 ->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
                 ->andWhere(self::FIELD_LOCALE . ' = ?3')
@@ -545,7 +539,7 @@ class TextRepository extends EntityRepository
 
             break;
 
-        case self::ALL_CONTENT_BY_LANG:
+        case self::TASK_ALL_CONTENT_BY_LANG:
         case self::ALL_CONTENT_BY_RES:
             $query->join('t.target', 'tr', Join::WITH , "tr.target != ?1")
                 ->where(self::FIELD_LOCALE . ' IN (?2)')
@@ -564,7 +558,7 @@ class TextRepository extends EntityRepository
 
             break;
 
-        case self::MISSING_TRANS_BY_LANG:
+        case self::TASK_MISSING_TRANS_BY_LANG:
         default:
             $query->join('t.target', 'tr', Join::WITH , "tr.target = ?1")
                 ->where(self::FIELD_RESOURCE . ' IN (?2)')
@@ -595,6 +589,7 @@ class TextRepository extends EntityRepository
      */
     public function setSearchParameters($searchPhrase, $searchMode = self::SEARCH_EXACT)
     {
+        // TODO: delete method, if changeText is service container
         if ($searchMode == self::SEARCH_LIKE) {
             $searchPhrase = preg_replace('/\s+/', ' ', $searchPhrase);
             $searchPhrase = str_replace(' ', '%', $searchPhrase);
