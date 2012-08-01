@@ -31,4 +31,9 @@ class opensixt::php {
                     && /srv/www/vhosts/bikini/app/console doctrine:fixtures:load",
         require => [Exec["composer_init_project"]],
     }
+
+    pear::package { "PEAR": }
+    pear::package { "PHPUnit":
+        repository => "pear.phpunit.de",
+    }
 }

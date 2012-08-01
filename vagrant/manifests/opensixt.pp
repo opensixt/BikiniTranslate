@@ -4,6 +4,7 @@ Exec["apt_update"] -> Package <| |>
 
 require opensixt::devsettings
 
+include pear
 include opensixt::network
 include opensixt::tools
 
