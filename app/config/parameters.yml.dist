@@ -4,7 +4,7 @@ parameters:
     database_port:     ~
     database_name:     bikini
     database_user:     bikini
-    database_password: ~
+    database_password: bikini
 
     mailer_transport:  smtp
     mailer_host:       localhost
