@@ -1,20 +1,25 @@
 class opensixt::php {
     package {["php5", "php5-mysql", "php5-xdebug"]:
         ensure => present,
-        require => Package["mysql-client"],
+        require => Class["mysql"],
     }
 
-    exec {"composer_install":
-        path => "/usr/bin:/bin",
-        command => '/bin/bash -c "export http_proxy=http://wp.sixt.de:8080 && export HTTP_PROXY=http://wp.sixt.de:8080 && cd /usr/local/bin/ && curl -x wp.sixt.de:8080 https://getcomposer.org/installer | php"',
-        unless => "/bin/sh -c 'test -d /usr/local/bin/composer.phar'",
-        require => Package["php5"],
+    class {"composer":
+      target_dir      => '/usr/local/bin',
+      composer_file   => 'composer',
+      download_method => 'curl',
+      logoutput       => false
+    }
+
+    $proxyString = ""
+    if $opensixt::devsettings::http_proxy != "" {
+        $proxyString = "&& export http_proxy=$opensixt::devsettings::http_proxy "
     }
 
     exec {"composer_init_project":
         path => "/usr/bin:/bin:/usr/local/bin",
-        command => "/bin/sh -c 'cd /srv/www/vhosts/bikini && export http_proxy=http://wp.sixt.de:8080 && composer.phar install'",
-        require => [Exec["composer_install"], Package["git"]],
+        command => "/bin/sh -c 'cd /srv/www/vhosts/bikini $proxyString && composer install'",
+        require => [Class["composer"], Package["git"]],
     }
 
     exec {"build_symfony_db":

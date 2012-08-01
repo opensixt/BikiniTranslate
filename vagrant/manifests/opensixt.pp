@@ -1,12 +1,22 @@
-$PATH = "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+include apt::update
+Exec { path => ['/usr/local/bin', '/opt/local/bin', '/usr/bin', '/usr/sbin', '/bin', '/sbin'], logoutput => true }
+Exec["apt_update"] -> Package <| |>
 
-stage { 'pre': before => Stage['main'] }
-
-
+require opensixt::devsettings
 
 include opensixt::network
 include opensixt::tools
 
-include opensixt::apache
+include opensixt::webserver
+
 include opensixt::php
-include opensixt::mysql
+
+class { "mysql": }
+class { "mysql::server":
+  config_hash => {
+    "root_password" => $opensixt::devsettings::db_root_password,
+    "etc_root_password" => true,
+    }
+}
+
+include opensixt::db
