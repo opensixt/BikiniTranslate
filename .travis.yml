@@ -11,3 +11,4 @@ script: phpunit -c app/phpunit.xml
 notifications:
   email:
     - paul.seiffert@mayflower.de
+    
