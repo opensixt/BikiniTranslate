@@ -34,9 +34,6 @@ class TextRepository extends EntityRepository
     const TASK_ALL_CONTENT_BY_LANG   = 2;
     const TASK_ALL_CONTENT_BY_RES    = 3;
 
-    const SEARCH_EXACT = 1;
-    const SEARCH_LIKE = 2;
-
     const DOMAIN_TYPE_LANGUAGE = 1;
     const DOMAIN_TYPE_RESOURCE = 2;
 
@@ -577,25 +574,6 @@ class TextRepository extends EntityRepository
 
             break;
         }
-    }
-
-    /**
-     * Set search parameters: searchPhrase and search mode
-     *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
-     * @param string $searchPhrase
-     * @param int $mode
-     */
-    public function setSearchParameters($searchPhrase, $searchMode = self::SEARCH_EXACT)
-    {
-        // TODO: delete method, if changeText is service container
-        if ($searchMode == self::SEARCH_LIKE) {
-            $searchPhrase = preg_replace('/\s+/', ' ', $searchPhrase);
-            $searchPhrase = str_replace(' ', '%', $searchPhrase);
-        }
-        $searchPhrase = '%' . $searchPhrase . '%';
-        //TODO: sanitize input, fulltext search (MATCH...AGAINST....)
-        $this->setSearchString($searchPhrase);
     }
 
     /**

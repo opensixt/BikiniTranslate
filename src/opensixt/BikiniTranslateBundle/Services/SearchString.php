@@ -17,8 +17,6 @@ class SearchString extends HandleText {
 
     protected $_searchString;
 
-    protected $_searchMode;
-
     public function __construct($doctrine)
     {
         $this->_paginationLimit = 15;

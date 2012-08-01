@@ -18,16 +18,9 @@ class TranslateController extends Controller
      */
     private $_paginationLimit;
 
-    /**
-     * Pagination limit for searchstring
-     * @var int
-     */
-    private $_paginationLimitSearch;
-
 
     public function __construct() {
         $this->_paginationLimit = 15;
-        $this->_paginationLimitSearch = 15;
     }
 
     /**
@@ -259,7 +252,6 @@ class TranslateController extends Controller
 
             // set search parameters
             $searcher->setSearchParameters($searchPhrase, $searchMode);
-
             $searcher->setLocale($searchLanguage);
             $searcher->setResources($searchResources);
 
@@ -340,7 +332,7 @@ class TranslateController extends Controller
 
         // retrieve request parameters
         $searchPhrase = $this->getFieldFromRequest('search');
-        $searchLocale = $this->getFieldFromRequest('locale');
+        $searchLanguage = $this->getFieldFromRequest('locale');
         $searchResource = $this->getFieldFromRequest('resource');
 
         if (strlen($searchResource)) {
@@ -350,35 +342,24 @@ class TranslateController extends Controller
         }
 
         if (strlen($searchPhrase)) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $tr = $em->getRepository(self::ENTITY_TEXT);
+            $searcher = $this->get('opensixt_searchstring');
 
             // set search parameters
-            $tr->setSearchParameters($searchPhrase);
+            $searcher->setSearchParameters($searchPhrase);
+            $searcher->setLocale($searchLanguage);
+            $searcher->setResources($searchResources);
 
-            $textCount = $tr->getTextCount(
-                TextRepository::TASK_SEARCH_PHRASE_BY_LANG,
-                $searchLocale,
-                $searchResources);
+            $searcher->setPaginationPage($page);
 
-            $pagination = new Pagination(
-                $textCount,
-                $this->_paginationLimitSearch,
-                $page);
-            $paginationBar = $pagination->getPaginationBar();
-
-            // get search results
-            $searchResults = $tr->getSearchResults(
-                $this->_paginationLimitSearch,
-                $pagination->getOffset());
+            $results = $searcher->getData();
         }
 
 
         $formBuilder = $this->createFormBuilder();
 
         // define textareas for any text
-        if (!empty($searchResults)){
-            foreach ($searchResults as $txt) {
+        if (!empty($results['searchResults'])){
+            foreach ($results['searchResults'] as $txt) {
                 $formBuilder->add('text_' . $txt['id'] , 'textarea', array(
                     'trim' => true,
                     'required' => false,
@@ -386,7 +367,7 @@ class TranslateController extends Controller
             }
         }
 
-        $formBuilder->add('search', 'text', array(
+        $formBuilder->add('search', 'search', array(
                     'label'       => $translator->trans('search_by') . ': ',
                     'trim'        => true,
                     'data'        => $searchPhrase,
@@ -402,7 +383,7 @@ class TranslateController extends Controller
                     'label'       => $translator->trans('with_language') . ': ',
                     'empty_value' => '',
                     'choices'     => $locales,
-                    'data'        => $searchLocale
+                    'data'        => $searchLanguage
                 ));
         $form = $formBuilder->getForm();
 
@@ -410,16 +391,15 @@ class TranslateController extends Controller
             'form'          => $form->createView(),
             'search'        => urlencode($searchPhrase),
             'searchPhrase'  => $searchPhrase,
-            'locale'        => $searchLocale,
+            'locale'        => $searchLanguage,
             'resource'      => $searchResource,
         );
 
-        if (isset($paginationBar)) {
-            $templateParam['paginationbar'] = $paginationBar;
+        if (!empty($results['paginationBar'])) {
+            $templateParam['paginationbar'] = $results['paginationBar'];
         }
-
-        if (isset($searchResults)) {
-            $templateParam['searchResults'] = $searchResults;
+        if (!empty($results['searchResults'])) {
+            $templateParam['searchResults'] = $results['searchResults'];
         }
 
         return $this->render('opensixtBikiniTranslateBundle:Translate:changetext.html.twig',
