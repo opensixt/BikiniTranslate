@@ -11,9 +11,15 @@ class opensixt::webserver {
     apache::vhost { 'bikini.dev':
         priority        => '10',
         port            => '80',
-        docroot         => '/srv/www/vhosts/bikini/',
-        logroot         => '/var/log/apache2/bikini',
+        docroot         => '/srv/www/vhosts/bikini/web',
+        logroot         => '/srv/www/vhosts/bikini/app/logs',
         serveradmin     => 'bikini@opensixt.de',
+    }
+
+    exec { "allow-override-bikini.dev":
+        command => "/bin/sh -c 'sed -i \"s/AllowOverride None/AllowOverride All/\" /etc/apache2/sites-enabled/*bikini*'",
+        require => Apache::Vhost["bikini.dev"],
+        notify => Service["httpd"],
     }
 
     $phpmyadmin_preseed = "/var/cache/debconf/phpmyadmin.preseed"
@@ -32,7 +38,7 @@ class opensixt::webserver {
         priority        => '10',
         port            => '80',
         docroot         => '/usr/share/phpmyadmin/',
-        logroot         => '/var/log/apache2/pma',
+        logroot         => '/var/log/',
         serveradmin     => 'bikini@opensixt.de',
     }
 }
