@@ -32,7 +32,7 @@ class TextRepository extends EntityRepository
     const TASK_MISSING_TRANS_BY_LANG = 0;
     const TASK_SEARCH_PHRASE_BY_LANG = 1;
     const TASK_ALL_CONTENT_BY_LANG   = 2;
-    const ALL_CONTENT_BY_RES    = 3;
+    const TASK_ALL_CONTENT_BY_RES    = 3;
 
     const SEARCH_EXACT = 1;
     const SEARCH_LIKE = 2;
@@ -322,7 +322,7 @@ class TextRepository extends EntityRepository
     {
         $contents = array();
         if (!empty($resource)) {
-            $this->setTask(self::ALL_CONTENT_BY_RES);
+            $this->setTask(self::TASK_ALL_CONTENT_BY_RES);
 
             $query = $this->createQueryBuilder('t')
                 ->select('t, r, tr')
@@ -457,7 +457,6 @@ class TextRepository extends EntityRepository
      */
     protected function getHashes($texts)
     {
-        $hashes_unique = array();
         if (count($texts)) {
             $hashes = array();
             foreach ($texts as $text) {
@@ -517,7 +516,7 @@ class TextRepository extends EntityRepository
             }
         }
 
-        if ($this->_task == self::TASK_ALL_CONTENT_BY_LANG || $this->_task == self::ALL_CONTENT_BY_RES) {
+        if ($this->_task == self::TASK_ALL_CONTENT_BY_LANG || $this->_task == self::TASK_ALL_CONTENT_BY_RES) {
             if (!$this->_commonLanguageId) {
                 throw new \Exception(__METHOD__ . ': _commonLanguageId is not set. Please set it with ' . __CLASS__ . '::setCommonLanguage() !');
             }
@@ -540,7 +539,7 @@ class TextRepository extends EntityRepository
             break;
 
         case self::TASK_ALL_CONTENT_BY_LANG:
-        case self::ALL_CONTENT_BY_RES:
+        case self::TASK_ALL_CONTENT_BY_RES:
             $query->join('t.target', 'tr', Join::WITH , "tr.target != ?1")
                 ->where(self::FIELD_LOCALE . ' IN (?2)')
                 ->andWhere(self::FIELD_EXP . ' IS NULL')
