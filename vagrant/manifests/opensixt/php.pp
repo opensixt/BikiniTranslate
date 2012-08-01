@@ -2,6 +2,7 @@ class opensixt::php {
     package {["php5", "php5-mysql", "php5-xdebug"]:
         ensure => present,
         require => Class["mysql"],
+        notify => Service["httpd"],
     }
 
     class {"composer":

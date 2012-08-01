@@ -22,6 +22,8 @@ class opensixt::webserver {
         notify => Service["httpd"],
     }
 
+    a2mod { 'rewrite                                                                                                                        ': ensure => present, }
+
     $phpmyadmin_preseed = "/var/cache/debconf/phpmyadmin.preseed"
 
     file {$phpmyadmin_preseed:
