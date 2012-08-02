@@ -5,17 +5,27 @@ namespace opensixt\BikiniTranslateBundle\Tests\Entity;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use opensixt\BikiniTranslateBundle\Entity\User;
 
-class UserTest extends WebTestCase {
-
+class UserTest extends WebTestCase
+{
+    /**
+     * @var int
+     */
     private $user_id;
 
-    public function setUp() {
+    /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+
+    public function setUp()
+    {
         $client = static::createClient();
         $container = $client->getContainer();
         $this->em = $container->get('doctrine')->getEntityManager();
     }
 
-    public function testCreateUser() {
+    public function testCreateUser()
+    {
         $user = new User;
         $user->setUsername('phpunit');
         $user->setPassword('phpunit');
@@ -29,8 +39,13 @@ class UserTest extends WebTestCase {
         $this->assertGreaterThan(0, $this->user_id);
     }
 
-    public function tearDown() {
-        // TODO: delete created user
+    public function tearDown()
+    {
+        $user = $this->em->find('opensixt\BikiniTranslateBundle\Entity\User', $this->user_id);
+        $this->em->remove($user);
+        $this->em->flush();
+
+        parent::tearDown();
     }
 
 }
