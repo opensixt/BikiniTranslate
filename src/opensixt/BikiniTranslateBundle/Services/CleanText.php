@@ -16,7 +16,7 @@ class CleanText extends HandleText {
 
     public function __construct($doctrine)
     {
-        $this->_paginationLimit = 2;
+        $this->_paginationLimit = 15;
         parent::__construct($doctrine);
     }
 
@@ -25,18 +25,9 @@ class CleanText extends HandleText {
      *
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return array
-     * @throws \Exception
      */
     public function getData()
     {
-        // Exceptions
-//        if (!$this->_locale) {
-//            throw new \Exception(__METHOD__ . ': _locale is not set. Please set it with ' . __CLASS__ . '::setLocale() !');
-//        }
-//        if (empty($this->_resources)) {
-//            throw new \Exception(__METHOD__ . ': _resources is not set. Please set it with ' . __CLASS__ . '::setResources() !');
-//        }
-
         $this->_textRepository->setDate(date("Y-m-d"));
 
         $data = array();

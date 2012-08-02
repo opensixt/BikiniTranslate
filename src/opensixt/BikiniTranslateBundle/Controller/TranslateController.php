@@ -81,11 +81,7 @@ class TranslateController extends Controller
         }
 
         $searchResource = $this->getFieldFromRequest('resource');
-        if ($searchResource) {
-            $searchResources = array($searchResource);
-        } else {
-            $searchResources = array_keys($resources);
-        }
+        $searchResources = $this->getSearchResources();
 
         // set search parameters
         $editText->setResources($searchResources);
@@ -216,11 +212,7 @@ class TranslateController extends Controller
         $searchMode     = $this->getFieldFromRequest('mode');
         $searchLanguage = $this->getFieldFromRequest('locale');
 
-        if (strlen($searchResource)) {
-            $searchResources = array($searchResource);
-        } else {
-            $searchResources = array_keys($resources);
-        }
+        $searchResources = $this->getSearchResources();
 
         if (strlen($searchPhrase) && !empty($searchLanguage)) {
             $searcher = $this->get('opensixt_searchstring');
@@ -310,11 +302,7 @@ class TranslateController extends Controller
         $searchLanguage = $this->getFieldFromRequest('locale');
         $searchResource = $this->getFieldFromRequest('resource');
 
-        if (strlen($searchResource)) {
-            $searchResources = array($searchResource);
-        } else {
-            $searchResources = array_keys($resources);
-        }
+        $searchResources = $this->getSearchResources();
 
         if (strlen($searchPhrase)) {
             $searcher = $this->get('opensixt_searchstring');
@@ -399,11 +387,7 @@ class TranslateController extends Controller
         $searchResource = $this->getFieldFromRequest('resource');
         $searchLanguage = $this->getFieldFromRequest('locale');
 
-        if (strlen($searchResource)) {
-            $searchResources = array($searchResource);
-        } else {
-            $searchResources = array_keys($resources);
-        }
+        $searchResources = $this->getSearchResources();
 
         $searcher = $this->get('opensixt_cleantext');
 
@@ -597,7 +581,7 @@ class TranslateController extends Controller
             ->getForm();
 
         $templateParam = array(
-            'form'          => $form->createView(),
+            'form' => $form->createView(),
         );
 
         if (!empty($translationsCount)) {
@@ -675,6 +659,27 @@ class TranslateController extends Controller
         }
 
         return $fieldValue;
+    }
+
+    /**
+     * Get search resources
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @return array
+     */
+    private function getSearchResources()
+    {
+        // retrieve resource from request
+        $searchResource = $this->getFieldFromRequest('resource');
+
+        if (strlen($searchResource)) {
+            $searchResources = array($searchResource);
+        } else {
+            // all available resources
+            $resources = $this->getUserResources();
+            $searchResources = array_keys($resources);
+        }
+        return $searchResources;
     }
 
 }
