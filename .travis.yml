@@ -6,8 +6,8 @@ before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - wget http://getcomposer.org/composer.phar
   - php composer.phar install
-  - mysql -uroot -p"" -e 'create database bikini;'
-  - mysql -uroot -p"" -e 'grant all on bikini.* to bikini@localhost identified by "bikini";'
+  - mysql -uroot -e 'create database bikini;'
+  - mysql -uroot -e 'grant all on bikini.* to bikini@localhost identified by "bikini";'
 
 script: phpunit -c app/phpunit.xml
 
