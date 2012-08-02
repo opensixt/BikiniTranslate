@@ -7,4 +7,5 @@ class opensixt::devsettings {
     $db_user = "bikini"
     $db_user_password = "bikini"
 
+    $server_admin = "webmaster@bikini.org"
 }

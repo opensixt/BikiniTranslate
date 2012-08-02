@@ -4,9 +4,15 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
 
 ## Setup (Tested on Ubuntu)
 
-1.  Clone this repository
+1.  Clone this repository and fetch submodules:
+    ```bash
+        git clone git@github.com:opensixt/BikiniTranslate.git
+        cd BikiniTranslate
+        git submodule init
+        git submodule update
+    ```
 
-2.  Create copies of .dist-files (without the .dist file extension) and adjust them
+2.  Create copies of .dist-files (without the .dist file extension) and adjust them:
     - vagrant/manifests/opensixt/devsettings.pp.dist
     - app/config/parameters.yml.dist
 
@@ -26,8 +32,12 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
         cd vagrant
         vagrant up
     ```
+    If there are any yellow or pink lines in the output of the previous command, just re-run puppet configuration:
+    ```bash
+       vagrant provision
+    ```
 
-If there are any yellow or pink lines in the output of this command, just re-run puppet configuration:
-```bash
-   vagrant provision
-```
+5.  Create an entry in your ```bash /etc/hosts ``` that points to the vm: (just append the following):
+    ```bash
+        192.168.10.55   bikini.dev pma.bikini.dev
+    ```
