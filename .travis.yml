@@ -12,7 +12,3 @@ before_script:
   - php app/console doctrine:fixtures:load
 
 script: phpunit -c app/phpunit.xml
-
-notifications:
-  email:
-    - paul.seiffert@mayflower.de
