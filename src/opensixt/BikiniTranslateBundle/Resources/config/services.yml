@@ -1,6 +1,7 @@
 parameters:
     opensixt_searchstring.class: opensixt\BikiniTranslateBundle\Services\SearchString
     opensixt_edittext.class: opensixt\BikiniTranslateBundle\Services\EditText
+    opensixt_cleantext.class: opensixt\BikiniTranslateBundle\Services\CleanText
 
 services:
     opensixt_searchstring:
@@ -11,3 +12,7 @@ services:
     opensixt_edittext:
         class: %opensixt_edittext.class%
         arguments: [@doctrine, %common_language%, %text_revision_control%]
+
+    opensixt_cleantext:
+        class: %opensixt_cleantext.class%
+        arguments: [@doctrine]

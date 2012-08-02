@@ -1,5 +1,4 @@
 <?php
-
 namespace opensixt\BikiniTranslateBundle\Services;
 
 use opensixt\BikiniTranslateBundle\Services\HandleText;

@@ -33,6 +33,7 @@ class TextRepository extends EntityRepository
     const TASK_SEARCH_PHRASE_BY_LANG = 1;
     const TASK_ALL_CONTENT_BY_LANG   = 2;
     const TASK_ALL_CONTENT_BY_RES    = 3;
+    const TASK_SEARCH_FLAGGED_TEXTS  = 4;
 
     const DOMAIN_TYPE_LANGUAGE = 1;
     const DOMAIN_TYPE_RESOURCE = 2;
@@ -76,6 +77,8 @@ class TextRepository extends EntityRepository
      * @var string
      */
     private $_textRevisionControl;
+
+    private $_date;
 
 
     /**
@@ -161,6 +164,11 @@ class TextRepository extends EntityRepository
         $this->_searchString = $searchString;
     }
 
+    public function setDate($date)
+    {
+        $this->_date = $date;
+    }
+
     /**
      * Sets class attributes
      *
@@ -243,9 +251,10 @@ class TextRepository extends EntityRepository
     public function getSearchResults($limit, $offset)
     {
         $query = $this->createQueryBuilder('t')
-            ->select('t, r, l, tr')
+            ->select('t, r, l, u, tr')
             ->leftJoin('t.resource', 'r')
-            ->leftJoin('t.locale', 'l');
+            ->leftJoin('t.locale', 'l')
+            ->leftJoin('t.user', 'u');
 
         $this->setQueryParameters($query);
 
@@ -503,7 +512,6 @@ class TextRepository extends EntityRepository
             throw new \Exception(__METHOD__ . ': _task is not set. Please set it with ' . __CLASS__ . '::init() !');
         }
 
-
         if ($this->_task == self::TASK_ALL_CONTENT_BY_LANG || $this->_task == self::TASK_ALL_CONTENT_BY_RES) {
             if (!$this->_commonLanguageId) {
                 throw new \Exception(__METHOD__ . ': _commonLanguageId is not set. Please set it with ' . __CLASS__ . '::setCommonLanguage() !');
@@ -538,9 +546,29 @@ class TextRepository extends EntityRepository
                 $query->andWhere(self::FIELD_RESOURCE . ' IN (?3)')
                 ->setParameter(3, $this->_resources);
             }
-
             if ($this->_locale == $this->_commonLanguageId) {
                 $query->andWhere(self::FIELD_REL . ' IS NOT NULL');
+            }
+
+            break;
+
+        case self::TASK_SEARCH_FLAGGED_TEXTS:
+            $query->join('t.target', 'tr')
+                ->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
+                ->setParameter(1, $this->_resources);
+
+            if (!empty($this->_locale)) {
+                $query->andWhere(self::FIELD_LOCALE . ' IN (?2)')
+                ->setParameter(2, $this->_locale);
+            }
+            if (!empty($this->_date)) {
+                // expired texts
+                $query->andWhere(self::FIELD_EXP . ' <= ?3')
+                    ->setParameter(3, $this->_date);
+            } else {
+                // non released texts
+                $query->andWhere(self::FIELD_REL . ' IS NULL')
+                    ->andWhere(self::FIELD_EXP . ' IS NULL');
             }
 
             break;

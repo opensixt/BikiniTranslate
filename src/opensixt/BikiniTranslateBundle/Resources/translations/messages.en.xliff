@@ -126,13 +126,21 @@
                 <source>copy_res_success %count%</source>
                 <target>Resource contents copied successfully. (%count% updates)</target>
             </trans-unit>
+            <trans-unit id="155">
+                <source>mnu_cleantext</source>
+                <target>Delete expired texts</target>
+            </trans-unit>
+            <trans-unit id="160">
+                <source>cleantext_explanation</source>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
+            </trans-unit>
             <trans-unit id="170">
                 <source>edittext_explanation</source>
-                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. </target>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
             </trans-unit>
             <trans-unit id="175">
                 <source>searchstring_explanation</source>
-                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. </target>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
             </trans-unit>
             <trans-unit id="180">
                 <source>changetext_explanation</source>
@@ -141,6 +149,26 @@
             <trans-unit id="185">
                 <source>copylanguage_explanation</source>
                 <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
+            </trans-unit>
+            <trans-unit id="190">
+                <source>cleantext_resource</source>
+                <target>Resource</target>
+            </trans-unit>
+            <trans-unit id="195">
+                <source>cleantext_language</source>
+                <target>Locale</target>
+            </trans-unit>
+            <trans-unit id="200">
+                <source>cleantext_author</source>
+                <target>Author</target>
+            </trans-unit>
+            <trans-unit id="205">
+                <source>cleantext_date</source>
+                <target>Expired</target>
+            </trans-unit>
+            <trans-unit id="210">
+                <source>cleantext_text</source>
+                <target>Text</target>
             </trans-unit>
 
         </body>

@@ -13,17 +13,6 @@ class TranslateController extends Controller
     const ENTITY_TEXT  = 'opensixtBikiniTranslateBundle:Text';
 
     /**
-     * Pagination limit
-     * @var int
-     */
-    private $_paginationLimit;
-
-
-    public function __construct() {
-        $this->_paginationLimit = 15;
-    }
-
-    /**
      * translate index Action
      *
      * @return Response A Response instance
@@ -294,7 +283,7 @@ class TranslateController extends Controller
         if (!empty($results['paginationBar'])) {
             $templateParam['paginationbar'] = $results['paginationBar'];
         }
-        if (!empty($results['searchResults'])) {
+        if (isset($results['searchResults'])) {
             $templateParam['searchResults'] = $results['searchResults'];
         }
 
@@ -384,11 +373,79 @@ class TranslateController extends Controller
         if (!empty($results['paginationBar'])) {
             $templateParam['paginationbar'] = $results['paginationBar'];
         }
-        if (!empty($results['searchResults'])) {
+        if (isset($results['searchResults'])) {
             $templateParam['searchResults'] = $results['searchResults'];
         }
 
         return $this->render('opensixtBikiniTranslateBundle:Translate:changetext.html.twig',
+            $templateParam
+            );
+    }
+
+    /**
+     * cleantext Action
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @return Response A Response instance
+     */
+    public function cleantextAction($page)
+    {
+        $translator = $this->get('translator');
+
+        $resources = $this->getUserResources();
+        $locales = $this->getUserLocales();
+
+        // retrieve request parameters
+        $searchResource = $this->getFieldFromRequest('resource');
+        $searchLanguage = $this->getFieldFromRequest('locale');
+
+        if (strlen($searchResource)) {
+            $searchResources = array($searchResource);
+        } else {
+            $searchResources = array_keys($resources);
+        }
+
+        $searcher = $this->get('opensixt_cleantext');
+
+        // set search parameters
+        $searcher->setLocale($searchLanguage);
+        $searcher->setResources($searchResources);
+        $searcher->setPaginationPage($page);
+
+        // get search results
+        $results = $searcher->getData();
+
+        $form = $this->createFormBuilder()
+            ->add('resource', 'choice', array(
+                    'label'       => $translator->trans('cleantext_resource') . ': ',
+                    'empty_value' => $translator->trans('all_values'),
+                    'choices'     => $resources,
+                    'required'    => false,
+                    'data'        => $searchResource
+                ))
+            ->add('locale', 'choice', array(
+                    'label'       => $translator->trans('cleantext_language') . ': ',
+                    'empty_value' => '',
+                    'choices'     => $locales,
+                    'required'    => false,
+                    'data'        => $searchLanguage
+                ))
+            ->getForm();
+
+        $templateParam = array(
+            'form'          => $form->createView(),
+            'resource'      => $searchResource,
+            'locale'        => $searchLanguage,
+        );
+
+        if (!empty($results['paginationBar'])) {
+            $templateParam['paginationbar'] = $results['paginationBar'];
+        }
+        if (isset($results['searchResults'])) {
+            $templateParam['searchResults'] = $results['searchResults'];
+        }
+
+        return $this->render('opensixtBikiniTranslateBundle:Translate:cleantext.html.twig',
             $templateParam
             );
     }

@@ -24,6 +24,12 @@ _translate_changetext:
     requirements:
         page: \d+
 
+_translate_cleantext:
+    pattern: /translate/cleantext/{page}
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:cleantext, page: 1 }
+    requirements:
+        page: \d+
+
 _translate_copylanguage:
     pattern: /translate/copylanguage/
     defaults: { _controller: opensixtBikiniTranslateBundle:Translate:copylanguage }
