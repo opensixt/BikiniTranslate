@@ -10,7 +10,7 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
     - vagrant/manifests/opensixt/devsettings.pp.dist
     - app/config/parameters.yml.dist
 
-2.  Install rubygems:
+2.  Install rubygems (required for vagrant) and nfs (for mounting shared folders):
     ```bash
         sudo apt-get install rubygems nfs-kernel-server
     ```
