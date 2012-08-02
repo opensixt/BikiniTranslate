@@ -77,11 +77,6 @@ class TextRepository extends EntityRepository
      */
     private $_textRevisionControl;
 
-    /**
-     * @var string
-     */
-    private $_searchString;
-
 
     /**
      *
@@ -137,7 +132,15 @@ class TextRepository extends EntityRepository
     public function setCommonLanguage($locale)
     {
         $this->_commonLanguage = $locale;
-        $this->_commonLanguageId = $this->getIdByLocale($locale);
+    }
+
+    /**
+     *
+     * @param int $id
+     */
+    public function setCommonLanguageId($id)
+    {
+        $this->_commonLanguageId = $id;
     }
 
     /**
@@ -454,8 +457,8 @@ class TextRepository extends EntityRepository
      */
     protected function getHashes($texts)
     {
+        $hashes = array();
         if (count($texts)) {
-            $hashes = array();
             foreach ($texts as $text) {
                 $hashes[$text['hash']] = $text['hash'];
             }
@@ -473,10 +476,6 @@ class TextRepository extends EntityRepository
      */
     protected function setMessagesInCommonLanguage(&$texts)
     {
-        if (!$this->_commonLanguageId) {
-            throw new \Exception(__METHOD__ . ': _commonLangauge is not set. Please set it with ' . __CLASS__ . '::setCommonLanguage() !');
-        }
-
         if ($this->_locale != $this->_commonLanguageId) {
             $textsLang = $this->getMessagesByLanguage($texts, array($this->_commonLanguageId));
             foreach ($texts as &$text) {
@@ -504,14 +503,6 @@ class TextRepository extends EntityRepository
             throw new \Exception(__METHOD__ . ': _task is not set. Please set it with ' . __CLASS__ . '::init() !');
         }
 
-        if ($this->_task == self::TASK_MISSING_TRANS_BY_LANG) {
-            if (!$this->_locale) {
-                throw new \Exception(__METHOD__ . ': _locale is not set. Please set it with ' . __CLASS__ . '::init() !');
-            }
-            if (empty($this->_resources)) {
-                throw new \Exception(__METHOD__ . ': _resources is not set. Please set it with ' . __CLASS__ . '::init() !');
-            }
-        }
 
         if ($this->_task == self::TASK_ALL_CONTENT_BY_LANG || $this->_task == self::TASK_ALL_CONTENT_BY_RES) {
             if (!$this->_commonLanguageId) {
@@ -585,11 +576,6 @@ class TextRepository extends EntityRepository
      */
     public function updateText($id, $text)
     {
-        // Exception
-        if (!isset($this->_textRevisionControl)) {
-            throw new \Exception(__METHOD__ . ': _textRevisionControl is not set. Please set it with ' . __CLASS__ . '::setTextRevisionControl() !');
-        }
-
         if ($id) {
             $textRevisionRep = $this->_em->getRepository('opensixtBikiniTranslateBundle:TextRevision');
 

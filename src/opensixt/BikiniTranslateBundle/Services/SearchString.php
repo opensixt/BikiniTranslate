@@ -15,6 +15,9 @@ use opensixt\BikiniTranslateBundle\Helpers\Pagination;
  */
 class SearchString extends HandleText {
 
+    const SEARCH_EXACT = 1;
+    const SEARCH_LIKE  = 2;
+
     protected $_searchString;
 
     public function __construct($doctrine)

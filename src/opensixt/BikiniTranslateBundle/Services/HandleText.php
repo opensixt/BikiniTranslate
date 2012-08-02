@@ -12,17 +12,26 @@ use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
 class HandleText {
 
-    const ENTITY_TEXT  = 'opensixt\BikiniTranslateBundle\Entity\Text';
+    const ENTITY_TEXT_NAME  = 'opensixt\BikiniTranslateBundle\Entity\Text';
 
-    const SEARCH_EXACT = 1;
-    const SEARCH_LIKE = 2;
-
+    /**
+     * @var repository
+     */
     protected $_textRepository;
 
+    /**
+     * @var EntityManager
+     */
     protected $_em;
 
+    /**
+     * @var int
+     */
     protected $_locale;
 
+    /**
+     * @var array
+     */
     protected $_resources;
 
     protected $_paginationLimit;
@@ -38,12 +47,13 @@ class HandleText {
     public function __construct($doctrine)
     {
         $this->_em = $doctrine->getEntityManager();
-        $this->_textRepository = $this->_em->getRepository(self::ENTITY_TEXT);
+        $this->_textRepository = $this->_em->getRepository(self::ENTITY_TEXT_NAME);
     }
 
     /**
      * Sets resources
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $resources
      */
     public function setResources(array $resources)
@@ -54,6 +64,7 @@ class HandleText {
     /**
      * Sets locale
      *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $locale
      */
     public function setLocale($locale)
@@ -61,11 +72,11 @@ class HandleText {
         $this->_locale = $locale;
     }
 
-    /*public function setPaginationLimit(int $limit)
-    {
-        $this->_paginationLimit = $limit;
-    }*/
-
+    /**
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param int $page
+     */
     public function setPaginationPage($page)
     {
         $this->_paginationPage = $page;

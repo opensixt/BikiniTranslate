@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use opensixt\BikiniTranslateBundle\Helpers\Pagination;
 use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
-use opensixt\BikiniTranslateBundle\Services\HandleText;
+use opensixt\BikiniTranslateBundle\Services\SearchString;
 
 class TranslateController extends Controller
 {
@@ -56,7 +56,6 @@ class TranslateController extends Controller
             $userLang = array_flip($this->getUserLocales());
             $languageId = isset($userLang[$locale]) ? $userLang[$locale] : 0;
         }
-
         if (!$languageId) {
             $session->set('targetRoute', '_translate_edittext');
             return $this->redirect($this->generateUrl('_translate_setlocale'));
@@ -65,19 +64,11 @@ class TranslateController extends Controller
         $request = $this->getRequest();
         $translator = $this->get('translator');
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $tr = $em->getRepository(self::ENTITY_TEXT);
+        $editText = $this->get('opensixt_edittext'); // controller intermediate layer
+        $editText->setLocale($languageId);
+        $currentLangIsCommonLang = $editText->compareCommonAndCurrentLocales();
 
-        $commonLang = $this->container->getParameter('common_language');
-        $tr->setCommonLanguage($commonLang);
-
-        $textRevisionControl = $this->container->getParameter('text_revision_control');
-        $tr->setTextRevisionControl($textRevisionControl);
-
-        $currentLangIsCommonLang = false;
-        if ($commonLang == $locale) {
-            $currentLangIsCommonLang = true;
-        }
+        $resources = $this->getUserResources(); // all available resources
 
         // Update texts with entered values
         if ($request->getMethod() == 'POST') {
@@ -88,17 +79,17 @@ class TranslateController extends Controller
                 }
 
                 if (isset($formData['action']) && $formData['action'] == 'save') {
+                    $textsToSave = array();
                     foreach ($formData as $key => $value) {
                         // for all textareas with name 'text_[number]'
                         if (preg_match("/text_([0-9]+)/", $key, $matches) && strlen($value)) {
-                            $tr->updateText($matches[1], $value);
+                            $textsToSave[$matches[1]] = $value;
                         }
                     }
+                    $editText->updateTexts($textsToSave);
                 }
             }
         }
-
-        $resources = $this->getUserResources(); // all available resources
 
         $searchResource = $this->getFieldFromRequest('resource');
         if ($searchResource) {
@@ -107,18 +98,12 @@ class TranslateController extends Controller
             $searchResources = array_keys($resources);
         }
 
-        $textCount = $tr->getTextCount(
-            TextRepository::TASK_MISSING_TRANS_BY_LANG,
-            $languageId,
-            $searchResources);
+        // set search parameters
+        $editText->setResources($searchResources);
+        $editText->setPaginationPage($page);
 
-        $pagination = new Pagination($textCount, $this->_paginationLimit, $page);
-        $paginationBar = $pagination->getPaginationBar();
-
-        $texts = $tr->getMissingTranslations(
-            $this->_paginationLimit,
-            $pagination->getOffset()
-            );
+        // get search results
+        $data = $editText->getData();
 
         $formBuilder = $this->createFormBuilder();
         $formBuilder
@@ -132,22 +117,23 @@ class TranslateController extends Controller
             ->add('action', 'hidden');
 
         // define textareas for any text
-        foreach ($texts as $txt) {
-            $formBuilder->add('text_' . $txt['id'] , 'textarea', array(
-                'trim' => true,
-                'required' => false,
-            ));
+        if (!empty($data['texts'])) {
+            foreach ($data['texts'] as $txt) {
+                $formBuilder->add('text_' . $txt['id'] , 'textarea', array(
+                    'trim' => true,
+                    'required' => false,
+                ));
+            }
         }
         $form = $formBuilder->getForm();
 
         $templateParam = array(
             'form'                    => $form->createView(),
-            'texts'                   => $texts,
-            'paginationbar'           => $paginationBar,
+            'texts'                   => $data['texts'],
+            'paginationbar'           => $data['paginationBar'],
             'locale'                  => $locale,
             'currentLangIsCommonLang' => $currentLangIsCommonLang,
         );
-
         if ($searchResource) {
             $templateParam['resource'] = $searchResource;
         }
@@ -228,8 +214,8 @@ class TranslateController extends Controller
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
         $mode = array(
-            HandleText::SEARCH_EXACT => $translator->trans('exact_match'),
-            HandleText::SEARCH_LIKE  => $translator->trans('like'),
+            SearchString::SEARCH_EXACT => $translator->trans('exact_match'),
+            SearchString::SEARCH_LIKE  => $translator->trans('like'),
         );
 
         // use tool_language (default language) for search
@@ -254,9 +240,9 @@ class TranslateController extends Controller
             $searcher->setSearchParameters($searchPhrase, $searchMode);
             $searcher->setLocale($searchLanguage);
             $searcher->setResources($searchResources);
-
             $searcher->setPaginationPage($page);
 
+            // get search results
             $results = $searcher->getData();
         }
 
@@ -348,9 +334,9 @@ class TranslateController extends Controller
             $searcher->setSearchParameters($searchPhrase);
             $searcher->setLocale($searchLanguage);
             $searcher->setResources($searchResources);
-
             $searcher->setPaginationPage($page);
 
+            // get search results
             $results = $searcher->getData();
         }
 
