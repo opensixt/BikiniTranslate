@@ -2,17 +2,32 @@
 
 Translation tool which generates translation files in formats .xliff, .mo/.po, json
 
-## Setup
+## Setup (Tested on Ubuntu)
 
-1. Clone this repository
-2. Install rubygems:
-   sudo apt-get install rubygems
-3. Install Vagrant:
-   sudo gem install vagrant
-4. Create your own development virtual machine:
-   cd path/to/repository/clone
-   cd vagrant
-   vagrant up
+1.  Clone this repository
+
+2.  Create copies of .dist-files (without the .dist file extension) and adjust them
+    - vagrant/manifests/opensixt/devsettings.pp.dist
+    - app/config/parameters.yml.dist
+
+2.  Install rubygems:
+    ```bash
+        sudo apt-get install rubygems nfs-kernel-server
+    ```
+
+3.  Install Vagrant:
+    ```bash
+        sudo gem install vagrant
+    ```
+
+4.  Create your own development virtual machine:
+    ```bash
+        cd path/to/repository/clone
+        cd vagrant
+        vagrant up
+    ```
 
 If there are any yellow or pink lines in the output of this command, just re-run puppet configuration:
-   vagrant provision
+    ```bash
+       vagrant provision
+    ```
