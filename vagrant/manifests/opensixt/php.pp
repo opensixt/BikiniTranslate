@@ -12,9 +12,10 @@ class opensixt::php {
       logoutput       => false
     }
 
-    $proxyString = ""
     if $opensixt::devsettings::http_proxy != "" {
         $proxyString = "&& export http_proxy=$opensixt::devsettings::http_proxy "
+    } else {
+        $proxyString = ""
     }
 
     exec {"composer_init_project":
@@ -30,6 +31,15 @@ class opensixt::php {
                     && /srv/www/vhosts/bikini/app/console doctrine:schema:create \
                     && /srv/www/vhosts/bikini/app/console doctrine:fixtures:load",
         require => [Exec["composer_init_project"]],
+    }
+
+    if $opensixt::devsettings::http_proxy != "" {
+        exec {"pear-proxy":
+            path => "/usr/bin",
+            command => "/bin/sh -c 'pear config-set http_proxy $opensixt::devsettings::http_proxy'",
+            before => Pear::Package["PHPUnit"],
+            require => Pear::Package["PEAR"],
+        }
     }
 
     pear::package { "PEAR": }

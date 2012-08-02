@@ -6,6 +6,11 @@ class opensixt::network {
     }
 
     if $opensixt::devsettings::http_proxy != "" {
+        file { "/etc/profile.d/proxy.sh":
+            ensure => present,
+            content => "export http_proxy=\"$opensixt::devsettings::http_proxy\"",
+        }
+
         file { "/etc/apt/apt.conf.d/proxy.conf":
             ensure => present,
             content => "Acquire::http::Proxy \"$opensixt::devsettings::http_proxy\";",
@@ -14,6 +19,9 @@ class opensixt::network {
         File["/etc/apt/apt.conf.d/proxy.conf"] -> Package <| |>
     } else {
         file { "/etc/apt/apt.conf.d/proxy.conf":
+            ensure => absent,
+        }
+        file { "/etc/profile.d/proxy.sh":
             ensure => absent,
         }
     }

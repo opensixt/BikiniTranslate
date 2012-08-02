@@ -3,9 +3,9 @@ Exec { path => ['/usr/local/bin', '/opt/local/bin', '/usr/bin', '/usr/sbin', '/b
 Exec["apt_update"] -> Package <| |>
 
 require opensixt::devsettings
+require opensixt::network
 
 include pear
-include opensixt::network
 include opensixt::tools
 
 include opensixt::webserver
