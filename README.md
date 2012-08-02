@@ -13,3 +13,6 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
    cd path/to/repository/clone
    cd vagrant
    vagrant up
+
+If there are any yellow or pink lines in the output of this command, just re-run puppet configuration:
+   vagrant provision
