@@ -11,7 +11,6 @@
 /composer.lock
 src/opensixt/ContentBundle/Resources/public/icons/*
 
-/vagrant/Vagrantfile
 /vagrant/.vagrant
 /vagrant/manifests/opensixt/devsettings.pp
 
