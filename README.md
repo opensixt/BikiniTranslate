@@ -28,6 +28,6 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
     ```
 
 If there are any yellow or pink lines in the output of this command, just re-run puppet configuration:
-    ```bash
-       vagrant provision
-    ```
+```bash
+   vagrant provision
+```
