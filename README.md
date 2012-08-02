@@ -13,8 +13,8 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
     ```
 
 2.  Create copies of .dist-files (without the .dist file extension) and adjust them:
-    - vagrant/manifests/opensixt/devsettings.pp.dist
-    - app/config/parameters.yml.dist
+    - ```vagrant/manifests/opensixt/devsettings.pp.dist```
+    - ```app/config/parameters.yml.dist```
 
 2.  Install rubygems (required for vagrant) and nfs (for mounting shared folders):
     ```bash
@@ -37,7 +37,7 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
        vagrant provision
     ```
 
-5.  Create an entry in your ```bash /etc/hosts ``` that points to the vm: (just append the following):
+5.  Create an entry in your ```/etc/hosts ``` that points to the vm: (just append the following):
     ```bash
         192.168.10.55   bikini.dev pma.bikini.dev
     ```
