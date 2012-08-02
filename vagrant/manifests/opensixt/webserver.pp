@@ -13,7 +13,7 @@ class opensixt::webserver {
         port            => '80',
         docroot         => '/srv/www/vhosts/bikini/web',
         logroot         => '/srv/www/vhosts/bikini/app/logs',
-        serveradmin     => 'bikini@opensixt.de',
+        serveradmin     => $opensixt::devsettings::server_admin,
     }
 
     exec { "allow-override-bikini.dev":
@@ -24,6 +24,7 @@ class opensixt::webserver {
 
     a2mod { 'rewrite': ensure => present, }
 
+    # PHPMYADMIN
     $phpmyadmin_preseed = "/var/cache/debconf/phpmyadmin.preseed"
 
     file {$phpmyadmin_preseed:
@@ -41,6 +42,6 @@ class opensixt::webserver {
         port            => '80',
         docroot         => '/usr/share/phpmyadmin/',
         logroot         => '/var/log/',
-        serveradmin     => 'bikini@opensixt.de',
+        serveradmin     => $opensixt::devsettings::server_admin,
     }
 }

@@ -12,15 +12,9 @@ class opensixt::php {
       logoutput       => false
     }
 
-    if $opensixt::devsettings::http_proxy != "" {
-        $proxyString = "&& export http_proxy=$opensixt::devsettings::http_proxy "
-    } else {
-        $proxyString = ""
-    }
-
     exec {"composer_init_project":
         path => "/usr/bin:/bin:/usr/local/bin",
-        command => "/bin/sh -c 'cd /srv/www/vhosts/bikini $proxyString && composer install'",
+        command => "/bin/sh -c 'cd /srv/www/vhosts/bikini && composer install'",
         require => [Class["composer"], Package["git"]],
     }
 
@@ -33,12 +27,11 @@ class opensixt::php {
         require => [Exec["composer_init_project"]],
     }
 
+    # PEAR
     if $opensixt::devsettings::http_proxy != "" {
-        exec {"pear-proxy":
-            path => "/usr/bin",
-            command => "/bin/sh -c 'pear config-set http_proxy $opensixt::devsettings::http_proxy'",
-            before => Pear::Package["PHPUnit"],
-            require => Pear::Package["PEAR"],
+        file {["/home/vagrant/.pearrc", "/root/.pearrc"]:
+            content => "a:1:{s:10:\"http_proxy\";s:23:\"$opensixt::devsettings::http_proxy\";}",
+            before => Package["PEAR"],
         }
     }
 

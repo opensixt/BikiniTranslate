@@ -1,6 +1,3 @@
-include_personalization = File.expand_path("../Personalization", __FILE__)
-load include_personalization if File.exist?(include_personalization)
-
 Vagrant::Config.run do |config|
   # BASEBOX 
   config.vm.box = "bikini-base"
