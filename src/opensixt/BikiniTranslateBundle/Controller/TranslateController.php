@@ -380,13 +380,78 @@ class TranslateController extends Controller
         // retrieve request parameters
         $searchResource = $this->getFieldFromRequest('resource');
         $searchLanguage = $this->getFieldFromRequest('locale');
-
         $searchResources = $this->getSearchResources();
 
-        $searcher = $this->get('opensixt_cleantext');
+        $searcher = $this->get('opensixt_flaggedtext');
 
         // set search parameters
         $searcher->setLocale($searchLanguage);
+        $searcher->setLocales(array_keys($locales));
+        $searcher->setResources($searchResources);
+        $searcher->setPaginationPage($page);
+        $searcher->setExpiredDate(date("Y-m-d"));
+
+        // get search results
+        $results = $searcher->getData();
+
+        $form = $this->createFormBuilder()
+            ->add('resource', 'choice', array(
+                    'label'       => $translator->trans('cleantext_resource') . ': ',
+                    'empty_value' => $translator->trans('all_values'),
+                    'choices'     => $resources,
+                    'required'    => false,
+                    'data'        => $searchResource
+                ))
+            ->add('locale', 'choice', array(
+                    'label'       => $translator->trans('cleantext_language') . ': ',
+                    'empty_value' => '',
+                    'choices'     => $locales,
+                    'required'    => false,
+                    'data'        => $searchLanguage
+                ))
+            ->getForm();
+
+        $templateParam = array(
+            'form'          => $form->createView(),
+            'resource'      => $searchResource,
+            'locale'        => $searchLanguage,
+        );
+
+        if (!empty($results['paginationBar'])) {
+            $templateParam['paginationbar'] = $results['paginationBar'];
+        }
+        if (isset($results['searchResults'])) {
+            $templateParam['searchResults'] = $results['searchResults'];
+        }
+
+        return $this->render('opensixtBikiniTranslateBundle:Translate:cleantext.html.twig',
+            $templateParam
+            );
+    }
+
+    /**
+     * releasetext Action
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @return Response A Response instance
+     */
+    public function releasetextAction($page)
+    {
+        $translator = $this->get('translator');
+
+        $resources = $this->getUserResources();
+        $locales = $this->getUserLocales();
+
+        // retrieve request parameters
+        $searchResource = $this->getFieldFromRequest('resource');
+        $searchLanguage = $this->getFieldFromRequest('locale');
+        $searchResources = $this->getSearchResources();
+
+        $searcher = $this->get('opensixt_flaggedtext');
+
+        // set search parameters
+        $searcher->setLocale($searchLanguage);
+        $searcher->setLocales(array_keys($locales));
         $searcher->setResources($searchResources);
         $searcher->setPaginationPage($page);
 
@@ -423,7 +488,7 @@ class TranslateController extends Controller
             $templateParam['searchResults'] = $results['searchResults'];
         }
 
-        return $this->render('opensixtBikiniTranslateBundle:Translate:cleantext.html.twig',
+        return $this->render('opensixtBikiniTranslateBundle:Translate:releasetext.html.twig',
             $templateParam
             );
     }

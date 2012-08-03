@@ -551,6 +551,9 @@ class TextRepository extends EntityRepository
             if (!empty($this->_locale)) {
                 $query->andWhere(self::FIELD_LOCALE . ' IN (?2)')
                 ->setParameter(2, $this->_locale);
+            } elseif (!empty($this->_locales)) {
+                $query->andWhere(self::FIELD_LOCALE . ' IN (?2)')
+                ->setParameter(2, $this->_locales);
             }
             if (!empty($this->_date)) {
                 // expired texts

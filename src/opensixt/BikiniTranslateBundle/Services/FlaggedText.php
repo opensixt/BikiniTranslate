@@ -7,12 +7,15 @@ use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 use opensixt\BikiniTranslateBundle\Helpers\Pagination;
 
 /**
- * CleanText
+ * FlaggedText
  * Intermediate layer between Controller and Model
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
-class CleanText extends HandleText {
+class FlaggedText extends HandleText {
+
+    protected $_expiredDate;
+
 
     public function __construct($doctrine)
     {
@@ -21,14 +24,31 @@ class CleanText extends HandleText {
     }
 
     /**
+     * Set expired date
+     *
+     * @param date $date
+     */
+    public function setExpiredDate($date)
+    {
+        $this->_expiredDate = $date;
+    }
+
+    /**
      * Returns search results and pagination data
+     * if $this->_date is set - get expired texts
+     * else returns non released texts
      *
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return array
      */
     public function getData()
     {
-        $this->_textRepository->setDate(date("Y-m-d"));
+        if (!empty($this->_expiredDate)) {
+            $this->_textRepository->setDate($this->_expiredDate);
+        }
+        if (count($this->_locales)) {
+            $this->_textRepository->setLocales($this->_locales);
+        }
 
         $data = array();
 

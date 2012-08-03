@@ -37,3 +37,9 @@ _translate_copylanguage:
 _translate_copyresource:
     pattern: /translate/copyresource/
     defaults: { _controller: opensixtBikiniTranslateBundle:Translate:copyresource }
+
+_translate_releasetext:
+    pattern: /translate/releasetext/{page}
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:releasetext, page: 1 }
+    requirements:
+        page: \d+
