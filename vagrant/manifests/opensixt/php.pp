@@ -39,4 +39,16 @@ class opensixt::php {
     pear::package { "PHPUnit":
         repository => "pear.phpunit.de",
     }
+
+    augeas { "xdebug-config":
+        context => '/files/etc/php5/conf.d/xdebug.ini',
+        changes => ['set Xdebug/xdebug.remote_enable On',
+                    'set Xdebug/xdebug.remote_port 9000',
+                    'set Xdebug/xdebug.remote_host localhost',
+                    'set Xdebug/xdebug.remote_mode req',
+                    'set Xdebug/xdebug.remote_handler dbgp',
+                    'set Xdebug/xdebug.remote_connect_back 1',],
+        require => Package['php5-xdebug'],
+        notify  => Service['httpd'],
+    }
 }
