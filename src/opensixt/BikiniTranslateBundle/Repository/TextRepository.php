@@ -512,15 +512,6 @@ class TextRepository extends EntityRepository
             throw new \Exception(__METHOD__ . ': _task is not set. Please set it with ' . __CLASS__ . '::init() !');
         }
 
-        if ($this->_task == self::TASK_ALL_CONTENT_BY_LANG || $this->_task == self::TASK_ALL_CONTENT_BY_RES) {
-            if (!$this->_commonLanguageId) {
-                throw new \Exception(__METHOD__ . ': _commonLanguageId is not set. Please set it with ' . __CLASS__ . '::setCommonLanguage() !');
-            }
-            if (empty($this->_locales)) {
-                throw new \Exception(__METHOD__ . ': _locales is not set. Please set it with ' . __CLASS__ . '::setLocales() !');
-            }
-        }
-
         switch ($this->_task) {
 
         case self::TASK_SEARCH_PHRASE_BY_LANG:

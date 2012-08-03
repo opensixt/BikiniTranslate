@@ -32,10 +32,33 @@ class HandleText {
     /**
      * @var array
      */
+    protected $_locales;
+
+    /**
+     * @var array
+     */
     protected $_resources;
 
+    /**
+     * @var string
+     */
+    private $_commonLanguage;
+
+    /**
+     * @var int
+     */
+    private $_commonLanguageId;
+
+    private $_revisionControlMode;
+
+    /**
+     * @var int
+     */
     protected $_paginationLimit;
 
+    /**
+     * @var int
+     */
     protected $_paginationPage;
 
     /**
@@ -70,6 +93,17 @@ class HandleText {
     public function setLocale($locale)
     {
         $this->_locale = $locale;
+    }
+
+    /**
+     * Sets locales
+     *
+     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param array $locales
+     */
+    public function setLocales($locales)
+    {
+        $this->_locales = $locales;
     }
 
     /**

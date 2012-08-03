@@ -9,24 +9,11 @@ use opensixt\BikiniTranslateBundle\Helpers\Pagination;
 
 /**
  * SearchSearch
- * Intermediate layer between Controller and Model (part of controller)
+ * Intermediate layer between Controller and Model
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
 class EditText extends HandleText {
-
-    /**
-     * @var string
-     */
-    private $_commonLanguage;
-
-    /**
-     * @var int
-     */
-    private $_commonLanguageId;
-
-    private $_revisionControlMode;
-
 
     public function __construct($doctrine, $locale, $text_revision_control)
     {

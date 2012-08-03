@@ -3,15 +3,10 @@ namespace opensixt\BikiniTranslateBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use opensixt\BikiniTranslateBundle\Helpers\Pagination;
-use opensixt\BikiniTranslateBundle\Repository\TextRepository;
-
 use opensixt\BikiniTranslateBundle\Services\SearchString;
 
 class TranslateController extends Controller
 {
-    const ENTITY_TEXT  = 'opensixtBikiniTranslateBundle:Text';
-
     /**
      * translate index Action
      *
@@ -19,7 +14,6 @@ class TranslateController extends Controller
      */
     public function indexAction()
     {
-        //print_r($this->getLocaleForLogedUser());
         return $this->render('opensixtBikiniTranslateBundle:Translate:index.html.twig');
     }
 
@@ -451,26 +445,17 @@ class TranslateController extends Controller
         $lang['from'] = $this->getFieldFromRequest('lang_from');
         $lang['to']   = $this->getFieldFromRequest('lang_to');
 
+        // if set source and destination locale
         if (!empty($lang['from']) && !empty($lang['to'])
                 && $lang['from'] != $lang['to']) {
-            // if set source and destination locale
 
-            $em = $this->getDoctrine()->getEntityManager();
-            $tr = $em->getRepository(self::ENTITY_TEXT);
+            $copyLang = $this->get('opensixt_copydomain');
 
-            // set common language
-            $commonLang = $this->container->getParameter('common_language');
-            $tr->setCommonLanguage($commonLang);
+            $copyLang->setDomainFrom($lang['from']);
+            $copyLang->setDomainTo($lang['to']);
+            $copyLang->setResources(array_keys($resources));
 
-            // set text revision mode
-            $textRevisionControl = $this->container->getParameter('text_revision_control');
-            $tr->setTextRevisionControl($textRevisionControl);
-
-            $translationsCount = $tr->copyLanguageContent(
-                $lang['from'],
-                $lang['to'],
-                array_keys($resources));
-
+            $translationsCount = $copyLang->copyLanguage();
             $translateMade = 'done';
         }
 
@@ -528,31 +513,20 @@ class TranslateController extends Controller
                 && $res['from'] != $res['to']) {
             // if set source and destination locale
 
-            $em = $this->getDoctrine()->getEntityManager();
-            $tr = $em->getRepository(self::ENTITY_TEXT);
+            $copyRes = $this->get('opensixt_copydomain');
 
-            // set common language
-            $commonLang = $this->container->getParameter('common_language');
-            $tr->setCommonLanguage($commonLang);
-
-            // set text revision mode
-            $textRevisionControl = $this->container->getParameter('text_revision_control');
-            $tr->setTextRevisionControl($textRevisionControl);
-
-            // set available resources
-            $tr->setResources(array_keys($resources));
+            $copyRes->setDomainFrom($res['from']);
+            $copyRes->setDomainTo($res['to']);
+            $copyRes->setResources(array_keys($resources)); // set available resources
 
             if (!empty($lang)) {
                 $arrLang = array($lang);
             } else {
                 $arrLang = array_keys($locales);
             }
+            $copyRes->setLocales($arrLang);
 
-            $translationsCount = $tr->copyResourceContent(
-                $res['from'],
-                $res['to'],
-                $arrLang);
-
+            $translationsCount = $copyRes->copyResource();
             $translateMade = 'done';
         }
 
@@ -681,5 +655,4 @@ class TranslateController extends Controller
         }
         return $searchResources;
     }
-
 }

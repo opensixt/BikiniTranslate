@@ -8,7 +8,7 @@ use opensixt\BikiniTranslateBundle\Helpers\Pagination;
 
 /**
  * CleanText
- * Intermediate layer between Controller and Model (part of controller)
+ * Intermediate layer between Controller and Model
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
