@@ -34,7 +34,7 @@
                     <td>{{ item.resource.name }} ({{ item.locale.locale }})<br/><br/>  </td>
                     <td>{{ item.target.target }}</td>
                     <td>{{ item.user.username }}</td>
-                    <td>{{ item.exp|date("d.m.Y") }}</td>
+                    <td>{{ item.expiryDate|date('date_format'|trans) }}</td>
                 </tr>
             {% else %}
                 <tr>
