@@ -96,25 +96,25 @@ class Text
     private $user;
 
     /**
-     * @var date $exp
+     * @var date $expiryDate
      *
-     * @ORM\Column(name="exp", type="date", nullable=true)
+     * @ORM\Column(name="expiry_date", type="date", nullable=true)
      */
-    private $exp;
+    private $expiryDate;
 
     /**
-     * @var boolean $rel
+     * @var boolean $released
      *
-     * @ORM\Column(name="rel", type="boolean", nullable=true)
+     * @ORM\Column(name="released", type="boolean", nullable=true)
      */
-    private $rel;
+    private $released;
 
     /**
-     * @var boolean $hts
+     * @var boolean $translationService
      *
-     * @ORM\Column(name="hts", type="boolean", nullable=true)
+     * @ORM\Column(name="translation_service", type="boolean", nullable=true)
      */
-    private $hts;
+    private $translationService;
 
     /**
      * @var boolean $block
@@ -341,63 +341,63 @@ class Text
     }
 
     /**
-     * Set exp
+     * Set expiryDate
      *
      * @param date $exp
      */
-    public function setExp($exp)
+    public function setExpirDate($exp)
     {
-        $this->exp = $exp;
+        $this->expiryDate = $exp;
     }
 
     /**
-     * Get exp
+     * Get expiryDate
      *
      * @return date
      */
-    public function getExp()
+    public function getExpiryDate()
     {
-        return $this->exp;
+        return $this->expiryDate;
     }
 
     /**
-     * Set rel
+     * Set released
      *
      * @param boolean $rel
      */
-    public function setRel($rel)
+    public function setReleased($rel)
     {
-        $this->rel = $rel;
+        $this->released = $rel;
     }
 
     /**
-     * Get rel
+     * Get released
      *
      * @return boolean
      */
-    public function getRel()
+    public function getReleased()
     {
-        return $this->rel;
+        return $this->released;
     }
 
     /**
-     * Set hts
+     * Set translationService
      *
-     * @param boolean $hts
+     * @param boolean $ts
      */
-    public function setHts($hts)
+    public function setTranslationService($ts)
     {
-        $this->hts = $hts;
+        $this->translationService = $ts;
     }
 
     /**
-     * Get hts
+     * Get translationService
      *
      * @return boolean
      */
-    public function getHts()
+    public function getTranslationService()
     {
-        return $this->hts;
+        return $this->translationService;
     }
 
     /**
@@ -418,5 +418,25 @@ class Text
     public function getBlock()
     {
         return $this->block;
+    }
+
+    /**
+     * Set dontTranslate
+     *
+     * @param boolean $flag
+     */
+    public function setDontTranslate($flag)
+    {
+        $this->dontTranslate = $flag;
+    }
+
+    /**
+     * Get dontTranslate
+     *
+     * @return boolean
+     */
+    public function getDontTranslate()
+    {
+        return $this->dontTranslate;
     }
 }

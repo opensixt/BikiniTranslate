@@ -22,9 +22,9 @@ class TextRepository extends EntityRepository
     const FIELD_RESOURCE    = 't.resourceId';
     const FIELD_LOCALE      = 't.localeId';
     const FIELD_USER        = 't.userId';
-    const FIELD_EXP         = 't.exp';
-    const FIELD_REL         = 't.rel';
-    const FIELD_HTS         = 't.hts';
+    const FIELD_EXP         = 't.expiryDate';
+    const FIELD_REL         = 't.released';
+    const FIELD_HTS         = 't.translationService';
     const FIELD_BLOCK       = 't.block';
 
     const TEXT_EMPTY_VALUE  = 'TRANSLATE_ME';
