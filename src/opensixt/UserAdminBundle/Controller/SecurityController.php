@@ -5,10 +5,8 @@ namespace opensixt\UserAdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
 
-
 class SecurityController extends Controller
 {
-    
     public function loginAction()
     {
         $request = $this->getRequest();
@@ -27,10 +25,5 @@ class SecurityController extends Controller
             'last_username' => $session->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
         ));
-    }
-
-    public function indexAction($name)
-    {
-        return $this->render('opensixtUserAdminBundle:Default:index.html.twig', array('name' => $name));
     }
 }
