@@ -32,7 +32,6 @@
         "doctrine/migrations": "dev-master",
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "twig/extensions": "dev-master",
-        "symfony/assetic-bundle": "dev-master",
         "symfony/swiftmailer-bundle": "dev-master",
         "symfony/monolog-bundle": "dev-master",
         "sensio/distribution-bundle": "dev-master",
@@ -41,6 +40,7 @@
         "jms/security-extra-bundle": "1.1.*",
         "jms/di-extra-bundle": "1.0.*"
     },
+    "minimum-stability": "beta",
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",

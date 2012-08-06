@@ -1,0 +1,23 @@
+Vagrant::Config.run do |config|
+  # BASEBOX 
+  config.vm.box = "bikini-base"
+  config.vm.box_url = "http://dl.dropbox.com/u/95320164/bikini-translate/bikini-base.box"
+
+  # NETWORK
+  config.vm.network :hostonly, "192.168.10.55"
+
+  # SHARED FOLDERS
+  config.vm.share_folder "opensixt_bikini", "/srv/www/vhosts/bikini", "../", :nfs => true
+
+  # MEMORY
+  config.vm.customize do |vm|
+    vm.memory_size = 768
+  end
+
+  # PUPPET CONFIGURATION
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file  = "opensixt.pp"
+    puppet.module_path  = "modules"
+  end
+end

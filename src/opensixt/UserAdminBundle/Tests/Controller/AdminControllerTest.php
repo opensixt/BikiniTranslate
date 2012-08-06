@@ -12,6 +12,9 @@ class AdminControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/login');
 
-        $this->assertTrue($crawler->filter('html:contains("Einloggen")')->count() > 0);
+        $loginStr = static::$kernel->getContainer()
+                                   ->get('translator')
+                                   ->trans('login');
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("' . $loginStr . '")')->count());
     }
 }

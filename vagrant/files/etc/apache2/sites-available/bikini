@@ -1,0 +1,19 @@
+<VirtualHost *:80>
+	ServerAdmin test@example.com
+
+	ServerName bikini.dev
+
+	DocumentRoot /srv/www/vhosts/bikini/web
+
+	<Directory /srv/www/vhosts/bikini/>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/bikini_error.log
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/bikini_access.log combined
+</VirtualHost>
