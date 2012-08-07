@@ -56,3 +56,6 @@ security:
         - { path: /admin/.*, roles: ROLE_USER }
         - { path: /translate/.*, roles: ROLE_USER }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+    acl:
+         connection: default

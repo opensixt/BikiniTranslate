@@ -117,13 +117,12 @@ class AdminController extends Controller
             // get user from db
             $user = $em->find('opensixtBikiniTranslateBundle:User', $id);
 
-            /*$securityContext = $this->get('security.context');
+            $securityContext = $this->get('security.context');
 
             //***** check for edit access
-            if (false === $securityContext->isGranted('VIEW', $user))
-            {
+            if (false === $securityContext->isGranted('VIEW', $user)) {
                 throw new AccessDeniedException();
-         } */
+            }
             //****
 
         } else {
@@ -198,9 +197,65 @@ class AdminController extends Controller
                     }
                 }
 
+                $securityContext = $this->get('security.context');
+
+                //***** check for edit access
+                if (false === $securityContext->isGranted('EDIT', $user)) {
+                    throw new AccessDeniedException();
+                }
+                //****
+
                 // save changes
                 $em->persist($user);
                 $em->flush();
+
+
+
+                // ACL only create
+
+                // creating the ACL
+        $aclProvider = $this->get('security.acl.provider');
+        $objectIdentity = ObjectIdentity::fromDomainObject($user);
+        $acl = $aclProvider->createAcl($objectIdentity);
+
+        // retrieving the security identity of the currently logged-in user
+        $securityContext = $this->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+
+
+
+$builder = new MaskBuilder();
+$builder
+    ->add('view')
+    ->add('edit')
+    ->add('delete')
+    ->add('undelete')
+;
+$mask = $builder->get(); // int(29)
+
+
+        ///$securityIdentity = UserSecurityIdentity::fromAccount($user);
+
+
+
+
+
+        // grant owner access
+        ///$acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+
+
+$identity = new UserSecurityIdentity('johannes', 'Acme\UserBundle\Entity\User');
+$acl->insertObjectAce($identity, $mask);
+
+        $aclProvider->updateAcl($acl);
+
+                // ACL
+
+
+
+
+
+
             } else {
                 var_dump($form->getErrors());
             }
