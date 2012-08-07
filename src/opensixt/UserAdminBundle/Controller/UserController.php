@@ -18,35 +18,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 /**
  * @author Paul Seiffert <paul.seiffert@mayflower.de>
  */
-class UserController
+class UserController extends AbstractController
 {
-    /** @var \Symfony\Component\HttpFoundation\Request */
-    public $request;
-
-    /** @var \Symfony\Bundle\FrameworkBundle\Translation\Translator */
-    public $translator;
-
-    /** @var \Doctrine\ORM\EntityManager */
-    public $em;
-
-    /** @var \Symfony\Component\Form\FormFactory */
-    public $formFactory;
-
-    /** @var \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface */
-    public $templating;
-
-    /** @var \Knp\Component\Pager\Paginator */
-    public $paginator;
-
-    /** @var \Symfony\Component\Security\Core\SecurityContext */
-    public $securityContext;
-
-    /** @var \Symfony\Bundle\FrameworkBundle\Routing\Router */
-    public $router;
-
-    /** @var \Symfony\Component\Security\Acl\Model\MutableAclProviderInterface */
-    public $aclProvider;
-
     /**
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
@@ -199,7 +172,7 @@ class UserController
     }
 
     /**
-     * @return \opensixt\UserAdminBundle\Repository\UserRepository
+     * @return opensixt\UserAdminBundle\Repository\UserRepository
      */
     private function getUserRepository()
     {
@@ -214,44 +187,5 @@ class UserController
     {
         return $this->formFactory
                     ->create(new UserEditForm($this->translator), $user);
-    }
-
-    /**
-     * @param string $url
-     * @param int $status
-     * @return RedirectResponse
-     */
-    private function redirect($url, $status = 302)
-    {
-        return new RedirectResponse($url, $status);
-    }
-
-    /**
-     * @param string $route
-     * @param array $parameters
-     * @param bool $absolute
-     * @return mixed
-     */
-    private function generateUrl($route, $parameters = array(), $absolute = false)
-    {
-        return $this->router->generate($route, $parameters, $absolute);
-    }
-
-    /**
-     * @throws AccessDeniedException
-     */
-    private function requireAdminUser()
-    {
-        if (!$this->isAdminUser()) {
-            throw new AccessDeniedException();
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    private function isAdminUser()
-    {
-        return $this->securityContext->isGranted('ROLE_ADMIN');
     }
 }

@@ -18,7 +18,6 @@ use opensixt\BikiniTranslateBundle\Helpers\Pagination;
  */
 class AdminController extends Controller
 {
-
     /**
      * Pagination limit
      * @var int
