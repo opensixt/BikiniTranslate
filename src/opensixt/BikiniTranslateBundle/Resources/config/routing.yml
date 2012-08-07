@@ -1,3 +1,10 @@
+_home:
+    pattern: /
+    defaults: { _controller: opensixtBikiniTranslateBundle:Default:index, page: 'index' }
+_page:
+    pattern: /{page}.html
+    defaults: { _controller: opensixtBikiniTranslateBundle:Default:index, page: 'index' }
+
 _translate_home:
     pattern: /translate/
     defaults: { _controller: opensixtBikiniTranslateBundle:Translate:index }
