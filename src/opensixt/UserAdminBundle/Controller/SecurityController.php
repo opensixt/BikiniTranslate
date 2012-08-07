@@ -28,9 +28,4 @@ class SecurityController extends Controller
             'error'         => $error,
         ));
     }
-
-    public function indexAction($name)
-    {
-        return $this->render('opensixtUserAdminBundle:Default:index.html.twig', array('name' => $name));
-    }
 }
