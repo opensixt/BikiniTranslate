@@ -13,4 +13,5 @@ services:
       templating: @templating
       paginator: @knp_paginator
       securityContext: @security.context
+      aclProvider: @security.acl.provider
       router: @router

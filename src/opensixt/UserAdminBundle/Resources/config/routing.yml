@@ -19,6 +19,20 @@ _admin_userlist:
         page: \d+
         _method: get
 
+_admin_user_create:
+    pattern: /admin/user/create
+    defaults: { _controller: opensixt.user_admin.controller.user:createAction }
+    requirements:
+        id: \d+
+        _method: get
+
+_admin_user_save_new:
+    pattern: /admin/user/save
+    defaults: { _controller: opensixt.user_admin.controller.user:saveNewAction }
+    requirements:
+        id: \d+
+        _method: post
+
 _admin_user:
     pattern: /admin/user/{id}
     defaults: { _controller: opensixt.user_admin.controller.user:viewAction }
