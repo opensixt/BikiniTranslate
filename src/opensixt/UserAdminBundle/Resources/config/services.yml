@@ -1,7 +1,16 @@
-#parameters:
-    #opensixt_pagination.class: opensixt\UserAdminBundle\PaginationBar
+parameters:
+  opensixt.user_admin.controller.user.class: "opensixt\UserAdminBundle\Controller\UserController"
 
-#services:
-    #opensixt_pagination:
-        #class: %opensixt_pagination.class%
-        #arguments: []
+services:
+  opensixt.user_admin.controller.user:
+    class: %opensixt.user_admin.controller.user.class%
+    scope: request
+    properties:
+      request: @request
+      translator: @translator
+      em: @doctrine.orm.entity_manager
+      formFactory: @form.factory
+      templating: @templating
+      paginator: @knp_paginator
+      securityContext: @security.context
+      router: @router

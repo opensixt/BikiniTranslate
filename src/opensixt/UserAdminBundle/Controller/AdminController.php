@@ -35,69 +35,9 @@ class AdminController extends Controller
         $this->_paginationLimit = 15;
     }
 
-
     public function indexAction()
     {
         return $this->render('opensixtBikiniTranslateBundle:Translate:index.html.twig');
-    }
-
-    /**
-     * Controller Action: userlist
-     *
-     * @param $page
-     * @return Response A Response instance
-     */
-    public function userlistAction($page = 1)
-    {
-        $request    = $this->getRequest();
-        $translator = $this->get('translator');
-
-        $em = $this->getDoctrine()->getEntityManager();
-        $ur = $em->getRepository('opensixtBikiniTranslateBundle:User');
-
-        $search = '';
-        if ($request->getMethod() == 'POST') {
-            $formData = $request->request->get('form'); // form fields
-            if (!empty($formData['search'])) {
-                $search = $formData['search'];
-            }
-        } elseif ($request->getMethod() == 'GET') {
-            if ($request->query->get('search')) {
-                $search = urldecode($request->query->get('search'));
-            }
-        }
-
-        $userCount = $ur->getUserCount($search);
-
-        $pagination = new Pagination($userCount, $this->_paginationLimit, $page);
-        $paginationBar = $pagination->getPaginationBar();
-
-        $userlist = $ur->getUserListWithPagination(
-            $this->_paginationLimit,
-            $pagination->getOffset());
-
-        $form = $this->createFormBuilder()
-            ->add('search', 'search', array(
-                    'label'       => $translator->trans('search_by') . ': ',
-                    'trim'        => true,
-                    'required'    => false,
-                    'data'        => $search
-                ))
-            ->getForm();
-
-        $templateParam = array(
-            'form'          => $form->createView(),
-            'userlist'      => $userlist,
-            'paginationbar' => $paginationBar,
-        );
-
-        if (strlen($search)) {
-             $templateParam['search'] = urlencode($search);
-        }
-
-        return $this->render('opensixtUserAdminBundle:UserAdmin:userlist.html.twig',
-            $templateParam
-            );
     }
 
     /**

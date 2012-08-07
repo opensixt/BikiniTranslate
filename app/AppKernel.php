@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle,
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle,
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new opensixt\BikiniTranslateBundle\opensixtBikiniTranslateBundle(),
             new opensixt\UserAdminBundle\opensixtUserAdminBundle(),
         );
