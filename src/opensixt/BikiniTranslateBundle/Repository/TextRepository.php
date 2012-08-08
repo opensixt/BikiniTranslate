@@ -22,9 +22,9 @@ class TextRepository extends EntityRepository
     const FIELD_RESOURCE    = 't.resourceId';
     const FIELD_LOCALE      = 't.localeId';
     const FIELD_USER        = 't.userId';
-    const FIELD_EXP         = 't.expiryDate';
-    const FIELD_REL         = 't.released';
-    const FIELD_HTS         = 't.translationService';
+    const FIELD_EXPIRY_DATE = 't.expiryDate';
+    const FIELD_RELEASED    = 't.released';
+    const FIELD_TS          = 't.translationService';
     const FIELD_BLOCK       = 't.block';
 
     const TEXT_EMPTY_VALUE  = 'TRANSLATE_ME';
@@ -518,7 +518,7 @@ class TextRepository extends EntityRepository
             $query->join('t.target', 'tr', Join::WITH , "tr.target LIKE ?1")
                 ->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
                 ->andWhere(self::FIELD_LOCALE . ' = ?3')
-                ->andWhere(self::FIELD_EXP . ' IS NULL')
+                ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
                 ->setParameter(1, $this->_searchString)
                 ->setParameter(2, $this->_resources)
                 ->setParameter(3, $this->_locale);
@@ -529,7 +529,7 @@ class TextRepository extends EntityRepository
         case self::TASK_ALL_CONTENT_BY_RES:
             $query->join('t.target', 'tr', Join::WITH , "tr.target != ?1")
                 ->where(self::FIELD_LOCALE . ' IN (?2)')
-                ->andWhere(self::FIELD_EXP . ' IS NULL')
+                ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
                 ->setParameter(1, self::TEXT_EMPTY_VALUE)
                 ->setParameter(2, $this->_locales);
 
@@ -538,7 +538,7 @@ class TextRepository extends EntityRepository
                 ->setParameter(3, $this->_resources);
             }
             if ($this->_locale == $this->_commonLanguageId) {
-                $query->andWhere(self::FIELD_REL . ' IS NOT NULL');
+                $query->andWhere(self::FIELD_RELEASED . ' IS NOT NULL');
             }
 
             break;
@@ -557,12 +557,12 @@ class TextRepository extends EntityRepository
             }
             if (!empty($this->_date)) {
                 // expired texts
-                $query->andWhere(self::FIELD_EXP . ' <= ?3')
+                $query->andWhere(self::FIELD_EXPIRY_DATE . ' <= ?3')
                     ->setParameter(3, $this->_date);
             } else {
                 // non released texts
-                $query->andWhere(self::FIELD_REL . ' IS NULL')
-                    ->andWhere(self::FIELD_EXP . ' IS NULL');
+                $query->andWhere(self::FIELD_RELEASED . ' IS NULL')
+                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL');
             }
 
             break;
@@ -573,17 +573,17 @@ class TextRepository extends EntityRepository
                 ->where(self::FIELD_RESOURCE . ' IN (?2)')
                 ->andWhere(self::FIELD_LOCALE . ' = ?3')
                 //->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
-                ->andWhere(self::FIELD_EXP . ' IS NULL')
-                ->andWhere(self::FIELD_REL . ' IS NOT NULL')
+                ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                ->andWhere(self::FIELD_RELEASED . ' IS NOT NULL')
                 ->setParameter(1, self::TEXT_EMPTY_VALUE)
                 ->setParameter(2, $this->_resources)
                 ->setParameter(3, $this->_locale);
             // just get the unflagged translations
             // 0 = open state
             // 1 = already sent to hts
-            if ($this->_hts === true) {
-                $query->addWhere(self::FIELD_HTS . ' IS NULL');
-            }
+       //     if ($this->_hts === true) {
+                $query->andWhere(self::FIELD_TS . ' IS NULL');
+       //     }
 
             break;
         }
