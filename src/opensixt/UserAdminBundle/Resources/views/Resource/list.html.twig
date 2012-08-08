@@ -16,9 +16,9 @@
             </tr>
         </thead>
         <tbody>
-        {% for item in reslist %}
+        {% for item in pagination %}
             <tr>
-                <td><a href="{{ path('_admin_resource', {'id':item.id}) }}">{{ item.name }}</a></td>
+                <td><a href="{{ path('_admin_resource', {'id': item.id}) }}">{{ item.name }}</a></td>
                 <td>{{ item.description }}</td>
             </tr>
         {% else %}
@@ -29,21 +29,19 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2">
-                    {% include 'opensixtUserAdminBundle:UserAdmin:paginationbar.html.twig' with {'target_route': '_admin_reslist', 'paginationbar' : paginationbar} %}
+                <td colspan="3">
+                    {{ pagination.render()|raw }}
                 </td>
             </tr>
         </tfoot>
     </table>
-
-
 
 {% endblock %}
 
 {% block sidebar %}
     <ul>
         <li class="backhome"><a href="{{ path('_user_admin_home') }}">{{ 'admin_home'|trans }}</a></li>
-        <li class="new"><a href="{{ path('_admin_resource') }}">{{ 'new_resource'|trans }}</a></li>
+        <li class="new"><a href="{{ path('_admin_resource_create') }}">{{ 'new_resource'|trans }}</a></li>
     </ul>
 
     <br/>

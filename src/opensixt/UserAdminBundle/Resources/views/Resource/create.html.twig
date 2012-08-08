@@ -1,14 +1,14 @@
 {% extends "::layout.html.twig" %}
 
 {% block title %}
-    {{ 'resource'|trans }}
+    {{ 'create_resource'|trans }}
 {% endblock %}
 
 {% block body %}
 
-    <h3>{{ 'resource'|trans }}</h3>
+    <h3>{{ 'create_resource'|trans }}</h3>
 
-    <form action="{{ path('_admin_resource', {'id':id}) }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('_admin_resource_save_new') }}" method="post" {{ form_enctype(form) }}>
         <div>
             {{ form_label(form.name) }}
             {{ form_errors(form.name) }}

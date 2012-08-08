@@ -118,13 +118,36 @@ _admin_language_save:
         _method: post
 
 _admin_reslist:
-    pattern: /admin/reslist/{page}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:reslist, page: 1 }
+    pattern: /admin/resource/list
+    defaults: { _controller: opensixt.user_admin.controller.resource:listAction, page: 1 }
     requirements:
-        page: \d+
+      page: \d+
+      _method: get
+
+_admin_resource_create:
+    pattern: /admin/resource/create
+    defaults: { _controller: opensixt.user_admin.controller.resource:createAction }
+    requirements:
+        id: \d+
+        _method: get
+
+_admin_resource_save_new:
+    pattern: /admin/resource/save
+    defaults: { _controller: opensixt.user_admin.controller.resource:saveNewAction }
+    requirements:
+        id: \d+
+        _method: post
 
 _admin_resource:
     pattern: /admin/resource/{id}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:resdata, id: 0 }
+    defaults: { _controller: opensixt.user_admin.controller.resource:viewAction }
     requirements:
         id: \d+
+        _method: get
+
+_admin_resource_save:
+    pattern: /admin/resource/{id}/save
+    defaults: { _controller: opensixt.user_admin.controller.resource:saveAction }
+    requirements:
+        id: \d+
+        _method: post

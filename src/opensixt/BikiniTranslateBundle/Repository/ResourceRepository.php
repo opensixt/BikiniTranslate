@@ -12,33 +12,12 @@ use Doctrine\ORM\EntityRepository;
 class ResourceRepository extends EntityRepository
 {
     /**
-     * Get list of resources from the DB
-     *
-     * @param int $limit
-     * @param int $offset
-     * @return array
+     * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getResourceListWithPagination($limit, $offset)
+    public function getQueryForAllResources()
     {
-        $list = $this->findBy(
-            array(),                // search criteria
-            array('name' => 'asc'), // order by
-            $limit,                 // limit
-            $offset);               // offset
-        return $list;
-    }
-
-    /**
-     * Get count of records in Resource table
-     *
-     * @return int
-     */
-    public function getResourceCount()
-    {
-        $count = $this->createQueryBuilder('r')
-            ->select('COUNT(r)')
-            ->getQuery()
-            ->getSingleScalarResult();
-        return $count;
+        $q = $this->createQueryBuilder('r')
+                  ->select('r');
+        return $q;
     }
 }
