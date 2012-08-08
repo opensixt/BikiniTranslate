@@ -3,7 +3,7 @@ _user_admin_home:
     defaults: { _controller: opensixtUserAdminBundle:Default:index }
 
 _admin_userlist:
-    pattern: /admin/user/list
+    pattern: /admin/user/list/{page}
     defaults: { _controller: opensixt.user_admin.controller.user:listAction, page: 1 }
     requirements:
         page: \d+
@@ -38,7 +38,7 @@ _admin_user_save:
         _method: post
 
 _admin_grouplist:
-    pattern: /admin/group/list
+    pattern: /admin/group/list/{page}
     defaults: { _controller: opensixt.user_admin.controller.group:listAction, page: 1 }
     requirements:
       page: \d+
@@ -73,7 +73,7 @@ _admin_group_save:
         _method: post
 
 _admin_langlist:
-    pattern: /admin/language/list
+    pattern: /admin/language/list/{page}
     defaults: { _controller: opensixt.user_admin.controller.language:listAction, page: 1 }
     requirements:
       page: \d+
@@ -108,7 +108,7 @@ _admin_language_save:
         _method: post
 
 _admin_reslist:
-    pattern: /admin/resource/list
+    pattern: /admin/resource/list/{page}
     defaults: { _controller: opensixt.user_admin.controller.resource:listAction, page: 1 }
     requirements:
       page: \d+
