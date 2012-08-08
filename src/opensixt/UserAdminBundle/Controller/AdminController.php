@@ -272,7 +272,7 @@ class AdminController extends Controller
             ))
             ->add('resources', 'entity', array(
                 'label'     => $translator->trans('resources') . ': ',
-                'class'     => 'opensixtBikiniTranslateBundle:Resource',
+                'class'     => 'opensixt\BikiniTranslateBundle\Entity\Resource',
                 'property'  => 'name',
                 'multiple'  => true,
                 'expanded'  => true
