@@ -13,13 +13,10 @@ use Symfony\Component\Form\FormError;
 
 use opensixt\BikiniTranslateBundle\Helpers\Pagination;
 
-/**
- * User Administration Controller
- */
-class AdminController extends Controller
+class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('opensixtBikiniTranslateBundle:Translate:index.html.twig');
+        return $this->render('opensixtUserAdminBundle:Default:index.html.twig');
     }
 }
