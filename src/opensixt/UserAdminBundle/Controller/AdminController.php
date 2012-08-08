@@ -32,7 +32,7 @@ class AdminController extends Controller
     {
         return $this->render('opensixtBikiniTranslateBundle:Translate:index.html.twig');
     }
-    
+
     /**
      * Controller Action: langlist - Languages
      *
