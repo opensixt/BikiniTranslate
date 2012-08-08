@@ -89,11 +89,33 @@ _admin_langlist:
       page: \d+
       _method: get
 
-_admin_lang:
-    pattern: /admin/lang/{id}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:langdata, id: 0 }
+_admin_language_create:
+    pattern: /admin/language/create
+    defaults: { _controller: opensixt.user_admin.controller.language:createAction }
     requirements:
         id: \d+
+        _method: get
+
+_admin_language_save_new:
+    pattern: /admin/language/save
+    defaults: { _controller: opensixt.user_admin.controller.language:saveNewAction }
+    requirements:
+        id: \d+
+        _method: post
+
+_admin_language:
+    pattern: /admin/language/{id}
+    defaults: { _controller: opensixt.user_admin.controller.language:viewAction }
+    requirements:
+        id: \d+
+        _method: get
+
+_admin_language_save:
+    pattern: /admin/language/{id}/save
+    defaults: { _controller: opensixt.user_admin.controller.language:saveAction }
+    requirements:
+        id: \d+
+        _method: post
 
 _admin_reslist:
     pattern: /admin/reslist/{page}

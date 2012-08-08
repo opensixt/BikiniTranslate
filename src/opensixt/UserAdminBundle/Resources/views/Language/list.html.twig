@@ -18,7 +18,7 @@
         <tbody>
         {% for item in pagination %}
             <tr>
-                <td><a href="{{ path('_admin_lang', {'id':item.id}) }}">{{ item.locale }}</a></td>
+                <td><a href="{{ path('_admin_language', {'id': item.id}) }}">{{ item.locale }}</a></td>
                 <td>{{ item.description }}</td>
             </tr>
         {% else %}
@@ -44,7 +44,7 @@
 {% block sidebar %}
     <ul>
         <li class="backhome"><a href="{{ path('_user_admin_home') }}">{{ 'admin_home'|trans }}</a></li>
-        <li class="new"><a href="{{ path('_admin_lang') }}">{{ 'new_language'|trans }}</a></li>
+        <li class="new"><a href="{{ path('_admin_language_create') }}">{{ 'new_language'|trans }}</a></li>
     </ul>
 
     <br/>

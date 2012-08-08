@@ -34,57 +34,6 @@ class AdminController extends Controller
     }
 
     /**
-     * Controller Action: langdata
-     *
-     * @param int $id
-     * @return Response a Response instance
-     */
-    public function langdataAction($id)
-    {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $translator = $this->get('translator');
-
-        if ($id) {
-            // get language from db
-            $lang = $em->find('opensixtBikiniTranslateBundle:Language', $id);
-        } else {
-            // new language
-            $lang = new Language();
-        }
-
-        $form = $this->createFormBuilder($lang)
-            ->add('locale', 'text', array(
-                'label'     =>  $translator->trans('language_name') . ': ',
-            ))
-            ->add('description', 'text', array(
-                'label'     => $translator->trans('description') . ': ',
-                'required'  => false
-            ))
-            ->getForm();
-
-        if ($request->getMethod() == 'POST') {
-            // the controller binds the submitted data to the form
-            $form->bindRequest($request);
-
-            if ($form->isValid()) {
-                // save changes
-                $em->persist($lang);
-                $em->flush();
-            } else {
-                var_dump($form->getErrors());
-            }
-        }
-
-        return $this->render('opensixtUserAdminBundle:UserAdmin:langdata.html.twig',
-            array(
-                'form' => $form->createView(),
-                'id' => $id,
-                ));
-    }
-
-    /**
      * Controller Action: reslist - Resources
      *
      * @param int $page

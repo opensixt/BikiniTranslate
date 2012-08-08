@@ -3,6 +3,7 @@
 namespace opensixt\UserAdminBundle\Controller;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use opensixt\UserAdminBundle\Form\GroupEdit as GroupEditForm;
 use opensixt\BikiniTranslateBundle\Entity\Groups;
 
@@ -30,13 +31,14 @@ class GroupController extends AbstractController
     }
 
     /**
-     * @param int $id
-     * @throws AccessDeniedException
+     * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws NotFoundHttpException
+     * @throws AccessDeniedException
      */
     public function viewAction($id)
     {
-        $group = $this->getGroupRepository()->find($id);
+        $group = $this->requireGroupWithId($id);
 
         if (!($this->isAdminUser() || $this->securityContext->isGranted('VIEW', $group))) {
             throw new AccessDeniedException();
@@ -52,11 +54,12 @@ class GroupController extends AbstractController
     /**
      * @param int $id
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws NotFoundHttpException
      * @throws AccessDeniedException
      */
     public function saveAction($id)
     {
-        $group = $this->getGroupRepository()->find($id);
+        $group = $this->requireGroupWithId($id);
 
         if (!($this->isAdminUser() || $this->securityContext->isGranted('EDIT', $group))) {
             throw new AccessDeniedException();
@@ -148,5 +151,20 @@ class GroupController extends AbstractController
     private function getGroupRepository()
     {
         return $this->em->getRepository('opensixtBikiniTranslateBundle:Groups');
+    }
+
+    /**
+     * @param int $id
+     * @return Groups object
+     * @throws NotFoundHttpException
+     */
+    private function requireGroupWithId($id)
+    {
+        $group = $this->getGroupRepository()->find($id);
+
+        if (!$group) {
+            throw new NotFoundHttpException();
+        }
+        return $group;
     }
 }

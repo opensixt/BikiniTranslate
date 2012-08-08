@@ -10,6 +10,7 @@ use opensixt\BikiniTranslateBundle\Entity\User;
 
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
@@ -49,7 +50,7 @@ class UserController extends AbstractController
      */
     public function viewAction($id)
     {
-        $user = $this->getUserWithId($id);
+        $user = $this->requireUserWithId($id);
 
         if (!($this->isAdminUser() || $this->securityContext->isGranted('VIEW', $user))) {
             throw new AccessDeniedException();
@@ -69,7 +70,7 @@ class UserController extends AbstractController
      */
     public function saveAction($id)
     {
-        $user = $this->getUserWithId($id);
+        $user = $this->requireUserWithId($id);
 
         if (!($this->isAdminUser() || $this->securityContext->isGranted('EDIT', $user))) {
             throw new AccessDeniedException();
@@ -161,11 +162,12 @@ class UserController extends AbstractController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @return User
      */
-    private function getUserWithId($id)
+    private function requireUserWithId($id)
     {
         $user = $this->getUserRepository()->find($id);
+
         if (!$user) {
-            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+            throw new NotFoundHttpException();
         }
         return $user;
     }
