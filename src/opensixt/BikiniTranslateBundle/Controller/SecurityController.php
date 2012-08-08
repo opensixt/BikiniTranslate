@@ -1,6 +1,6 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Controller;
+namespace opensixt\BikiniTranslateBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -8,7 +8,6 @@ use Symfony\Component\Security\Core\SecurityContext;
 
 class SecurityController extends Controller
 {
-    
     public function loginAction()
     {
         $request = $this->getRequest();
@@ -22,10 +21,8 @@ class SecurityController extends Controller
             $session->remove(SecurityContext::AUTHENTICATION_ERROR);
         }
 
-        return $this->render('opensixtUserAdminBundle:UserAdmin:login.html.twig', array(
-            // last username entered by the user
-            'last_username' => $session->get(SecurityContext::LAST_USERNAME),
-            'error'         => $error,
-        ));
+        return $this->render('opensixtBikiniTranslateBundle:Security:login.html.twig',
+                             array('last_username' => $session->get(SecurityContext::LAST_USERNAME),
+                                   'error' => $error));
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace opensixt\UserAdminBundle\Tests\Controller;
+namespace opensixt\BikiniTranslateBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class AdminControllerTest extends WebTestCase
+class SecurityControllerTest extends WebTestCase
 {
     public function testIndex()
     {

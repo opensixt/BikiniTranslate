@@ -1,13 +1,3 @@
-_user_admin_login:
-    pattern:  /login
-    defaults: { _controller: opensixtUserAdminBundle:Security:login }
-
-_user_admin_check:
-    pattern: /login_check
-
-_user_admin_logout:
-    pattern: /logout
-
 _user_admin_home:
     pattern: /admin/
     defaults: { _controller: opensixtUserAdminBundle:Admin:index }
