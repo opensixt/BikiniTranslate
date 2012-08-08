@@ -217,7 +217,7 @@ class TextRepository extends EntityRepository
      * @param int $limit Pagination limit
      * @param int $offset Pagination offset
      */
-    public function getMissingTranslations($limit, $offset)
+    public function getMissingTranslations($limit = 0, $offset = 0)
     {
         $query = $this->createQueryBuilder('t')
             ->select('t, l, r, u, tr')
@@ -228,8 +228,10 @@ class TextRepository extends EntityRepository
         $this->setQueryParameters($query);
 
         // pagination limit and offset
-        $query->setMaxResults($limit)
-            ->setFirstResult($offset);
+        if ($limit) {
+            $query->setMaxResults($limit)
+                ->setFirstResult($offset);
+        }
 
         $translations = $query->getQuery() //->getResult();//
             ->getArrayResult();
@@ -637,6 +639,32 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     * Set translation_service=1 for each id from $ids
+     *
+     * @param array $ids
+     */
+    public function setTranslationServiceFlag($ids)
+    {
+        if (!count($ids)) return;
+
+        $this->createQueryBuilder('t')
+            ->update()
+            ->set(self::FIELD_TS, '1')
+            ->where(self::FIELD_ID . ' IN (?1)')
+            ->setParameter(1, $ids)
+            ->getQuery()
+            ->execute();
+        // TODO: ORM update
+        /*foreach ($ids as $id) {
+            $objText = $this->_em->find('opensixtBikiniTranslateBundle:Text', $id);
+            $objText->setTranslationService(1);
+        }
+        $this->_em->persist($objText);
+        $this->_em->flush();
+         */
+    }
+
+    /**
      * Get language id from table Languages by locale
      *
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
@@ -644,13 +672,14 @@ class TextRepository extends EntityRepository
      */
     public function getIdByLocale($locale)
     {
-        if ($locale) {
-            $repository = $this->getEntityManager()
-                ->getRepository('opensixtBikiniTranslateBundle:Language');
+        if (!$locale) return false;
 
-            $langData = $repository->findBy(array('locale' => $locale));
-            return $langData[0]->getId();
-        }
+        $repository = $this->getEntityManager()
+            ->getRepository('opensixtBikiniTranslateBundle:Language');
+
+        $langData = $repository->findBy(array('locale' => $locale));
+        return $langData[0]->getId();
+
     }
 
 }

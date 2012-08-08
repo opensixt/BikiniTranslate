@@ -42,14 +42,17 @@ class HandleText {
     /**
      * @var string
      */
-    private $_commonLanguage;
+    protected $_commonLanguage;
 
     /**
      * @var int
      */
-    private $_commonLanguageId;
+    protected $_commonLanguageId;
 
-    private $_revisionControlMode;
+    /**
+     * @var string
+     */
+    public $_revisionControlMode;
 
     /**
      * @var int
@@ -108,12 +111,22 @@ class HandleText {
 
     /**
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $page
      */
     public function setPaginationPage($page)
     {
         $this->_paginationPage = $page;
+    }
+
+    /**
+     *
+     * @param int $page
+     */
+    public function setPaginationLimit($lim)
+    {
+        if ($lim >= 0) {
+            $this->_paginationLimit = $lim;
+        }
     }
 
 }

@@ -182,6 +182,22 @@
                 <source>releasetext_explanation</source>
                 <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
             </trans-unit>
+            <trans-unit id="225">
+                <source>mnu_sendtots</source>
+                <target>Send to translation service</target>
+            </trans-unit>
+            <trans-unit id="230">
+                <source>sendtots_explanation</source>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. </target>
+            </trans-unit>
+            <trans-unit id="235">
+                <source>send</source>
+                <target>Senden</target>
+            </trans-unit>
+            <trans-unit id="240">
+                <source>sendtots_success</source>
+                <target>Success message!</target>
+            </trans-unit>
 
         </body>
     </file>

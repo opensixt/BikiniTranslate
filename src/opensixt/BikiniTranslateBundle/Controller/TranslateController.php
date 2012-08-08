@@ -48,8 +48,7 @@ class TranslateController extends Controller
         $translator = $this->get('translator');
 
         $editText = $this->get('opensixt_edittext'); // controller intermediate layer
-        $editText->setLocale($languageId);
-        $currentLangIsCommonLang = $editText->compareCommonAndCurrentLocales();
+        $currentLangIsCommonLang = $editText->compareCommonAndCurrentLocales($languageId);
 
         $resources = $this->getUserResources(); // all available resources
 
@@ -78,11 +77,10 @@ class TranslateController extends Controller
         $searchResources = $this->getSearchResources();
 
         // set search parameters
-        $editText->setResources($searchResources);
         $editText->setPaginationPage($page);
 
         // get search results
-        $data = $editText->getData();
+        $data = $editText->getData($languageId, $searchResources);
 
         $formBuilder = $this->createFormBuilder();
         $formBuilder
@@ -631,6 +629,72 @@ class TranslateController extends Controller
         }
 
         return $this->render('opensixtBikiniTranslateBundle:Translate:copyresource.html.twig',
+            $templateParam);
+    }
+
+    /**
+     * sendtots Send to translation service
+     *
+     * @param string $locale
+     */
+    public function sendtotsAction($locale)
+    {
+        // if $locale is not set, redirect to setlocale action
+        if (!$locale || $locale == 'empty') {
+            // store an attribute for reuse during a later user request
+            $session->set('targetRoute', '_translate_sendtots');
+            return $this->redirect($this->generateUrl('_translate_setlocale'));
+        } else {
+            // get language id with locale
+            $userLang = array_flip($this->getUserLocales());
+            $languageId = isset($userLang[$locale]) ? $userLang[$locale] : 0;
+        }
+        if (!$languageId) {
+            $session->set('targetRoute', '_translate_sendtots');
+            return $this->redirect($this->generateUrl('_translate_setlocale'));
+        }
+
+        $request = $this->getRequest();
+        $searcher = $this->get('opensixt_edittext'); // controller intermediate layer
+
+        // set search parameters
+        $resources = $this->getUserResources(); // all available resources
+        $searcher->setPaginationLimit(0);
+
+        // get search results
+        $data = $searcher->getData($languageId, array_keys($resources));
+
+        $form = $this->createFormBuilder()
+            ->add('action', 'hidden')
+            ->getForm();
+
+        $templateParam = array(
+            'form' => $form->createView(),
+            'locale' => $locale,
+            'data' => $data['texts'],
+        );
+
+        // Send data to translation service
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->get('form');
+            if ($formData && count($data['texts'])) {
+                if (isset($formData['action']) && $formData['action'] == 'send') {
+                    $chunks = $searcher->prepareExportData($data['texts']);
+
+                    $export = $this->get('bikini_export');
+                    $export->setTargetLanguage($locale);
+                    $export->initXliff('human_translation_service');
+
+                    foreach ($chunks as $chunk) {
+                        $exportXliff = $export->getDataAsXliff($chunk);
+                        $searcher->sendToTS($exportXliff, $chunk);
+                    }
+                    $templateParam['success'] = 1;
+                }
+            }
+        }
+
+        return $this->render('opensixtBikiniTranslateBundle:Translate:sendtots.html.twig',
             $templateParam);
     }
 

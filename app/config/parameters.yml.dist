@@ -19,3 +19,5 @@ parameters:
     common_language:   en_GB
 
     text_revision_control: on
+
+    export_chunk_limit: 100

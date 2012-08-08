@@ -43,3 +43,7 @@ _translate_releasetext:
     defaults: { _controller: opensixtBikiniTranslateBundle:Translate:releasetext, page: 1 }
     requirements:
         page: \d+
+
+_translate_sendtots:
+    pattern: /translate/sendToTS/{locale}
+    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:sendtots, locale: 'empty' }

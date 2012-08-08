@@ -3,6 +3,7 @@ parameters:
     opensixt_edittext.class: opensixt\BikiniTranslateBundle\Services\EditText
     opensixt_flaggedtext.class: opensixt\BikiniTranslateBundle\Services\FlaggedText
     opensixt_copydomain.class: opensixt\BikiniTranslateBundle\Services\CopyDomain
+    bikini_export.class: opensixt\BikiniTranslateBundle\Helpers\BikiniExport
 
 services:
     opensixt_searchstring:
@@ -12,7 +13,10 @@ services:
 
     opensixt_edittext:
         class: %opensixt_edittext.class%
-        arguments: [@doctrine, %common_language%, %text_revision_control%]
+        arguments: [@doctrine, %common_language%]
+        properties:
+            _revisionControlMode: %text_revision_control%
+            _exportChunkLimit: %export_chunk_limit%
 
     opensixt_flaggedtext:
         class: %opensixt_flaggedtext.class%
@@ -21,3 +25,7 @@ services:
     opensixt_copydomain:
         class: %opensixt_copydomain.class%
         arguments: [@doctrine, %common_language%, %text_revision_control%]
+
+    bikini_export:
+        class: %bikini_export.class%
+        arguments: [%tool_language%]
