@@ -32,65 +32,7 @@ class AdminController extends Controller
     {
         return $this->render('opensixtBikiniTranslateBundle:Translate:index.html.twig');
     }
-
-    /**
-     * Controller Action: groupdata
-     *
-     * @param int $id
-     * @return Response a Response instance
-     */
-    public function groupdataAction($id)
-    {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $translator = $this->get('translator');
-
-        if ($id) {
-            // get group from db
-            $group = $em->find('opensixtBikiniTranslateBundle:Groups', $id);
-        } else {
-            // new group
-            $group = new Groups();
-        }
-
-        $form = $this->createFormBuilder($group)
-            ->add('name', 'text', array(
-                'label'     =>  $translator->trans('groupname') . ': ',
-            ))
-            ->add('description', 'text', array(
-                'label'     => $translator->trans('description') . ': ',
-                'required'  => false
-            ))
-            ->add('resources', 'entity', array(
-                'label'     => $translator->trans('resources') . ': ',
-                'class'     => 'opensixtBikiniTranslateBundle:Resource',
-                'property'  => 'name',
-                'multiple'  => true,
-                'expanded'  => true
-            ))
-            ->getForm();
-
-        if ($request->getMethod() == 'POST') {
-            // the controller binds the submitted data to the form
-            $form->bindRequest($request);
-
-            if ($form->isValid()) {
-                // save changes
-                $em->persist($group);
-                $em->flush();
-            } else {
-                var_dump($form->getErrors());
-            }
-        }
-
-        return $this->render('opensixtUserAdminBundle:UserAdmin:groupdata.html.twig',
-            array(
-                'form' => $form->createView(),
-                'id' => $id,
-                ));
-    }
-
+    
     /**
      * Controller Action: langlist - Languages
      *
