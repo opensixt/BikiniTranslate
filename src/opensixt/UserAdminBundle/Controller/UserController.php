@@ -20,6 +20,9 @@ use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
  */
 class UserController extends AbstractController
 {
+    /** @var int */
+    public $listNumItems;
+
     /**
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
@@ -32,7 +35,7 @@ class UserController extends AbstractController
 
         $query = $this->getUserRepository()
                       ->getQueryForUserSearch($searchTerm);
-        $pagination = $this->paginator->paginate($query, $page, 25);
+        $pagination = $this->paginator->paginate($query, $page, $this->listNumItems);
 
         /** @var $form UserSearchForm|\Symfony\Component\Form\FormInterface */
         $form = $this->formFactory

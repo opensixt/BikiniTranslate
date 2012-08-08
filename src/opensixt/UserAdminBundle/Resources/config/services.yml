@@ -24,18 +24,26 @@ services:
     class: %opensixt.user_admin.controller.user.class%
     parent: opensixt.user_admin.controller.abstract
     scope: request
+    properties:
+      listNumItems: %opensixt.user_admin.controller.user.list.num_items%
 
   opensixt.user_admin.controller.group:
     class: %opensixt.user_admin.controller.group.class%
     parent: opensixt.user_admin.controller.abstract
     scope: request
+    properties:
+      listNumItems: %opensixt.user_admin.controller.group.list.num_items%
 
   opensixt.user_admin.controller.language:
     class: %opensixt.user_admin.controller.language.class%
     parent: opensixt.user_admin.controller.abstract
     scope: request
+    properties:
+      listNumItems: %opensixt.user_admin.controller.language.list.num_items%
 
   opensixt.user_admin.controller.resource:
     class: %opensixt.user_admin.controller.resource.class%
     parent: opensixt.user_admin.controller.abstract
     scope: request
+    properties:
+      listNumItems: %opensixt.user_admin.controller.resource.list.num_items%

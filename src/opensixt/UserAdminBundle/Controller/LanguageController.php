@@ -14,6 +14,9 @@ use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 
 class LanguageController extends AbstractController
 {
+    /** @var int */
+    public $listNumItems;
+
     /**
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
@@ -24,7 +27,7 @@ class LanguageController extends AbstractController
 
         $query = $this->getLanguageRepository()
                       ->getQueryForAllLanguages();
-        $pagination = $this->paginator->paginate($query, $page, 25);
+        $pagination = $this->paginator->paginate($query, $page, $this->listNumItems);
 
         return $this->templating->renderResponse('opensixtUserAdminBundle:Language:list.html.twig',
                                                  array('pagination' => $pagination));
