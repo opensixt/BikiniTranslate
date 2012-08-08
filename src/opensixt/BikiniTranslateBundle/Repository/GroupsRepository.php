@@ -12,33 +12,12 @@ use Doctrine\ORM\EntityRepository;
 class GroupsRepository extends EntityRepository
 {
     /**
-     * Get list of groups from the DB
-     *
-     * @param int $limit
-     * @param int $offset
-     * @return array
+     * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getGroupListWithPagination($limit, $offset)
+    public function getQueryForAllGroups()
     {
-        $list = $this->findBy(
-            array(),                // search criteria
-            array('name' => 'asc'), // order by
-            $limit,                 // limit
-            $offset);               // offset
-        return $list;
-    }
-
-    /**
-     * Get count of records in Groups table
-     *
-     * @return int
-     */
-    public function getGroupCount()
-    {
-        $count = $this->createQueryBuilder('g')
-            ->select('COUNT(g)')
-            ->getQuery()
-            ->getSingleScalarResult();
-        return $count;
+        $q = $this->createQueryBuilder('g')
+                  ->select('g');
+        return $q;
     }
 }

@@ -172,7 +172,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @return opensixt\UserAdminBundle\Repository\UserRepository
+     * @return \opensixt\UserAdminBundle\Repository\UserRepository
      */
     private function getUserRepository()
     {

@@ -47,16 +47,12 @@ _admin_user_save:
         id: \d+
         _method: post
 
-#
-#_admin_user:
-#    pattern: /admin/user/{id}
-#    defaults: { _controller: opensixtUserAdminBundle:Admin:userdata, id: 0 }
-#    requirements:
-#        id: \d+
-
 _admin_grouplist:
-    pattern: /admin/grouplist/{page}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:grouplist, page: 1 }
+    pattern: /admin/group/list
+    defaults: { _controller: opensixt.user_admin.controller.group:listAction, page: 1 }
+    requirements:
+      page: \d+
+      _method: get
 
 _admin_group:
     pattern: /admin/group/{id}
