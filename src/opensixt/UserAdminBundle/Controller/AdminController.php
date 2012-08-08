@@ -34,34 +34,6 @@ class AdminController extends Controller
     }
 
     /**
-     * Controller Action: grouplist
-     *
-     * @param int $page
-     * @return Response A Response instance
-     */
-    public function grouplistAction($page)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-        $gr = $em->getRepository('opensixtBikiniTranslateBundle:Groups');
-
-        $groupCount = $gr->getGroupCount();
-
-        $pagination = new Pagination($groupCount, $this->_paginationLimit, $page);
-        $paginationBar = $pagination->getPaginationBar();
-
-        $grouplist = $gr->getGroupListWithPagination(
-            $this->_paginationLimit,
-            $pagination->getOffset());
-
-        return $this->render('opensixtUserAdminBundle:UserAdmin:grouplist.html.twig',
-            array(
-                'grouplist' => $grouplist,
-                'paginationbar' => $paginationBar,
-                )
-            );
-    }
-
-    /**
      * Controller Action: groupdata
      *
      * @param int $id

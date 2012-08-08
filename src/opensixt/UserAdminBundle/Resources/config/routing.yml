@@ -54,11 +54,33 @@ _admin_grouplist:
       page: \d+
       _method: get
 
-_admin_group:
-    pattern: /admin/group/{id}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:groupdata, id: 0 }
+_admin_group_create:
+    pattern: /admin/group/create
+    defaults: { _controller: opensixt.user_admin.controller.group:createAction }
     requirements:
         id: \d+
+        _method: get
+
+_admin_group_save_new:
+    pattern: /admin/group/save
+    defaults: { _controller: opensixt.user_admin.controller.group:saveNewAction }
+    requirements:
+        id: \d+
+        _method: post
+
+_admin_group:
+    pattern: /admin/group/{id}
+    defaults: { _controller: opensixt.user_admin.controller.group:viewAction }
+    requirements:
+        id: \d+
+        _method: get
+
+_admin_group_save:
+    pattern: /admin/group/{id}/save
+    defaults: { _controller: opensixt.user_admin.controller.group:saveAction }
+    requirements:
+        id: \d+
+        _method: post
 
 _admin_langlist:
     pattern: /admin/langlist/{page}

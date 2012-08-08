@@ -18,7 +18,7 @@
         <tbody>
         {% for item in pagination %}
             <tr>
-                <td><a href="{{ path('_admin_group', {'id':item.id}) }}">{{ item.name }}</a></td>
+                <td><a href="{{ path('_admin_group', {'id': item.id}) }}">{{ item.name }}</a></td>
                 <td>{{ item.description }}</td>
             </tr>
         {% else %}
@@ -41,7 +41,7 @@
 {% block sidebar %}
     <ul>
         <li class="backhome"><a href="{{ path('_user_admin_home') }}">{{ 'admin_home'|trans }}</a></li>
-        <li class="new"><a href="{{ path('_admin_group') }}">{{ 'new_group'|trans }}</a></li>
+        <li class="new"><a href="{{ path('_admin_group_create') }}">{{ 'new_group'|trans }}</a></li>
     </ul>
 
     <br/>
