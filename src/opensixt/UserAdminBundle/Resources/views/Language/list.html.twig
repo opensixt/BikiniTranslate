@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for item in langlist %}
+        {% for item in pagination %}
             <tr>
                 <td><a href="{{ path('_admin_lang', {'id':item.id}) }}">{{ item.locale }}</a></td>
                 <td>{{ item.description }}</td>
@@ -30,7 +30,7 @@
         <tfoot>
             <tr>
                 <td colspan="2">
-                    {% include 'opensixtUserAdminBundle:UserAdmin:paginationbar.html.twig' with {'target_route': '_admin_langlist', 'paginationbar' : paginationbar} %}
+                    {{ pagination.render()|raw }}
                 </td>
             </tr>
         </tfoot>

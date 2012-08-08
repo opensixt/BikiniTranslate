@@ -26,6 +26,7 @@ security:
                 check_path: /login_check
                 login_path: /login
                 default_target_path: /admin
+                use_referer: true
             logout:
                 target: /admin
             security: true

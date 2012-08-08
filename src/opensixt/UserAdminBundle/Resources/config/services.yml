@@ -1,7 +1,8 @@
 parameters:
-  opensixt.user_admin.controller.abstract.class: "opensixt\UserAdminBundle\Controller\AbstractController"
-  opensixt.user_admin.controller.user.class: "opensixt\UserAdminBundle\Controller\UserController"
-  opensixt.user_admin.controller.group.class: "opensixt\UserAdminBundle\Controller\GroupController"
+  opensixt.user_admin.controller.abstract.class: 'opensixt\UserAdminBundle\Controller\AbstractController'
+  opensixt.user_admin.controller.user.class: 'opensixt\UserAdminBundle\Controller\UserController'
+  opensixt.user_admin.controller.group.class: 'opensixt\UserAdminBundle\Controller\GroupController'
+  opensixt.user_admin.controller.language.class: 'opensixt\UserAdminBundle\Controller\LanguageController'
 
 services:
   opensixt.user_admin.controller.abstract:
@@ -25,5 +26,10 @@ services:
 
   opensixt.user_admin.controller.group:
     class: %opensixt.user_admin.controller.group.class%
+    parent: opensixt.user_admin.controller.abstract
+    scope: request
+
+  opensixt.user_admin.controller.language:
+    class: %opensixt.user_admin.controller.language.class%
     parent: opensixt.user_admin.controller.abstract
     scope: request

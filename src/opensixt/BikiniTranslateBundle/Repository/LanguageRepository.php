@@ -12,33 +12,12 @@ use Doctrine\ORM\EntityRepository;
 class LanguageRepository extends EntityRepository
 {
     /**
-     * Get list of locales from the DB
-     *
-     * @param int $limit
-     * @param int $offset
-     * @return array
+     * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getLangListWithPagination($limit, $offset)
+    public function getQueryForAllLanguages()
     {
-        $list = $this->findBy(
-            array(),                  // search criteria
-            array('locale' => 'asc'), // order by
-            $limit,                   // limit
-            $offset);                 // offset
-        return $list;
-    }
-
-    /**
-     * Get count of records in language table
-     *
-     * @return int
-     */
-    public function getLangCount()
-    {
-        $count = $this->createQueryBuilder('l')
-            ->select('COUNT(l)')
-            ->getQuery()
-            ->getSingleScalarResult();
-        return $count;
+        $q = $this->createQueryBuilder('l')
+                  ->select('l');
+        return $q;
     }
 }

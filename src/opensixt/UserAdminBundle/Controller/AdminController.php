@@ -34,37 +34,6 @@ class AdminController extends Controller
     }
 
     /**
-     * Controller Action: langlist - Languages
-     *
-     * @param int $page
-     * @return Response A Response instance
-     */
-    public function langlistAction($page = 1)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-        $lr = $em->getRepository('opensixtBikiniTranslateBundle:Language');
-
-        $langCount = $lr->getLangCount();
-
-        $pagination = new Pagination(
-            $langCount,
-            $this->_paginationLimit,
-            $page);
-        $paginationBar = $pagination->getPaginationBar();
-
-        $langList = $lr->getLangListWithPagination(
-            $this->_paginationLimit,
-            $pagination->getOffset());
-
-        return $this->render('opensixtUserAdminBundle:UserAdmin:langlist.html.twig',
-            array(
-                'langlist' => $langList,
-                'paginationbar' => $paginationBar,
-                )
-            );
-    }
-
-    /**
      * Controller Action: langdata
      *
      * @param int $id
