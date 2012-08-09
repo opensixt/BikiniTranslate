@@ -18,7 +18,7 @@ class EditText extends HandleText {
     /**
      * @var int
      */
-    public $_exportChunkLimit;
+    public $exportChunkLimit;
 
     public function __construct($doctrine, $locale)
     {
@@ -59,14 +59,6 @@ class EditText extends HandleText {
      */
     public function getData($locale, $resources)
     {
-        // Exceptions
-        /*if (!$this->_locale) {
-            throw new \Exception(__METHOD__ . ': _locale is not set. Please set it with ' . __CLASS__ . '::setLocale() !');
-        }
-        if (empty($this->_resources)) {
-            throw new \Exception(__METHOD__ . ': _resources is not set. Please set it with ' . __CLASS__ . '::setResources() !');
-        }*/
-
         $data = array();
 
         $this->_textRepository->setCommonLanguage($this->_commonLanguage);
@@ -104,11 +96,11 @@ class EditText extends HandleText {
     public function updateTexts(array $texts)
     {
         // Exception
-        if (!isset($this->_revisionControlMode)) {
-            throw new \Exception(__METHOD__ . ': _revisionControlMode is not set. Please set text_revision_control in parameters.yml !');
+        if (!isset($this->revisionControlMode)) {
+            throw new \Exception(__METHOD__ . ': revisionControlMode is not set. Please set text_revision_control in parameters.yml !');
         }
 
-        $this->_textRepository->setTextRevisionControl($this->_revisionControlMode);
+        $this->_textRepository->setTextRevisionControl($this->revisionControlMode);
 
         if (!empty($texts)) {
             foreach ($texts as $key => $value) {
@@ -133,9 +125,9 @@ class EditText extends HandleText {
                 $elem['target']['target'] = $elem['source'];
             }
         }
-        if (!empty($this->_exportChunkLimit)) {
-            // chunks an array into $this->_exportChunkLimit large chunks
-            $chunks = array_chunk($data, $this->_exportChunkLimit);
+        if (!empty($this->exportChunkLimit)) {
+            // chunks an array into $this->exportChunkLimit large chunks
+            $chunks = array_chunk($data, $this->exportChunkLimit);
         } else {
             $chunks[0] = $data;
         }

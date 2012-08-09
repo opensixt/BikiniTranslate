@@ -35,11 +35,6 @@ class HandleText {
     protected $_locales;
 
     /**
-     * @var array
-     */
-    protected $_resources;
-
-    /**
      * @var string
      */
     protected $_commonLanguage;
@@ -52,7 +47,7 @@ class HandleText {
     /**
      * @var string
      */
-    public $_revisionControlMode;
+    public $revisionControlMode;
 
     /**
      * @var int
@@ -74,17 +69,6 @@ class HandleText {
     {
         $this->_em = $doctrine->getEntityManager();
         $this->_textRepository = $this->_em->getRepository(self::ENTITY_TEXT_NAME);
-    }
-
-    /**
-     * Sets resources
-     *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
-     * @param array $resources
-     */
-    public function setResources(array $resources)
-    {
-        $this->_resources = $resources;
     }
 
     /**

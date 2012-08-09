@@ -211,12 +211,12 @@ class TranslateController extends Controller
 
             // set search parameters
             $searcher->setSearchParameters($searchPhrase, $searchMode);
-            $searcher->setLocale($searchLanguage);
-            $searcher->setResources($searchResources);
-            $searcher->setPaginationPage($page);
 
             // get search results
-            $results = $searcher->getData();
+            $results = $searcher->getData(
+                $searchLanguage,
+                $searchResources,
+                $page);
         }
 
         // set default search language
@@ -301,12 +301,12 @@ class TranslateController extends Controller
 
             // set search parameters
             $searcher->setSearchParameters($searchPhrase);
-            $searcher->setLocale($searchLanguage);
-            $searcher->setResources($searchResources);
-            $searcher->setPaginationPage($page);
 
             // get search results
-            $results = $searcher->getData();
+            $results = $searcher->getData(
+                $searchLanguage,
+                $searchResources,
+                $page);
         }
 
 
@@ -383,14 +383,14 @@ class TranslateController extends Controller
         $searcher = $this->get('opensixt_flaggedtext');
 
         // set search parameters
-        $searcher->setLocale($searchLanguage);
         $searcher->setLocales(array_keys($locales));
-        $searcher->setResources($searchResources);
-        $searcher->setPaginationPage($page);
-        $searcher->setExpiredDate(date("Y-m-d"));
 
         // get search results
-        $results = $searcher->getData();
+        $results = $searcher->getData(
+            $searchLanguage,
+            $searchResources,
+            $page,
+            date("Y-m-d"));
 
         $form = $this->createFormBuilder()
             ->add('resource', 'choice', array(
@@ -448,13 +448,10 @@ class TranslateController extends Controller
         $searcher = $this->get('opensixt_flaggedtext');
 
         // set search parameters
-        $searcher->setLocale($searchLanguage);
         $searcher->setLocales(array_keys($locales));
-        $searcher->setResources($searchResources);
-        $searcher->setPaginationPage($page);
 
         // get search results
-        $results = $searcher->getData();
+        $results = $searcher->getData($searchLanguage, $searchResources, $page);
 
         $form = $this->createFormBuilder()
             ->add('resource', 'choice', array(
@@ -514,11 +511,10 @@ class TranslateController extends Controller
 
             $copyLang = $this->get('opensixt_copydomain');
 
-            $copyLang->setDomainFrom($lang['from']);
-            $copyLang->setDomainTo($lang['to']);
-            $copyLang->setResources(array_keys($resources));
-
-            $translationsCount = $copyLang->copyLanguage();
+            $translationsCount = $copyLang->copyLanguage(
+                $lang['from'],
+                $lang['to'],
+                array_keys($resources));
             $translateMade = 'done';
         }
 
@@ -542,7 +538,6 @@ class TranslateController extends Controller
         $templateParam = array(
             'form'          => $form->createView(),
         );
-
         if (!empty($translationsCount)) {
             $templateParam['translationsCount'] = $translationsCount;
         }
@@ -578,10 +573,6 @@ class TranslateController extends Controller
 
             $copyRes = $this->get('opensixt_copydomain');
 
-            $copyRes->setDomainFrom($res['from']);
-            $copyRes->setDomainTo($res['to']);
-            $copyRes->setResources(array_keys($resources)); // set available resources
-
             if (!empty($lang)) {
                 $arrLang = array($lang);
             } else {
@@ -589,7 +580,10 @@ class TranslateController extends Controller
             }
             $copyRes->setLocales($arrLang);
 
-            $translationsCount = $copyRes->copyResource();
+            $translationsCount = $copyRes->copyResource(
+                    $res['from'],
+                    $res['to'],
+                    array_keys($resources));
             $translateMade = 'done';
         }
 

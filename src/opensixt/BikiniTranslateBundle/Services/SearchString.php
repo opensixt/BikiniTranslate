@@ -40,36 +40,21 @@ class SearchString extends HandleText {
         }
         $searchPhrase = '%' . $searchPhrase . '%';
         //TODO: sanitize input, fulltext search (MATCH...AGAINST....)
-        $this->setSearchString($searchPhrase);
-    }
-
-    /**
-     * Sets search string
-     *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
-     * @param string $searchString
-     */
-    public function setSearchString($searchString)
-    {
-        $this->_searchString = $searchString;
+        $this->_searchString = $searchPhrase;
     }
 
     /**
      * Returns search results and pagination data
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param int $locale
+     * @param array $resources
+     * @param int $page
      * @return array
      * @throws \Exception
      */
-    public function getData()
+    public function getData($locale, $resources, $page)
     {
         // Exceptions
-        if (!$this->_locale) {
-            throw new \Exception(__METHOD__ . ': _locale is not set. Please set it with ' . __CLASS__ . '::setLocale() !');
-        }
-        if (empty($this->_resources)) {
-            throw new \Exception(__METHOD__ . ': _resources is not set. Please set it with ' . __CLASS__ . '::setResources() !');
-        }
         if (!$this->_searchString) {
             throw new \Exception(__METHOD__ . ': _searchString is not set. Please set it with ' . __CLASS__ . '::setSearchParameters() !');
         }
@@ -81,14 +66,14 @@ class SearchString extends HandleText {
         // count of all results for the search parameters
         $textCount = $this->_textRepository->getTextCount(
             TextRepository::TASK_SEARCH_PHRASE_BY_LANG,
-            $this->_locale,
-            $this->_resources);
+            $locale,
+            $resources);
 
         // get pagination bar
         $pagination = new Pagination(
             $textCount,
             $this->_paginationLimit,
-            $this->_paginationPage);
+            $page);
         $data['paginationBar'] = $pagination->getPaginationBar();
 
         // get search results

@@ -16,8 +16,8 @@ services:
         class: %opensixt_edittext.class%
         arguments: [@doctrine, %common_language%]
         properties:
-            _revisionControlMode: %text_revision_control%
-            _exportChunkLimit: %export_chunk_limit%
+            revisionControlMode: %text_revision_control%
+            exportChunkLimit: %export_chunk_limit%
 
     opensixt_flaggedtext:
         class: %opensixt_flaggedtext.class%
@@ -25,7 +25,9 @@ services:
 
     opensixt_copydomain:
         class: %opensixt_copydomain.class%
-        arguments: [@doctrine, %common_language%, %text_revision_control%]
+        arguments: [@doctrine, %common_language%]
+        properties:
+            revisionControlMode: %text_revision_control%
 
     bikini_export:
         class: %bikini_export.class%

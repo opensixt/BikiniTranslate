@@ -14,9 +14,6 @@ use opensixt\BikiniTranslateBundle\Helpers\Pagination;
  */
 class FlaggedText extends HandleText {
 
-    protected $_expiredDate;
-
-
     public function __construct($doctrine)
     {
         $this->_paginationLimit = 15;
@@ -24,27 +21,20 @@ class FlaggedText extends HandleText {
     }
 
     /**
-     * Set expired date
-     *
-     * @param date $date
-     */
-    public function setExpiredDate($date)
-    {
-        $this->_expiredDate = $date;
-    }
-
-    /**
      * Returns search results and pagination data
      * if $this->_date is set - get expired texts
      * else returns non released texts
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+     * @param int $locale
+     * @param array $resources
+     * @param int $page
+     * @param date $expiredDate
      * @return array
      */
-    public function getData()
+    public function getData($locale, $resources, $page, $expiredDate = null)
     {
-        if (!empty($this->_expiredDate)) {
-            $this->_textRepository->setDate($this->_expiredDate);
+        if (!empty($expiredDate)) {
+            $this->_textRepository->setDate($expiredDate);
         }
         if (count($this->_locales)) {
             $this->_textRepository->setLocales($this->_locales);
@@ -55,14 +45,14 @@ class FlaggedText extends HandleText {
         // count of all results for the search parameters
         $textCount = $this->_textRepository->getTextCount(
             TextRepository::TASK_SEARCH_FLAGGED_TEXTS,
-            $this->_locale,
-            $this->_resources);
+            $locale,
+            $resources);
 
         // get pagination bar
         $pagination = new Pagination(
             $textCount,
             $this->_paginationLimit,
-            $this->_paginationPage);
+            $page);
         $data['paginationBar'] = $pagination->getPaginationBar();
 
         // get search results
