@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -17,8 +18,8 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
  * opensixt\BikiniTranslateBundle\Entity\User
  *
  * @ORM\Table(name="user")
- * @Assert\UniqueEntity("username")
- * @Assert\UniqueEntity("email")
+ * @UniqueEntity("username")
+ * @UniqueEntity("email")
  * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\UserRepository")
  */
 class User implements AdvancedUserInterface
