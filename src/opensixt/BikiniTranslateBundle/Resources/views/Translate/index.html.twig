@@ -1,4 +1,4 @@
-{% extends "::layout.html.twig" %}
+{% extends 'opensixtBikiniTranslateBundle::base.html.twig' %}
 
 {% block title %}
     {{ 'admin_home'|trans }}
@@ -12,15 +12,5 @@
         {% set name = app.user.username %}
         <div class="message">{% trans %} hello %name% {% endtrans %}</div>
     {% endif %}
-
-{% endblock %}
-
-{% block sidebar %}
-
-    {% include 'opensixtBikiniTranslateBundle:Translate:translationtool_menu.html.twig' %}
-
-    <br/>
-
-    {% include 'opensixtBikiniTranslateBundle:Translate:useradmin_menu.html.twig' %}
 
 {% endblock %}

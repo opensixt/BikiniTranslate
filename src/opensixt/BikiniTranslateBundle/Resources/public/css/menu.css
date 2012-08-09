@@ -1,0 +1,12 @@
+.sidebar ul li {
+    padding: 5px;
+    margin-left: 20px;
+}
+
+.sidebar .menu_level_1 .current {
+    background: #efefef;
+}
+
+.sidebar .menu_level_1 li:hover {
+    background: #eee;
+}

@@ -182,6 +182,38 @@
                 <source>releasetext_explanation</source>
                 <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
             </trans-unit>
+            <trans-unit id="250">
+                <source>menu.translation</source>
+                <target>Translation Tool</target>
+            </trans-unit>
+            <trans-unit id="251">
+                <source>menu.translation.release_text</source>
+                <target>Activate Translations</target>
+            </trans-unit>
+            <trans-unit id="252">
+                <source>menu.translation.edit_text</source>
+                <target>Translate</target>
+            </trans-unit>
+            <trans-unit id="253">
+                <source>menu.translation.search_string</source>
+                <target>Search</target>
+            </trans-unit>
+            <trans-unit id="254">
+                <source>menu.translation.change_text</source>
+                <target>Change</target>
+            </trans-unit>
+            <trans-unit id="255">
+                <source>menu.translation.clean_text</source>
+                <target>Delete Expired Texts</target>
+            </trans-unit>
+            <trans-unit id="256">
+                <source>menu.translation.copy_language</source>
+                <target>Copy Language Content</target>
+            </trans-unit>
+            <trans-unit id="257">
+                <source>menu.translation.copy_resource</source>
+                <target>Copy resource content</target>
+            </trans-unit>
 
         </body>
     </file>

@@ -21,15 +21,6 @@ body { line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px;
 .main { width: 700px; display: inline-block; float: left; padding: 20px; margin-bottom: 20px; }
 .sidebar { width: 239px; padding: 10px; display: inline-block; }
 
-.sidebar ul li {
-    padding: 5px;
-    padding-left: 20px;
-}
-
-.sidebar ul li:hover {
-    background: #eee;
-}
-
 .sidebar ul li.backhome {
     background: url(../icons/16x16/actions/go-home.png) no-repeat 0 5px;
 }

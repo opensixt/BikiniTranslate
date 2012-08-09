@@ -158,8 +158,26 @@
                 <source>results</source>
                 <target>Suchergebnisse</target>
             </trans-unit>
-
-
+            <trans-unit id="200">
+                <source>menu.administration</source>
+                <target>Administration</target>
+            </trans-unit>
+            <trans-unit id="201">
+                <source>menu.users</source>
+                <target>Benutzer</target>
+            </trans-unit>
+            <trans-unit id="202">
+                <source>menu.groups</source>
+                <target>Gruppen</target>
+            </trans-unit>
+            <trans-unit id="203">
+                <source>menu.languages</source>
+                <target>Sprachen</target>
+            </trans-unit>
+            <trans-unit id="204">
+                <source>menu.resources</source>
+                <target>Ressourcen</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

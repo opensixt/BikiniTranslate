@@ -21,3 +21,20 @@ services:
     opensixt_copydomain:
         class: %opensixt_copydomain.class%
         arguments: [@doctrine, %common_language%, %text_revision_control%]
+
+    opensixt.bikini_translate.menu_builder:
+        class: opensixt\BikiniTranslateBundle\Menu\MenuBuilder
+        properties:
+          factory: @knp_menu.factory
+          translator: @translator
+          eventDispatcher: @event_dispatcher
+          securityContext: @security.context
+
+    opensixt.bikini_translate.sidebar_menu:
+        class: Knp\Menu\MenuItem
+        factory_service: opensixt.bikini_translate.menu_builder
+        factory_method: createSidebarMenu
+        arguments: [@request]
+        scope: request
+        tags:
+            - { name: knp_menu.menu, alias: bikini_translate.sidebar_menu }

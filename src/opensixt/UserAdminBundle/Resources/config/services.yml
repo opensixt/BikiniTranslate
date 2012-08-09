@@ -47,3 +47,11 @@ services:
     scope: request
     properties:
       listNumItems: %opensixt.user_admin.controller.resource.list.num_items%
+
+  opensixt.user_admin.event_listener.menu_configure:
+    class: opensixt\UserAdminBundle\EventListener\ConfigureMenuListener
+    properties:
+      securityContext: @security.context
+      translator: @translator
+    tags:
+      - { name: kernel.event_listener, event: opensixt_bikini_translate.menu_configure, method: onMenuConfigure }

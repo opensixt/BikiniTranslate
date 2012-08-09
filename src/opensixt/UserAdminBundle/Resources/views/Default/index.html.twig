@@ -13,31 +13,4 @@
         <div class="message">{% trans %} hello %name% {% endtrans %}</div>
     {% endif %}
     
-{% endblock %}    
-    
-{% block sidebar %}
-
-<ul>
-    <li>
-        <a href="{{ path('_admin_userlist') }}">
-            {{ 'user_list'|trans }}
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('_admin_grouplist') }}">
-            {{ 'groups'|trans }}
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('_admin_langlist') }}">
-            {{ 'languages'|trans }}
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('_admin_reslist') }}">
-            {{ 'resources'|trans }}
-        </a>
-    </li>
-</ul>
-
 {% endblock %}
