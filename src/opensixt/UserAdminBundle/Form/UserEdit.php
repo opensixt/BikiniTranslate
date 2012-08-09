@@ -10,30 +10,18 @@ use \Symfony\Component\Form\FormError;
 
 class UserEdit extends AbstractType
 {
-    /** @var Translator */
-    public $translator;
-
-    /**
-     * @param Translator $translator
-     */
-    public function __construct(Translator $translator)
-    {
-        $this->translator = $translator;
-    }
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $translator = $this->translator;
-        $builder->add('username', 'text', array('label' => $translator->trans('username') . ': '))
-                ->add('email', 'email', array('label' => $translator->trans('email') . ': '))
-                ->add('isactive', 'checkbox', array('label' => $translator->trans('active') . ': ',
+        $builder->add('username', 'text', array('label' => 'username'))
+                ->add('email', 'email', array('label' => 'email'))
+                ->add('isactive', 'checkbox', array('label' => 'active',
                                                     'value' => 1,
                                                     'required' => false))
-                ->add('userroles', 'entity', array('label' => $translator->trans('roles') . ': ',
+                ->add('userroles', 'entity', array('label' => 'roles',
                                                    'class' => 'opensixt\BikiniTranslateBundle\Entity\Role',
                                                    'property' => 'label',
                                                    'multiple' => true,
@@ -49,12 +37,10 @@ class UserEdit extends AbstractType
                                                     'multiple' => true,
                                                     'expanded' => true))
                 ->add('password', 'repeated', array('type' => 'password',
-                                                    'first_options' => array('property_path' => false,
-                                                                             'required' => false,
-                                                                             'label' => $translator->trans('new_password') . ': '),
-                                                    'second_options' => array('label' => $translator->trans('confirm_password') . ': ',
-                                                                              'property_path' => false,
-                                                                              'required' => false)));
+                                                    'required' => 'create' === $options['intention'],
+                                                    'invalid_message' => 'Passwords have to be equal',
+                                                    'first_options' => array('label' => 'new_password'),
+                                                    'second_options' => array('label' => 'confirm_password')));
     }
 
     /**

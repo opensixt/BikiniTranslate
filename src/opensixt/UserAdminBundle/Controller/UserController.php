@@ -82,16 +82,21 @@ class UserController extends AbstractController
         $form = $this->getEditUserFormForUser($user);
 
         $form->bind($this->request);
+
         if ($form->isValid()) {
+            $newPassword = $form->getData()->getPassword();
+            if (!empty($newPassword)) {
+                $user->setPassword($newPassword);
+            }
+
             $this->em->persist($user);
             $this->em->flush();
 
             return $this->redirect($this->generateUrl('_admin_user', array('id' => $id)));
-        } else {
-            return $this->templating->renderResponse('opensixtUserAdminBundle:User:view.html.twig',
-                                                             array('user' => $user,
-                                                                   'form' => $form->createView()));
         }
+        return $this->templating->renderResponse('opensixtUserAdminBundle:User:view.html.twig',
+                                                         array('user' => $user,
+                                                               'form' => $form->createView()));
     }
 
     /**
@@ -114,17 +119,12 @@ class UserController extends AbstractController
     {
         $this->requireAdminUser();
 
-        $user = new User();
+        $form = $this->getEditUserFormForUser();
 
-        $form = $this->getEditUserFormForUser($user);
         $form->bind($this->request);
 
         if ($form->isValid()) {
-            if ($form->get('newPassword')->getData()) {
-                if ($form['confirmPassword']->getData() == $form['newPassword']->getData()) {
-                    $user->setPassword($form['newPassword']->getData());
-                }
-            }
+            $user = $form->getData();
 
             $this->em->persist($user);
             $this->em->flush();
@@ -189,7 +189,13 @@ class UserController extends AbstractController
      */
     private function getEditUserFormForUser(User $user = null)
     {
+        $intention = 'edit';
+        if (null === $user) {
+            $intention = 'create';
+            $user = new User();
+        }
+
         return $this->formFactory
-                    ->create(new UserEditForm($this->translator), $user);
+                    ->create(new UserEditForm(), $user, array('intention' => $intention));
     }
 }
