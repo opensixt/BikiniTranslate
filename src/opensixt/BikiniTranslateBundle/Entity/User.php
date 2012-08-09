@@ -7,11 +7,9 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
@@ -19,8 +17,8 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
  * opensixt\BikiniTranslateBundle\Entity\User
  *
  * @ORM\Table(name="user")
- * @UniqueEntity("username")
- * @UniqueEntity("email")
+ * @Assert\UniqueEntity("username")
+ * @Assert\UniqueEntity("email")
  * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\UserRepository")
  */
 class User implements AdvancedUserInterface
@@ -40,6 +38,9 @@ class User implements AdvancedUserInterface
     /**
      * @var string $username
      *
+     * @Assert\NotBlank()
+     * @Assert\MinLength(limit=5)
+     *
      * @ORM\Column(name="username", type="string", length=32, nullable=false, unique=true)
      */
     private $username;
@@ -54,8 +55,9 @@ class User implements AdvancedUserInterface
     /**
      * @var text $email
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable=false, unique=true)
      * @Assert\Email()
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=false, unique=true)
      */
     private $email;
 
@@ -112,9 +114,7 @@ class User implements AdvancedUserInterface
     protected $salt;
 
     /**
-     * Constructor
      *
-     * @return void
      */
     public function __construct()
     {
@@ -219,7 +219,7 @@ class User implements AdvancedUserInterface
     /**
      * Set created
      *
-     * @param datetime $created
+     * @param \Datetime $created
      */
     public function setCreated($created)
     {
@@ -229,7 +229,7 @@ class User implements AdvancedUserInterface
     /**
      * Get created
      *
-     * @return datetime
+     * @return \Datetime
      */
     public function getCreated()
     {
@@ -239,7 +239,8 @@ class User implements AdvancedUserInterface
     /**
      * adds a role to userRoles ArrayCollection
      *
-     * @return boolean
+     * @param mixed $role
+     * @return bool
      */
     public function addUserRole($role)
     {
@@ -247,8 +248,7 @@ class User implements AdvancedUserInterface
     }
 
     /**
-     * set userRoles
-     * Set Roles as ArrayCollection
+     * @param array $roles
      */
     public function setUserRoles(array $roles = array())
     {
@@ -366,10 +366,5 @@ class User implements AdvancedUserInterface
     public function isEnabled()
     {
         return $this->isactive;
-    }
-
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraint('username', new NotBlank());
     }
 }
