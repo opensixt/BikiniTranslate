@@ -1,0 +1,14 @@
+<div>
+    {{ form_label(form.username) }}
+    {{ form_errors(form.username) }}
+    {{ form_widget(form.username) }}
+</div>
+<div>
+    {{ form_label(form.email) }}
+    {{ form_errors(form.email) }}
+    {{ form_widget(form.email) }}
+</div>
+
+{{ form_rest(form) }}
+
+<input type="submit" value="{{ 'submit'|trans }}"/>
