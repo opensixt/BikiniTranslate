@@ -38,28 +38,23 @@ class UserEdit extends AbstractType
                                                    'property' => 'label',
                                                    'multiple' => true,
                                                    'expanded' => true))
-                ->add('userlanguages', 'entity', array('label' => $translator->trans('languages') . ': ',
+                ->add('userlanguages', 'entity', array('label' => 'languages',
                                                        'class' => 'opensixt\BikiniTranslateBundle\Entity\Language',
                                                        'property' => 'locale',
                                                        'multiple' => true,
                                                        'expanded' => true))
-                ->add('usergroups', 'entity', array('label' => $translator->trans('groups') . ': ',
+                ->add('usergroups', 'entity', array('label' => 'groups',
                                                     'class' => 'opensixt\BikiniTranslateBundle\Entity\Groups',
                                                     'property' => 'name',
                                                     'multiple' => true,
                                                     'expanded' => true))
-                ->add('newPassword', 'password', array('label' => $translator->trans('new_password') . ': ',
-                                                       'property_path' => false,
-                                                       'required' => false))
-                ->add('confirmPassword', 'password', array('label' => $translator->trans('confirm_password') . ': ',
-                                                           'property_path' => false,
-                                                           'required' => false))
-                ->addValidator(new CallbackValidator(function($form) use ($translator)
-                    {
-                        if($form['confirmPassword']->getData() != $form['newPassword']->getData()) {
-                            $form['confirmPassword']->addError(new FormError($translator->trans('passwords_must_match')));
-                        }
-                    }));
+                ->add('password', 'repeated', array('type' => 'password',
+                                                    'first_options' => array('property_path' => false,
+                                                                             'required' => false,
+                                                                             'label' => $translator->trans('new_password') . ': '),
+                                                    'second_options' => array('label' => $translator->trans('confirm_password') . ': ',
+                                                                              'property_path' => false,
+                                                                              'required' => false)));
     }
 
     /**
