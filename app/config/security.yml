@@ -26,6 +26,7 @@ security:
                 check_path: /login_check
                 login_path: /login
                 default_target_path: /admin
+                use_referer: true
             logout:
                 target: /admin
             security: true
@@ -56,3 +57,6 @@ security:
         - { path: /admin/.*, roles: ROLE_USER }
         - { path: /translate/.*, roles: ROLE_USER }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+    acl:
+         connection: default

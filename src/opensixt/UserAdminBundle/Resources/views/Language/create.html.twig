@@ -1,0 +1,26 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    {{ 'create_language'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ 'create_language'|trans }}</h3>
+
+    <form action="{{ path('_admin_language_save_new') }}" method="post" {{ form_enctype(form) }}>
+        <div>
+            {{ form_label(form.locale) }}
+            {{ form_errors(form.locale) }}
+            {{ form_widget(form.locale) }}
+        </div>
+        <div>
+            {{ form_label(form.description) }}
+            {{ form_errors(form.description) }}
+            {{ form_widget(form.description) }}
+        </div>
+        {{ form_rest(form) }}
+        <input type="submit" value="{{ 'submit'|trans }}"/>
+    </form>
+
+{% endblock %}

@@ -38,7 +38,9 @@
         "sensio/framework-extra-bundle": "dev-master",
         "sensio/generator-bundle": "dev-master",
         "jms/security-extra-bundle": "1.1.*",
-        "jms/di-extra-bundle": "1.0.*"
+        "jms/di-extra-bundle": "1.0.*",
+        "knplabs/knp-paginator-bundle": "*",
+        "knplabs/knp-menu-bundle": "*"
     },
     "minimum-stability": "beta",
     "scripts": {

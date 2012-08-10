@@ -1,0 +1,15 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    {{ 'user'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ 'user'|trans }}</h3>
+
+    <form action="{{ path('_admin_user_save', { 'id': user.getId() }) }}" method="post" {{ form_enctype(form) }}>
+        {% include 'opensixtUserAdminBundle:User:form.html.twig' %}
+    </form>
+
+{% endblock %}

@@ -1,3 +1,20 @@
+_home:
+    pattern: /
+    defaults: { _controller: opensixtBikiniTranslateBundle:Default:index, page: 'index' }
+_page:
+    pattern: /{page}.html
+    defaults: { _controller: opensixtBikiniTranslateBundle:Default:index, page: 'index' }
+
+_login:
+    pattern:  /login
+    defaults: { _controller: opensixtBikiniTranslateBundle:Security:login }
+
+_login_check:
+    pattern: /login_check
+
+_logout:
+    pattern: /logout
+
 _translate_home:
     pattern: /translate/
     defaults: { _controller: opensixtBikiniTranslateBundle:Translate:index }

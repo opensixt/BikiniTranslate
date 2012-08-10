@@ -1,59 +1,143 @@
-_user_admin_login:
-    pattern:  /login
-    defaults: { _controller: opensixtUserAdminBundle:Security:login }
-
-_user_admin_check:
-    pattern: /login_check
-
-_user_admin_logout:
-    pattern: /logout
-
 _user_admin_home:
     pattern: /admin/
-    defaults: { _controller: opensixtUserAdminBundle:Admin:index }
+    defaults: { _controller: opensixtUserAdminBundle:Default:index }
 
 _admin_userlist:
-    pattern: /admin/userlist/{page}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:userlist, page: 1 }
+    pattern: /admin/user/list/{page}
+    defaults: { _controller: opensixt.user_admin.controller.user:listAction, page: 1 }
     requirements:
         page: \d+
+        _method: get
+
+_admin_user_create:
+    pattern: /admin/user/create
+    defaults: { _controller: opensixt.user_admin.controller.user:createAction }
+    requirements:
+        id: \d+
+        _method: get
+
+_admin_user_save_new:
+    pattern: /admin/user/save
+    defaults: { _controller: opensixt.user_admin.controller.user:saveNewAction }
+    requirements:
+        id: \d+
+        _method: post
 
 _admin_user:
     pattern: /admin/user/{id}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:userdata, id: 0 }
+    defaults: { _controller: opensixt.user_admin.controller.user:viewAction }
     requirements:
         id: \d+
+        _method: get
+
+_admin_user_save:
+    pattern: /admin/user/{id}/save
+    defaults: { _controller: opensixt.user_admin.controller.user:saveAction }
+    requirements:
+        id: \d+
+        _method: post
 
 _admin_grouplist:
-    pattern: /admin/grouplist/{page}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:grouplist, page: 1 }
+    pattern: /admin/group/list/{page}
+    defaults: { _controller: opensixt.user_admin.controller.group:listAction, page: 1 }
+    requirements:
+      page: \d+
+      _method: get
+
+_admin_group_create:
+    pattern: /admin/group/create
+    defaults: { _controller: opensixt.user_admin.controller.group:createAction }
+    requirements:
+        id: \d+
+        _method: get
+
+_admin_group_save_new:
+    pattern: /admin/group/save
+    defaults: { _controller: opensixt.user_admin.controller.group:saveNewAction }
+    requirements:
+        id: \d+
+        _method: post
 
 _admin_group:
     pattern: /admin/group/{id}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:groupdata, id: 0 }
+    defaults: { _controller: opensixt.user_admin.controller.group:viewAction }
     requirements:
         id: \d+
+        _method: get
+
+_admin_group_save:
+    pattern: /admin/group/{id}/save
+    defaults: { _controller: opensixt.user_admin.controller.group:saveAction }
+    requirements:
+        id: \d+
+        _method: post
 
 _admin_langlist:
-    pattern: /admin/langlist/{page}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:langlist, page: 1 }
+    pattern: /admin/language/list/{page}
+    defaults: { _controller: opensixt.user_admin.controller.language:listAction, page: 1 }
     requirements:
-        page: \d+
+      page: \d+
+      _method: get
 
-_admin_lang:
-    pattern: /admin/lang/{id}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:langdata, id: 0 }
+_admin_language_create:
+    pattern: /admin/language/create
+    defaults: { _controller: opensixt.user_admin.controller.language:createAction }
     requirements:
         id: \d+
+        _method: get
+
+_admin_language_save_new:
+    pattern: /admin/language/save
+    defaults: { _controller: opensixt.user_admin.controller.language:saveNewAction }
+    requirements:
+        id: \d+
+        _method: post
+
+_admin_language:
+    pattern: /admin/language/{id}
+    defaults: { _controller: opensixt.user_admin.controller.language:viewAction }
+    requirements:
+        id: \d+
+        _method: get
+
+_admin_language_save:
+    pattern: /admin/language/{id}/save
+    defaults: { _controller: opensixt.user_admin.controller.language:saveAction }
+    requirements:
+        id: \d+
+        _method: post
 
 _admin_reslist:
-    pattern: /admin/reslist/{page}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:reslist, page: 1 }
+    pattern: /admin/resource/list/{page}
+    defaults: { _controller: opensixt.user_admin.controller.resource:listAction, page: 1 }
     requirements:
-        page: \d+
+      page: \d+
+      _method: get
+
+_admin_resource_create:
+    pattern: /admin/resource/create
+    defaults: { _controller: opensixt.user_admin.controller.resource:createAction }
+    requirements:
+        id: \d+
+        _method: get
+
+_admin_resource_save_new:
+    pattern: /admin/resource/save
+    defaults: { _controller: opensixt.user_admin.controller.resource:saveNewAction }
+    requirements:
+        id: \d+
+        _method: post
 
 _admin_resource:
     pattern: /admin/resource/{id}
-    defaults: { _controller: opensixtUserAdminBundle:Admin:resdata, id: 0 }
+    defaults: { _controller: opensixt.user_admin.controller.resource:viewAction }
     requirements:
         id: \d+
+        _method: get
+
+_admin_resource_save:
+    pattern: /admin/resource/{id}/save
+    defaults: { _controller: opensixt.user_admin.controller.resource:saveAction }
+    requirements:
+        id: \d+
+        _method: post

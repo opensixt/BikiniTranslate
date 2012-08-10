@@ -198,8 +198,38 @@
                 <source>sendtots_success</source>
                 <target>Success message!</target>
             </trans-unit>
-
-
+            <trans-unit id="250">
+                <source>menu.translation</source>
+                <target>Übersetzungs Tool</target>
+            </trans-unit>
+            <trans-unit id="251">
+                <source>menu.translation.release_text</source>
+                <target>Übersetzungen freischalten</target>
+            </trans-unit>
+            <trans-unit id="252">
+                <source>menu.translation.edit_text</source>
+                <target>Übersetzen</target>
+            </trans-unit>
+            <trans-unit id="253">
+                <source>menu.translation.search_string</source>
+                <target>Suchen</target>
+            </trans-unit>
+            <trans-unit id="254">
+                <source>menu.translation.change_text</source>
+                <target>Ändern</target>
+            </trans-unit>
+            <trans-unit id="255">
+                <source>menu.translation.clean_text</source>
+                <target>Löschen veralteter Texte</target>
+            </trans-unit>
+            <trans-unit id="256">
+                <source>menu.translation.copy_language</source>
+                <target>Sprachinhalte kopieren</target>
+            </trans-unit>
+            <trans-unit id="257">
+                <source>menu.translation.copy_resource</source>
+                <target>Ressourceinhalte kopieren</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

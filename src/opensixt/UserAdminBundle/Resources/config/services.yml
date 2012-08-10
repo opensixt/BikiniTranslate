@@ -1,7 +1,57 @@
-#parameters:
-    #opensixt_pagination.class: opensixt\UserAdminBundle\PaginationBar
+parameters:
+  opensixt.user_admin.controller.abstract.class: 'opensixt\UserAdminBundle\Controller\AbstractController'
+  opensixt.user_admin.controller.user.class: 'opensixt\UserAdminBundle\Controller\UserController'
+  opensixt.user_admin.controller.group.class: 'opensixt\UserAdminBundle\Controller\GroupController'
+  opensixt.user_admin.controller.language.class: 'opensixt\UserAdminBundle\Controller\LanguageController'
+  opensixt.user_admin.controller.resource.class: 'opensixt\UserAdminBundle\Controller\ResourceController'
 
-#services:
-    #opensixt_pagination:
-        #class: %opensixt_pagination.class%
-        #arguments: []
+services:
+  opensixt.user_admin.controller.abstract:
+    class: %opensixt.user_admin.controller.abstract.class%
+    abstract: true
+    properties:
+      request: @request
+      translator: @translator
+      em: @doctrine.orm.entity_manager
+      formFactory: @form.factory
+      templating: @templating
+      paginator: @knp_paginator
+      securityContext: @security.context
+      aclProvider: @security.acl.provider
+      router: @router
+
+  opensixt.user_admin.controller.user:
+    class: %opensixt.user_admin.controller.user.class%
+    parent: opensixt.user_admin.controller.abstract
+    scope: request
+    properties:
+      listNumItems: %opensixt.user_admin.controller.user.list.num_items%
+
+  opensixt.user_admin.controller.group:
+    class: %opensixt.user_admin.controller.group.class%
+    parent: opensixt.user_admin.controller.abstract
+    scope: request
+    properties:
+      listNumItems: %opensixt.user_admin.controller.group.list.num_items%
+
+  opensixt.user_admin.controller.language:
+    class: %opensixt.user_admin.controller.language.class%
+    parent: opensixt.user_admin.controller.abstract
+    scope: request
+    properties:
+      listNumItems: %opensixt.user_admin.controller.language.list.num_items%
+
+  opensixt.user_admin.controller.resource:
+    class: %opensixt.user_admin.controller.resource.class%
+    parent: opensixt.user_admin.controller.abstract
+    scope: request
+    properties:
+      listNumItems: %opensixt.user_admin.controller.resource.list.num_items%
+
+  opensixt.user_admin.event_listener.menu_configure:
+    class: opensixt\UserAdminBundle\EventListener\ConfigureMenuListener
+    properties:
+      securityContext: @security.context
+      translator: @translator
+    tags:
+      - { name: kernel.event_listener, event: opensixt_bikini_translate.menu_configure, method: onMenuConfigure }
