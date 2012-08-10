@@ -4,6 +4,7 @@ parameters:
     opensixt_flaggedtext.class: opensixt\BikiniTranslateBundle\Services\FlaggedText
     opensixt_copydomain.class: opensixt\BikiniTranslateBundle\Services\CopyDomain
     bikini_export.class: opensixt\BikiniTranslateBundle\Helpers\BikiniExport
+    opensixt.bikini_translate.acl.user_permissions.class: opensixt\BikiniTranslateBundle\Acl\UserPermissions
 
 services:
     opensixt_searchstring:
@@ -46,3 +47,8 @@ services:
         scope: request
         tags:
             - { name: knp_menu.menu, alias: bikini_translate.sidebar_menu }
+
+    opensixt.bikini_translate.acl.user_permissions:
+        class: %opensixt.bikini_translate.acl.user_permissions.class%
+        properties:
+          aclProvider: @security.acl.provider

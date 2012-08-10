@@ -23,6 +23,9 @@ class UserController extends AbstractController
     /** @var int */
     public $listNumItems;
 
+    /** @var \opensixt\BikiniTranslateBundle\Acl\UserPermissions */
+    public $userPermissions;
+
     /**
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
@@ -130,35 +133,13 @@ class UserController extends AbstractController
             $this->em->persist($user);
             $this->em->flush();
 
-            $this->initAclForNewUser($user);
+            $this->userPermissions->initAclForNewUser($user);
 
             return $this->redirect($this->generateUrl('_admin_userlist'));
         }
 
         return $this->templating->renderResponse('opensixtUserAdminBundle:User:create.html.twig',
                                                  array('form' => $form->createView()));
-    }
-
-    /**
-     * @param User $user
-     */
-    private function initAclForNewUser(User $user)
-    {
-        $acl = $this->aclProvider->createAcl(ObjectIdentity::fromDomainObject($user));
-
-        $userIdentity = new UserSecurityIdentity($user->getUsername(), get_class($user));
-        $mask = new MaskBuilder();
-        $mask->add('view')
-             ->add(256);
-
-        $acl->insertObjectAce($userIdentity, $mask->get());
-
-        $roleIdentity = new RoleSecurityIdentity('ROLE_ADMIN');
-        $mask->reset();
-        $mask->add('master');
-        $acl->insertObjectAce($roleIdentity, $mask->get());
-
-        $this->aclProvider->updateAcl($acl);
     }
 
     /**
