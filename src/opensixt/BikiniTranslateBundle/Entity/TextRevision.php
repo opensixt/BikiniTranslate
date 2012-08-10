@@ -58,22 +58,4 @@ class TextRevision
     {
         return $this->target;
     }
-
-    /** @ORM\PrePersist */
-    public function onPrePersist()
-    {
-        var_dump(array('changed from prePersist callback!', $this->getId(), $this->getTarget()));
-    }
-
-    /** @ORM\PostPersist */
-    public function onPostPersist()
-    {
-        var_dump(array('changed from postPersist callback!', $this->getId(), $this->getTarget()));
-    }
-
-    /** @ORM\OnFlush */
-    public function onFlush($args)
-    {
-        var_dump(array(count($args), 'changed from onFlush callback!', $this->getId(), $this->getTarget()));
-    }
 }

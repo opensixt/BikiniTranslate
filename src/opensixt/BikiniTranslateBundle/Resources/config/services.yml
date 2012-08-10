@@ -5,6 +5,7 @@ parameters:
     opensixt_copydomain.class: opensixt\BikiniTranslateBundle\Services\CopyDomain
     bikini_export.class: opensixt\BikiniTranslateBundle\Helpers\BikiniExport
     opensixt.bikini_translate.acl.user_permissions.class: opensixt\BikiniTranslateBundle\Acl\UserPermissions
+    opensixt.bikini_translate.listener.doctrine.flush.class: opensixt\BikiniTranslateBundle\Listener\Doctrine\Flush
 
 services:
     opensixt_searchstring:
@@ -54,3 +55,9 @@ services:
         class: %opensixt.bikini_translate.acl.user_permissions.class%
         properties:
           aclProvider: @security.acl.provider
+
+    opensixt.bikini_translate.listener.doctrine.flush:
+        class: %opensixt.bikini_translate.listener.doctrine.flush.class%
+        tags:
+          - { name: doctrine.event_listener, event: postFlush }
+          - { name: doctrine.event_listener, event: onFlush }

@@ -715,4 +715,18 @@ class TextRepository extends EntityRepository
 
     }
 
+    /**
+     * @param \opensixt\BikiniTranslateBundle\Entity\TextRevision $target
+     * @return \opensixt\BikiniTranslateBundle\Entity\Text[]
+     */
+    public function findOneByTarget(TextRevision $target)
+    {
+        $qb = $this->createQueryBuilder('t');
+        $qb ->select('t')
+            ->join('t.target', 'ta')
+            ->where('ta.id = ?1');
+        $result = $qb->getQuery()->execute(array('1' => $target->getId()));
+
+        return current($result);
+    }
 }
