@@ -26,6 +26,7 @@ services:
     scope: request
     properties:
       listNumItems: %opensixt.user_admin.controller.user.list.num_items%
+      userPermissions: @opensixt.bikini_translate.acl.user_permissions
 
   opensixt.user_admin.controller.group:
     class: %opensixt.user_admin.controller.group.class%
