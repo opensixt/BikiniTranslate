@@ -197,6 +197,7 @@
             <trans-unit id="240">
                 <source>sendtots_success</source>
                 <target>Success message!</target>
+            </trans-unit>
             <trans-unit id="250">
                 <source>menu.translation</source>
                 <target>Translation Tool</target>
