@@ -43,7 +43,7 @@ class GroupController extends AbstractController
     {
         $group = $this->requireGroupWithId($id);
 
-        if (!($this->isAdminUser() || $this->securityContext->isGranted('VIEW', $group))) {
+        if (!$this->securityContext->isGranted('VIEW', $group)) {
             throw new AccessDeniedException();
         }
 
@@ -64,7 +64,7 @@ class GroupController extends AbstractController
     {
         $group = $this->requireGroupWithId($id);
 
-        if (!($this->isAdminUser() || $this->securityContext->isGranted('EDIT', $group))) {
+        if (!$this->securityContext->isGranted('EDIT', $group)) {
             throw new AccessDeniedException();
         }
 
