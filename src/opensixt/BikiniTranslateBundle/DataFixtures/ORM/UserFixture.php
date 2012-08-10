@@ -17,6 +17,9 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
     /** @var \Symfony\Component\DependencyInjection\Container */
     private $container;
 
+    /**
+     * @param \Doctrine\Common\Persistence\ObjectManager $manager
+     */
     public function load(ObjectManager $manager) {
         $admin = new User;
         $admin->setUsername('admin');
@@ -67,7 +70,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
     }
 
     /**
-     * @return \opensixt\BikiniTranslateBundle\Acl\UserPermissions;
+     * @return \opensixt\BikiniTranslateBundle\Acl\UserPermissions
      */
     private function getUserPermissions()
     {
