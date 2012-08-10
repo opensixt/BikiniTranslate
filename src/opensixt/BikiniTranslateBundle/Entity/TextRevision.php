@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="text_revision")
  * @ORM\Entity
+ * @ORM\Entity @ORM\HasLifecycleCallbacks
  */
 class TextRevision
 {
@@ -20,13 +21,6 @@ class TextRevision
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
-    /**
-     * @var int $textId
-     *
-     * @ORM\Column(name="text_id", type="integer", nullable=false)
-     */
-    private $textId;
 
     /**
      * @var text $target
@@ -43,26 +37,6 @@ class TextRevision
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set textId
-     *
-     * @param int $textId
-     */
-    public function setTextId($textId)
-    {
-        $this->textId = $textId;
-    }
-
-    /**
-     * Get textId
-     *
-     * @return int
-     */
-    public function getTextId()
-    {
-        return $this->textId;
     }
 
     /**
@@ -83,5 +57,23 @@ class TextRevision
     public function getTarget()
     {
         return $this->target;
+    }
+
+    /** @ORM\PrePersist */
+    public function onPrePersist()
+    {
+        var_dump(array('changed from prePersist callback!', $this->getId(), $this->getTarget()));
+    }
+
+    /** @ORM\PostPersist */
+    public function onPostPersist()
+    {
+        var_dump(array('changed from postPersist callback!', $this->getId(), $this->getTarget()));
+    }
+
+    /** @ORM\OnFlush */
+    public function onFlush($args)
+    {
+        var_dump(array(count($args), 'changed from onFlush callback!', $this->getId(), $this->getTarget()));
     }
 }

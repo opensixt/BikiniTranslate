@@ -12,15 +12,25 @@ use opensixt\BikiniTranslateBundle\Entity\Groups;
  */
 class GroupsFixture extends AbstractFixture implements OrderedFixtureInterface {
     public function load(ObjectManager $manager) {
-        $dummy = new Groups;
-        $dummy->setName('Dummygroup');
-        $dummy->setDescription('Just a dummy group');
-        $dummy->setResources(array($manager->merge($this->getReference('res-dummy'))));
+        $dummygroup = new Groups;
+        $dummygroup->setName('Dummygroup');
+        $dummygroup->setDescription('Just a dummy group');
+        $dummygroup->setResources(array($manager->merge($this->getReference('res-dummy'))));
 
-        $manager->persist($dummy);
+        $manager->persist($dummygroup);
         $manager->flush();
 
-        $this->addReference('groups-dummy', $dummy);
+        $this->addReference('groups-dummy', $dummygroup);
+
+        $admingroup = new Groups;
+        $admingroup->setName('Admingroup');
+        $admingroup->setDescription('Admingroup for translating the tool');
+        $admingroup->setResources(array($manager->merge($this->getReference('res-admin'))));
+
+        $manager->persist($admingroup);
+        $manager->flush();
+
+        $this->addReference('groups-admin', $admingroup);
     }
 
     public function getOrder() {

@@ -20,6 +20,15 @@ class ResourceFixture extends AbstractFixture implements OrderedFixtureInterface
         $manager->flush();
 
         $this->addReference('res-dummy', $res);
+
+        $adminres = new Resource;
+        $adminres->setName('Adminres');
+        $adminres->setDescription('Admin resource for the tool');
+        $manager->persist($adminres);
+
+        $manager->flush();
+
+        $this->addReference('res-admin', $adminres);
     }
 
     public function getOrder() {

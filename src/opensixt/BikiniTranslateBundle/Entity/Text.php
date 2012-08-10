@@ -3,6 +3,9 @@
 namespace opensixt\BikiniTranslateBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use opensixt\BikiniTranslateBundle\Entity\TextRevision;
 
 /**
  * opensixt\BikiniTranslateBundle\Entity\Text
@@ -38,13 +41,16 @@ class Text
     /**
      * @var int $textRevisionId
      *
-     * @ORM\Column(name="text_revision_id", type="integer", nullable=false)
+     * @ORM\Column(name="text_revision_id", type="integer", nullable=true)
+     * @ORM\JoinColumn(name="text_revision_id", referencedColumnName="id")
      */
     private $textRevisionId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="opensixt\BikiniTranslateBundle\Entity\TextRevision")
+     * @ORM\ManyToMany(targetEntity="opensixt\BikiniTranslateBundle\Entity\TextRevision", cascade={"persist"})
      * @ORM\JoinColumn(name="text_revision_id", referencedColumnName="id")
+     *     joinColumns={@ORM\JoinColumn(name="text_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="text_revision_id", referencedColumnName="id")}
      *
      * @var ArrayCollection $target
      */
@@ -130,6 +136,10 @@ class Text
      */
     private $dontTranslate;
 
+    public function __construct() {
+        $this->target = new ArrayCollection;
+    }
+
     /**
      * Get id
      *
@@ -145,7 +155,7 @@ class Text
      *
      * @param string $hash
      */
-    public function setHash($hash)
+    protected function setHash($hash)
     {
         $this->hash = $hash;
     }
@@ -168,6 +178,7 @@ class Text
     public function setSource($source)
     {
         $this->source = $source;
+        $this->setHash(md5($source));
     }
 
     /**
@@ -180,7 +191,7 @@ class Text
         return $this->source;
     }
 
-    /**
+/**
      * Set textRevisionId
      *
      * @param int $textRevisionId
@@ -203,11 +214,30 @@ class Text
     /**
      * Set target
      *
+     * @param string $target
+     */
+    public function addTarget($target)
+    {
+        $textRev = new TextRevision;
+        $textRev->setTarget($target);
+
+        $this->target[] = $textRev;
+    }
+
+    /**
+     * Set target
+     *
      * @param ArrayCollection $target
      */
-    public function setTarget($target)
+    public function setTarget(array $target)
     {
-        $this->target = $target;
+        // transform array of strings to array of TextRevision
+        $this->target = array_map(function($target) {
+            $textRev = new TextRevision;
+            $textRev->setTarget($target);
+
+            return $textRev;
+        }, $target);
     }
 
     /**
