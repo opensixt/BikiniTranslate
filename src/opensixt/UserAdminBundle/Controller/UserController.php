@@ -75,6 +75,7 @@ class UserController extends AbstractController
     {
         $user = $this->requireUserWithId($id);
 
+        //TODO: remove first condition (when fixtures have ACLs)
         if (!($this->isAdminUser() || $this->securityContext->isGranted('EDIT', $user))) {
             throw new AccessDeniedException();
         }
