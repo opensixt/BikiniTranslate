@@ -2,8 +2,16 @@
 namespace opensixt\BikiniTranslateBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use opensixt\BikiniTranslateBundle\Services\SearchString;
+use opensixt\BikiniTranslateBundle\Form\SearchStringForm;
+use opensixt\BikiniTranslateBundle\Form\ReleaseTextForm;
+use opensixt\BikiniTranslateBundle\Form\ChangeTextForm;
+use opensixt\BikiniTranslateBundle\Form\SetLocaleForm;
+use opensixt\BikiniTranslateBundle\Form\EditTextForm;
+use opensixt\BikiniTranslateBundle\Form\CopyResourceForm;
+use opensixt\BikiniTranslateBundle\Form\CopyLanguageForm;
+use opensixt\BikiniTranslateBundle\Form\CleanTextForm;
+use opensixt\BikiniTranslateBundle\Form\SendToTSForm;
 
 class TranslateController extends Controller
 {
@@ -45,7 +53,6 @@ class TranslateController extends Controller
         }
 
         $request = $this->getRequest();
-        $translator = $this->get('translator');
 
         $editText = $this->get('opensixt_edittext'); // controller intermediate layer
         $currentLangIsCommonLang = $editText->compareCommonAndCurrentLocales($languageId);
@@ -82,27 +89,20 @@ class TranslateController extends Controller
         // get search results
         $data = $editText->getData($languageId, $searchResources);
 
-        $formBuilder = $this->createFormBuilder();
-        $formBuilder
-            ->add('resource', 'choice', array(
-                  'label'       => $translator->trans('resource') . ': ',
-                  'empty_value' => $translator->trans('all_values'),
-                  'choices'     => $resources,
-                  'required'    => false,
-                  'data'        => $searchResource
-                ))
-            ->add('action', 'hidden');
-
-        // define textareas for any text
-        if (!empty($data['texts'])) {
-            foreach ($data['texts'] as $txt) {
-                $formBuilder->add('text_' . $txt['id'] , 'textarea', array(
-                    'trim' => true,
-                    'required' => false,
-                ));
-            }
+        $ids = array();
+        if (isset($data['texts'])) {
+            $ids = array_reduce(
+                $data['texts'],
+                function($ids, $elem) { $ids[] = $elem['id']; return $ids; },
+                array());
         }
-        $form = $formBuilder->getForm();
+
+        $form = $this->get('form.factory')
+            ->create(new EditTextForm(), null, array(
+                'searchResource'   => $searchResource,
+                'resources'        => $resources,
+                'ids'              => $ids,
+        ));
 
         $templateParam = array(
             'form'                    => $form->createView(),
@@ -139,22 +139,17 @@ class TranslateController extends Controller
         }
 
         $request = $this->getRequest();
-        $translator = $this->get('translator');
 
-        $form = $this->createFormBuilder()
-            ->add('locale', 'choice', array(
-                    'label'     => $translator->trans('please_choose_locale') . ': ',
-                    'empty_value' => '',
-                    'choices'   => $locales,
-                ))
-            ->getForm();
+        $form = $this->get('form.factory')
+            ->create(new SetLocaleForm(), null, array(
+                'locales' => $locales,
+        ));
 
         if ($request->getMethod() == 'POST') {
             // the controller binds the submitted data to the form
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-
                 if ($form->get('locale')->getData()) {
                     //echo $form->get('locale')->getData();
                     $localeId = $form->get('locale')->getData();
@@ -165,7 +160,6 @@ class TranslateController extends Controller
                         array('locale' => $locale)
                         ));
                 }
-
             } else {
                 var_dump($form->getErrors());
             }
@@ -180,7 +174,6 @@ class TranslateController extends Controller
     /**
      * searchstring Action
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $page
      * @return Response A Response instance
      */
@@ -226,34 +219,17 @@ class TranslateController extends Controller
             $preferredChoices = array($locales_flip[$toolLang]);
         }
 
-        $form = $this->createFormBuilder()
-            ->add('search', 'search', array(
-                    'label'       => $translator->trans('search_by') . ': ',
-                    'trim'        => true,
-                    'data'        => $searchPhrase
-                ))
-            ->add('resource', 'choice', array(
-                    'label'       => $translator->trans('with_resource') . ': ',
-                    'empty_value' => $translator->trans('all_values'),
-                    'choices'     => $resources,
-                    'required'    => false,
-                    'data'        => $searchResource
-                ))
-            ->add('locale', 'choice', array(
-                    'label'       => $translator->trans('with_language') . ': ',
-                    'empty_value' => (!empty($preferredChoices)) ? false : '',
-                    'choices'     => $locales,
-                    'preferred_choices' => $preferredChoices,
-                    'required'    => true,
-                    'data'        => $searchLanguage
-                ))
-            ->add('mode', 'choice', array(
-                    'label'       => $translator->trans('search_method') . ': ',
-                    'empty_value' => '',
-                    'choices'     => $mode,
-                    'data'        => $searchMode
-                ))
-            ->getForm();
+        $form = $this->get('form.factory')
+            ->create(new SearchStringForm(), null, array(
+                'searchPhrase'     => $searchPhrase,
+                'searchResource'   => $searchResource,
+                'resources'        => $resources,
+                'searchLanguage'   => $searchLanguage,
+                'locales'          => $locales,
+                'preferredChoices' => $preferredChoices,
+                'searchMode'       => $searchMode,
+                'mode'             => $mode,
+        ));
 
         $templateParam = array(
             'form'          => $form->createView(),
@@ -263,7 +239,6 @@ class TranslateController extends Controller
             'resource'      => $searchResource,
             'locale'        => $searchLanguage,
         );
-
         if (!empty($results['paginationBar'])) {
             $templateParam['paginationbar'] = $results['paginationBar'];
         }
@@ -284,8 +259,6 @@ class TranslateController extends Controller
      */
     public function changetextAction($page)
     {
-        $translator = $this->get('translator');
-
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
 
@@ -309,38 +282,24 @@ class TranslateController extends Controller
                 $page);
         }
 
-
-        $formBuilder = $this->createFormBuilder();
-
-        // define textareas for any text
-        if (!empty($results['searchResults'])){
-            foreach ($results['searchResults'] as $txt) {
-                $formBuilder->add('text_' . $txt['id'] , 'textarea', array(
-                    'trim' => true,
-                    'required' => false,
-                ));
-            }
+        // ids of texts for textarreas
+        $ids = array();
+        if (isset($results['searchResults'])) {
+            $ids = array_reduce(
+                $results['searchResults'],
+                function($ids, $elem) { $ids[] = $elem['id']; return $ids; },
+                array());
         }
 
-        $formBuilder->add('search', 'search', array(
-                    'label'       => $translator->trans('search_by') . ': ',
-                    'trim'        => true,
-                    'data'        => $searchPhrase,
-                ))
-            ->add('resource', 'choice', array(
-                    'label'       => $translator->trans('with_resource') . ': ',
-                    'empty_value' => $translator->trans('all_values'),
-                    'choices'     => $resources,
-                    'data'        => $searchResource,
-                    'required'    => false,
-                ))
-            ->add('locale', 'choice', array(
-                    'label'       => $translator->trans('with_language') . ': ',
-                    'empty_value' => '',
-                    'choices'     => $locales,
-                    'data'        => $searchLanguage
-                ));
-        $form = $formBuilder->getForm();
+        $form = $this->get('form.factory')
+            ->create(new ChangeTextForm(), null, array(
+                'searchPhrase'     => $searchPhrase,
+                'searchResource'   => $searchResource,
+                'resources'        => $resources,
+                'searchLanguage'   => $searchLanguage,
+                'locales'          => $locales,
+                'ids'              => $ids,
+        ));
 
         $templateParam = array(
             'form'          => $form->createView(),
@@ -370,8 +329,6 @@ class TranslateController extends Controller
      */
     public function cleantextAction($page)
     {
-        $translator = $this->get('translator');
-
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
 
@@ -392,22 +349,13 @@ class TranslateController extends Controller
             $page,
             date("Y-m-d"));
 
-        $form = $this->createFormBuilder()
-            ->add('resource', 'choice', array(
-                    'label'       => $translator->trans('cleantext_resource') . ': ',
-                    'empty_value' => $translator->trans('all_values'),
-                    'choices'     => $resources,
-                    'required'    => false,
-                    'data'        => $searchResource
-                ))
-            ->add('locale', 'choice', array(
-                    'label'       => $translator->trans('cleantext_language') . ': ',
-                    'empty_value' => '',
-                    'choices'     => $locales,
-                    'required'    => false,
-                    'data'        => $searchLanguage
-                ))
-            ->getForm();
+        $form = $this->get('form.factory')
+            ->create(new CleanTextForm(), null, array(
+                'searchResource'   => $searchResource,
+                'resources'        => $resources,
+                'searchLanguage'   => $searchLanguage,
+                'locales'          => $locales,
+        ));
 
         $templateParam = array(
             'form'          => $form->createView(),
@@ -435,8 +383,6 @@ class TranslateController extends Controller
      */
     public function releasetextAction($page)
     {
-        $translator = $this->get('translator');
-
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
 
@@ -453,22 +399,13 @@ class TranslateController extends Controller
         // get search results
         $results = $searcher->getData($searchLanguage, $searchResources, $page);
 
-        $form = $this->createFormBuilder()
-            ->add('resource', 'choice', array(
-                    'label'       => $translator->trans('cleantext_resource') . ': ',
-                    'empty_value' => $translator->trans('all_values'),
-                    'choices'     => $resources,
-                    'required'    => false,
-                    'data'        => $searchResource
-                ))
-            ->add('locale', 'choice', array(
-                    'label'       => $translator->trans('cleantext_language') . ': ',
-                    'empty_value' => '',
-                    'choices'     => $locales,
-                    'required'    => false,
-                    'data'        => $searchLanguage
-                ))
-            ->getForm();
+        $form = $this->get('form.factory')
+            ->create(new ReleaseTextForm(), null, array(
+                'searchResource'   => $searchResource,
+                'resources'        => $resources,
+                'searchLanguage'   => $searchLanguage,
+                'locales'          => $locales,
+        ));
 
         $templateParam = array(
             'form'          => $form->createView(),
@@ -496,8 +433,6 @@ class TranslateController extends Controller
      */
     public function copylanguageAction()
     {
-        $translator = $this->get('translator');
-
         $resources = $this->getUserResources(); // available resources
         $locales = $this->getUserLocales(); // available languages
 
@@ -518,22 +453,12 @@ class TranslateController extends Controller
             $translateMade = 'done';
         }
 
-        $form = $this->createFormBuilder()
-            ->add('lang_from', 'choice', array(
-                    'label'       => $translator->trans('copy_lang_content_from') . ': ',
-                    'empty_value' => '',
-                    'choices'     => $locales,
-                    'required'    => true,
-                    'data'        => $lang['from']
-                ))
-            ->add('lang_to', 'choice', array(
-                    'label'       => $translator->trans('copy_lang_content_to') . ': ',
-                    'empty_value' => '',
-                    'choices'     => $locales,
-                    'required'    => true,
-                    'data'        => $lang['to']
-                ))
-            ->getForm();
+        $form = $this->get('form.factory')
+            ->create(new CopyLanguageForm(), null, array(
+                'from'           => $lang['from'],
+                'to'             => $lang['to'],
+                'locales'        => $locales,
+        ));
 
         $templateParam = array(
             'form'          => $form->createView(),
@@ -557,15 +482,13 @@ class TranslateController extends Controller
      */
     public function copyresourceAction()
     {
-        $translator = $this->get('translator');
-
         $resources = $this->getUserResources(); // available resources
         $locales = $this->getUserLocales(); // available languages
 
         // request values
-        $res['from'] = $this->getFieldFromRequest('res_from');
-        $res['to']   = $this->getFieldFromRequest('res_to');
-        $lang        = $this->getFieldFromRequest('lang');
+        $res['from']    = $this->getFieldFromRequest('res_from');
+        $res['to']      = $this->getFieldFromRequest('res_to');
+        $searchLanguage = $this->getFieldFromRequest('locale');
 
         if (!empty($res['from']) && !empty($res['to'])
                 && $res['from'] != $res['to']) {
@@ -573,8 +496,8 @@ class TranslateController extends Controller
 
             $copyRes = $this->get('opensixt_copydomain');
 
-            if (!empty($lang)) {
-                $arrLang = array($lang);
+            if (!empty($searchLanguage)) {
+                $arrLang = array($searchLanguage);
             } else {
                 $arrLang = array_keys($locales);
             }
@@ -587,34 +510,18 @@ class TranslateController extends Controller
             $translateMade = 'done';
         }
 
-        $form = $this->createFormBuilder()
-            ->add('res_from', 'choice', array(
-                    'label'       => $translator->trans('copy_res_content_from') . ': ',
-                    'empty_value' => '',
-                    'choices'     => $resources,
-                    'required'    => true,
-                    'data'        => $res['from']
-                ))
-            ->add('res_to', 'choice', array(
-                    'label'       => $translator->trans('copy_res_content_to') . ': ',
-                    'empty_value' => '',
-                    'choices'     => $resources,
-                    'required'    => true,
-                    'data'        => $res['to']
-                ))
-            ->add('lang', 'choice', array(
-                    'label'       => $translator->trans('copy_res_content_lang') . ': ',
-                    'empty_value' => $translator->trans('all_values'),
-                    'choices'     => $locales,
-                    'required'    => false,
-                    'data'        => $lang
-                ))
-            ->getForm();
+        $form = $this->get('form.factory')
+            ->create(new CopyResourceForm(), null, array(
+                'from'           => $res['from'],
+                'to'             => $res['to'],
+                'resources'      => $resources,
+                'searchLanguage' => $searchLanguage,
+                'locales'        => $locales,
+        ));
 
         $templateParam = array(
             'form' => $form->createView(),
         );
-
         if (!empty($translationsCount)) {
             $templateParam['translationsCount'] = $translationsCount;
         }
@@ -658,9 +565,8 @@ class TranslateController extends Controller
         // get search results
         $data = $searcher->getData($languageId, array_keys($resources));
 
-        $form = $this->createFormBuilder()
-            ->add('action', 'hidden')
-            ->getForm();
+        $form = $this->get('form.factory')
+            ->create(new SendToTSForm(), null, array());
 
         $templateParam = array(
             'form' => $form->createView(),
@@ -745,13 +651,15 @@ class TranslateController extends Controller
 
         $fieldValue = '';
         if ($request->getMethod() == 'POST') {
-            $formData = $request->request->get('form'); // form fields
+            $formData = $request->get('form'); // form fields
             if (!empty($formData[$fieldName])) {
                 $fieldValue = $formData[$fieldName];
+            } else {
+                $fieldValue = $request->get($fieldName, '');
             }
         } elseif ($request->getMethod() == 'GET') {
-            if ($request->query->get($fieldName)) {
-                $fieldValue = urldecode($request->query->get($fieldName));
+            if ($request->get($fieldName)) {
+                $fieldValue = urldecode($request->get($fieldName));
             }
         }
 
