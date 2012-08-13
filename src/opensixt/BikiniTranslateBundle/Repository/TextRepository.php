@@ -14,18 +14,19 @@ use opensixt\BikiniTranslateBundle\Entity\TextRevision;
  */
 class TextRepository extends EntityRepository
 {
-    const FIELD_ID          = 't.id';
-    const FIELD_HASH        = 't.hash';
-    const FIELD_SOURCE      = 't.source';
-    const FIELD_TARGET      = 't.target';
-    const FIELD_REVISION_ID = 't.textRevisionId';
-    const FIELD_RESOURCE    = 't.resourceId';
-    const FIELD_LOCALE      = 't.localeId';
-    const FIELD_USER        = 't.userId';
-    const FIELD_EXPIRY_DATE = 't.expiryDate';
-    const FIELD_RELEASED    = 't.released';
-    const FIELD_TS          = 't.translationService';
-    const FIELD_BLOCK       = 't.block';
+    const FIELD_ID            = 't.id';
+    const FIELD_HASH          = 't.hash';
+    const FIELD_SOURCE        = 't.source';
+    const FIELD_TARGET        = 't.target';
+    const FIELD_REVISION_ID   = 't.textRevisionId';
+    const FIELD_RESOURCE      = 't.resourceId';
+    const FIELD_LOCALE        = 't.localeId';
+    const FIELD_USER          = 't.userId';
+    const FIELD_EXPIRY_DATE   = 't.expiryDate';
+    const FIELD_RELEASED      = 't.released';
+    const FIELD_TS            = 't.translationService';
+    const FIELD_BLOCK         = 't.block';
+    const FIELD_DONTTRANSLATE = 't.dontTranslate';
 
     const TEXT_EMPTY_VALUE  = 'TRANSLATE_ME';
 
@@ -540,7 +541,7 @@ class TextRepository extends EntityRepository
                 ->setParameter(3, $this->_resources);
             }
             if ($this->_locale == $this->_commonLanguageId) {
-                $query->andWhere(self::FIELD_RELEASED . ' IS NOT NULL');
+                $query->andWhere(self::FIELD_RELEASED . ' = 1');
             }
 
             break;
@@ -563,7 +564,7 @@ class TextRepository extends EntityRepository
                     ->setParameter(3, $this->_date);
             } else {
                 // non released texts
-                $query->andWhere(self::FIELD_RELEASED . ' IS NULL')
+                $query->andWhere(self::FIELD_RELEASED . ' IS NULL OR ' . self::FIELD_RELEASED . ' = 0')
                     ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL');
             }
 
@@ -574,9 +575,9 @@ class TextRepository extends EntityRepository
             $query->join('t.target', 'tr', Join::WITH , "tr.target = ?1")
                 ->where(self::FIELD_RESOURCE . ' IN (?2)')
                 ->andWhere(self::FIELD_LOCALE . ' = ?3')
-                //->where(self::FIELD_TARGET . ' != \'DONT_TRANSLATE\'')
+                ->andWhere(self::FIELD_DONTTRANSLATE . ' IS NULL OR ' . self::FIELD_DONTTRANSLATE . ' = 0')
                 ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
-                ->andWhere(self::FIELD_RELEASED . ' IS NOT NULL')
+                ->andWhere(self::FIELD_RELEASED . ' = 1')
                 ->setParameter(1, self::TEXT_EMPTY_VALUE)
                 ->setParameter(2, $this->_resources)
                 ->setParameter(3, $this->_locale);
@@ -584,7 +585,7 @@ class TextRepository extends EntityRepository
             // 0 = open state
             // 1 = already sent to hts
        //     if ($this->_hts === true) {
-                $query->andWhere(self::FIELD_TS . ' IS NULL');
+                $query->andWhere(self::FIELD_TS . ' IS NULL OR ' . self::FIELD_TS . ' = 0');
        //     }
 
             break;
