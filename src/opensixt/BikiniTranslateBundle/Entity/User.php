@@ -121,6 +121,7 @@ class User implements AdvancedUserInterface
     {
         //$this->setSalt('');
         $this->userRoles = new ArrayCollection();
+        $this->userLanguages = new ArrayCollection();
         $this->setIsactive($this::NotActiveUser);
         $this->setCreated(new \DateTime());
     }
@@ -266,6 +267,16 @@ class User implements AdvancedUserInterface
     public function getUserRoles()
     {
         return $this->userRoles;
+    }
+
+    /**
+     * adds a role to userRoles ArrayCollection
+     *
+     * @return boolean
+     */
+    public function addUserLanguage($userLanguage)
+    {
+        return $this->userLanguages->add($userLanguage);
     }
 
     /**
