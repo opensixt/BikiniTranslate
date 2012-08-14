@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="text_revision")
  * @ORM\Entity
- * @ORM\Entity @ORM\HasLifecycleCallbacks
  */
 class TextRevision
 {

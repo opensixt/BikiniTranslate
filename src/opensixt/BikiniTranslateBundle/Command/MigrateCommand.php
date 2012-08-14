@@ -152,6 +152,13 @@ class MigrateCommand extends ContainerAwareCommand {
             $text->setUser($grouped['user'][$row['user']]);
             $text->addTarget($row['msgstr']);
 
+            // flags
+            if ($row['exp']) $text->setExpiryDate(new \DateTime($row['exp']));
+            if ($row['rel']) $text->setReleased(true);
+            if ($row['hts']) $text->setTranslationService(true);
+            if ($row['block']) $text->setBlock(true);
+            if ($row['msgstr'] == 'DONT_TRANSLATE') $text->setDontTranslate(true);
+
             $manager->persist($text);
 
             // flush every 500th

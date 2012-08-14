@@ -143,7 +143,7 @@ class BikiniExport
                     $source->appendChild($attribute);
                 }
 
-                $target = $dom->createElement('target', $elem['target']['target']);
+                $target = $dom->createElement('target', $elem['target'][0]['target']);
                 foreach ($this->_xliffTargetAttributes as $key => $value) {
                     $attribute = $dom->createAttribute($key);
                     $attribute->value = $value;

@@ -389,7 +389,7 @@ class TextRepository extends EntityRepository
         $changesCount = 0;
         // merge all empty translations in destination language
         foreach ($textsDestLang as $txt) {
-            if ($txt['target']['target'] == self::TEXT_EMPTY_VALUE) {
+            if ($txt['target'][0]['target'] == self::TEXT_EMPTY_VALUE) {
                 $txtId = $txt['id'];
 
                 // if the list of availabte resources is not set
@@ -404,11 +404,11 @@ class TextRepository extends EntityRepository
                     foreach ($sourceData as $src) {
                         if ($src['hash'] == $txt['hash']){
                             if ($src['resourceId'] == $txt['resourceId'] && $domainType == self::DOMAIN_TYPE_LANGUAGE) {
-                                $translation = $src['target']['target'];
+                                $translation = $src['target'][0]['target'];
                                 break;
                             }
                             if ($src['localeId'] == $txt['localeId'] && $domainType == self::DOMAIN_TYPE_RESOURCE) {
-                                $translation = $src['target']['target'];
+                                $translation = $src['target'][0]['target'];
                                 break;
                             }
                         }
@@ -454,6 +454,10 @@ class TextRepository extends EntityRepository
                 $query->andWhere(self::FIELD_RESOURCE . ' IN  (?3)')
                     ->setParameter(3, $resources);
             }
+
+            // needed to access last text revision via target.0.target or $ele['target'][0]['target']
+            $query->addOrderBy('tr.id', 'DESC');
+
             $messages = $query->getQuery()->getArrayResult();
         }
 
@@ -526,7 +530,7 @@ class TextRepository extends EntityRepository
                 $mess = '';
                 foreach ($textsLang as $textLang) {
                     if ($text['hash'] == $textLang['hash']) {
-                        $mess = $textLang['target']['target'];
+                        $mess = $textLang['target'][0]['target'];
                         break;
                     }
                 }
@@ -622,6 +626,9 @@ class TextRepository extends EntityRepository
 
             break;
         }
+
+        // needed to access last text revision via target.0.target or $ele['target'][0]['target']
+        $query->addOrderBy('tr.id', 'DESC');
     }
 
     /**

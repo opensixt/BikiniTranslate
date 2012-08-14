@@ -139,7 +139,7 @@ class EditText extends HandleText {
         $chunks = array();
         if (count($data)) {
             foreach ($data as &$elem) {
-                $elem['target']['target'] = $elem['source'];
+                $elem['target'][0]['target'] = $elem['source'];
             }
         }
         if (!empty($this->exportChunkLimit)) {
