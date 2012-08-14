@@ -345,7 +345,7 @@ class Text
      *
      * @param date $exp
      */
-    public function setExpirDate($exp)
+    public function setExpiryDate($exp)
     {
         $this->expiryDate = $exp;
     }
