@@ -33,8 +33,14 @@
         </thead>
         <tbody>
         {% for item in texts %}
-            <tr>
-                <td>{{ item.resource.name }}<br/>{{ item.source }}</td>
+            <tr id="item_{{ item.id }}">
+                <td>
+                    {{ item.resource.name }}<br/><br/>
+                    {{ item.source }}
+                    {% if item.suggestions|length > 0%}
+                    <br/><br/><a class="suggestion" href="#">{{ 'suggestions'|trans }}</a>
+                    {% endif %}
+                </td>
                 {% if not currentLangIsCommonLang %}
                 <td>{{ item.commonLang }}</td>
                 {% endif %}
@@ -74,14 +80,82 @@
         $('#btnSaveTranslations').click(function() {
             $('#form_action').val('save');
             $(this.form).submit();
-            });
+        });
 
         $('#btnSearch').click(function() {
             $('#form_action').val('search');
             $(this.form).submit();
-            });
+        });
+
+        $('a.suggestion').click(function(e) {
+            e.preventDefault();
+            var id = $(this).closest('tr').attr('id').replace('item_', '');
+            getDialog(id, suggestions[id]);
+        });
+
+        $('input[name=suggestions]').live('click', function() {
+            var ids = this.id.split('_');
+            if (ids.length != 3) {
+                return;
+            }
+            var text = '';
+            for (var i = 0, row; row = suggestions[ids[1]][i]; i++) {
+                if (row.id == ids[2]) {
+                    text = row.target.target;
+                    break;
+                }
+            }
+            setText(ids[1], text);
+        });
+
+        var suggestions = {};
+        {% for item in texts %}
+        suggestions[{{ item.id }}] = {{ item.suggestions|json_encode|raw }};
+        {% endfor %}
+
+        function getDialog(target_id, data)
+        {
+            var html = [];
+
+            html.push('<p class="validateTips">{{ 'suggestion_text'|trans }}</p>');
+            html.push('<fieldset>');
+
+            for (var i = 0, row; row = data[i]; i++) {
+
+                var radio_id = 'suggestion_' + target_id + '_' + row.id;
+                html.push('<br/>');
+                html.push('<label for="' + radio_id + '">' + row.resource.name + '</label><br/>');
+                html.push('<input type="radio" name="suggestions" id="' + radio_id + '" class="text ui-widget-content ui-corner-all" />');
+                html.push('<label for="' + radio_id + '">' +  row.target.target + '</label><br/>');
+            }
+            html.push('</fieldset>');
+
+            var $dialog = $('<div></div>')
+                        .html(html.join('\n'))
+                        .dialog({
+                            autoOpen: true,
+                            title: '',
+                            modal: true,
+                            buttons:{
+                                "Ok" : function() {
+                                    $(this).dialog('destroy').remove();
+                                }
+                            },
+                        });
+
+            /*$('#dialog_ok').click(function() {
+                $dialog.dialog('close');
+                $dialog.dialog('destroy');
+                $dialog.remove();
+            });*/
+
+        }
+
+        function setText(id, text)
+        {
+            $('#form_text_' + id).val(text);
+        }
 
     });
-
     </script>
 {% endblock %}

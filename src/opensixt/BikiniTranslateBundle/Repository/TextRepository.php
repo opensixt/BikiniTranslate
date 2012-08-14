@@ -17,7 +17,7 @@ class TextRepository extends EntityRepository
     const FIELD_ID            = 't.id';
     const FIELD_HASH          = 't.hash';
     const FIELD_SOURCE        = 't.source';
-    const FIELD_TARGET        = 't.target';
+    const FIELD_TARGET        = 'tr.target';
     const FIELD_REVISION_ID   = 't.textRevisionId';
     const FIELD_RESOURCE      = 't.resourceId';
     const FIELD_LOCALE        = 't.localeId';
@@ -458,6 +458,38 @@ class TextRepository extends EntityRepository
         }
 
         return $messages;
+    }
+
+    /**
+     * Get suggegstions (translations with same hash from other resources)
+     *
+     * @param string $hash md5 string
+     * @param int $locale source langiage
+     * @param type $resource source resource
+     * @return array texts with same hash and language and with another resources
+     */
+    public function getSuggestionByHashAndLanguage($hash, $locale, $resource, $allresources)
+    {
+        $suggestions = array();
+
+        if (strlen($hash) && $locale) {
+            $query = $this->createQueryBuilder('t')
+                ->select('t, r, tr')
+                ->leftJoin('t.resource', 'r')
+                ->join('t.target', 'tr', Join::WITH , self::FIELD_TARGET . " != ?1")
+                ->where(self::FIELD_HASH . ' = ?2')
+                ->andWhere(self::FIELD_LOCALE . ' = ?3')
+                ->andWhere(self::FIELD_RESOURCE . ' != ?4')
+                ->andWhere(self::FIELD_RESOURCE . ' in (?5)')
+                ->setParameter(1, self::TEXT_EMPTY_VALUE)
+                ->setParameter(2, $hash)
+                ->setParameter(3, $locale)
+                ->setParameter(4, $resource)
+                ->setParameter(5, $allresources);
+            $suggestions = $query->getQuery()->getArrayResult();
+        }
+
+        return $suggestions;
     }
 
     /**

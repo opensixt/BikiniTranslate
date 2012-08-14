@@ -230,6 +230,15 @@
                 <source>menu.translation.copy_resource</source>
                 <target>Ressourceinhalte kopieren</target>
             </trans-unit>
+            <trans-unit id="260">
+                <source>suggestions</source>
+                <target>Vorschläge vorhanden</target>
+            </trans-unit>
+            <trans-unit id="265">
+                <source>suggestion_text</source>
+                <target>At vero eos et accusam et justo duo dolores et ea rebum.</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

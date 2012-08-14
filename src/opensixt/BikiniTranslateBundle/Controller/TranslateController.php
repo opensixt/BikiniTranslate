@@ -80,14 +80,19 @@ class TranslateController extends Controller
             }
         }
 
-        $searchResource = $this->getFieldFromRequest('resource');
         $searchResources = $this->getSearchResources();
 
         // set search parameters
         $editText->setPaginationPage($page);
+        $getSuggestionsFlag = true; // get translations with same hash from other resources
 
         // get search results
-        $data = $editText->getData($languageId, $searchResources);
+        $data = $editText->getData(
+            $languageId,
+            $searchResources,
+            array_keys($resources),
+            $getSuggestionsFlag
+            );
 
         $ids = array();
         if (isset($data['texts'])) {
@@ -97,6 +102,7 @@ class TranslateController extends Controller
                 array());
         }
 
+        $searchResource = $this->getFieldFromRequest('resource');
         $form = $this->get('form.factory')
             ->create(new EditTextForm(), null, array(
                 'searchResource'   => $searchResource,
@@ -563,7 +569,7 @@ class TranslateController extends Controller
         $searcher->setPaginationLimit(0);
 
         // get search results
-        $data = $searcher->getData($languageId, array_keys($resources));
+        $data = $searcher->getData($languageId, array_keys($resources), array_keys($resources));
 
         $form = $this->get('form.factory')
             ->create(new SendToTSForm(), null, array());
@@ -676,12 +682,13 @@ class TranslateController extends Controller
     {
         // retrieve resource from request
         $searchResource = $this->getFieldFromRequest('resource');
+        $resources = $this->getUserResources(); // available resources
 
-        if (strlen($searchResource)) {
+        if (strlen($searchResource) && !empty($resources[$searchResource])) {
+            // if $searchResource is set and available
             $searchResources = array($searchResource);
         } else {
             // all available resources
-            $resources = $this->getUserResources();
             $searchResources = array_keys($resources);
         }
         return $searchResources;

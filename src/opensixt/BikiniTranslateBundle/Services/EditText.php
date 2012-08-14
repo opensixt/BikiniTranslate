@@ -53,11 +53,13 @@ class EditText extends HandleText {
      * Returns search results and pagination data
      *
      * @param int $locale
-     * @param array $resources resource ids
+     * @param array $searchResources search resources
+     * @param array $resources all available resources
+     * @param boolean $suggestionsFlag if true get suggegstions for any text
      * @return array
      * @throws \Exception
      */
-    public function getData($locale, $resources)
+    public function getData($locale, $searchResources, $resources, $suggestionsFlag = false)
     {
         $data = array();
 
@@ -68,7 +70,7 @@ class EditText extends HandleText {
         $textCount = $this->_textRepository->getTextCount(
             TextRepository::TASK_MISSING_TRANS_BY_LANG,
             $locale,
-            $resources);
+            $searchResources);
 
         if (!empty($this->_paginationLimit)) {
             // get pagination bar
@@ -82,6 +84,21 @@ class EditText extends HandleText {
             $data['texts'] = $this->_textRepository->getMissingTranslations(
                 $this->_paginationLimit,
                 $pagination->getOffset());
+
+            // get suggegstions (translations with same hash from other resources)
+            if ($suggestionsFlag && count($data['texts'])) {
+                foreach ($data['texts'] as &$txt) {
+                $txt['suggestions'] = $this->_textRepository
+                    ->getSuggestionByHashAndLanguage(
+                        $txt['hash'],
+                        $txt['locale']['id'],
+                        $txt['resource']['id'],
+                        $resources
+                    );
+
+                }
+            }
+
         } else {
             $data['texts'] = $this->_textRepository->getMissingTranslations();
         }
