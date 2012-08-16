@@ -26,9 +26,8 @@ class TextRepository extends EntityRepository
     const FIELD_RELEASED      = 't.released';
     const FIELD_TS            = 't.translationService';
     const FIELD_BLOCK         = 't.block';
+    const FIELD_TRANSLATE_ME  = 't.translateMe';
     const FIELD_DONTTRANSLATE = 't.dontTranslate';
-
-    const TEXT_EMPTY_VALUE  = 'TRANSLATE_ME';
 
     const TASK_MISSING_TRANS_BY_LANG = 0;
     const TASK_SEARCH_PHRASE_BY_LANG = 1;
@@ -389,7 +388,7 @@ class TextRepository extends EntityRepository
         $changesCount = 0;
         // merge all empty translations in destination language
         foreach ($textsDestLang as $txt) {
-            if ($txt['target'][0]['target'] == self::TEXT_EMPTY_VALUE) {
+            if ($txt['translateMe'] == 1) {
                 $txtId = $txt['id'];
 
                 // if the list of availabte resources is not set
@@ -566,15 +565,15 @@ class TextRepository extends EntityRepository
 
         case self::TASK_ALL_CONTENT_BY_LANG:
         case self::TASK_ALL_CONTENT_BY_RES:
-            $query->join('t.target', 'tr', Join::WITH , "tr.target != ?1")
-                ->where(self::FIELD_LOCALE . ' IN (?2)')
+            $query->join('t.target', 'tr')
+                ->where(self::FIELD_LOCALE . ' IN (?1)')
                 ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
-                ->setParameter(1, self::TEXT_EMPTY_VALUE)
-                ->setParameter(2, $this->_locales);
+                ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
+                ->setParameter(1, $this->_locales);
 
             if (!empty($this->_resources)) {
-                $query->andWhere(self::FIELD_RESOURCE . ' IN (?3)')
-                ->setParameter(3, $this->_resources);
+                $query->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
+                ->setParameter(2, $this->_resources);
             }
             if ($this->_locale == $this->_commonLanguageId) {
                 $query->andWhere(self::FIELD_RELEASED . ' = 1');
@@ -608,15 +607,15 @@ class TextRepository extends EntityRepository
 
         case self::TASK_MISSING_TRANS_BY_LANG:
         default:
-            $query->join('t.target', 'tr', Join::WITH , "tr.target = ?1")
-                ->where(self::FIELD_RESOURCE . ' IN (?2)')
-                ->andWhere(self::FIELD_LOCALE . ' = ?3')
+            $query->join('t.target', 'tr')
+                ->where(self::FIELD_RESOURCE . ' IN (?1)')
+                ->andWhere(self::FIELD_LOCALE . ' = ?2')
                 ->andWhere(self::FIELD_DONTTRANSLATE . ' IS NULL OR ' . self::FIELD_DONTTRANSLATE . ' = 0')
                 ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
                 ->andWhere(self::FIELD_RELEASED . ' = 1')
-                ->setParameter(1, self::TEXT_EMPTY_VALUE)
-                ->setParameter(2, $this->_resources)
-                ->setParameter(3, $this->_locale);
+                ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
+                ->setParameter(1, $this->_resources)
+                ->setParameter(2, $this->_locale);
             // just get the unflagged translations
             // 0 = open state
             // 1 = already sent to hts
@@ -641,9 +640,10 @@ class TextRepository extends EntityRepository
     public function updateText($id, $text)
     {
         if ($id) {
-            $textRevisionRep = $this->_em->getRepository('opensixtBikiniTranslateBundle:TextRevision');
+            $textRep = $this->_em->getRepository('opensixtBikiniTranslateBundle:Text');
+            //$textRevisionRep = $this->_em->getRepository('opensixtBikiniTranslateBundle:TextRevision');
 
-            if ($this->_textRevisionControl == 'off') {
+            /*if ($this->_textRevisionControl == 'off') {
                 // if text_revision_control is 'off', than update table with new data
                 $objTextRevision = $textRevisionRep->find($id);
                 if (!empty($objTextRevision)) {
@@ -652,29 +652,19 @@ class TextRepository extends EntityRepository
                     $this->_em->flush();
                 }
 
-            } else {
+            } else {*/
                 /* if text_revision_control is 'on', than insert a new record into
                    TextRevision table, and update a pointer field in Text */
-                $objTextRevision = new TextRevision();
-                $objTextRevision->setTextId($id);
-                $objTextRevision->setTarget($text);
 
-                $this->_em->persist($objTextRevision);
-                $this->_em->flush();
-                $newTextId = $objTextRevision->getId();
-
-                if ($newTextId) {
-                    // TODO: use ORM
-                    $this->createQueryBuilder('t')
-                        ->update()
-                        ->set(self::FIELD_REVISION_ID, '?1')
-                        ->where(self::FIELD_ID . ' = ?2')
-                        ->setParameter(1, $newTextId)
-                        ->setParameter(2, $id)
-                        ->getQuery()
-                        ->execute();
+                $objText = $textRep->find($id);
+                if (is_null($objText)) {
+                    throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
                 }
-            }
+
+                $objText->addTarget($text);
+                $this->_em->persist($objText);
+                $this->_em->flush();
+            //}
         }
     }
 

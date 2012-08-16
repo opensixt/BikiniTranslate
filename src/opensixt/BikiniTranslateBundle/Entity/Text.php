@@ -137,6 +137,13 @@ class Text
     private $block;
 
     /**
+     * @var boolean translate_me
+     *
+     * @ORM\Column(name="translate_me", type="boolean", nullable=true)
+     */
+    private $translateMe;
+
+    /**
      * @var boolean dont_translate
      *
      * @ORM\Column(name="dont_translate", type="boolean", nullable=true)
@@ -271,6 +278,9 @@ class Text
         $textRev->setTarget($target);
 
         $this->target[] = $textRev;
+
+        // mark as translated
+        $this->setTranslateMe(false);
     }
 
     /**
@@ -287,6 +297,9 @@ class Text
 
             return $textRev;
         }, $target);
+
+        // mark as translated
+        $this->setTranslateMe(false);
     }
 
     /**
@@ -497,6 +510,26 @@ class Text
     public function getBlock()
     {
         return $this->block;
+    }
+
+    /**
+     * Set translateMe
+     *
+     * @param boolean $flag
+     */
+    public function setTranslateMe($flag)
+    {
+        $this->translateMe = $flag;
+    }
+
+    /**
+     * Get translateMe
+     *
+     * @return boolean
+     */
+    public function getTranslateMe()
+    {
+        return $this->translateMe;
     }
 
     /**
