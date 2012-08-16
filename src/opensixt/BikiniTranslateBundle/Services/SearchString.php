@@ -17,6 +17,7 @@ class SearchString extends HandleText {
     const SEARCH_EXACT = 1;
     const SEARCH_LIKE  = 2;
 
+    /** @var string */
     protected $_searchString;
 
     public function __construct($doctrine)
@@ -26,9 +27,8 @@ class SearchString extends HandleText {
     }
 
     /**
-     * Set search parameters: search phrase and search mode
+     * Set search phrase
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param string $searchPhrase
      * @param int $mode
      */
