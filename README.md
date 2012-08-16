@@ -53,7 +53,7 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
         mysql -uroot -p -e 'create database bikini character set utf8 default character set utf8 collate utf8_general_ci default collate utf8_general_ci;'
         mysql -uroot -p -e 'grant all on bikini.* to bikini@localhost identified by "bikini";'
         php app/console doctrine:schema:create
-        app/console doctrine:fixtures:load
+        php app/console doctrine:fixtures:load
     ```
 
 9.  Create a vhost, eg "bikini.dev", which points to /path/to/BikiniTranslate/web
