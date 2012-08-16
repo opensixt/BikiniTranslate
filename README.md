@@ -2,9 +2,9 @@
 
 Translation tool which generates translation files in formats .xliff, .mo/.po, json
 
-## Setup (Tested on Ubuntu)
+## Setup
 
-1.  Clone this repository and fetch submodules:
+Clone this repository and fetch submodules:
     ```bash
         git clone git@github.com:opensixt/BikiniTranslate.git
         cd BikiniTranslate
@@ -12,21 +12,25 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
         git submodule update
     ```
 
-2.  Create copies of .dist-files (without the .dist file extension) and adjust them:
-    - ```vagrant/manifests/opensixt/devsettings.pp.dist```
-    - ```app/config/parameters.yml.dist```
+Create a copy of .dist-file (without the .dist file extension) and adjust it (no need to):
+    - ```cp app/config/parameters.yml.dist app/config/parameters.yml```
 
-2.  Install rubygems (required for vagrant) and nfs (for mounting shared folders):
+## Setup in developer VM (Tested on Ubuntu)
+
+Install virtualbox (needed to run the VM), rubygems (required for vagrant) and nfs (for mounting shared folders):
     ```bash
-        sudo apt-get install rubygems nfs-kernel-server
+        sudo apt-get install virtualbox rubygems nfs-kernel-server
     ```
 
-3.  Install Vagrant:
+Create a copy of .dist-file (without the .dist file extension) and adjust it (no need to):
+    - ```cp vagrant/manifests/opensixt/devsettings.pp.dist vagrant/manifests/opensixt/devsettings.pp```
+
+Install Vagrant:
     ```bash
         sudo gem install vagrant
     ```
 
-4.  Create your own development virtual machine:
+Create your own development virtual machine:
     ```bash
         cd path/to/repository/clone
         cd vagrant
@@ -37,7 +41,24 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
        vagrant provision
     ```
 
-5.  Create an entry in your ```/etc/hosts ``` that points to the vm: (just append the following):
+Create an entry in your ```/etc/hosts ``` that points to the vm: (just append the following):
     ```bash
         192.168.10.55   bikini.dev pma.bikini.dev
+    ```
+
+## Setup in your own software stack
+
+Setup the database, the schema and load fixtures
+    ```bash
+        mysql -uroot -p -e 'create database bikini character set utf8 default character set utf8 collate utf8_general_ci default collate utf8_general_ci;'
+        mysql -uroot -p -e 'grant all on bikini.* to bikini@localhost identified by "bikini";'
+        php app/console doctrine:schema:create
+        app/console doctrine:fixtures:load
+    ```
+
+Create a vhost, eg "bikini.dev", which points to /path/to/BikiniTranslate/web
+
+Create an entry in your ```/etc/hosts ```: (just append the following):
+    ```bash
+        127.0.0.1   bikini.dev
     ```

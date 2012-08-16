@@ -5,18 +5,18 @@
         {
             "name": "Dmitri Mansilia",
             "email": "dmitri.mansilia@sixt.com",
-            "homepage": "http://www.opensixt.com",
+            "homepage": "https://github.com/dmitrimansiliasixt",
             "role": "Developer"
         },
         {
             "name": "Uwe Pries",
             "email": "uwe.pries@sixt.com",
-            "homepage": "http://www.opensixt.com",
+            "homepage": "https://github.com/uwepriessixt",
             "role": "Developer"
         }
     ],
     "support": {
-        "email": "support@opensixt.com",
+        "email": "dmitri.mansilia@sixt.com,uwe.pries@sixt.com",
         "irc": "irc://irc.freenode.org/opensixt"
     },
     "autoload": {
