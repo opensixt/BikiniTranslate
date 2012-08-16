@@ -4,6 +4,7 @@ namespace opensixt\BikiniTranslateBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 
 use opensixt\BikiniTranslateBundle\Entity\TextRevision;
 
@@ -214,11 +215,9 @@ class TextRepository extends EntityRepository
     /**
      * Gets list of texts without translations
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
-     * @param int $limit Pagination limit
-     * @param int $offset Pagination offset
+     * @return QueryBuilder
      */
-    public function getMissingTranslations($limit = 0, $offset = 0)
+    public function getMissingTranslations()
     {
         $query = $this->createQueryBuilder('t')
             ->select('t, l, r, u, tr')
@@ -228,30 +227,15 @@ class TextRepository extends EntityRepository
 
         $this->setQueryParameters($query);
 
-        // pagination limit and offset
-        if ($limit) {
-            $query->setMaxResults($limit)
-                ->setFirstResult($offset);
-        }
-
-        $translations = $query->getQuery() //->getResult();//
-            ->getArrayResult();
-
-        // set messages in common language for any text in $translations
-        $this->setMessagesInCommonLanguage($translations);
-
-        return $translations;
+        return $query;
     }
 
     /**
      * Get search results
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
-     * @param int $limit Pagination limit
-     * @param int $offset Pagination offset
-     * @return type
+     * @return QueryBuilder
      */
-    public function getSearchResults($limit, $offset)
+    public function getSearchResults()
     {
         $query = $this->createQueryBuilder('t')
             ->select('t, r, l, u, tr')
@@ -261,14 +245,7 @@ class TextRepository extends EntityRepository
 
         $this->setQueryParameters($query);
 
-        // pagination limit and offset
-        $query->setMaxResults($limit)
-            ->setFirstResult($offset);
-
-        $results = $query->getQuery() //->getResult();//
-            ->getArrayResult();
-
-        return $results;
+        return $query;
     }
 
     /**
@@ -431,12 +408,12 @@ class TextRepository extends EntityRepository
      * $resources - array of resources, - optional filter by it
      *
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
-     * @param array $texts
+     * @param SlidingPagination $texts
      * @param array $locales
      * @param array $resources
      * @return array
      */
-    protected function getMessagesByLanguage(array $texts, array $locales, array $resources = array())
+    protected function getMessagesByLanguage(/*SlidingPagination*/ $texts, array $locales, array $resources = array())
     {
         $messages = array();
         $hashes = $this->getHashes($texts);
@@ -454,7 +431,7 @@ class TextRepository extends EntityRepository
                 $query->andWhere(self::FIELD_RESOURCE . ' IN  (?3)')
                     ->setParameter(3, $resources);
             }
-            $messages = $query->getQuery()->getArrayResult();
+            $messages = $query->getQuery()->getResult();
         }
 
         return $messages;
@@ -496,7 +473,7 @@ class TextRepository extends EntityRepository
      * Get array with unique values if key 'hash' from $texts
      *
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
-     * @param type $texts
+     * @param array of objects Entity/Text
      * @return array
      */
     protected function getHashes($texts)
@@ -504,7 +481,7 @@ class TextRepository extends EntityRepository
         $hashes = array();
         if (count($texts)) {
             foreach ($texts as $text) {
-                $hashes[$text['hash']] = $text['hash'];
+                $hashes[$text->getHash()] = $text->getHash();
             }
         }
         return array_values($hashes);
@@ -518,19 +495,19 @@ class TextRepository extends EntityRepository
      * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $texts
      */
-    protected function setMessagesInCommonLanguage(&$texts)
+    public function setMessagesInCommonLanguage(&$texts)
     {
         if ($this->_locale != $this->_commonLanguageId) {
             $textsLang = $this->getMessagesByLanguage($texts, array($this->_commonLanguageId));
-            foreach ($texts as &$text) {
-                $mess = '';
+            foreach ($texts as $text) {
+                $message = '';
                 foreach ($textsLang as $textLang) {
-                    if ($text['hash'] == $textLang['hash']) {
-                        $mess = $textLang['target']['target'];
+                    if ($text->getHash() == $textLang->getHash()) {
+                        $message = $textLang->getTarget()->getTarget();
                         break;
                     }
                 }
-                $text['commonLang'] = $mess;
+                $text->setTextInCommonLanguage($message);
             }
         }
     }

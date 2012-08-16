@@ -32,7 +32,7 @@ class SearchStringForm extends AbstractType
                 ))
             ->add('locale', 'choice', array(
                     'label'       => 'with_language',
-                    'empty_value' => (!empty($preferredChoices)) ? false : '',
+                    'empty_value' => (!empty($options['preferredChoices'])) ? false : '',
                     'choices'     => $options['locales'],
                     'preferred_choices' => $options['preferredChoices'],
                     'required'    => true,
@@ -53,7 +53,7 @@ class SearchStringForm extends AbstractType
      */
     public function getName()
     {
-        return 'form';
+        return '';
     }
 
     /**

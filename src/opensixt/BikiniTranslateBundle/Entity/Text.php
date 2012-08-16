@@ -130,6 +130,12 @@ class Text
      */
     private $dontTranslate;
 
+    /** @var text */
+    private $textInCommonLanguage;
+
+    /** @var ArrayCollection */
+    private $suggestions;
+
     /**
      * Get id
      *
@@ -438,5 +444,46 @@ class Text
     public function getDontTranslate()
     {
         return $this->dontTranslate;
+    }
+
+    /**
+     * Set textInCommonLanguage
+     *
+     * @param text $text
+     */
+    public function setTextInCommonLanguage($text)
+    {
+        $this->textInCommonLanguage = $text;
+    }
+
+    /**
+     * Get textInCommonLanguage
+     *
+     * @return text
+     */
+    public function getTextInCommonLanguage()
+    {
+        return $this->textInCommonLanguage;
+    }
+
+    /**
+     * Set suggestions
+     *
+     * @param ArrayCollection $suggestions
+     */
+    // TODO: type hinting ArrayCollection?
+    public function setSuggestions($suggestions)
+    {
+        $this->suggestions = $suggestions;
+    }
+
+    /**
+     * Get suggestions
+     *
+     * @return ArrayCollection
+     */
+    public function getSuggestions()
+    {
+        return $this->suggestions;
     }
 }

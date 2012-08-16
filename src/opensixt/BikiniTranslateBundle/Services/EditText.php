@@ -52,6 +52,7 @@ class EditText extends HandleText {
     /**
      * Returns search results and pagination data
      *
+     * @param int $page
      * @param int $locale
      * @param array $searchResources search resources
      * @param array $resources all available resources
@@ -59,48 +60,38 @@ class EditText extends HandleText {
      * @return array
      * @throws \Exception
      */
-    public function getData($locale, $searchResources, $resources, $suggestionsFlag = false)
+    public function getData($page, $locale, $searchResources, $resources, $suggestionsFlag = false)
     {
-        $data = array();
-
         $this->_textRepository->setCommonLanguage($this->_commonLanguage);
         $this->_textRepository->setCommonLanguageId($this->_commonLanguageId);
 
         // count of all results for the search parameters
-        $textCount = $this->_textRepository->getTextCount(
+        $this->_textRepository->init(
             TextRepository::TASK_MISSING_TRANS_BY_LANG,
             $locale,
             $searchResources);
 
-        if (!empty($this->_paginationLimit)) {
-            // get pagination bar
-            $pagination = new Pagination(
-                $textCount,
-                $this->_paginationLimit,
-                $this->_paginationPage);
-            $data['paginationBar'] = $pagination->getPaginationBar();
+        $query = $this->_textRepository->getMissingTranslations();
 
-            // get search results
-            $data['texts'] = $this->_textRepository->getMissingTranslations(
-                $this->_paginationLimit,
-                $pagination->getOffset());
+        if (empty($this->_paginationLimit)) {
+            $this->_paginationLimit = PHP_INT_MAX;
+        }
+        $data = $this->paginator->paginate($query, $page, $this->_paginationLimit);
 
-            // get suggegstions (translations with same hash from other resources)
-            if ($suggestionsFlag && count($data['texts'])) {
-                foreach ($data['texts'] as &$txt) {
-                $txt['suggestions'] = $this->_textRepository
-                    ->getSuggestionByHashAndLanguage(
-                        $txt['hash'],
-                        $txt['locale']['id'],
-                        $txt['resource']['id'],
+        // set messages in common language for any text in $translations
+        $this->_textRepository->setMessagesInCommonLanguage($data);
+
+        // get suggegstions (translations with same hash from other resources)
+        if ($suggestionsFlag && count($data)) {
+            foreach ($data as $txt) {
+                $txt->setSuggestions(
+                    $this->_textRepository->getSuggestionByHashAndLanguage(
+                        $txt->getHash(),
+                        $txt->getLocaleId(),
+                        $txt->getResourceId(),
                         $resources
-                    );
-
-                }
+                    ));
             }
-
-        } else {
-            $data['texts'] = $this->_textRepository->getMissingTranslations();
         }
 
         return $data;

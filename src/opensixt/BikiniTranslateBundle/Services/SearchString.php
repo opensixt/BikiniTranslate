@@ -46,42 +46,33 @@ class SearchString extends HandleText {
     /**
      * Returns search results and pagination data
      *
+     * @param int $page
      * @param int $locale
      * @param array $resources
-     * @param int $page
-     * @return array
+     * @return Knp\Component\Pager\Pagination\PaginationInterface
      * @throws \Exception
      */
-    public function getData($locale, $resources, $page)
+    public function getData($page, $locale, $resources)
     {
         // Exceptions
         if (!$this->_searchString) {
             throw new \Exception(__METHOD__ . ': _searchString is not set. Please set it with ' . __CLASS__ . '::setSearchParameters() !');
         }
 
-        $data = array();
-
         $this->_textRepository->setSearchString($this->_searchString);
 
-        // count of all results for the search parameters
-        $textCount = $this->_textRepository->getTextCount(
+        $this->_textRepository->init(
             TextRepository::TASK_SEARCH_PHRASE_BY_LANG,
             $locale,
             $resources);
 
-        // get pagination bar
-        $pagination = new Pagination(
-            $textCount,
-            $this->_paginationLimit,
-            $page);
-        $data['paginationBar'] = $pagination->getPaginationBar();
+        $query = $this->_textRepository->getSearchResults();
 
-        // get search results
-        $data['searchResults'] = $this->_textRepository->getSearchResults(
-            $this->_paginationLimit,
-            $pagination->getOffset());
+        if (empty($this->_paginationLimit)) {
+            $this->_paginationLimit = PHP_INT_MAX;
+        }
 
-        return $data;
+        return $this->paginator->paginate($query, $page, $this->_paginationLimit);
     }
 
 }

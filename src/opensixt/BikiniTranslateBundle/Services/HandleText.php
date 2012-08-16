@@ -10,7 +10,7 @@ use opensixt\BikiniTranslateBundle\Repository\TextRepository;
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
 
-class HandleText {
+abstract class HandleText {
 
     const ENTITY_TEXT_NAME  = 'opensixt\BikiniTranslateBundle\Entity\Text';
 
@@ -32,18 +32,17 @@ class HandleText {
     /** @var int */
     protected $_commonLanguageId;
 
-    /**
-     * @var string
-     */
-    public $revisionControlMode;
-
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $_paginationLimit;
 
     /** @var int */
     protected $_paginationPage;
+
+    /** @var string */
+    public $revisionControlMode;
+
+    /** @var \Knp\Component\Pager\Paginator */
+    public $paginator;
 
     /**
      * Constructor

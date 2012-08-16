@@ -10,7 +10,7 @@
 
     <div class="textblock">{{ 'searchstring_explanation'|trans }}</div>
 
-    <form action="{{ path('_translate_searchstring') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('_translate_searchstring') }}" method="get" {{ form_enctype(form) }}>
 
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
@@ -41,18 +41,14 @@
             </tr>
         {% endfor %}
         </tbody>
-
-        {% if paginationbar is defined %}
         <tfoot>
             <tr>
                 <td colspan="2">
-                    {% set param = {'target_route': '_translate_searchstring', 'paginationbar' : paginationbar } %}
-                    {% set param = param|merge({'search': search, 'mode': mode, 'resource': resource}) %}
-                    {% include 'opensixtBikiniTranslateBundle:Translate:paginationbar.html.twig' with param %}
+                    {# navigation #}
+                    {{ searchResults.render()|raw }}
                 </td>
             </tr>
         </tfoot>
-        {% endif %}
     </table>
     {% endif %}
 

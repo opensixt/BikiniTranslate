@@ -16,7 +16,7 @@
         </a>
     </div>
 
-    <form action="{{ path('_translate_edittext', {'locale':locale, 'page':paginationbar.current}) }}" method="post">
+    <form action="{{ path('_translate_edittext', {'locale':locale}) }}" method="get">
 
     {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
     <input id="btnSearch" type="button" value="{{ 'submit_page'|trans }}"/>
@@ -42,7 +42,7 @@
                     {% endif %}
                 </td>
                 {% if not currentLangIsCommonLang %}
-                <td>{{ item.commonLang }}</td>
+                <td>{{ item.textInCommonLanguage }}</td>
                 {% endif %}
                 <td>{{ form_widget(form['text_' ~ item.id]) }}</td>
             </tr>
@@ -55,11 +55,8 @@
         <tfoot>
             <tr>
                 <td colspan="2">
-                    {% set param = {'target_route': '_translate_edittext', 'paginationbar' : paginationbar, 'locale': locale } %}
-                    {% if resource is defined %}
-                        {% set param = param|merge({'resource': resource}) %}
-                    {% endif %}
-                    {% include 'opensixtBikiniTranslateBundle:Translate:paginationbar.html.twig' with param %}
+                    {# navigation #}
+                    {{ texts.render()|raw }}
                 </td>
             </tr>
         </tfoot>
@@ -147,7 +144,7 @@
 
         function setText(id, text)
         {
-            $('#form_text_' + id).val(text);
+            $('#text_' + id).val(text);
         }
 
     });
