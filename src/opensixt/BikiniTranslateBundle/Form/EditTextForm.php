@@ -46,7 +46,7 @@ class EditTextForm extends AbstractType
      */
     public function getName()
     {
-        return 'form';
+        return '';
     }
 
     /**

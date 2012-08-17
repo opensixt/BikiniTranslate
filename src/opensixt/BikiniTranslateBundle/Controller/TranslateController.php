@@ -83,11 +83,11 @@ class TranslateController extends Controller
         $searchResources = $this->getSearchResources();
 
         // set search parameters
-        $editText->setPaginationPage($page);
         $getSuggestionsFlag = true; // get translations with same hash from other resources
 
         // get search results
         $data = $editText->getData(
+            $page,
             $languageId,
             $searchResources,
             array_keys($resources),
@@ -95,11 +95,10 @@ class TranslateController extends Controller
             );
 
         $ids = array();
-        if (isset($data['texts'])) {
-            $ids = array_reduce(
-                $data['texts'],
-                function($ids, $elem) { $ids[] = $elem['id']; return $ids; },
-                array());
+        if (isset($data)) {
+            foreach ($data as $elem) {
+                $ids[] = $elem->getId();
+            }
         }
 
         $searchResource = $this->getFieldFromRequest('resource');
@@ -112,8 +111,7 @@ class TranslateController extends Controller
 
         $templateParam = array(
             'form'                    => $form->createView(),
-            'texts'                   => $data['texts'],
-            'paginationbar'           => $data['paginationBar'],
+            'texts'                   => $data,
             'locale'                  => $locale,
             'currentLangIsCommonLang' => $currentLangIsCommonLang,
         );
@@ -213,9 +211,9 @@ class TranslateController extends Controller
 
             // get search results
             $results = $searcher->getData(
+                $page,
                 $searchLanguage,
-                $searchResources,
-                $page);
+                $searchResources);
         }
 
         // set default search language
@@ -245,11 +243,8 @@ class TranslateController extends Controller
             'resource'      => $searchResource,
             'locale'        => $searchLanguage,
         );
-        if (!empty($results['paginationBar'])) {
-            $templateParam['paginationbar'] = $results['paginationBar'];
-        }
-        if (isset($results['searchResults'])) {
-            $templateParam['searchResults'] = $results['searchResults'];
+        if (isset($results)) {
+            $templateParam['searchResults'] = $results;
         }
 
         return $this->render('opensixtBikiniTranslateBundle:Translate:searchstring.html.twig',

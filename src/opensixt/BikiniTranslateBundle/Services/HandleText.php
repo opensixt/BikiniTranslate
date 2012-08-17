@@ -10,59 +10,43 @@ use opensixt\BikiniTranslateBundle\Repository\TextRepository;
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
 
-class HandleText {
+abstract class HandleText {
 
     const ENTITY_TEXT_NAME  = 'opensixt\BikiniTranslateBundle\Entity\Text';
 
-    /**
-     * @var repository
-     */
+    /** @var repository */
     protected $_textRepository;
 
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     protected $_em;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $_locale;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $_locales;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $_commonLanguage;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $_commonLanguageId;
 
-    /**
-     * @var string
-     */
-    public $revisionControlMode;
-
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $_paginationLimit;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $_paginationPage;
+
+    /** @var string */
+    public $revisionControlMode;
+
+    /** @var \Knp\Component\Pager\Paginator */
+    public $paginator;
 
     /**
      * Constructor
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param type $doctrine
      */
     public function __construct($doctrine)
@@ -74,7 +58,6 @@ class HandleText {
     /**
      * Sets locale
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $locale
      */
     public function setLocale($locale)
@@ -85,7 +68,6 @@ class HandleText {
     /**
      * Sets locales
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $locales
      */
     public function setLocales($locales)
@@ -94,6 +76,7 @@ class HandleText {
     }
 
     /**
+     * Set current page for pagination
      *
      * @param int $page
      */
@@ -103,6 +86,7 @@ class HandleText {
     }
 
     /**
+     * Set pagination limit
      *
      * @param int $page
      */

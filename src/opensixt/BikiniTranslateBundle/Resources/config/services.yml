@@ -11,12 +11,14 @@ services:
     opensixt_searchstring:
         class: %opensixt_searchstring.class%
         arguments: [@doctrine]
-#        arguments: [@service_id, "plain_value", %parameter%]
+        properties:
+            paginator: @knp_paginator
 
     opensixt_edittext:
         class: %opensixt_edittext.class%
         arguments: [@doctrine, %common_language%]
         properties:
+            paginator: @knp_paginator
             revisionControlMode: %text_revision_control%
             exportChunkLimit: %export_chunk_limit%
 
