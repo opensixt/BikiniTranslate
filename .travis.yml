@@ -19,5 +19,5 @@ before_script:
 
 script:
   - phpunit -c app/phpunit.xml
-  - phpcs ./src/
+  - phpcs --standard=PSR2 ./src/
   - phpcpd ./src/
