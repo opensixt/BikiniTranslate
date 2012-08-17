@@ -19,5 +19,4 @@ before_script:
 
 script:
   - phpunit -c app/phpunit.xml
-  - phpcpd ./src/
-  - phpcs ./src/
+  - phpcpd ./src/ && phpcs ./src/
