@@ -460,16 +460,16 @@ class TextRepository extends EntityRepository
             $query = $this->createQueryBuilder('t')
                 ->select('t, r, tr')
                 ->leftJoin('t.resource', 'r')
-                ->join('t.target', 'tr', Join::WITH, self::FIELD_TARGET . " != ?1")
-                ->where(self::FIELD_HASH . ' = ?2')
-                ->andWhere(self::FIELD_LOCALE . ' = ?3')
-                ->andWhere(self::FIELD_RESOURCE . ' != ?4')
-                ->andWhere(self::FIELD_RESOURCE . ' in (?5)')
-                ->setParameter(1, self::TEXT_EMPTY_VALUE)
-                ->setParameter(2, $hash)
-                ->setParameter(3, $locale)
-                ->setParameter(4, $resource)
-                ->setParameter(5, $allresources);
+                ->join('t.target', 'tr')
+                ->where(self::FIELD_HASH . ' = ?1')
+                ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
+                ->andWhere(self::FIELD_LOCALE . ' = ?2')
+                ->andWhere(self::FIELD_RESOURCE . ' != ?3')
+                ->andWhere(self::FIELD_RESOURCE . ' in (?4)')
+                ->setParameter(1, $hash)
+                ->setParameter(2, $locale)
+                ->setParameter(3, $resource)
+                ->setParameter(4, $allresources);
             $suggestions = $query->getQuery()->getArrayResult();
         }
 
@@ -510,7 +510,7 @@ class TextRepository extends EntityRepository
                 $message = '';
                 foreach ($textsLang as $textLang) {
                     if ($text->getHash() == $textLang->getHash()) {
-                        $message = $textLang->getTarget()->getTarget();
+                        $message = $textLang->getCurrentTarget()->getTarget();
                         break;
                     }
                 }

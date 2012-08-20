@@ -16,7 +16,7 @@
         </a>
     </div>
 
-    <form action="{{ path('_translate_edittext', {'locale':locale}) }}" method="get">
+    <form action="{{ path('_translate_edittext', {'locale':locale}) }}" method="post">
 
     {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
     <input id="btnSearch" type="button" value="{{ 'submit_page'|trans }}"/>
@@ -75,12 +75,12 @@
         // no conflict mode, use $ in here
 
         $('#btnSaveTranslations').click(function() {
-            $('#form_action').val('save');
+            $('#action').val('save');
             $(this.form).submit();
         });
 
         $('#btnSearch').click(function() {
-            $('#form_action').val('search');
+            $('#action').val('search');
             $(this.form).submit();
         });
 

@@ -20,6 +20,12 @@ class SearchString extends HandleText
     /** @var string */
     protected $searchString;
 
+    /** @var string */
+    protected $searchPhrase;
+
+    /** @var int */
+    protected $searchMode;
+
     public function __construct($doctrine)
     {
         $this->paginationLimit = 15;
@@ -34,6 +40,9 @@ class SearchString extends HandleText
      */
     public function setSearchParameters($searchPhrase, $searchMode = self::SEARCH_EXACT)
     {
+        $searchPhrase = urldecode($searchPhrase);
+        $this->searchPhrase = $searchPhrase;
+        $this->searchMode = $searchMode;
         if ($searchMode == self::SEARCH_LIKE) {
             $searchPhrase = preg_replace('/\s+/', ' ', $searchPhrase);
             $searchPhrase = str_replace(' ', '%', $searchPhrase);
@@ -76,7 +85,17 @@ class SearchString extends HandleText
             $this->paginationLimit = PHP_INT_MAX;
         }
 
-        return $this->paginator->paginate($query, $page, $this->paginationLimit);
+        $data = $this->paginator->paginate($query, $page, $this->paginationLimit);
+
+        // set GET parameter for paginator links
+        if (count($resources) == 1) {
+            $data->setParam('resource', $resources[0]);
+        }
+        $data->setParam('search', $this->searchPhrase);
+        $data->setParam('mode', $this->searchMode);
+        $data->setParam('locale', $locale);
+
+        return $data;
     }
 }
 
