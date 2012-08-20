@@ -10,7 +10,7 @@
 
     <div class="textblock">{{ 'searchstring_explanation'|trans }}</div>
 
-    <form action="{{ path('_translate_searchstring') }}" method="get" {{ form_enctype(form) }}>
+    <form action="{{ path('_translate_searchstring') }}" method="post" {{ form_enctype(form) }}>
 
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}

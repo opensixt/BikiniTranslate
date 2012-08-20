@@ -61,22 +61,21 @@ class TranslateController extends Controller
 
         // Update texts with entered values
         if ($request->getMethod() == 'POST') {
-            $formData = $request->request->get('form');
-            if (isset($formData)) {
-                if (isset($formData['action']) && $formData['action'] == 'search') {
-                    $page = 1;
-                }
+            $formData = $this->getRequestData($request);
 
-                if (isset($formData['action']) && $formData['action'] == 'save') {
-                    $textsToSave = array();
-                    foreach ($formData as $key => $value) {
-                        // for all textareas with name 'text_[number]'
-                        if (preg_match("/text_([0-9]+)/", $key, $matches) && strlen($value)) {
-                            $textsToSave[$matches[1]] = $value;
-                        }
+            if (isset($formData['action']) && $formData['action'] == 'search') {
+                $page = 1;
+            }
+
+            if (isset($formData['action']) && $formData['action'] == 'save') {
+                $textsToSave = array();
+                foreach ($formData as $key => $value) {
+                    // for all textareas with name 'text_[number]'
+                    if (preg_match("/text_([0-9]+)/", $key, $matches) && strlen($value)) {
+                        $textsToSave[$matches[1]] = $value;
                     }
-                    $editText->updateTexts($textsToSave);
                 }
+                $editText->updateTexts($textsToSave);
             }
         }
 
@@ -687,5 +686,18 @@ class TranslateController extends Controller
             $searchResources = array_keys($resources);
         }
         return $searchResources;
+    }
+
+    /**
+     * Return $_REQUEST content as array
+     *
+     * @param type $request
+     * @return type
+     */
+    private function getRequestData($request)
+    {
+        $requestString = $request->getContent();
+        parse_str($requestString, $requestData);
+        return $requestData;
     }
 }

@@ -319,6 +319,20 @@ class Text
     }
 
     /**
+     * Get the first element from target ArrayCollection
+     *
+     * @return ArrayCollection
+     */
+    public function getCurrentTarget()
+    {
+        if (!count($this->target)) {
+            return NULL;
+        }
+
+        return $this->target[0];
+    }
+
+    /**
      * Set resourceId
      *
      * @param string $resourceId

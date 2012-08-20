@@ -78,6 +78,12 @@ class EditText extends HandleText {
         }
         $data = $this->paginator->paginate($query, $page, $this->_paginationLimit);
 
+        // set resource as GET parameter for paginator links,
+        // if resource filter is set
+        if (count($searchResources) == 1) {
+            $data->setParam('resource', $searchResources[0]);
+        }
+
         // set messages in common language for any text in $translations
         $this->_textRepository->setMessagesInCommonLanguage($data);
 
