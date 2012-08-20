@@ -24,8 +24,8 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
  */
 class User implements AdvancedUserInterface
 {
-    const ActiveUser    = 1;
-    const NotActiveUser = 0;
+    const ACTIVE_USER     = 1;
+    const NOT_ACTIVE_USER = 0;
 
     /**
      * @var int $id
@@ -122,7 +122,7 @@ class User implements AdvancedUserInterface
         //$this->setSalt('');
         $this->userRoles = new ArrayCollection();
         $this->userLanguages = new ArrayCollection();
-        $this->setIsactive($this::NotActiveUser);
+        $this->setIsactive(self::NOT_ACTIVE_USER);
         $this->setCreated(new \DateTime());
     }
 
@@ -380,3 +380,4 @@ class User implements AdvancedUserInterface
         return $this->isactive;
     }
 }
+

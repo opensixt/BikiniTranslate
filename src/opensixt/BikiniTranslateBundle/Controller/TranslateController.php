@@ -588,7 +588,7 @@ class TranslateController extends Controller
 
                     foreach ($chunks as $chunk) {
                         $exportXliff = $export->getDataAsXliff($chunk);
-                        $searcher->sendToTS($exportXliff, $chunk);
+                        $searcher->sendToTranslationService($exportXliff, $chunk);
                     }
                     $templateParam['success'] = 1;
                 }

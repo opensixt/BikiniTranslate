@@ -10,33 +10,33 @@ use opensixt\BikiniTranslateBundle\Repository\TextRepository;
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
 
-abstract class HandleText {
-
+abstract class HandleText
+{
     const ENTITY_TEXT_NAME  = 'opensixt\BikiniTranslateBundle\Entity\Text';
 
     /** @var repository */
-    protected $_textRepository;
+    protected $textRepository;
 
     /** @var EntityManager */
-    protected $_em;
+    protected $em;
 
     /** @var int */
-    protected $_locale;
+    protected $locale;
 
     /** @var array */
-    protected $_locales;
+    protected $locales;
 
     /** @var string */
-    protected $_commonLanguage;
+    protected $commonLanguage;
 
     /** @var int */
-    protected $_commonLanguageId;
+    protected $commonLanguageId;
 
     /** @var int */
-    protected $_paginationLimit;
+    protected $paginationLimit;
 
     /** @var int */
-    protected $_paginationPage;
+    protected $paginationPage;
 
     /** @var string */
     public $revisionControlMode;
@@ -51,8 +51,8 @@ abstract class HandleText {
      */
     public function __construct($doctrine)
     {
-        $this->_em = $doctrine->getEntityManager();
-        $this->_textRepository = $this->_em->getRepository(self::ENTITY_TEXT_NAME);
+        $this->em = $doctrine->getEntityManager();
+        $this->textRepository = $this->em->getRepository(self::ENTITY_TEXT_NAME);
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class HandleText {
      */
     public function setLocale($locale)
     {
-        $this->_locale = $locale;
+        $this->locale = $locale;
     }
 
     /**
@@ -72,7 +72,7 @@ abstract class HandleText {
      */
     public function setLocales($locales)
     {
-        $this->_locales = $locales;
+        $this->locales = $locales;
     }
 
     /**
@@ -82,7 +82,7 @@ abstract class HandleText {
      */
     public function setPaginationPage($page)
     {
-        $this->_paginationPage = $page;
+        $this->paginationPage = $page;
     }
 
     /**
@@ -93,8 +93,8 @@ abstract class HandleText {
     public function setPaginationLimit($lim)
     {
         if ($lim >= 0) {
-            $this->_paginationLimit = $lim;
+            $this->paginationLimit = $lim;
         }
     }
-
 }
+

@@ -10,8 +10,10 @@ use opensixt\BikiniTranslateBundle\Entity\Role;
 /**
  * @author uwe.pries@sixt.com
  */
-class RoleFixture extends AbstractFixture implements OrderedFixtureInterface {
-    public function load(ObjectManager $manager) {
+class RoleFixture extends AbstractFixture implements OrderedFixtureInterface
+{
+    public function load(ObjectManager $manager)
+    {
         $super_admin = new Role;
         $super_admin->setName('Super Admin');
         $super_admin->setLabel('ROLE_SUPER_ADMIN');
@@ -26,21 +28,23 @@ class RoleFixture extends AbstractFixture implements OrderedFixtureInterface {
         $user->setName('User');
         $user->setLabel('ROLE_USER');
         $manager->persist($user);
-        
+
         $guest = new Role;
         $guest->setName('Guest');
         $guest->setLabel('ROLE_GUEST');
         $manager->persist($guest);
-        
+
         $manager->flush();
-        
+
         $this->addReference('role-1', $super_admin);
         $this->addReference('role-2', $admin);
         $this->addReference('role-3', $user);
         $this->addReference('role-4', $guest);
     }
-    
-    public function getOrder() {
+
+    public function getOrder()
+    {
         return 1;
     }
 }
+

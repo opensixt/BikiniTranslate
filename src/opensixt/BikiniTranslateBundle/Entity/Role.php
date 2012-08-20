@@ -98,3 +98,4 @@ class Role implements RoleInterface
         return $this->label;
     }
 }
+

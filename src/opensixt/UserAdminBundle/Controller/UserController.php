@@ -44,9 +44,13 @@ class UserController extends AbstractController
         $form = $this->formFactory
                      ->create(new UserSearchForm($this->translator), array('search' => $searchTerm));
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:User:list.html.twig',
-                                                 array('form' => $form->createView(),
-                                                       'pagination' => $pagination));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:User:list.html.twig',
+            array(
+                'form' => $form->createView(),
+                'pagination' => $pagination
+            )
+        );
     }
 
     /**
@@ -64,9 +68,13 @@ class UserController extends AbstractController
 
         $form = $this->getEditUserFormForUser($user);
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:User:view.html.twig',
-                                                 array('user' => $user,
-                                                       'form' => $form->createView()));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:User:view.html.twig',
+            array(
+                'user' => $user,
+                'form' => $form->createView()
+            )
+        );
     }
 
     /**
@@ -97,9 +105,14 @@ class UserController extends AbstractController
 
             return $this->redirect($this->generateUrl('_admin_user', array('id' => $id)));
         }
-        return $this->templating->renderResponse('opensixtUserAdminBundle:User:view.html.twig',
-                                                         array('user' => $user,
-                                                               'form' => $form->createView()));
+
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:User:view.html.twig',
+            array(
+                'user' => $user,
+                'form' => $form->createView()
+            )
+        );
     }
 
     /**
@@ -111,8 +124,12 @@ class UserController extends AbstractController
 
         $form = $this->getEditUserFormForUser();
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:User:create.html.twig',
-                                                 array('form' => $form->createView()));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:User:create.html.twig',
+            array(
+                'form' => $form->createView()
+            )
+        );
     }
 
     /**
@@ -137,8 +154,12 @@ class UserController extends AbstractController
             return $this->redirect($this->generateUrl('_admin_userlist'));
         }
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:User:create.html.twig',
-                                                 array('form' => $form->createView()));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:User:create.html.twig',
+            array(
+                'form' => $form->createView()
+            )
+        );
     }
 
     /**
@@ -177,6 +198,7 @@ class UserController extends AbstractController
         }
 
         return $this->formFactory
-                    ->create(new UserEditForm(), $user, array('intention' => $intention));
+            ->create(new UserEditForm(), $user, array('intention' => $intention));
     }
 }
+

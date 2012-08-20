@@ -29,8 +29,10 @@ class GroupController extends AbstractController
                       ->getQueryForAllGroups();
         $pagination = $this->paginator->paginate($query, $page, $this->listNumItems);
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Group:list.html.twig',
-                                                 array('pagination' => $pagination));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Group:list.html.twig',
+            array('pagination' => $pagination)
+        );
     }
 
     /**
@@ -49,9 +51,13 @@ class GroupController extends AbstractController
 
         $form = $this->getGroupEditFormForGroup($group);
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Group:view.html.twig',
-                                                 array('form' => $form->createView(),
-                                                       'group' => $group));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Group:view.html.twig',
+            array(
+                'form' => $form->createView(),
+                'group' => $group
+            )
+        );
     }
 
     /**
@@ -77,9 +83,13 @@ class GroupController extends AbstractController
 
             return $this->redirect($this->generateUrl('_admin_group', array('id' => $id)));
         } else {
-            return $this->templating->renderResponse('opensixtUserAdminBundle:Group:view.html.twig',
-                                                             array('user' => $group,
-                                                                   'form' => $form->createView()));
+            return $this->templating->renderResponse(
+                'opensixtUserAdminBundle:Group:view.html.twig',
+                array(
+                    'user' => $group,
+                    'form' => $form->createView()
+                )
+            );
         }
     }
 
@@ -92,8 +102,10 @@ class GroupController extends AbstractController
 
         $form = $this->getGroupEditFormForGroup();
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Group:create.html.twig',
-                                                 array('form' => $form->createView()));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Group:create.html.twig',
+            array('form' => $form->createView())
+        );
     }
 
     /**
@@ -117,8 +129,10 @@ class GroupController extends AbstractController
             return $this->redirect($this->generateUrl('_admin_grouplist'));
         }
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Group:create.html.twig',
-                                                 array('form' => $form->createView()));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Group:create.html.twig',
+            array('form' => $form->createView())
+        );
     }
 
     /**
@@ -168,6 +182,8 @@ class GroupController extends AbstractController
         if (!$group) {
             throw new NotFoundHttpException();
         }
+
         return $group;
     }
 }
+

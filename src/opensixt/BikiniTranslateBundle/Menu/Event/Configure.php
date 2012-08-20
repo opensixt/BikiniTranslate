@@ -40,3 +40,4 @@ class Configure extends Event
         return $this->menu;
     }
 }
+

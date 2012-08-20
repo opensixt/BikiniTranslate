@@ -20,17 +20,20 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
     /**
      * @param \Doctrine\Common\Persistence\ObjectManager $manager
      */
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager)
+    {
         $admin = new User;
         $admin->setUsername('admin');
         $admin->setPassword('admin');
         $admin->setEmail('admin@bikinitranslate');
-        $admin->setIsactive(User::ActiveUser);
+        $admin->setIsactive(User::ACTIVE_USER);
         $admin->addUserRole($manager->merge($this->getReference('role-1')));
-        $admin->setUserLanguages(array(
-            $manager->merge($this->getReference('language-en_GB')),
-            $manager->merge($this->getReference('language-de_DE')),
-        ));
+        $admin->setUserLanguages(
+            array(
+                $manager->merge($this->getReference('language-en_GB')),
+                $manager->merge($this->getReference('language-de_DE')),
+            )
+        );
         $admin->setUserGroups(array($manager->merge($this->getReference('groups-admin'))));
 
         $manager->persist($admin);
@@ -41,7 +44,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setUsername('user');
         $user->setPassword('user');
         $user->setEmail('user@bikinitranslate');
-        $user->setIsactive(User::ActiveUser);
+        $user->setIsactive(User::ACTIVE_USER);
         $user->addUserRole($manager->merge($this->getReference('role-3')));
         $user->setUserLanguages(array($manager->merge($this->getReference('language-de_DE'))));
         $user->setUserGroups(array($manager->merge($this->getReference('groups-dummy'))));
@@ -80,5 +83,5 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
     {
         return $this->container->get('opensixt.bikini_translate.acl.user_permissions');
     }
-
 }
+

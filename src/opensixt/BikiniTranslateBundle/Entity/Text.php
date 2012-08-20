@@ -156,7 +156,8 @@ class Text
     /** @var ArrayCollection */
     private $suggestions;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->setCreated(new \DateTime('now'));
         $this->setUpdated(new \DateTime('now'));
         $this->target = new ArrayCollection;
@@ -297,12 +298,15 @@ class Text
     public function setTarget(array $target)
     {
         // transform array of strings to array of TextRevision
-        $this->target = array_map(function($target) {
-            $textRev = new TextRevision;
-            $textRev->setTarget($target);
+        $this->target = array_map(
+            function ($target) {
+                $textRev = new TextRevision;
+                $textRev->setTarget($target);
 
-            return $textRev;
-        }, $target);
+                return $textRev;
+            },
+            $target
+        );
 
         // mark as translated
         $this->setTranslateMe(false);
@@ -606,3 +610,4 @@ class Text
         $this->setUpdated(new \DateTime('now'));
     }*/
 }
+

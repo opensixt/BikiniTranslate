@@ -7,7 +7,6 @@ use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use \Symfony\Component\Form\CallbackValidator;
 use \Symfony\Component\Form\FormError;
 
-
 /**
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
@@ -19,21 +18,29 @@ class EditTextForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('resource', 'choice', array(
-                  'label'       => 'resource',
-                  'empty_value' => 'all_values',
-                  'choices'     => $options['resources'],
-                  'required'    => false,
-                  'data'        => $options['searchResource']
-                ))
-            ->add('action', 'hidden');
+        $builder->add(
+            'resource',
+            'choice',
+            array(
+              'label'       => 'resource',
+              'empty_value' => 'all_values',
+              'choices'     => $options['resources'],
+              'required'    => false,
+              'data'        => $options['searchResource']
+            )
+        )
+        ->add('action', 'hidden');
 
-        if (!empty($options['ids'])){
+        if (!empty($options['ids'])) {
             foreach ($options['ids'] as $id) {
-                $builder->add('text_' . $id, 'textarea', array(
-                    'trim' => true,
-                    'required' => false,
-                ));
+                $builder->add(
+                    'text_' . $id,
+                    'textarea',
+                    array(
+                        'trim' => true,
+                        'required' => false,
+                    )
+                );
             }
         }
 
@@ -61,6 +68,7 @@ class EditTextForm extends AbstractType
             'ids'            => array(),
             'resources'      => array(),
             'searchResource' => 0,
-            );
+        );
     }
 }
+

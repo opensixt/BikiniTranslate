@@ -18,27 +18,39 @@ class CopyResourceForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('res_from', 'choice', array(
-                    'label'       => 'copy_res_content_from',
-                    'empty_value' => '',
-                    'choices'     => $options['resources'],
-                    'required'    => true,
-                    'data'        => $options['from'],
-                ))
-            ->add('res_to', 'choice', array(
-                    'label'       => 'copy_res_content_to',
-                    'empty_value' => '',
-                    'choices'     => $options['resources'],
-                    'required'    => true,
-                    'data'        => $options['to'],
-                ))
-            ->add('locale', 'choice', array(
-                    'label'       => 'copy_res_content_lang',
-                    'empty_value' => 'all_values',
-                    'choices'     => $options['locales'],
-                    'required'    => false,
-                    'data'        => $options['searchLanguage'],
-                ));
+        $builder->add(
+            'res_from',
+            'choice',
+            array(
+                'label'       => 'copy_res_content_from',
+                'empty_value' => '',
+                'choices'     => $options['resources'],
+                'required'    => true,
+                'data'        => $options['from'],
+            )
+        )
+        ->add(
+            'res_to',
+            'choice',
+            array(
+                'label'       => 'copy_res_content_to',
+                'empty_value' => '',
+                'choices'     => $options['resources'],
+                'required'    => true,
+                'data'        => $options['to'],
+            )
+        )
+        ->add(
+            'locale',
+            'choice',
+            array(
+                'label'       => 'copy_res_content_lang',
+                'empty_value' => 'all_values',
+                'choices'     => $options['locales'],
+                'required'    => false,
+                'data'        => $options['searchLanguage'],
+            )
+        );
     }
 
     /**
@@ -65,6 +77,7 @@ class CopyResourceForm extends AbstractType
             'locales' => array(),
             'from'    => 0,
             'to'      => 0,
-            );
+        );
     }
 }
+

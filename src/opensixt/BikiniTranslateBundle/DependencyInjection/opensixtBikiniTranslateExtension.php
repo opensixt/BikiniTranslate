@@ -26,3 +26,4 @@ class opensixtBikiniTranslateExtension extends Extension
         $loader->load('services.yml');
     }
 }
+

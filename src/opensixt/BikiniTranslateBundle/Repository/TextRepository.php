@@ -42,44 +42,44 @@ class TextRepository extends EntityRepository
     /**
      * @var string
      */
-    private $_task;
+    private $task;
 
     /**
      * @var array
      */
-    private $_resources;
+    private $resources;
 
     /**
      * @var int
      */
-    private $_hts;
+    private $hts;
 
     /**
      * @var int
      */
-    private $_locale;
+    private $locale;
 
     /**
      * @var array
      */
-    private $_locales;
+    private $locales;
 
     /**
      * @var string
      */
-    private $_commonLanguage;
+    private $commonLanguage;
 
     /**
      * @var int
      */
-    private $_commonLanguageId;
+    private $commonLanguageId;
 
     /**
      * @var string
      */
-    private $_textRevisionControl;
+    private $textRevisionControl;
 
-    private $_date;
+    private $date;
 
 
     /**
@@ -88,7 +88,7 @@ class TextRepository extends EntityRepository
      */
     public function setTask($task)
     {
-        $this->_task = $task;
+        $this->task = $task;
     }
 
     /**
@@ -97,7 +97,7 @@ class TextRepository extends EntityRepository
      */
     public function setResources($resources)
     {
-        $this->_resources = $resources;
+        $this->resources = $resources;
     }
 
     /**
@@ -106,7 +106,7 @@ class TextRepository extends EntityRepository
      */
     public function setHts($hts)
     {
-        $this->_hts = $hts;
+        $this->hts = $hts;
     }
 
     /**
@@ -116,7 +116,7 @@ class TextRepository extends EntityRepository
      */
     public function setLocale($locale)
     {
-        $this->_locale = $locale;
+        $this->locale = $locale;
     }
 
     /**
@@ -126,7 +126,7 @@ class TextRepository extends EntityRepository
      */
     public function setLocales($locales)
     {
-        $this->_locales = $locales;
+        $this->locales = $locales;
     }
 
     /**
@@ -135,7 +135,7 @@ class TextRepository extends EntityRepository
      */
     public function setCommonLanguage($locale)
     {
-        $this->_commonLanguage = $locale;
+        $this->commonLanguage = $locale;
     }
 
     /**
@@ -144,7 +144,7 @@ class TextRepository extends EntityRepository
      */
     public function setCommonLanguageId($id)
     {
-        $this->_commonLanguageId = $id;
+        $this->commonLanguageId = $id;
     }
 
     /**
@@ -153,7 +153,7 @@ class TextRepository extends EntityRepository
      */
     public function setTextRevisionControl($textRevisionControl)
     {
-        $this->_textRevisionControl = $textRevisionControl;
+        $this->textRevisionControl = $textRevisionControl;
     }
 
     /**
@@ -162,12 +162,12 @@ class TextRepository extends EntityRepository
      */
     public function setSearchString($searchString)
     {
-        $this->_searchString = $searchString;
+        $this->searchString = $searchString;
     }
 
     public function setDate($date)
     {
-        $this->_date = $date;
+        $this->date = $date;
     }
 
     /**
@@ -268,7 +268,8 @@ class TextRepository extends EntityRepository
 
             // set data for destination locale
             $textsDestLang = $this->getMessagesByLanguage($sourceData, array($langTo));
-            $translationsCount = $this->updateEmptyTranslations($sourceData, $textsDestLang, self::DOMAIN_TYPE_LANGUAGE);
+            $translationsCount =
+                $this->updateEmptyTranslations($sourceData, $textsDestLang, self::DOMAIN_TYPE_LANGUAGE);
         }
         return $translationsCount;
     }
@@ -294,7 +295,8 @@ class TextRepository extends EntityRepository
 
             // set data for destination resource for any language from $languages
             $textsDestLang = $this->getMessagesByLanguage($sourceData, $languages, array($resTo));
-            $translationsCount = $this->updateEmptyTranslations($sourceData, $textsDestLang, self::DOMAIN_TYPE_RESOURCE);
+            $translationsCount =
+                $this->updateEmptyTranslations($sourceData, $textsDestLang, self::DOMAIN_TYPE_RESOURCE);
         }
         return $translationsCount;
     }
@@ -369,16 +371,18 @@ class TextRepository extends EntityRepository
                 $txtId = $txt['id'];
 
                 // if the list of availabte resources is not set
-                if (empty($this->_resources)) {
-                    throw new \Exception(__METHOD__ . ': _resources is not set. Please set it with ' . __CLASS__ . '::setResources() !');
+                if (empty($this->resources)) {
+                    throw new \Exception(
+                        __METHOD__ . ': resources is not set. Please set it with ' . __CLASS__ . '::setResources() !'
+                    );
                 }
 
                 // if destination text belongs to available resource
-                if (in_array($txt['resourceId'], $this->_resources)) {
+                if (in_array($txt['resourceId'], $this->resources)) {
                     // get text from $sourceData by hash and resource
                     $translation = '';
                     foreach ($sourceData as $src) {
-                        if ($src['hash'] == $txt['hash']){
+                        if ($src['hash'] == $txt['hash']) {
                             if ($src['resourceId'] == $txt['resourceId'] && $domainType == self::DOMAIN_TYPE_LANGUAGE) {
                                 $translation = $src['target'][0]['target'];
                                 break;
@@ -456,7 +460,7 @@ class TextRepository extends EntityRepository
             $query = $this->createQueryBuilder('t')
                 ->select('t, r, tr')
                 ->leftJoin('t.resource', 'r')
-                ->join('t.target', 'tr', Join::WITH , self::FIELD_TARGET . " != ?1")
+                ->join('t.target', 'tr', Join::WITH, self::FIELD_TARGET . " != ?1")
                 ->where(self::FIELD_HASH . ' = ?2')
                 ->andWhere(self::FIELD_LOCALE . ' = ?3')
                 ->andWhere(self::FIELD_RESOURCE . ' != ?4')
@@ -500,8 +504,8 @@ class TextRepository extends EntityRepository
      */
     public function setMessagesInCommonLanguage(&$texts)
     {
-        if ($this->_locale != $this->_commonLanguageId) {
-            $textsLang = $this->getMessagesByLanguage($texts, array($this->_commonLanguageId));
+        if ($this->locale != $this->commonLanguageId) {
+            $textsLang = $this->getMessagesByLanguage($texts, array($this->commonLanguageId));
             foreach ($texts as $text) {
                 $message = '';
                 foreach ($textsLang as $textLang) {
@@ -523,84 +527,81 @@ class TextRepository extends EntityRepository
     protected function setQueryParameters($query)
     {
         // Exceptions
-        if (!isset($this->_task)) {
-            throw new \Exception(__METHOD__ . ': _task is not set. Please set it with ' . __CLASS__ . '::init() !');
+        if (!isset($this->task)) {
+            throw new \Exception(__METHOD__ . ': task is not set. Please set it with ' . __CLASS__ . '::init() !');
         }
 
-        switch ($this->_task) {
+        switch ($this->task) {
+            case self::TASK_SEARCH_PHRASE_BY_LANG:
+                $query->join('t.target', 'tr', Join::WITH, "tr.target LIKE ?1")
+                    ->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
+                    ->andWhere(self::FIELD_LOCALE . ' = ?3')
+                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->setParameter(1, $this->searchString)
+                    ->setParameter(2, $this->resources)
+                    ->setParameter(3, $this->locale);
 
-        case self::TASK_SEARCH_PHRASE_BY_LANG:
-            $query->join('t.target', 'tr', Join::WITH , "tr.target LIKE ?1")
-                ->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
-                ->andWhere(self::FIELD_LOCALE . ' = ?3')
-                ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
-                ->setParameter(1, $this->_searchString)
-                ->setParameter(2, $this->_resources)
-                ->setParameter(3, $this->_locale);
+                break;
+            case self::TASK_ALL_CONTENT_BY_LANG:
+            case self::TASK_ALL_CONTENT_BY_RES:
+                $query->join('t.target', 'tr')
+                    ->where(self::FIELD_LOCALE . ' IN (?1)')
+                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
+                    ->setParameter(1, $this->locales);
 
-            break;
+                if (!empty($this->resources)) {
+                    $query->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
+                    ->setParameter(2, $this->resources);
+                }
+                if ($this->locale == $this->commonLanguageId) {
+                    $query->andWhere(self::FIELD_RELEASED . ' = 1');
+                }
 
-        case self::TASK_ALL_CONTENT_BY_LANG:
-        case self::TASK_ALL_CONTENT_BY_RES:
-            $query->join('t.target', 'tr')
-                ->where(self::FIELD_LOCALE . ' IN (?1)')
-                ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
-                ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
-                ->setParameter(1, $this->_locales);
+                break;
+            case self::TASK_SEARCH_FLAGGED_TEXTS:
+                $query->join('t.target', 'tr')
+                    ->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
+                    ->setParameter(1, $this->resources);
 
-            if (!empty($this->_resources)) {
-                $query->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
-                ->setParameter(2, $this->_resources);
-            }
-            if ($this->_locale == $this->_commonLanguageId) {
-                $query->andWhere(self::FIELD_RELEASED . ' = 1');
-            }
+                if (!empty($this->locale)) {
+                    $query->andWhere(self::FIELD_LOCALE . ' IN (?2)')
+                    ->setParameter(2, $this->locale);
+                } elseif (!empty($this->locales)) {
+                    $query->andWhere(self::FIELD_LOCALE . ' IN (?2)')
+                    ->setParameter(2, $this->locales);
+                }
 
-            break;
+                if (!empty($this->date)) {
+                    // expired texts
+                    $query->andWhere(self::FIELD_EXPIRY_DATE . ' <= ?3')
+                        ->setParameter(3, $this->date);
+                } else {
+                    // non released texts
+                    $query->andWhere(self::FIELD_RELEASED . ' IS NULL OR ' . self::FIELD_RELEASED . ' = 0')
+                        ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL');
+                }
 
-        case self::TASK_SEARCH_FLAGGED_TEXTS:
-            $query->join('t.target', 'tr')
-                ->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
-                ->setParameter(1, $this->_resources);
+                break;
+            case self::TASK_MISSING_TRANS_BY_LANG:
+            default:
+                $query->join('t.target', 'tr')
+                    ->where(self::FIELD_RESOURCE . ' IN (?1)')
+                    ->andWhere(self::FIELD_LOCALE . ' = ?2')
+                    ->andWhere(self::FIELD_DONTTRANSLATE . ' IS NULL OR ' . self::FIELD_DONTTRANSLATE . ' = 0')
+                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_RELEASED . ' = 1')
+                    ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
+                    ->setParameter(1, $this->resources)
+                    ->setParameter(2, $this->locale);
+                // just get the unflagged translations
+                // 0 = open state
+                // 1 = already sent to hts
+                //     if ($this->hts === true) {
+                    $query->andWhere(self::FIELD_TS . ' IS NULL OR ' . self::FIELD_TS . ' = 0');
+                //     }
 
-            if (!empty($this->_locale)) {
-                $query->andWhere(self::FIELD_LOCALE . ' IN (?2)')
-                ->setParameter(2, $this->_locale);
-            } elseif (!empty($this->_locales)) {
-                $query->andWhere(self::FIELD_LOCALE . ' IN (?2)')
-                ->setParameter(2, $this->_locales);
-            }
-            if (!empty($this->_date)) {
-                // expired texts
-                $query->andWhere(self::FIELD_EXPIRY_DATE . ' <= ?3')
-                    ->setParameter(3, $this->_date);
-            } else {
-                // non released texts
-                $query->andWhere(self::FIELD_RELEASED . ' IS NULL OR ' . self::FIELD_RELEASED . ' = 0')
-                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL');
-            }
-
-            break;
-
-        case self::TASK_MISSING_TRANS_BY_LANG:
-        default:
-            $query->join('t.target', 'tr')
-                ->where(self::FIELD_RESOURCE . ' IN (?1)')
-                ->andWhere(self::FIELD_LOCALE . ' = ?2')
-                ->andWhere(self::FIELD_DONTTRANSLATE . ' IS NULL OR ' . self::FIELD_DONTTRANSLATE . ' = 0')
-                ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
-                ->andWhere(self::FIELD_RELEASED . ' = 1')
-                ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
-                ->setParameter(1, $this->_resources)
-                ->setParameter(2, $this->_locale);
-            // just get the unflagged translations
-            // 0 = open state
-            // 1 = already sent to hts
-       //     if ($this->_hts === true) {
-                $query->andWhere(self::FIELD_TS . ' IS NULL OR ' . self::FIELD_TS . ' = 0');
-       //     }
-
-            break;
+                break;
         }
 
         // needed to access last text revision via target.0.target or $ele['target'][0]['target']
@@ -617,31 +618,20 @@ class TextRepository extends EntityRepository
     public function updateText($id, $text)
     {
         if ($id) {
-            $textRep = $this->_em->getRepository('opensixtBikiniTranslateBundle:Text');
-            //$textRevisionRep = $this->_em->getRepository('opensixtBikiniTranslateBundle:TextRevision');
+            // TODO: $this->_textRevisionControl == 'off'
 
-            /*if ($this->_textRevisionControl == 'off') {
-                // if text_revision_control is 'off', than update table with new data
-                $objTextRevision = $textRevisionRep->find($id);
-                if (!empty($objTextRevision)) {
-                    $objTextRevision->setTarget($text);
-                    $this->_em->persist($objTextRevision);
-                    $this->_em->flush();
-                }
+            $em = $this->getEntityManager();
 
-            } else {*/
-                /* if text_revision_control is 'on', than insert a new record into
-                   TextRevision table, and update a pointer field in Text */
+            $textRep = $em->getRepository('opensixtBikiniTranslateBundle:Text');
 
-                $objText = $textRep->find($id);
-                if (is_null($objText)) {
-                    throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
-                }
+            $objText = $textRep->find($id);
+            if (is_null($objText)) {
+                throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
+            }
 
-                $objText->addTarget($text);
-                $this->_em->persist($objText);
-                $this->_em->flush();
-            //}
+            $objText->addTarget($text);
+            $em->persist($objText);
+            $em->flush();
         }
     }
 
@@ -652,7 +642,9 @@ class TextRepository extends EntityRepository
      */
     public function setTranslationServiceFlag($ids)
     {
-        if (!count($ids)) return;
+        if (!count($ids)) {
+            return;
+        }
 
         $this->createQueryBuilder('t')
             ->update()
@@ -679,7 +671,9 @@ class TextRepository extends EntityRepository
      */
     public function getIdByLocale($locale)
     {
-        if (!$locale) return false;
+        if (!$locale) {
+            return false;
+        }
 
         $repository = $this->getEntityManager()
             ->getRepository('opensixtBikiniTranslateBundle:Language');
@@ -704,3 +698,4 @@ class TextRepository extends EntityRepository
         return current($result);
     }
 }
+

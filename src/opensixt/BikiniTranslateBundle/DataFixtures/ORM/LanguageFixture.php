@@ -10,8 +10,10 @@ use opensixt\BikiniTranslateBundle\Entity\Language;
 /**
  * @author uwe.pries@sixt.com
  */
-class LanguageFixture extends AbstractFixture implements OrderedFixtureInterface {
-    public function load(ObjectManager $manager) {
+class LanguageFixture extends AbstractFixture implements OrderedFixtureInterface
+{
+    public function load(ObjectManager $manager)
+    {
         $en = new Language;
         $en->setLocale('en_GB');
         $en->setDescription('English (GB)');
@@ -28,7 +30,9 @@ class LanguageFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('language-de_DE', $de);
     }
 
-    public function getOrder() {
+    public function getOrder()
+    {
         return 2;
     }
 }
+

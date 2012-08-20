@@ -29,8 +29,10 @@ class ResourceController extends AbstractController
                       ->getQueryForAllResources();
         $pagination = $this->paginator->paginate($query, $page, $this->listNumItems);
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Resource:list.html.twig',
-                                                 array('pagination' => $pagination));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Resource:list.html.twig',
+            array('pagination' => $pagination)
+        );
     }
 
     /**
@@ -48,9 +50,13 @@ class ResourceController extends AbstractController
 
         $form = $this->getResourceEditFormForResource($resource);
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Resource:view.html.twig',
-                                                 array('form' => $form->createView(),
-                                                       'resource' => $resource));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Resource:view.html.twig',
+            array(
+                'form' => $form->createView(),
+                'resource' => $resource
+            )
+        );
     }
 
     /**
@@ -76,9 +82,13 @@ class ResourceController extends AbstractController
             return $this->redirect($this->generateUrl('_admin_resource', array('id' => $id)));
         }
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Resource:view.html.twig',
-                                                 array('form' => $form->createView(),
-                                                       'resource' => $resource));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Resource:view.html.twig',
+            array(
+                'form' => $form->createView(),
+                'resource' => $resource
+            )
+        );
     }
 
     /**
@@ -90,8 +100,10 @@ class ResourceController extends AbstractController
 
         $form = $this->getResourceEditFormForResource();
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Resource:create.html.twig',
-                                                 array('form' => $form->createView()));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Resource:create.html.twig',
+            array('form' => $form->createView())
+        );
     }
 
     /**
@@ -115,8 +127,10 @@ class ResourceController extends AbstractController
             return $this->redirect($this->generateUrl('_admin_reslist'));
         }
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Resource:create.html.twig',
-                                                 array('form' => $form->createView()));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Resource:create.html.twig',
+            array('form' => $form->createView())
+        );
     }
 
     /**
@@ -169,3 +183,4 @@ class ResourceController extends AbstractController
         return $resource;
     }
 }
+

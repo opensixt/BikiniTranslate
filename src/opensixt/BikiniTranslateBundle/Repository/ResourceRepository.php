@@ -21,3 +21,4 @@ class ResourceRepository extends EntityRepository
         return $q;
     }
 }
+

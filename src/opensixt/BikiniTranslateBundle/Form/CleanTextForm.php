@@ -7,7 +7,6 @@ use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use \Symfony\Component\Form\CallbackValidator;
 use \Symfony\Component\Form\FormError;
 
-
 /**
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
@@ -19,20 +18,28 @@ class CleanTextForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('resource', 'choice', array(
-                    'label'       => 'cleantext_resource',
-                    'empty_value' => 'all_values',
-                    'choices'     => $options['resources'],
-                    'required'    => false,
-                    'data'        => $options['searchResource'],
-                ))
-            ->add('locale', 'choice', array(
-                    'label'       => 'cleantext_language',
-                    'empty_value' => '',
-                    'choices'     => $options['locales'],
-                    'required'    => false,
-                    'data'        => $options['searchLanguage'],
-                ));
+        $builder->add(
+            'resource',
+            'choice',
+            array(
+                'label'       => 'cleantext_resource',
+                'empty_value' => 'all_values',
+                'choices'     => $options['resources'],
+                'required'    => false,
+                'data'        => $options['searchResource'],
+            )
+        )
+        ->add(
+            'locale',
+            'choice',
+            array(
+                'label'       => 'cleantext_language',
+                'empty_value' => '',
+                'choices'     => $options['locales'],
+                'required'    => false,
+                'data'        => $options['searchLanguage'],
+            )
+        );
     }
 
     /**
@@ -58,6 +65,7 @@ class CleanTextForm extends AbstractType
             'searchResource' => 0,
             'locales'        => array(),
             'searchLanguage' => 0,
-            );
+        );
     }
 }
+

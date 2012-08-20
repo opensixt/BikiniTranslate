@@ -10,8 +10,10 @@ use opensixt\BikiniTranslateBundle\Entity\Resource;
 /**
  * @author uwe.pries@sixt.com
  */
-class ResourceFixture extends AbstractFixture implements OrderedFixtureInterface {
-    public function load(ObjectManager $manager) {
+class ResourceFixture extends AbstractFixture implements OrderedFixtureInterface
+{
+    public function load(ObjectManager $manager)
+    {
         $res = new Resource;
         $res->setName('Dummyres');
         $res->setDescription('Just a dummy resource');
@@ -31,7 +33,9 @@ class ResourceFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('res-admin', $adminres);
     }
 
-    public function getOrder() {
+    public function getOrder()
+    {
         return 3;
     }
 }
+

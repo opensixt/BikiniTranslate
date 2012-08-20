@@ -73,3 +73,4 @@ abstract class AbstractController
         return $this->securityContext->isGranted('ROLE_ADMIN');
     }
 }
+

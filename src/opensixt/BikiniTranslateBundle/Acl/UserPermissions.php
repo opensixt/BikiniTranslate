@@ -63,3 +63,4 @@ class UserPermissions
         $acl->insertObjectAce($userIdentity, $maskBuilder->get());
     }
 }
+

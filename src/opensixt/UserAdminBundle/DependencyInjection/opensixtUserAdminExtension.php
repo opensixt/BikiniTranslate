@@ -22,16 +22,25 @@ class opensixtUserAdminExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('opensixt.user_admin.controller.user.list.num_items',
-                                 $config['user']['list_num_items']);
-        $container->setParameter('opensixt.user_admin.controller.group.list.num_items',
-                                 $config['group']['list_num_items']);
-        $container->setParameter('opensixt.user_admin.controller.language.list.num_items',
-                                 $config['language']['list_num_items']);
-        $container->setParameter('opensixt.user_admin.controller.resource.list.num_items',
-                                 $config['resource']['list_num_items']);
+        $container->setParameter(
+            'opensixt.user_admin.controller.user.list.num_items',
+            $config['user']['list_num_items']
+        );
+        $container->setParameter(
+            'opensixt.user_admin.controller.group.list.num_items',
+            $config['group']['list_num_items']
+        );
+        $container->setParameter(
+            'opensixt.user_admin.controller.language.list.num_items',
+            $config['language']['list_num_items']
+        );
+        $container->setParameter(
+            'opensixt.user_admin.controller.resource.list.num_items',
+            $config['resource']['list_num_items']
+        );
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
 }
+

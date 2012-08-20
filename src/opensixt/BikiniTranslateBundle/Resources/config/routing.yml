@@ -62,5 +62,5 @@ _translate_releasetext:
         page: \d+
 
 _translate_sendtots:
-    pattern: /translate/sendToTS/{locale}
+    pattern: /translate/sendtots/{locale}
     defaults: { _controller: opensixtBikiniTranslateBundle:Translate:sendtots, locale: 'empty' }

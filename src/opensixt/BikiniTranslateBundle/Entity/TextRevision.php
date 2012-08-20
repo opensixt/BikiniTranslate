@@ -58,3 +58,4 @@ class TextRevision
         return $this->target;
     }
 }
+

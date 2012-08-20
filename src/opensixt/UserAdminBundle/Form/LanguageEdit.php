@@ -29,8 +29,11 @@ class LanguageEdit extends AbstractType
     {
         $translator = $this->translator;
         $builder->add('locale', 'text', array('label' => $translator->trans('language_name') . ': '))
-                ->add('description', 'text', array('label' => $translator->trans('description') . ': ',
-                                                   'required'  => false));
+                ->add(
+                    'description',
+                    'text',
+                    array('label' => $translator->trans('description') . ': ', 'required'  => false)
+                );
     }
 
     /**
@@ -43,3 +46,4 @@ class LanguageEdit extends AbstractType
         return '';
     }
 }
+

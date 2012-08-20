@@ -21,3 +21,4 @@ class GroupsRepository extends EntityRepository
         return $q;
     }
 }
+

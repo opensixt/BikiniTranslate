@@ -18,20 +18,28 @@ class CopyLanguageForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('lang_from', 'choice', array(
-                    'label'       => 'copy_lang_content_from', // $translator->trans('')
-                    'empty_value' => '',
-                    'choices'     => $options['locales'],
-                    'required'    => true,
-                    'data'        => $options['from'],
-                ))
-            ->add('lang_to', 'choice', array(
-                    'label'       => 'copy_lang_content_to',
-                    'empty_value' => '',
-                    'choices'     => $options['locales'],
-                    'required'    => true,
-                    'data'        => $options['to']
-                ));
+        $builder->add(
+            'lang_from',
+            'choice',
+            array(
+                'label'       => 'copy_lang_content_from', // $translator->trans('')
+                'empty_value' => '',
+                'choices'     => $options['locales'],
+                'required'    => true,
+                'data'        => $options['from'],
+            )
+        )
+        ->add(
+            'lang_to',
+            'choice',
+            array(
+                'label'       => 'copy_lang_content_to',
+                'empty_value' => '',
+                'choices'     => $options['locales'],
+                'required'    => true,
+                'data'        => $options['to']
+            )
+        );
     }
 
     /**
@@ -59,3 +67,4 @@ class CopyLanguageForm extends AbstractType
             );
     }
 }
+

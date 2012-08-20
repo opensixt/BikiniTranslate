@@ -47,5 +47,5 @@ class UserTest extends WebTestCase
 
         parent::tearDown();
     }
-
 }
+

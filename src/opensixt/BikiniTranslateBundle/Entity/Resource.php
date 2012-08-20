@@ -87,3 +87,4 @@ class Resource
         return $this->description;
     }
 }
+

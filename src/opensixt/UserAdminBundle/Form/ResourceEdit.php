@@ -29,8 +29,11 @@ class ResourceEdit extends AbstractType
     {
         $translator = $this->translator;
         $builder->add('name', 'text', array('label' => $translator->trans('resource_name') . ': '))
-                ->add('description', 'text', array('label' => $translator->trans('description') . ': ',
-                                                   'required'  => false));
+                ->add(
+                    'description',
+                    'text',
+                    array('label' => $translator->trans('description') . ': ', 'required'  => false)
+                );
     }
 
     /**
@@ -43,3 +46,4 @@ class ResourceEdit extends AbstractType
         return '';
     }
 }
+

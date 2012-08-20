@@ -7,7 +7,6 @@ use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use \Symfony\Component\Form\CallbackValidator;
 use \Symfony\Component\Form\FormError;
 
-
 /**
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
@@ -19,34 +18,49 @@ class ChangeTextForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('search', 'search', array(
-                    'label'       => 'search_by',
-                    'trim'        => true,
-                    'data'        => $options['searchPhrase'],
-                ))
-            ->add('resource', 'choice', array(
-                    'label'       => 'with_resource',
-                    'empty_value' => 'all_values',
-                    'choices'     => $options['resources'],
-                    'data'        => $options['searchResource'],
-                    'required'    => false,
-                ))
-            ->add('locale', 'choice', array(
-                    'label'       => 'with_language',
-                    'empty_value' => '',
-                    'choices'     => $options['locales'],
-                    'data'        => $options['searchLanguage']
-                ));
+        $builder->add(
+            'search',
+            'search',
+            array(
+                'label'       => 'search_by',
+                'trim'        => true,
+                'data'        => $options['searchPhrase'],
+            )
+        )
+        ->add(
+            'resource',
+            'choice',
+            array(
+                'label'       => 'with_resource',
+                'empty_value' => 'all_values',
+                'choices'     => $options['resources'],
+                'data'        => $options['searchResource'],
+                'required'    => false,
+            )
+        )
+        ->add(
+            'locale',
+            'choice',
+            array(
+                'label'       => 'with_language',
+                'empty_value' => '',
+                'choices'     => $options['locales'],
+                'data'        => $options['searchLanguage']
+            )
+        );
 
-        if (!empty($options['ids'])){
+        if (!empty($options['ids'])) {
             foreach ($options['ids'] as $id) {
-                $builder->add('text_' . $id, 'textarea', array(
-                    'trim' => true,
-                    'required' => false,
-                ));
+                $builder->add(
+                    'text_' . $id,
+                    'textarea',
+                    array(
+                        'trim' => true,
+                        'required' => false,
+                    )
+                );
             }
         }
-
     }
 
     /**
@@ -74,6 +88,7 @@ class ChangeTextForm extends AbstractType
             'searchResource' => 0,
             'locales'        => array(),
             'searchLanguage' => 0,
-            );
+        );
     }
 }
+

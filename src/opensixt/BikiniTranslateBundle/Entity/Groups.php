@@ -118,3 +118,4 @@ class Groups
         return $this->resources;
     }
 }
+

@@ -39,7 +39,7 @@ class Flush
         $textRepository = $em->getRepository('opensixt\BikiniTranslateBundle\Entity\Text');
 
         $changedFlag = false;
-        foreach($this->newEntities as $entity) {
+        foreach ($this->newEntities as $entity) {
             if ($entity instanceof TextRevision) {
                 /** @var $entity TextRevision */
                 $newTextRevisionId = $entity->getId();
@@ -47,7 +47,9 @@ class Flush
                 /** @var $text \opensixt\BikiniTranslateBundle\Entity\Text */
                 $text = $textRepository->findOneByTarget($entity);
 
-                if (!$text) continue;
+                if (!$text) {
+                    continue;
+                }
 
                 if ($text->getTextRevisionId() != $newTextRevisionId) {
                     $text->setTextRevisionId($newTextRevisionId);
@@ -64,3 +66,4 @@ class Flush
         $this->newEntities = null;
     }
 }
+

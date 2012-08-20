@@ -23,16 +23,15 @@ use opensixt\BikiniTranslateBundle\Entity\Groups;
  *
  * @author pries
  */
-class MigrateCommand extends ContainerAwareCommand {
-
+class MigrateCommand extends ContainerAwareCommand
+{
     protected function configure()
     {
         $this
             ->setName('bikinitranslate:import')
             ->setDescription('Import live data from gtxt')
             ->addArgument('url', InputArgument::OPTIONAL, 'Database url?')
-            ->addArgument('max_rows', InputArgument::OPTIONAL, 'How many rows do you want to import')
-        ;
+            ->addArgument('max_rows', InputArgument::OPTIONAL, 'How many rows do you want to import');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -113,7 +112,7 @@ class MigrateCommand extends ContainerAwareCommand {
         $nouser->setUsername('nouser');
         $nouser->setPassword('nouser');
         $nouser->setEmail('nouser@sixt.de');
-        $nouser->setIsactive(User::ActiveUser);
+        $nouser->setIsactive(User::ACTIVE_USER);
         $nouser->addUserRole($role);
         $nouser->setUserLanguages($grouped['locale']);
         $nouser->setUserGroups(array($defaultgroup));
@@ -135,7 +134,7 @@ class MigrateCommand extends ContainerAwareCommand {
                 $user->setUsername($row['user']);
                 $user->setPassword($row['user']);
                 $user->setEmail($row['user'] . '@sixt.de');
-                $user->setIsactive(User::ActiveUser);
+                $user->setIsactive(User::ACTIVE_USER);
                 $user->addUserRole($role);
                 $user->addUserLanguage($grouped['locale'][$row['locale']]);
                 $user->setUserGroups(array($defaultgroup));
@@ -155,14 +154,25 @@ class MigrateCommand extends ContainerAwareCommand {
             if ($row['msgstr'] != 'TRANSLATE_ME') {
                 $text->addTarget($row['msgstr']);
             }
-
             // flags
-            if ($row['exp']) $text->setExpiryDate(new \DateTime($row['exp']));
-            if ($row['rel']) $text->setReleased(true);
-            if ($row['hts']) $text->setTranslationService(true);
-            if ($row['block']) $text->setBlock(true);
-            if ($row['msgstr'] == 'TRANSLATE_ME') $text->setTranslateMe(true);
-            if ($row['msgstr'] == 'DONT_TRANSLATE') $text->setDontTranslate(true);
+            if ($row['exp']) {
+                $text->setExpiryDate(new \DateTime($row['exp']));
+            }
+            if ($row['rel']) {
+                $text->setReleased(true);
+            }
+            if ($row['hts']) {
+                $text->setTranslationService(true);
+            }
+            if ($row['block']) {
+                $text->setBlock(true);
+            }
+            if ($row['msgstr'] == 'TRANSLATE_ME') {
+                $text->setTranslateMe(true);
+            }
+            if ($row['msgstr'] == 'DONT_TRANSLATE') {
+                $text->setDontTranslate(true);
+            }
 
             $manager->persist($text);
 
@@ -181,5 +191,5 @@ class MigrateCommand extends ContainerAwareCommand {
 
         gc_disable(); // Disable Garbage Collector
     }
-
 }
+

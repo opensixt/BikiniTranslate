@@ -36,7 +36,7 @@
             </trans-unit>
             <trans-unit id="40">
                 <source>logout</source>
-                <target>logout</target>
+                <target>Logout</target>
             </trans-unit>
             <trans-unit id="45">
                 <source>login</source>

@@ -9,15 +9,15 @@ use opensixt\BikiniTranslateBundle\Services\HandleText;
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
-class CopyDomain extends HandleText {
-
+class CopyDomain extends HandleText
+{
     public function __construct($doctrine, $locale)
     {
-        $this->_commonLanguage = $locale;
+        $this->commonLanguage = $locale;
 
         parent::__construct($doctrine);
 
-        $this->_commonLanguageId = $this->_textRepository->getIdByLocale($locale);
+        $this->commonLanguageId = $this->textRepository->getIdByLocale($locale);
     }
 
     /**
@@ -32,20 +32,25 @@ class CopyDomain extends HandleText {
     {
         // Exception
         if (!isset($this->revisionControlMode)) {
-            throw new \Exception(__METHOD__ . ': revisionControlMode is not set. Please set text_revision_control in parameters.yml !');
+            throw new \Exception(
+                __METHOD__ . ': revisionControlMode is not set. Please set text_revision_control in parameters.yml !'
+            );
         }
-        if (!isset($this->_commonLanguage)) {
-            throw new \Exception(__METHOD__ . ': _commonLanguage is not set. Please set common_language in parameters.yml !');
+        if (!isset($this->commonLanguage)) {
+            throw new \Exception(
+                __METHOD__ . ': _commonLanguage is not set. Please set common_language in parameters.yml !'
+            );
         }
 
-        $this->_textRepository->setTextRevisionControl($this->revisionControlMode);
-        $this->_textRepository->setCommonLanguage($this->_commonLanguage);
-        $this->_textRepository->setCommonLanguageId($this->_commonLanguageId);
+        $this->textRepository->setTextRevisionControl($this->revisionControlMode);
+        $this->textRepository->setCommonLanguage($this->commonLanguage);
+        $this->textRepository->setCommonLanguageId($this->commonLanguageId);
 
-        $translationsCount = $this->_textRepository->copyLanguageContent(
+        $translationsCount = $this->textRepository->copyLanguageContent(
             $from,
             $to,
-            $resources);
+            $resources
+        );
 
         return $translationsCount;
     }
@@ -62,26 +67,33 @@ class CopyDomain extends HandleText {
     {
         // Exception
         if (!isset($this->revisionControlMode)) {
-            throw new \Exception(__METHOD__ . ': revisionControlMode is not set. Please set text_revision_control in parameters.yml !');
+            throw new \Exception(
+                __METHOD__ . ': revisionControlMode is not set. Please set text_revision_control in parameters.yml !'
+            );
         }
-        if (!isset($this->_commonLanguage)) {
-            throw new \Exception(__METHOD__ . ': _commonLanguage is not set. Please set common_language in parameters.yml !');
+        if (!isset($this->commonLanguage)) {
+            throw new \Exception(
+                __METHOD__ . ': _commonLanguage is not set. Please set common_language in parameters.yml !'
+            );
         }
-        if (empty($this->_locales)) {
-            throw new \Exception(__METHOD__ . ': _locales is not set. Please set it with ' . __CLASS__ . '::setLocales() !');
+        if (empty($this->locales)) {
+            throw new \Exception(
+                __METHOD__ . ': _locales is not set. Please set it with ' . __CLASS__ . '::setLocales() !'
+            );
         }
 
-        $this->_textRepository->setTextRevisionControl($this->revisionControlMode);
-        $this->_textRepository->setCommonLanguage($this->_commonLanguage);
-        $this->_textRepository->setCommonLanguageId($this->_commonLanguageId);
-        $this->_textRepository->setResources($resources);
+        $this->textRepository->setTextRevisionControl($this->revisionControlMode);
+        $this->textRepository->setCommonLanguage($this->commonLanguage);
+        $this->textRepository->setCommonLanguageId($this->commonLanguageId);
+        $this->textRepository->setResources($resources);
 
-        $translationsCount = $this->_textRepository->copyResourceContent(
+        $translationsCount = $this->textRepository->copyResourceContent(
             $from,
             $to,
-            $this->_locales);
+            $this->locales
+        );
 
         return $translationsCount;
     }
-
 }
+

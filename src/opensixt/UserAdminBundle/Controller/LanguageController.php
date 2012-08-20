@@ -29,8 +29,10 @@ class LanguageController extends AbstractController
                       ->getQueryForAllLanguages();
         $pagination = $this->paginator->paginate($query, $page, $this->listNumItems);
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Language:list.html.twig',
-                                                 array('pagination' => $pagination));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Language:list.html.twig',
+            array('pagination' => $pagination)
+        );
     }
 
     /**
@@ -48,9 +50,13 @@ class LanguageController extends AbstractController
 
         $form = $this->getLanguageEditFormForLanguage($language);
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Language:view.html.twig',
-                                                 array('form' => $form->createView(),
-                                                       'language' => $language));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Language:view.html.twig',
+            array(
+                'form' => $form->createView(),
+                'language' => $language
+            )
+        );
     }
 
     /**
@@ -76,9 +82,13 @@ class LanguageController extends AbstractController
             return $this->redirect($this->generateUrl('_admin_language', array('id' => $id)));
         }
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Language:view.html.twig',
-                                                 array('form' => $form->createView(),
-                                                       'language' => $language));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Language:view.html.twig',
+            array(
+                'form' => $form->createView(),
+                'language' => $language
+            )
+        );
     }
 
     /**
@@ -90,8 +100,10 @@ class LanguageController extends AbstractController
 
         $form = $this->getLanguageEditFormForLanguage();
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Language:create.html.twig',
-                                                 array('form' => $form->createView()));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Language:create.html.twig',
+            array('form' => $form->createView())
+        );
     }
 
     /**
@@ -115,8 +127,10 @@ class LanguageController extends AbstractController
             return $this->redirect($this->generateUrl('_admin_langlist'));
         }
 
-        return $this->templating->renderResponse('opensixtUserAdminBundle:Language:create.html.twig',
-                                                 array('form' => $form->createView()));
+        return $this->templating->renderResponse(
+            'opensixtUserAdminBundle:Language:create.html.twig',
+            array('form' => $form->createView())
+        );
     }
 
     /**
@@ -169,3 +183,4 @@ class LanguageController extends AbstractController
         return $language;
     }
 }
+

@@ -20,3 +20,4 @@ class DefaultController extends Controller
         return $this->render('opensixtUserAdminBundle:Default:index.html.twig');
     }
 }
+

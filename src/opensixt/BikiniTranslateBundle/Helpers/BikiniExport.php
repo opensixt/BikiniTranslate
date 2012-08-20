@@ -8,18 +8,16 @@ namespace opensixt\BikiniTranslateBundle\Helpers;
  */
 class BikiniExport
 {
+    protected $version;
 
-    protected $_version;
+    protected $xliffAttributes;
+    protected $xliffFileAttributes;
+    protected $xliffSourceAttributes;
+    protected $xliffTargetAttributes;
 
-    protected $_xliffAttributes;
-    protected $_xliffFileAttributes;
-    protected $_xliffSourceAttributes;
-    protected $_xliffTargetAttributes;
-
-    protected $_sourceLanguage;
-    protected $_targetLanguage;
-    protected $_toolLanguage;
-
+    protected $sourceLanguage;
+    protected $targetLanguage;
+    protected $toolLanguage;
 
     /**
      * Constructor
@@ -28,7 +26,7 @@ class BikiniExport
      */
     public function __construct($toolLanguage)
     {
-        $this->_toolLanguage = $toolLanguage;
+        $this->toolLanguage = $toolLanguage;
     }
 
     /**
@@ -38,7 +36,7 @@ class BikiniExport
      */
     public function setSourceLanguage($language)
     {
-        $this->_sourceLanguage = $language;
+        $this->sourceLanguage = $language;
     }
 
     /**
@@ -48,46 +46,44 @@ class BikiniExport
      */
     public function setTargetLanguage($language)
     {
-        $this->_targetLanguage = $language;
+        $this->targetLanguage = $language;
     }
 
     public function initXliff($version)
     {
         if (!empty($version)) {
-            $this->_version = $version;
+            $this->version = $version;
 
             switch ($version) {
-
-            case 'human_translation_service':
-                $this->_sourceLanguage = $this->_toolLanguage;
-                $this->_xliffAttributes = array (
-                    'version' => '1.1',
-                    'xmlns' => 'urn:oasis:names:tc:xliff:document:1.1',
-                );
-                $this->_xliffFileAttributes = array (
-                    'datatype' => 'xml/html',
-                    'original' => 'PID-TRANSLATED',
-                );
-                $this->_xliffSourceAttributes = array (
-                    'xml:lang' => str_replace('_', '-', $this->_sourceLanguage),
-                );
-                $this->_xliffTargetAttributes = array (
-                    'xml:lang' => str_replace('_', '-', $this->_targetLanguage),
-                );
-                break;
-
-            case '1.2':
-            default:
-                $this->_xliffAttributes = array (
-                    'version' => '1.2',
-                    'xmlns' => 'urn:oasis:names:tc:xliff:document:1.2',
-                );
-                $this->_xliffFileAttributes = array (
-                    'source-language' => 'en',
-                    'datatype' => 'plaintext',
-                    'original' => 'file.ext',
-                );
-                break;
+                case 'human_translation_service':
+                    $this->sourceLanguage = $this->toolLanguage;
+                    $this->xliffAttributes = array (
+                        'version' => '1.1',
+                        'xmlns' => 'urn:oasis:names:tc:xliff:document:1.1',
+                    );
+                    $this->xliffFileAttributes = array (
+                        'datatype' => 'xml/html',
+                        'original' => 'PID-TRANSLATED',
+                    );
+                    $this->xliffSourceAttributes = array (
+                        'xml:lang' => str_replace('_', '-', $this->sourceLanguage),
+                    );
+                    $this->xliffTargetAttributes = array (
+                        'xml:lang' => str_replace('_', '-', $this->targetLanguage),
+                    );
+                    break;
+                case '1.2':
+                default:
+                    $this->xliffAttributes = array (
+                        'version' => '1.2',
+                        'xmlns' => 'urn:oasis:names:tc:xliff:document:1.2',
+                    );
+                    $this->xliffFileAttributes = array (
+                        'source-language' => 'en',
+                        'datatype' => 'plaintext',
+                        'original' => 'file.ext',
+                    );
+                    break;
             }
         }
     }
@@ -100,11 +96,15 @@ class BikiniExport
     public function getDataAsXliff($data)
     {
         // Exceptions
-        if (!count($this->_xliffAttributes)) {
-            throw new \Exception(__METHOD__ . ': _xliffAttributes is not set. Please set it with ' . __CLASS__ . '::initXliff() !');
+        if (!count($this->xliffAttributes)) {
+            throw new \Exception(
+                __METHOD__ . ': xliffAttributes is not set. Please set it with ' . __CLASS__ . '::initXliff() !'
+            );
         }
-        if (!count($this->_xliffFileAttributes)) {
-            throw new \Exception(__METHOD__ . ': _xliffFileAttributes is not set. Please set it with ' . __CLASS__ . '::initXliff() !');
+        if (!count($this->xliffFileAttributes)) {
+            throw new \Exception(
+                __METHOD__ . ': xliffFileAttributes is not set. Please set it with ' . __CLASS__ . '::initXliff() !'
+            );
         }
 
         $ret = '';
@@ -115,14 +115,14 @@ class BikiniExport
             $dom->formatOutput = true;
 
             $xliff = $dom->createElement('xliff');
-            foreach ($this->_xliffAttributes as $key => $value) {
+            foreach ($this->xliffAttributes as $key => $value) {
                 $attribute = $dom->createAttribute($key);
                 $attribute->value = $value;
                 $xliff->appendChild($attribute);
             }
 
             $file = $dom->createElement('file');
-            foreach ($this->_xliffFileAttributes as $key => $value) {
+            foreach ($this->xliffFileAttributes as $key => $value) {
                 $attribute = $dom->createAttribute($key);
                 $attribute->value = $value;
                 $file->appendChild($attribute);
@@ -137,14 +137,14 @@ class BikiniExport
                 $transUnit->appendChild($id);
 
                 $source = $dom->createElement('source', $elem['source']);
-                foreach ($this->_xliffSourceAttributes as $key => $value) {
+                foreach ($this->xliffSourceAttributes as $key => $value) {
                     $attribute = $dom->createAttribute($key);
                     $attribute->value = $value;
                     $source->appendChild($attribute);
                 }
 
                 $target = $dom->createElement('target', $elem['target'][0]['target']);
-                foreach ($this->_xliffTargetAttributes as $key => $value) {
+                foreach ($this->xliffTargetAttributes as $key => $value) {
                     $attribute = $dom->createAttribute($key);
                     $attribute->value = $value;
                     $target->appendChild($attribute);
@@ -162,8 +162,8 @@ class BikiniExport
 
             $ret = $dom->saveXML();
         }
+
         return $ret;
     }
-
-
 }
+

@@ -18,3 +18,4 @@ class DefaultController extends Controller
         return $this->render('opensixtBikiniTranslateBundle:Default:index.html.twig', array('page' => $page));
     }
 }
+

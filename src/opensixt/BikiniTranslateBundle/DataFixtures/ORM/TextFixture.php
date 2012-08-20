@@ -10,8 +10,10 @@ use opensixt\BikiniTranslateBundle\Entity\Text;
 /**
  * @author uwe.pries@sixt.com
  */
-class TextFixture extends AbstractFixture implements OrderedFixtureInterface {
-    public function load(ObjectManager $manager) {
+class TextFixture extends AbstractFixture implements OrderedFixtureInterface
+{
+    public function load(ObjectManager $manager)
+    {
         // first text
         $text = new Text;
         $text->setSource('Hallo Welt');
@@ -47,7 +49,9 @@ class TextFixture extends AbstractFixture implements OrderedFixtureInterface {
         $manager->flush();
     }
 
-    public function getOrder() {
+    public function getOrder()
+    {
         return 6;
     }
 }
+

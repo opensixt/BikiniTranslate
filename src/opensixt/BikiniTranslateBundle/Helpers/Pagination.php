@@ -9,7 +9,6 @@ namespace opensixt\BikiniTranslateBundle\Helpers;
  */
 class Pagination
 {
-
     /**
      * Count of all elements in a data array
      * @var int
@@ -65,7 +64,9 @@ class Pagination
      */
     public function setPage($page)
     {
-        if (!$page) $page = 1;
+        if (!$page) {
+            $page = 1;
+        }
         $this->page = $page;
     }
 
@@ -133,8 +134,10 @@ class Pagination
     public function getOffset()
     {
         $offset = ($this->page - 1) * $this->limit;
-        if ($offset > $this->count) $offset = 0;
+        if ($offset > $this->count) {
+            $offset = 0;
+        }
         return $offset;
     }
-
 }
+

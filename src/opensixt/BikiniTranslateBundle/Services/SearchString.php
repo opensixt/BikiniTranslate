@@ -12,17 +12,17 @@ use opensixt\BikiniTranslateBundle\Helpers\Pagination;
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
-class SearchString extends HandleText {
-
+class SearchString extends HandleText
+{
     const SEARCH_EXACT = 1;
     const SEARCH_LIKE  = 2;
 
     /** @var string */
-    protected $_searchString;
+    protected $searchString;
 
     public function __construct($doctrine)
     {
-        $this->_paginationLimit = 15;
+        $this->paginationLimit = 15;
         parent::__construct($doctrine);
     }
 
@@ -40,7 +40,7 @@ class SearchString extends HandleText {
         }
         $searchPhrase = '%' . $searchPhrase . '%';
         //TODO: sanitize input, fulltext search (MATCH...AGAINST....)
-        $this->_searchString = $searchPhrase;
+        $this->searchString = $searchPhrase;
     }
 
     /**
@@ -55,24 +55,28 @@ class SearchString extends HandleText {
     public function getData($page, $locale, $resources)
     {
         // Exceptions
-        if (!$this->_searchString) {
-            throw new \Exception(__METHOD__ . ': _searchString is not set. Please set it with ' . __CLASS__ . '::setSearchParameters() !');
+        if (!$this->searchString) {
+            throw new \Exception(
+                __METHOD__ . ': searchString is not set. ' .
+                'Please set it with ' . __CLASS__ . '::setSearchParameters() !'
+            );
         }
 
-        $this->_textRepository->setSearchString($this->_searchString);
+        $this->textRepository->setSearchString($this->searchString);
 
-        $this->_textRepository->init(
+        $this->textRepository->init(
             TextRepository::TASK_SEARCH_PHRASE_BY_LANG,
             $locale,
-            $resources);
+            $resources
+        );
 
-        $query = $this->_textRepository->getSearchResults();
+        $query = $this->textRepository->getSearchResults();
 
-        if (empty($this->_paginationLimit)) {
-            $this->_paginationLimit = PHP_INT_MAX;
+        if (empty($this->paginationLimit)) {
+            $this->paginationLimit = PHP_INT_MAX;
         }
 
-        return $this->paginator->paginate($query, $page, $this->_paginationLimit);
+        return $this->paginator->paginate($query, $page, $this->paginationLimit);
     }
-
 }
+

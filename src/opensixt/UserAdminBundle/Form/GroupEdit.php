@@ -29,13 +29,22 @@ class GroupEdit extends AbstractType
     {
         $translator = $this->translator;
         $builder->add('name', 'text', array('label' => $translator->trans('groupname') . ': '))
-                ->add('description', 'text', array('label' => $translator->trans('description') . ': ',
-                                                   'required'  => false))
-                ->add('resources', 'entity', array('label'     => $translator->trans('resources') . ': ',
-                                                   'class'     => 'opensixt\BikiniTranslateBundle\Entity\Resource',
-                                                   'property'  => 'name',
-                                                   'multiple'  => true,
-                                                   'expanded'  => true));
+                ->add(
+                    'description',
+                    'text',
+                    array('label' => $translator->trans('description') . ': ', 'required'  => false)
+                )
+                ->add(
+                    'resources',
+                    'entity',
+                    array(
+                        'label'     => $translator->trans('resources') . ': ',
+                        'class'     => 'opensixt\BikiniTranslateBundle\Entity\Resource',
+                        'property'  => 'name',
+                        'multiple'  => true,
+                        'expanded'  => true
+                    )
+                );
     }
 
     /**
@@ -48,3 +57,4 @@ class GroupEdit extends AbstractType
         return '';
     }
 }
+

@@ -18,32 +18,48 @@ class SearchStringForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('search', 'search', array(
-                    'label'       => 'search_by',
-                    'trim'        => true,
-                    'data'        => $options['searchPhrase']
-                ))
-            ->add('resource', 'choice', array(
-                    'label'       => 'with_resource',
-                    'empty_value' => 'all_values',
-                    'choices'     => $options['resources'],
-                    'required'    => false,
-                    'data'        => $options['searchResource']
-                ))
-            ->add('locale', 'choice', array(
-                    'label'       => 'with_language',
-                    'empty_value' => (!empty($options['preferredChoices'])) ? false : '',
-                    'choices'     => $options['locales'],
-                    'preferred_choices' => $options['preferredChoices'],
-                    'required'    => true,
-                    'data'        => $options['searchLanguage']
-                ))
-            ->add('mode', 'choice', array(
-                    'label'       => 'search_method',
-                    'empty_value' => '',
-                    'choices'     => $options['mode'],
-                    'data'        => $options['searchMode']
-                ));
+        $builder->add(
+            'search',
+            'search',
+            array(
+                'label'       => 'search_by',
+                'trim'        => true,
+                'data'        => $options['searchPhrase']
+            )
+        )
+        ->add(
+            'resource',
+            'choice',
+            array(
+                'label'       => 'with_resource',
+                'empty_value' => 'all_values',
+                'choices'     => $options['resources'],
+                'required'    => false,
+                'data'        => $options['searchResource']
+            )
+        )
+        ->add(
+            'locale',
+            'choice',
+            array(
+                'label'       => 'with_language',
+                'empty_value' => (!empty($options['preferredChoices'])) ? false : '',
+                'choices'     => $options['locales'],
+                'preferred_choices' => $options['preferredChoices'],
+                'required'    => true,
+                'data'        => $options['searchLanguage']
+            )
+        )
+        ->add(
+            'mode',
+            'choice',
+            array(
+                'label'       => 'search_method',
+                'empty_value' => '',
+                'choices'     => $options['mode'],
+                'data'        => $options['searchMode']
+            )
+        );
     }
 
     /**
@@ -76,3 +92,4 @@ class SearchStringForm extends AbstractType
             );
     }
 }
+

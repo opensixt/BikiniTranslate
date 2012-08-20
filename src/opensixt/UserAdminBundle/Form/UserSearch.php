@@ -25,9 +25,15 @@ class UserSearch extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('search', 'search', array('label'       => $this->translator->trans('search_by') . ': ',
-                                                'trim'        => true,
-                                                'required'    => false));
+        $builder->add(
+            'search',
+            'search',
+            array(
+                'label'       => $this->translator->trans('search_by') . ': ',
+                'trim'        => true,
+                'required'    => false
+            )
+        );
     }
 
     /**
@@ -40,3 +46,4 @@ class UserSearch extends AbstractType
         return '';
     }
 }
+

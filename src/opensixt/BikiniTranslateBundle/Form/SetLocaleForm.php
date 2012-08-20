@@ -3,10 +3,9 @@ namespace opensixt\BikiniTranslateBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
-use \Symfony\Component\Form\CallbackValidator;
-use \Symfony\Component\Form\FormError;
-
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\Form\CallbackValidator;
+use Symfony\Component\Form\FormError;
 
 /**
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
@@ -19,11 +18,15 @@ class SetLocaleForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('locale', 'choice', array(
-                    'label'     => 'please_choose_locale',
-                    'empty_value' => '',
-                    'choices'   => $options['locales'],
-                ));
+        $builder->add(
+            'locale',
+            'choice',
+            array(
+                'label'     => 'please_choose_locale',
+                'empty_value' => '',
+                'choices'   => $options['locales'],
+            )
+        );
     }
 
     /**
@@ -45,7 +48,8 @@ class SetLocaleForm extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'locales'        => array(),
-            );
+            'locales' => array(),
+        );
     }
 }
+

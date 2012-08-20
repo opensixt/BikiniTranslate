@@ -10,8 +10,10 @@ use opensixt\BikiniTranslateBundle\Entity\Groups;
 /**
  * @author uwe.pries@sixt.com
  */
-class GroupsFixture extends AbstractFixture implements OrderedFixtureInterface {
-    public function load(ObjectManager $manager) {
+class GroupsFixture extends AbstractFixture implements OrderedFixtureInterface
+{
+    public function load(ObjectManager $manager)
+    {
         $dummygroup = new Groups;
         $dummygroup->setName('Dummygroup');
         $dummygroup->setDescription('Just a dummy group');
@@ -33,7 +35,9 @@ class GroupsFixture extends AbstractFixture implements OrderedFixtureInterface {
         $this->addReference('groups-admin', $admingroup);
     }
 
-    public function getOrder() {
+    public function getOrder()
+    {
         return 4;
     }
 }
+
