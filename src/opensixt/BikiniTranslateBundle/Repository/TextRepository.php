@@ -585,7 +585,7 @@ class TextRepository extends EntityRepository
                 break;
             case self::TASK_MISSING_TRANS_BY_LANG:
             default:
-                $query->join('t.target', 'tr')
+                $query->leftJoin('t.target', 'tr')
                     ->where(self::FIELD_RESOURCE . ' IN (?1)')
                     ->andWhere(self::FIELD_LOCALE . ' = ?2')
                     ->andWhere(self::FIELD_DONTTRANSLATE . ' IS NULL OR ' . self::FIELD_DONTTRANSLATE . ' = 0')
