@@ -299,25 +299,18 @@ class TranslateController extends Controller
 
             // get search results
             $results = $searcher->getData(
+                $page,
                 $searchLanguage,
-                $searchResources,
-                $page
+                $searchResources
             );
         }
 
         // ids of texts for textarreas
         $ids = array();
-        if (isset($results['searchResults'])) {
-            $ids = array_reduce(
-                $results['searchResults'],
-                // @codingStandardsIgnoreStart
-                function($ids, $elem) {
-                // @codingStandardsIgnoreEnd
-                    $ids[] = $elem['id'];
-                    return $ids;
-                },
-                array()
-            );
+        if (isset($results)) {
+            foreach ($results as $elem) {
+                $ids[] = $elem->getId();
+            }
         }
 
         $form = $this->get('form.factory')
@@ -341,12 +334,8 @@ class TranslateController extends Controller
             'locale'        => $searchLanguage,
             'resource'      => $searchResource,
         );
-
-        if (!empty($results['paginationBar'])) {
-            $templateParam['paginationbar'] = $results['paginationBar'];
-        }
-        if (isset($results['searchResults'])) {
-            $templateParam['searchResults'] = $results['searchResults'];
+        if (isset($results)) {
+            $templateParam['searchResults'] = $results;
         }
 
         return $this->render(

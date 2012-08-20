@@ -70,7 +70,7 @@ class ChangeTextForm extends AbstractType
      */
     public function getName()
     {
-        return 'form';
+        return '';
     }
 
     /**

@@ -39,22 +39,18 @@
             {% endfor %}
             </tbody>
 
-            {% if paginationbar is defined %}
             <tfoot>
                 <tr>
                     <td colspan="2">
-                        {% set param = {'target_route': '_translate_changetext', 'paginationbar' : paginationbar } %}
-                        {% set param = param|merge({'search': search, 'locale': locale, 'resource': resource}) %}
-                        {% include 'opensixtBikiniTranslateBundle:Translate:paginationbar.html.twig' with param %}
+                        {# navigation #}
+                        {{ searchResults.render()|raw }}
                     </td>
                 </tr>
             </tfoot>
-            {% endif %}
         </table>
         {% endif %}
 
         {{ form_rest(form) }}
     </form>
-
 
 {% endblock %}
