@@ -91,7 +91,7 @@ class TranslateController extends Controller
             $searchResources,
             array_keys($resources),
             $getSuggestionsFlag
-            );
+        );
 
         $ids = array();
         if (isset($data)) {
@@ -102,11 +102,15 @@ class TranslateController extends Controller
 
         $searchResource = $this->getFieldFromRequest('resource');
         $form = $this->get('form.factory')
-            ->create(new EditTextForm(), null, array(
-                'searchResource'   => $searchResource,
-                'resources'        => $resources,
-                'ids'              => $ids,
-        ));
+            ->create(
+                new EditTextForm(),
+                null,
+                array(
+                        'searchResource'   => $searchResource,
+                        'resources'        => $resources,
+                        'ids'              => $ids,
+                )
+            );
 
         $templateParam = array(
             'form'                    => $form->createView(),
@@ -118,9 +122,10 @@ class TranslateController extends Controller
             $templateParam['resource'] = $searchResource;
         }
 
-        return $this->render('opensixtBikiniTranslateBundle:Translate:edittext.html.twig',
+        return $this->render(
+            'opensixtBikiniTranslateBundle:Translate:edittext.html.twig',
             $templateParam
-            );
+        );
     }
 
     /**
@@ -135,18 +140,24 @@ class TranslateController extends Controller
 
         $locales = $this->getUserLocales();
         if (count($locales) == 1) {
-            return $this->redirect($this->generateUrl(
-                $session->get('targetRoute') ? : '_translate_home',
-                array('locale' => $locales[0])
-                ));
+            return $this->redirect(
+                $this->generateUrl(
+                    $session->get('targetRoute') ? : '_translate_home',
+                    array('locale' => $locales[0])
+                )
+            );
         }
 
         $request = $this->getRequest();
 
         $form = $this->get('form.factory')
-            ->create(new SetLocaleForm(), null, array(
-                'locales' => $locales,
-        ));
+            ->create(
+                new SetLocaleForm(),
+                null,
+                array(
+                    'locales' => $locales,
+                )
+            );
 
         if ($request->getMethod() == 'POST') {
             // the controller binds the submitted data to the form
@@ -158,20 +169,24 @@ class TranslateController extends Controller
                     $localeId = $form->get('locale')->getData();
                     $locale = isset($locales[$localeId]) ? $locales[$localeId] : '';
 
-                    return $this->redirect($this->generateUrl(
-                        $session->get('targetRoute') ? : '_translate_home',
-                        array('locale' => $locale)
-                        ));
+                    return $this->redirect(
+                        $this->generateUrl(
+                            $session->get('targetRoute') ? : '_translate_home',
+                            array('locale' => $locale)
+                        )
+                    );
                 }
             } else {
                 var_dump($form->getErrors());
             }
         }
 
-        return $this->render('opensixtBikiniTranslateBundle:Translate:setlocale.html.twig',
+        return $this->render(
+            'opensixtBikiniTranslateBundle:Translate:setlocale.html.twig',
             array(
                 'form' => $form->createView(),
-            ));
+            )
+        );
     }
 
     /**
@@ -212,7 +227,8 @@ class TranslateController extends Controller
             $results = $searcher->getData(
                 $page,
                 $searchLanguage,
-                $searchResources);
+                $searchResources
+            );
         }
 
         // set default search language
@@ -223,16 +239,20 @@ class TranslateController extends Controller
         }
 
         $form = $this->get('form.factory')
-            ->create(new SearchStringForm(), null, array(
-                'searchPhrase'     => $searchPhrase,
-                'searchResource'   => $searchResource,
-                'resources'        => $resources,
-                'searchLanguage'   => $searchLanguage,
-                'locales'          => $locales,
-                'preferredChoices' => $preferredChoices,
-                'searchMode'       => $searchMode,
-                'mode'             => $mode,
-        ));
+            ->create(
+                new SearchStringForm(),
+                null,
+                array(
+                        'searchPhrase'     => $searchPhrase,
+                        'searchResource'   => $searchResource,
+                        'resources'        => $resources,
+                        'searchLanguage'   => $searchLanguage,
+                        'locales'          => $locales,
+                        'preferredChoices' => $preferredChoices,
+                        'searchMode'       => $searchMode,
+                        'mode'             => $mode,
+                )
+            );
 
         $templateParam = array(
             'form'          => $form->createView(),
@@ -246,8 +266,10 @@ class TranslateController extends Controller
             $templateParam['searchResults'] = $results;
         }
 
-        return $this->render('opensixtBikiniTranslateBundle:Translate:searchstring.html.twig',
-            $templateParam);
+        return $this->render(
+            'opensixtBikiniTranslateBundle:Translate:searchstring.html.twig',
+            $templateParam
+        );
     }
 
     /**
@@ -279,7 +301,8 @@ class TranslateController extends Controller
             $results = $searcher->getData(
                 $searchLanguage,
                 $searchResources,
-                $page);
+                $page
+            );
         }
 
         // ids of texts for textarreas
@@ -287,19 +310,29 @@ class TranslateController extends Controller
         if (isset($results['searchResults'])) {
             $ids = array_reduce(
                 $results['searchResults'],
-                function($ids, $elem) { $ids[] = $elem['id']; return $ids; },
-                array());
+                // @codingStandardsIgnoreStart
+                function($ids, $elem) {
+                // @codingStandardsIgnoreEnd
+                    $ids[] = $elem['id'];
+                    return $ids;
+                },
+                array()
+            );
         }
 
         $form = $this->get('form.factory')
-            ->create(new ChangeTextForm(), null, array(
-                'searchPhrase'     => $searchPhrase,
-                'searchResource'   => $searchResource,
-                'resources'        => $resources,
-                'searchLanguage'   => $searchLanguage,
-                'locales'          => $locales,
-                'ids'              => $ids,
-        ));
+            ->create(
+                new ChangeTextForm(),
+                null,
+                array(
+                        'searchPhrase'     => $searchPhrase,
+                        'searchResource'   => $searchResource,
+                        'resources'        => $resources,
+                        'searchLanguage'   => $searchLanguage,
+                        'locales'          => $locales,
+                        'ids'              => $ids,
+                )
+            );
 
         $templateParam = array(
             'form'          => $form->createView(),
@@ -316,9 +349,10 @@ class TranslateController extends Controller
             $templateParam['searchResults'] = $results['searchResults'];
         }
 
-        return $this->render('opensixtBikiniTranslateBundle:Translate:changetext.html.twig',
+        return $this->render(
+            'opensixtBikiniTranslateBundle:Translate:changetext.html.twig',
             $templateParam
-            );
+        );
     }
 
     /**
@@ -347,15 +381,20 @@ class TranslateController extends Controller
             $searchLanguage,
             $searchResources,
             $page,
-            date("Y-m-d"));
+            date("Y-m-d")
+        );
 
         $form = $this->get('form.factory')
-            ->create(new CleanTextForm(), null, array(
-                'searchResource'   => $searchResource,
-                'resources'        => $resources,
-                'searchLanguage'   => $searchLanguage,
-                'locales'          => $locales,
-        ));
+            ->create(
+                new CleanTextForm(),
+                null,
+                array(
+                        'searchResource'   => $searchResource,
+                        'resources'        => $resources,
+                        'searchLanguage'   => $searchLanguage,
+                        'locales'          => $locales,
+                )
+            );
 
         $templateParam = array(
             'form'          => $form->createView(),
@@ -370,9 +409,10 @@ class TranslateController extends Controller
             $templateParam['searchResults'] = $results['searchResults'];
         }
 
-        return $this->render('opensixtBikiniTranslateBundle:Translate:cleantext.html.twig',
+        return $this->render(
+            'opensixtBikiniTranslateBundle:Translate:cleantext.html.twig',
             $templateParam
-            );
+        );
     }
 
     /**
@@ -400,12 +440,16 @@ class TranslateController extends Controller
         $results = $searcher->getData($searchLanguage, $searchResources, $page);
 
         $form = $this->get('form.factory')
-            ->create(new ReleaseTextForm(), null, array(
-                'searchResource'   => $searchResource,
-                'resources'        => $resources,
-                'searchLanguage'   => $searchLanguage,
-                'locales'          => $locales,
-        ));
+            ->create(
+                new ReleaseTextForm(),
+                null,
+                array(
+                        'searchResource'   => $searchResource,
+                        'resources'        => $resources,
+                        'searchLanguage'   => $searchLanguage,
+                        'locales'          => $locales,
+                )
+            );
 
         $templateParam = array(
             'form'          => $form->createView(),
@@ -420,9 +464,10 @@ class TranslateController extends Controller
             $templateParam['searchResults'] = $results['searchResults'];
         }
 
-        return $this->render('opensixtBikiniTranslateBundle:Translate:releasetext.html.twig',
+        return $this->render(
+            'opensixtBikiniTranslateBundle:Translate:releasetext.html.twig',
             $templateParam
-            );
+        );
     }
 
     /**
@@ -449,16 +494,21 @@ class TranslateController extends Controller
             $translationsCount = $copyLang->copyLanguage(
                 $lang['from'],
                 $lang['to'],
-                array_keys($resources));
+                array_keys($resources)
+            );
             $translateMade = 'done';
         }
 
         $form = $this->get('form.factory')
-            ->create(new CopyLanguageForm(), null, array(
-                'from'           => $lang['from'],
-                'to'             => $lang['to'],
-                'locales'        => $locales,
-        ));
+            ->create(
+                new CopyLanguageForm(),
+                null,
+                array(
+                    'from'           => $lang['from'],
+                    'to'             => $lang['to'],
+                    'locales'        => $locales,
+                )
+            );
 
         $templateParam = array(
             'form'          => $form->createView(),
@@ -470,8 +520,10 @@ class TranslateController extends Controller
             $templateParam['translateMade'] = $translateMade;
         }
 
-        return $this->render('opensixtBikiniTranslateBundle:Translate:copylanguage.html.twig',
-            $templateParam);
+        return $this->render(
+            'opensixtBikiniTranslateBundle:Translate:copylanguage.html.twig',
+            $templateParam
+        );
     }
 
     /**
@@ -504,20 +556,25 @@ class TranslateController extends Controller
             $copyRes->setLocales($arrLang);
 
             $translationsCount = $copyRes->copyResource(
-                    $res['from'],
-                    $res['to'],
-                    array_keys($resources));
+                $res['from'],
+                $res['to'],
+                array_keys($resources)
+            );
             $translateMade = 'done';
         }
 
         $form = $this->get('form.factory')
-            ->create(new CopyResourceForm(), null, array(
-                'from'           => $res['from'],
-                'to'             => $res['to'],
-                'resources'      => $resources,
-                'searchLanguage' => $searchLanguage,
-                'locales'        => $locales,
-        ));
+            ->create(
+                new CopyResourceForm(),
+                null,
+                array(
+                    'from'           => $res['from'],
+                    'to'             => $res['to'],
+                    'resources'      => $resources,
+                    'searchLanguage' => $searchLanguage,
+                    'locales'        => $locales,
+                )
+            );
 
         $templateParam = array(
             'form' => $form->createView(),
@@ -529,8 +586,10 @@ class TranslateController extends Controller
             $templateParam['translateMade'] = $translateMade;
         }
 
-        return $this->render('opensixtBikiniTranslateBundle:Translate:copyresource.html.twig',
-            $templateParam);
+        return $this->render(
+            'opensixtBikiniTranslateBundle:Translate:copyresource.html.twig',
+            $templateParam
+        );
     }
 
     /**
@@ -594,8 +653,10 @@ class TranslateController extends Controller
             }
         }
 
-        return $this->render('opensixtBikiniTranslateBundle:Translate:sendtots.html.twig',
-            $templateParam);
+        return $this->render(
+            'opensixtBikiniTranslateBundle:Translate:sendtots.html.twig',
+            $templateParam
+        );
     }
 
     /**
@@ -701,3 +762,4 @@ class TranslateController extends Controller
         return $requestData;
     }
 }
+

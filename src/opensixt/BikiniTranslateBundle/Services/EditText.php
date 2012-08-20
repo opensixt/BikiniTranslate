@@ -171,10 +171,10 @@ class EditText extends HandleText
             $chunk,
             // @codingStandardsIgnoreStart
             function ($ids, $elem) {
+            // @codingStandardsIgnoreEnd
                 $ids[] = $elem['id'];
                 return $ids;
             },
-            // @codingStandardsIgnoreEnd
             array()
         );
 
