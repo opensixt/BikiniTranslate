@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
-class UserSearch extends AbstractType
+class UserSearchForm extends AbstractType
 {
     /** @var Translator */
     public $translator;

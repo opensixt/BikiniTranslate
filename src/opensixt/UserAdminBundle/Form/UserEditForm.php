@@ -8,7 +8,7 @@ use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use \Symfony\Component\Form\CallbackValidator;
 use \Symfony\Component\Form\FormError;
 
-class UserEdit extends AbstractType
+class UserEditForm extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder

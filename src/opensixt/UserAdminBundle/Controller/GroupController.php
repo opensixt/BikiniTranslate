@@ -4,7 +4,7 @@ namespace opensixt\UserAdminBundle\Controller;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use opensixt\UserAdminBundle\Form\GroupEdit as GroupEditForm;
+use opensixt\UserAdminBundle\Form\GroupEditForm;
 use opensixt\BikiniTranslateBundle\Entity\Groups;
 
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
