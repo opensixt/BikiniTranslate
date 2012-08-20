@@ -13,6 +13,9 @@ use opensixt\BikiniTranslateBundle\Form\CopyLanguageForm;
 use opensixt\BikiniTranslateBundle\Form\CleanTextForm;
 use opensixt\BikiniTranslateBundle\Form\SendToTSForm;
 
+/**
+ * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
+ */
 class TranslateController extends Controller
 {
     /**
@@ -28,7 +31,6 @@ class TranslateController extends Controller
     /**
      * edittext Action
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param string $locale
      * @param int $page
      * @return Response A Response instance
@@ -106,9 +108,9 @@ class TranslateController extends Controller
                 new EditTextForm(),
                 null,
                 array(
-                        'searchResource'   => $searchResource,
-                        'resources'        => $resources,
-                        'ids'              => $ids,
+                    'searchResource' => $searchResource,
+                    'resources'      => $resources,
+                    'ids'            => $ids,
                 )
             );
 
@@ -131,7 +133,6 @@ class TranslateController extends Controller
     /**
      * setlocale Action
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return Response A Response instance
      */
     public function setlocaleAction()
@@ -243,14 +244,14 @@ class TranslateController extends Controller
                 new SearchStringForm(),
                 null,
                 array(
-                        'searchPhrase'     => $searchPhrase,
-                        'searchResource'   => $searchResource,
-                        'resources'        => $resources,
-                        'searchLanguage'   => $searchLanguage,
-                        'locales'          => $locales,
-                        'preferredChoices' => $preferredChoices,
-                        'searchMode'       => $searchMode,
-                        'mode'             => $mode,
+                    'searchPhrase'     => $searchPhrase,
+                    'searchResource'   => $searchResource,
+                    'resources'        => $resources,
+                    'searchLanguage'   => $searchLanguage,
+                    'locales'          => $locales,
+                    'preferredChoices' => $preferredChoices,
+                    'searchMode'       => $searchMode,
+                    'mode'             => $mode,
                 )
             );
 
@@ -275,7 +276,6 @@ class TranslateController extends Controller
     /**
      * changetext Action
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $page
      * @return Response A Response instance
      */
@@ -325,12 +325,12 @@ class TranslateController extends Controller
                 new ChangeTextForm(),
                 null,
                 array(
-                        'searchPhrase'     => $searchPhrase,
-                        'searchResource'   => $searchResource,
-                        'resources'        => $resources,
-                        'searchLanguage'   => $searchLanguage,
-                        'locales'          => $locales,
-                        'ids'              => $ids,
+                    'searchPhrase'    => $searchPhrase,
+                    'searchResource'  => $searchResource,
+                    'resources'       => $resources,
+                    'searchLanguage'  => $searchLanguage,
+                    'locales'         => $locales,
+                    'ids'             => $ids,
                 )
             );
 
