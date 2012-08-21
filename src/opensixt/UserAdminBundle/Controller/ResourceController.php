@@ -144,16 +144,9 @@ class ResourceController extends AbstractController
      */
     private function initAclForNewResource(Resource $resource)
     {
-        $acl = $this->aclProvider->createAcl(ObjectIdentity::fromDomainObject($resource));
+        $userPermissions = $this->getContainer()->get('opensixt.bikini_translate.acl.user_permissions');
 
-        $roleIdentity = new RoleSecurityIdentity('ROLE_ADMIN');
-
-        $mask = new MaskBuilder();
-        $mask->reset();
-        $mask->add('master');
-        $acl->insertObjectAce($roleIdentity, $mask->get());
-
-        $this->aclProvider->updateAcl($acl);
+        $userPermissions->initAclForNew($group);
     }
 
     /**

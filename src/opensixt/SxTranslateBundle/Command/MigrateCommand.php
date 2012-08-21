@@ -60,13 +60,13 @@ class MigrateCommand extends ContainerAwareCommand
 
         $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $user_permissions = $this->getContainer()->get('opensixt.bikini_translate.acl.user_permissions');
+        $userPermissions = $this->getContainer()->get('opensixt.bikini_translate.acl.user_permissions');
 
         $conn = $this->getConnection($dsn);
 
         $this->loadGroupsAndResources($conn, $manager);
 
-        $this->loadResourcesAndLocales($conn, $manager);
+        $this->loadResourcesAndLocales($conn, $manager, $userPermissions);
 
         // admin role
         $adminRole = $this->getRoleAdmin();
@@ -97,6 +97,8 @@ class MigrateCommand extends ContainerAwareCommand
 
         $this->group['default'] = $groupDefault;
 
+        $userPermissions->initAclForNew($groupDefault);
+
         // admin user
         $admin = $this->getUserAdmin();
         $manager->persist($admin);
@@ -104,7 +106,7 @@ class MigrateCommand extends ContainerAwareCommand
 
         $this->user['admin'] = $admin;
 
-        $user_permissions->initAclForNewUser($admin);
+        $userPermissions->initAclForNewUser($admin);
 
         // no user
         $nouser = $this->getUserNoUser();
@@ -113,7 +115,7 @@ class MigrateCommand extends ContainerAwareCommand
 
         $this->user[''] = $nouser;
 
-        $user_permissions->initAclForNewUser($nouser);
+        $userPermissions->initAclForNewUser($nouser);
 
         $i = 0;
         gc_enable(); // Enable Garbage Collector
@@ -122,6 +124,7 @@ class MigrateCommand extends ContainerAwareCommand
         $sql = "SELECT * FROM gtxt" . ($max_rows > 0 ? " LIMIT {$max_rows}" : "");
 
         $stmt = $conn->query($sql);
+        $texts = array();
 
         $usersToAcl = array();
 
@@ -139,6 +142,8 @@ class MigrateCommand extends ContainerAwareCommand
 
                 $usersToAcl[] = $user;
                 $this->user[$row['user']] = $user;
+
+                $userPermissions->initAclForNewUser($user);
             }
 
             // get the group by resource name
@@ -149,6 +154,9 @@ class MigrateCommand extends ContainerAwareCommand
 
             $text = $this->getText($row);
             $manager->persist($text);
+
+            // collect texts to init acl after flush
+            $texts[] = $text;
 
             // flush every 500th
             if ($i > 0 && $i % 500 === 0) {
@@ -161,6 +169,10 @@ class MigrateCommand extends ContainerAwareCommand
                 $usersToAcl = array();
 
                 gc_collect_cycles();
+
+                foreach ($texts as $text) {
+                    $userPermissions->initAclForNew($text);
+                }
             }
 
             $i++;
@@ -247,13 +259,12 @@ class MigrateCommand extends ContainerAwareCommand
         }
     }
 
-    /**
-     * @param \Doctrine\DBAL\Connection $conn
-     * @param \Doctrine\ORM\EntityManager $manager
-     */
-    protected function loadResourcesAndLocales(\Doctrine\DBAL\Connection $conn, \Doctrine\ORM\EntityManager $manager)
-    {
-        $sql = "SELECT `module`, GROUP_CONCAT(DISTINCT locale) AS `locales` FROM gtxt GROUP BY `module`";
+    protected function loadResourcesAndLocales(
+        \Doctrine\DBAL\Connection $conn,
+        \Doctrine\ORM\EntityManager $manager,
+        \opensixt\BikiniTranslateBundle\Acl\UserPermissions $userPermissions
+    ) {
+        $sql = "SELECT module, GROUP_CONCAT(distinct locale) as locales FROM gtxt group by module";
         $stmt = $conn->query($sql);
 
         while ($row = $stmt->fetch()) {
@@ -269,14 +280,19 @@ class MigrateCommand extends ContainerAwareCommand
                 if (!isset($this->locale[$loc])) {
                     $locale = $this->getLanguage($loc, 'Description for ' . $loc);
                     $manager->persist($locale);
+                    $manager->flush();
 
                     $this->locale[$loc] = $locale;
+
+                    //$userPermissions->initAclForNew($locale);
                 }
             }
 
             $manager->flush();
 
             $this->res[$row['module']] = $res;
+
+            //$userPermissions->initAclForNew($res);
         }
     }
 
@@ -412,9 +428,9 @@ class MigrateCommand extends ContainerAwareCommand
     {
         $user = new User;
 
-        $user->setUsername('nouser');
-        $user->setPassword('nouser');
-        $user->setEmail('nouser@sixt.de');
+        $user->setUsername('bikini');
+        $user->setPassword('bikini');
+        $user->setEmail('bikini@bikinitranslate');
         $user->setIsactive(User::ACTIVE_USER);
         $user->addUserRole($this->role['user']);
         $user->setUserLanguages($this->locale);

@@ -18,6 +18,15 @@ class UserPermissions
     /** @var \Symfony\Component\Security\Acl\Model\MutableAclProviderInterface */
     public $aclProvider;
 
+    public function initAclForNew($object)
+    {
+        $acl = $this->aclProvider->createAcl(ObjectIdentity::fromDomainObject($object));
+
+        $this->addAdminRoleAce($acl);
+
+        $this->aclProvider->updateAcl($acl);
+    }
+
     /**
      * Creates a new ACL for the given user. This method is used application-wide to ensure that all new users are
      * created with similar ACEs.

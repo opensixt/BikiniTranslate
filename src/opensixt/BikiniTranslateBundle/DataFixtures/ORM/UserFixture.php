@@ -41,9 +41,9 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $this->addReference('users-admin', $admin);
 
         $user = new User;
-        $user->setUsername('user');
-        $user->setPassword('user');
-        $user->setEmail('user@bikinitranslate');
+        $user->setUsername('bikini');
+        $user->setPassword('bikini');
+        $user->setEmail('bikini@bikinitranslate');
         $user->setIsactive(User::ACTIVE_USER);
         $user->addUserRole($manager->merge($this->getReference('role-3')));
         $user->setUserLanguages(array($manager->merge($this->getReference('language-de_DE'))));

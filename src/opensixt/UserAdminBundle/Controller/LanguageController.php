@@ -144,16 +144,9 @@ class LanguageController extends AbstractController
      */
     private function initAclForNewLanguage(Language $language)
     {
-        $acl = $this->aclProvider->createAcl(ObjectIdentity::fromDomainObject($language));
+        $userPermissions = $this->getContainer()->get('opensixt.bikini_translate.acl.user_permissions');
 
-        $roleIdentity = new RoleSecurityIdentity('ROLE_ADMIN');
-
-        $mask = new MaskBuilder();
-        $mask->reset();
-        $mask->add('master');
-        $acl->insertObjectAce($roleIdentity, $mask->get());
-
-        $this->aclProvider->updateAcl($acl);
+        $userPermissions->initAclForNew($group);
     }
 
     /**

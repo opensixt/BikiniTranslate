@@ -147,16 +147,9 @@ class GroupController extends AbstractController
      */
     private function initAclForNewGroup(Group $group)
     {
-        $acl = $this->aclProvider->createAcl(ObjectIdentity::fromDomainObject($group));
+        $userPermissions = $this->getContainer()->get('opensixt.bikini_translate.acl.user_permissions');
 
-        $roleIdentity = new RoleSecurityIdentity('ROLE_ADMIN');
-
-        $mask = new MaskBuilder();
-        $mask->reset();
-        $mask->add('master');
-        $acl->insertObjectAce($roleIdentity, $mask->get());
-
-        $this->aclProvider->updateAcl($acl);
+        $userPermissions->initAclForNew($group);
     }
 
     /**
@@ -165,8 +158,12 @@ class GroupController extends AbstractController
      */
     private function getGroupEditFormForGroup(Group $group = null)
     {
-        return $this->formFactory
-                    ->create(new GroupEditForm($this->translator), $group);
+        return $this
+            ->formFactory
+            ->create(
+                new GroupEditForm($this->translator),
+                $group
+            );
     }
 
     /**
