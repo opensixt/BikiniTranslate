@@ -11,8 +11,6 @@ use opensixt\BikiniTranslateBundle\Entity\Resource;
 use Symfony\Component\Form\CallbackValidator;
 use Symfony\Component\Form\FormError;
 
-use opensixt\BikiniTranslateBundle\Helpers\Pagination;
-
 class DefaultController extends Controller
 {
     public function indexAction()

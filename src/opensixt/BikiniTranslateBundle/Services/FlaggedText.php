@@ -4,8 +4,6 @@ namespace opensixt\BikiniTranslateBundle\Services;
 use opensixt\BikiniTranslateBundle\Services\HandleText;
 use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
-use opensixt\BikiniTranslateBundle\Helpers\Pagination;
-
 /**
  * FlaggedText
  * Intermediate layer between Controller and Model
@@ -28,40 +26,38 @@ class FlaggedText extends HandleText
      * @param int $locale
      * @param array $resources
      * @param int $page
-     * @param date $expiredDate
-     * @return array
+     * @param date $expiryDate
+     * @return Knp\Component\Pager\Pagination\PaginationInterface
      */
-    public function getData($locale, $resources, $page, $expiredDate = null)
+    public function getData($page, $locale, $resources, $expiryDate = null)
     {
-        if (!empty($expiredDate)) {
-            $this->textRepository->setDate($expiredDate);
+        if (!empty($expiryDate)) {
+            $this->textRepository->setExpiryDate($expiryDate);
         }
         if (count($this->locales)) {
             $this->textRepository->setLocales($this->locales);
         }
 
-        $data = array();
-
-        // count of all results for the search parameters
-        $textCount = $this->textRepository->getTextCount(
+        $this->textRepository->init(
             TextRepository::TASK_SEARCH_FLAGGED_TEXTS,
             $locale,
             $resources
         );
 
-        // get pagination bar
-        $pagination = new Pagination(
-            $textCount,
-            $this->paginationLimit,
-            $page
-        );
-        $data['paginationBar'] = $pagination->getPaginationBar();
+        $query = $this->textRepository->getSearchResults();
 
-        // get search results
-        $data['searchResults'] = $this->textRepository->getSearchResults(
-            $this->paginationLimit,
-            $pagination->getOffset()
-        );
+        if (empty($this->paginationLimit)) {
+            $this->paginationLimit = PHP_INT_MAX;
+        }
+        $data = $this->paginator->paginate($query, $page, $this->paginationLimit);
+
+        // set GET parameter for paginator links
+        if (count($resources) == 1) {
+            $data->setParam('resource', $resources[0]);
+        }
+        if (count($locale) == 1) {
+            $data->setParam('locale', $locale);
+        }
 
         return $data;
     }

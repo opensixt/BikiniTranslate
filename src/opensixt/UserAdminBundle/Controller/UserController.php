@@ -2,10 +2,8 @@
 
 namespace opensixt\UserAdminBundle\Controller;
 
-use opensixt\BikiniTranslateBundle\Helpers\Pagination;
 use opensixt\UserAdminBundle\Form\UserSearchForm;
 use opensixt\UserAdminBundle\Form\UserEditForm;
-
 use opensixt\BikiniTranslateBundle\Entity\User;
 
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;

@@ -377,9 +377,9 @@ class TranslateController extends Controller
 
         // get search results
         $results = $searcher->getData(
+            $page,
             $searchLanguage,
             $searchResources,
-            $page,
             date("Y-m-d")
         );
 
@@ -388,10 +388,10 @@ class TranslateController extends Controller
                 new CleanTextForm(),
                 null,
                 array(
-                        'searchResource'   => $searchResource,
-                        'resources'        => $resources,
-                        'searchLanguage'   => $searchLanguage,
-                        'locales'          => $locales,
+                    'searchResource'   => $searchResource,
+                    'resources'        => $resources,
+                    'searchLanguage'   => $searchLanguage,
+                    'locales'          => $locales,
                 )
             );
 
@@ -401,11 +401,8 @@ class TranslateController extends Controller
             'locale'        => $searchLanguage,
         );
 
-        if (!empty($results['paginationBar'])) {
-            $templateParam['paginationbar'] = $results['paginationBar'];
-        }
-        if (isset($results['searchResults'])) {
-            $templateParam['searchResults'] = $results['searchResults'];
+        if (isset($results)) {
+            $templateParam['searchResults'] = $results;
         }
 
         return $this->render(
@@ -436,17 +433,17 @@ class TranslateController extends Controller
         $searcher->setLocales(array_keys($locales));
 
         // get search results
-        $results = $searcher->getData($searchLanguage, $searchResources, $page);
+        $results = $searcher->getData($page, $searchLanguage, $searchResources);
 
         $form = $this->get('form.factory')
             ->create(
                 new ReleaseTextForm(),
                 null,
                 array(
-                        'searchResource'   => $searchResource,
-                        'resources'        => $resources,
-                        'searchLanguage'   => $searchLanguage,
-                        'locales'          => $locales,
+                    'searchResource'   => $searchResource,
+                    'resources'        => $resources,
+                    'searchLanguage'   => $searchLanguage,
+                    'locales'          => $locales,
                 )
             );
 
@@ -455,12 +452,8 @@ class TranslateController extends Controller
             'resource'      => $searchResource,
             'locale'        => $searchLanguage,
         );
-
-        if (!empty($results['paginationBar'])) {
-            $templateParam['paginationbar'] = $results['paginationBar'];
-        }
-        if (isset($results['searchResults'])) {
-            $templateParam['searchResults'] = $results['searchResults'];
+        if (isset($results)) {
+            $templateParam['searchResults'] = $results;
         }
 
         return $this->render(

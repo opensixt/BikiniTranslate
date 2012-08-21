@@ -26,6 +26,8 @@ services:
     opensixt_flaggedtext:
         class: %opensixt_flaggedtext.class%
         arguments: [@doctrine]
+        properties:
+            paginator: @knp_paginator
 
     opensixt_copydomain:
         class: %opensixt_copydomain.class%

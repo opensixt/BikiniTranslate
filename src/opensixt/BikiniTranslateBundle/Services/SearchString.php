@@ -4,8 +4,6 @@ namespace opensixt\BikiniTranslateBundle\Services;
 use opensixt\BikiniTranslateBundle\Services\HandleText;
 use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
-use opensixt\BikiniTranslateBundle\Helpers\Pagination;
-
 /**
  * SearchSearch
  * Intermediate layer between Controller and Model

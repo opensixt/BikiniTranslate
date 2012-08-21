@@ -5,8 +5,6 @@ namespace opensixt\BikiniTranslateBundle\Services;
 use opensixt\BikiniTranslateBundle\Services\HandleText;
 use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
-use opensixt\BikiniTranslateBundle\Helpers\Pagination;
-
 /**
  * SearchSearch
  * Intermediate layer between Controller and Model
@@ -59,7 +57,7 @@ class EditText extends HandleText
      * @param array $searchResources search resources
      * @param array $resources all available resources
      * @param boolean $suggestionsFlag if true get suggegstions for any text
-     * @return array
+     * @return Knp\Component\Pager\Pagination\PaginationInterface
      * @throws \Exception
      */
     public function getData($page, $locale, $searchResources, $resources, $suggestionsFlag = false)
@@ -67,7 +65,6 @@ class EditText extends HandleText
         $this->textRepository->setCommonLanguage($this->commonLanguage);
         $this->textRepository->setCommonLanguageId($this->commonLanguageId);
 
-        // count of all results for the search parameters
         $this->textRepository->init(
             TextRepository::TASK_MISSING_TRANS_BY_LANG,
             $locale,

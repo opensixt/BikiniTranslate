@@ -40,18 +40,14 @@
                 </tr>
             {% endfor %}
             </tbody>
-
-            {% if paginationbar is defined %}
             <tfoot>
                 <tr>
                     <td colspan="2">
-                        {% set param = {'target_route': '_translate_releasetext', 'paginationbar' : paginationbar } %}
-                        {% set param = param|merge({'resource': resource}) %}
-                        {% include 'opensixtBikiniTranslateBundle:Translate:paginationbar.html.twig' with param %}
+                        {# navigation #}
+                        {{ searchResults.render()|raw }}
                     </td>
                 </tr>
             </tfoot>
-            {% endif %}
         </table>
         {% endif %}
 
