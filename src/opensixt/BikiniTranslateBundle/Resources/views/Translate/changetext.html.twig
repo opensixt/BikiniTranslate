@@ -15,7 +15,7 @@
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
         {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        <input id="btnSearch" type="button" value="{{ 'submit_page'|trans }}"/>
+        <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
 
         {% if searchResults is defined %}
         <table class="list">
@@ -49,7 +49,7 @@
             </tfoot>
         </table>
 
-        <input type="button" value="{{ 'save'|trans }}" id="btnSaveTranslations">
+        <input type="submit" value="{{ 'save'|trans }}" id="btnSaveTranslations">
         {% endif %}
 
         {{ form_rest(form) }}
@@ -64,12 +64,10 @@
 
         $('#btnSaveTranslations').click(function() {
             $('#action').val('save');
-            $(this.form).submit();
         });
 
         $('#btnSearch').click(function() {
             $('#action').val('search');
-            $(this.form).submit();
         });
 
     });

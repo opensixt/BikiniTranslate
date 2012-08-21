@@ -25,6 +25,7 @@ class ChangeTextForm extends AbstractType
                 'label'       => 'search_by',
                 'trim'        => true,
                 'data'        => $options['searchPhrase'],
+                'required'    => true,
             )
         )
         ->add(
@@ -45,7 +46,8 @@ class ChangeTextForm extends AbstractType
                 'label'       => 'with_language',
                 'empty_value' => '',
                 'choices'     => $options['locales'],
-                'data'        => $options['searchLanguage']
+                'data'        => $options['searchLanguage'],
+                'required'    => true,
             )
         )
         ->add('action', 'hidden');

@@ -34,8 +34,8 @@ class SearchStringForm extends AbstractType
                 'label'       => 'with_resource',
                 'empty_value' => 'all_values',
                 'choices'     => $options['resources'],
+                'data'        => $options['searchResource'],
                 'required'    => false,
-                'data'        => $options['searchResource']
             )
         )
         ->add(
