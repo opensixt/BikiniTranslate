@@ -378,10 +378,10 @@ class TranslateController extends Controller
                 new CleanTextForm(),
                 null,
                 array(
-                        'searchResource'   => $searchResource,
-                        'resources'        => $resources,
-                        'searchLanguage'   => $searchLanguage,
-                        'locales'          => $locales,
+                    'searchResource'   => $searchResource,
+                    'resources'        => $resources,
+                    'searchLanguage'   => $searchLanguage,
+                    'locales'          => $locales,
                 )
             );
 
@@ -426,17 +426,17 @@ class TranslateController extends Controller
         $searcher->setLocales(array_keys($locales));
 
         // get search results
-        $results = $searcher->getData($searchLanguage, $searchResources, $page);
+        $results = $searcher->getData($page, $searchLanguage, $searchResources);
 
         $form = $this->get('form.factory')
             ->create(
                 new ReleaseTextForm(),
                 null,
                 array(
-                        'searchResource'   => $searchResource,
-                        'resources'        => $resources,
-                        'searchLanguage'   => $searchLanguage,
-                        'locales'          => $locales,
+                    'searchResource'   => $searchResource,
+                    'resources'        => $resources,
+                    'searchLanguage'   => $searchLanguage,
+                    'locales'          => $locales,
                 )
             );
 
