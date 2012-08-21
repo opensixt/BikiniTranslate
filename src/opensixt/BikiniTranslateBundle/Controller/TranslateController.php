@@ -70,20 +70,14 @@ class TranslateController extends Controller
             }
 
             if (isset($formData['action']) && $formData['action'] == 'save') {
-                $textsToSave = array();
-                foreach ($formData as $key => $value) {
-                    // for all textareas with name 'text_[number]'
-                    if (preg_match("/text_([0-9]+)/", $key, $matches) && strlen($value)) {
-                        $textsToSave[$matches[1]] = $value;
-                    }
-                }
-                $editText->updateTexts($textsToSave);
+                $editText->updateTexts(
+                    $this->getTextsToSaveFromRequest($formData)
+                );
             }
         }
 
-        $searchResources = $this->getSearchResources();
-
         // set search parameters
+        $searchResources = $this->getSearchResources();
         $getSuggestionsFlag = true; // get translations with same hash from other resources
 
         // get search results
@@ -162,7 +156,7 @@ class TranslateController extends Controller
 
         if ($request->getMethod() == 'POST') {
             // the controller binds the submitted data to the form
-            $form->bindRequest($request);
+            $form->bind($request);
 
             if ($form->isValid()) {
                 if ($form->get('locale')->getData()) {
@@ -281,6 +275,7 @@ class TranslateController extends Controller
      */
     public function changetextAction($page)
     {
+        $request = $this->getRequest();
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
 
@@ -289,12 +284,27 @@ class TranslateController extends Controller
         $searchLanguage = $this->getFieldFromRequest('locale');
         $searchResource = $this->getFieldFromRequest('resource');
 
-        $searchResources = $this->getSearchResources();
+        $searcher = $this->get('opensixt_searchstring');
+
+        // Update texts with entered values
+        if ($request->getMethod() == 'POST') {
+            $formData = $this->getRequestData($request);
+
+            if (isset($formData['action']) && $formData['action'] == 'search') {
+                $page = 1;
+            }
+
+            if (isset($formData['action']) && $formData['action'] == 'save') {
+                $searcher->updateTexts(
+                    $this->getTextsToSaveFromRequest($formData)
+                );
+            }
+        }
 
         if (strlen($searchPhrase)) {
-            $searcher = $this->get('opensixt_searchstring');
 
             // set search parameters
+            $searchResources = $this->getSearchResources();
             $searcher->setSearchParameters($searchPhrase);
 
             // get search results
@@ -741,14 +751,35 @@ class TranslateController extends Controller
     /**
      * Return $_REQUEST content as array
      *
-     * @param type $request
-     * @return type
+     * @param Request $request
+     * @return array
      */
     private function getRequestData($request)
     {
         $requestString = $request->getContent();
         parse_str($requestString, $requestData);
         return $requestData;
+    }
+
+    /**
+     * Return Texts (text_[number]) to save from $_REQUEST
+     *
+     * @param array $formData equals _REQUEST
+     * @return array
+     */
+    private function getTextsToSaveFromRequest($formData)
+    {
+        $textsToSave = array();
+        if (!empty($formData)) {
+            foreach ($formData as $key => $value) {
+                // for all textareas with name 'text_[number]'
+                if (preg_match("/text_([0-9]+)/", $key, $matches) && strlen($value)) {
+                    $textsToSave[$matches[1]] = $value;
+                }
+            }
+        }
+
+        return $textsToSave;
     }
 }
 

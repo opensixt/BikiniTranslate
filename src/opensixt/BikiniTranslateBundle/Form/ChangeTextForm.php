@@ -47,7 +47,8 @@ class ChangeTextForm extends AbstractType
                 'choices'     => $options['locales'],
                 'data'        => $options['searchLanguage']
             )
-        );
+        )
+        ->add('action', 'hidden');
 
         if (!empty($options['ids'])) {
             foreach ($options['ids'] as $id) {

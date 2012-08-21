@@ -96,5 +96,29 @@ abstract class HandleText
             $this->paginationLimit = $lim;
         }
     }
+
+    /**
+     *
+     * @param array $texts
+     */
+    public function updateTexts(array $texts)
+    {
+        // Exception
+        if (!isset($this->revisionControlMode)) {
+            throw new \Exception(
+                __METHOD__ . ': revisionControlMode is not set. Please set text_revision_control in parameters.yml !'
+            );
+        }
+
+        $this->textRepository->setTextRevisionControl($this->revisionControlMode);
+
+        if (!empty($texts)) {
+            foreach ($texts as $key => $value) {
+                if ($key > 0 && strlen($value)) {
+                    $this->textRepository->updateText($key, $value);
+                }
+            }
+        }
+    }
 }
 

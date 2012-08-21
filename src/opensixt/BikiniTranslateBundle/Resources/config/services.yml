@@ -13,6 +13,7 @@ services:
         arguments: [@doctrine]
         properties:
             paginator: @knp_paginator
+            revisionControlMode: %text_revision_control%
 
     opensixt_edittext:
         class: %opensixt_edittext.class%
