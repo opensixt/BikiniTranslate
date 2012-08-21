@@ -3,8 +3,8 @@
 namespace opensixt\UserAdminBundle\Controller;
 
 use opensixt\BikiniTranslateBundle\Helpers\Pagination;
-use opensixt\UserAdminBundle\Form\UserSearch as UserSearchForm;
-use opensixt\UserAdminBundle\Form\UserEdit as UserEditForm;
+use opensixt\UserAdminBundle\Form\UserSearchForm;
+use opensixt\UserAdminBundle\Form\UserEditForm;
 
 use opensixt\BikiniTranslateBundle\Entity\User;
 

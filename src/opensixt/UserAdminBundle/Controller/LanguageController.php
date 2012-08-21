@@ -4,7 +4,7 @@ namespace opensixt\UserAdminBundle\Controller;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use opensixt\UserAdminBundle\Form\LanguageEdit as LanguageEditForm;
+use opensixt\UserAdminBundle\Form\LanguageEditForm;
 use opensixt\BikiniTranslateBundle\Entity\Language;
 
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;

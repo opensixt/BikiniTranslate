@@ -8,7 +8,7 @@ use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use \Symfony\Component\Form\CallbackValidator;
 use \Symfony\Component\Form\FormError;
 
-class ResourceEdit extends AbstractType
+class LanguageEditForm extends AbstractType
 {
     /** @var Translator */
     public $translator;
@@ -28,7 +28,7 @@ class ResourceEdit extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $translator = $this->translator;
-        $builder->add('name', 'text', array('label' => $translator->trans('resource_name') . ': '))
+        $builder->add('locale', 'text', array('label' => $translator->trans('language_name') . ': '))
                 ->add(
                     'description',
                     'text',

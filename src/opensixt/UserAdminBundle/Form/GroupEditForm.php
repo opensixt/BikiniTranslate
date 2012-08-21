@@ -8,7 +8,7 @@ use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use \Symfony\Component\Form\CallbackValidator;
 use \Symfony\Component\Form\FormError;
 
-class GroupEdit extends AbstractType
+class GroupEditForm extends AbstractType
 {
     /** @var Translator */
     public $translator;
