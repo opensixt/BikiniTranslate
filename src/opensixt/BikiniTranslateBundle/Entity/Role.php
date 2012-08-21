@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="role")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Role implements RoleInterface
 {
@@ -21,6 +22,20 @@ class Role implements RoleInterface
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var datetime $created
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
+    private $created;
+
+    /**
+     * @var datetime $updated
+     *
+     * @ORM\Column(name="updated", type="datetime", nullable=false)
+     */
+    private $updated;
 
     /**
      * @var string $name
@@ -36,7 +51,14 @@ class Role implements RoleInterface
      */
     private $label;
 
-
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->setCreated(new \DateTime());
+        $this->setUpdated(new \DateTime());
+    }
 
     /**
      * Get id
@@ -46,6 +68,46 @@ class Role implements RoleInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \Datetime $created
+     */
+    protected function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \Datetime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \Datetime $updated
+     */
+    protected function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \Datetime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 
     /**
@@ -96,6 +158,12 @@ class Role implements RoleInterface
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /** @ORM\PrePersist */
+    public function onPrePersist()
+    {
+        $this->setUpdated(new \DateTime());
     }
 }
 

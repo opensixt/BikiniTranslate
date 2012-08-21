@@ -22,11 +22,23 @@ class TextRevision
     private $id;
 
     /**
+     * @var datetime $created
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
+    private $created;
+
+    /**
      * @var text $target
      *
      * @ORM\Column(name="target", type="text", nullable=false)
      */
     private $target;
+
+    public function __construct()
+    {
+        $this->setCreated(new \DateTime());
+    }
 
     /**
      * Get id
@@ -36,6 +48,26 @@ class TextRevision
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     */
+    protected function setCreated(\DateTime $created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
     }
 
     /**

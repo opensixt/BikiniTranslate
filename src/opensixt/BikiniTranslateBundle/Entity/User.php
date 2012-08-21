@@ -21,6 +21,7 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
  * @UniqueEntity("username")
  * @UniqueEntity("email")
  * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class User implements AdvancedUserInterface
 {
@@ -35,6 +36,20 @@ class User implements AdvancedUserInterface
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var datetime $created
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
+    private $created;
+
+    /**
+     * @var datetime $updated
+     *
+     * @ORM\Column(name="updated", type="datetime", nullable=false)
+     */
+    private $updated;
 
     /**
      * @var string $username
@@ -68,13 +83,6 @@ class User implements AdvancedUserInterface
      * @ORM\Column(name="isactive", type="boolean", nullable=false)
      */
     private $isactive;
-
-    /**
-     * @var datetime $created
-     *
-     * @ORM\Column(name="created", type="datetime", nullable=false)
-     */
-    private $created;
 
     /**
      * @ORM\ManyToMany(targetEntity="opensixt\BikiniTranslateBundle\Entity\Role")
@@ -124,6 +132,7 @@ class User implements AdvancedUserInterface
         $this->userLanguages = new ArrayCollection();
         $this->setIsactive(self::NOT_ACTIVE_USER);
         $this->setCreated(new \DateTime());
+        $this->setUpdated(new \DateTime());
     }
 
     /**
@@ -134,6 +143,46 @@ class User implements AdvancedUserInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \Datetime $created
+     */
+    protected function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \Datetime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \Datetime $updated
+     */
+    protected function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \Datetime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 
     /**
@@ -216,26 +265,6 @@ class User implements AdvancedUserInterface
     public function getIsactive()
     {
         return (boolean)$this->isactive;
-    }
-
-    /**
-     * Set created
-     *
-     * @param \Datetime $created
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \Datetime
-     */
-    public function getCreated()
-    {
-        return $this->created;
     }
 
     /**
@@ -378,6 +407,12 @@ class User implements AdvancedUserInterface
     public function isEnabled()
     {
         return $this->isactive;
+    }
+
+    /** @ORM\PrePersist */
+    public function onPrePersist()
+    {
+        $this->setUpdated(new \DateTime());
     }
 }
 

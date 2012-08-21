@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="resource")
  * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\ResourceRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Resource
 {
@@ -20,6 +21,20 @@ class Resource
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var datetime $created
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
+    private $created;
+
+    /**
+     * @var datetime $updated
+     *
+     * @ORM\Column(name="updated", type="datetime", nullable=false)
+     */
+    private $updated;
 
     /**
      * @var string $name
@@ -35,7 +50,14 @@ class Resource
      */
     private $description;
 
-
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->setCreated(new \DateTime());
+        $this->setUpdated(new \DateTime());
+    }
 
     /**
      * Get id
@@ -45,6 +67,46 @@ class Resource
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \Datetime $created
+     */
+    protected function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \Datetime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \Datetime $updated
+     */
+    protected function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \Datetime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 
     /**
@@ -85,6 +147,12 @@ class Resource
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /** @ORM\PrePersist */
+    public function onPrePersist()
+    {
+        $this->setUpdated(new \DateTime());
     }
 }
 

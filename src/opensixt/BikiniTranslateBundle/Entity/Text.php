@@ -12,7 +12,7 @@ use opensixt\BikiniTranslateBundle\Entity\TextRevision;
  *
  * @ORM\Table(name="text")
  * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\TextRepository")
- * //@ORM\Entity @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks
  */
 class Text
 {
@@ -25,10 +25,18 @@ class Text
      */
     private $id;
 
-    /** @ORM\Column(name="created", type="datetime") */
+    /**
+     * @var datetime $created
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
     private $created;
 
-    /** @ORM\Column(name="updated", type="datetime") */
+    /**
+     * @var datetime $updated
+     *
+     * @ORM\Column(name="updated", type="datetime", nullable=false)
+     */
     private $updated;
 
     /**
@@ -158,8 +166,8 @@ class Text
 
     public function __construct()
     {
-        $this->setCreated(new \DateTime('now'));
-        $this->setUpdated(new \DateTime('now'));
+        $this->setCreated(new \DateTime());
+        $this->setUpdated(new \DateTime());
         $this->target = new ArrayCollection;
     }
 
@@ -618,10 +626,9 @@ class Text
     }
 
     /** @ORM\PrePersist */
-    /*public function onPrePersist()
+    public function onPrePersist()
     {
-        echo "onPrePersist\n";
-        $this->setUpdated(new \DateTime('now'));
-    }*/
+        $this->setUpdated(new \DateTime());
+    }
 }
 

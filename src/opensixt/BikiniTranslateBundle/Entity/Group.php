@@ -5,6 +5,7 @@ namespace opensixt\BikiniTranslateBundle\Entity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * opensixt\BikiniTranslateBundle\Entity\Group
@@ -12,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="groups")
  * @UniqueEntity("name")
  * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\GroupRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Group
 {
@@ -23,6 +25,20 @@ class Group
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var datetime $created
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
+    private $created;
+
+    /**
+     * @var datetime $updated
+     *
+     * @ORM\Column(name="updated", type="datetime", nullable=false)
+     */
+    private $updated;
 
     /**
      * @var string $name
@@ -50,6 +66,16 @@ class Group
     protected $resources;
 
     /**
+     *
+     */
+    public function __construct()
+    {
+        $this->resources = new ArrayCollection();
+        $this->setCreated(new \DateTime());
+        $this->setUpdated(new \DateTime());
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -57,6 +83,46 @@ class Group
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \Datetime $created
+     */
+    protected function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \Datetime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \Datetime $updated
+     */
+    protected function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \Datetime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 
     /**
@@ -116,6 +182,12 @@ class Group
     public function getResources()
     {
         return $this->resources;
+    }
+
+    /** @ORM\PrePersist */
+    public function onPrePersist()
+    {
+        $this->setUpdated(new \DateTime());
     }
 }
 
