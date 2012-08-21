@@ -335,7 +335,7 @@ class TextRepository extends EntityRepository
             $query->andWhere(self::FIELD_RESOURCE . ' = ?3')
                 ->setParameter(3, $resource);
 
-            $contents = $query->getQuery()->getArrayResult();
+            $contents = $query->getQuery()->getResult();
         }
         return $contents;
     }
@@ -359,7 +359,7 @@ class TextRepository extends EntityRepository
 
             $this->setQueryParameters($query);
 
-            $contents = $query->getQuery()->getArrayResult();
+            $contents = $query->getQuery()->getResult();
         }
         return $contents;
     }
@@ -377,8 +377,8 @@ class TextRepository extends EntityRepository
         $changesCount = 0;
         // merge all empty translations in destination language
         foreach ($textsDestLang as $txt) {
-            if ($txt['translateMe'] == 1) {
-                $txtId = $txt['id'];
+            if ($txt->getTranslateMe() === false) {
+                $txtId = $txt->getId();
 
                 // if the list of availabte resources is not set
                 if (empty($this->resources)) {
@@ -388,17 +388,17 @@ class TextRepository extends EntityRepository
                 }
 
                 // if destination text belongs to available resource
-                if (in_array($txt['resourceId'], $this->resources)) {
+                if (in_array($txt->getResourceId(), $this->resources)) {
                     // get text from $sourceData by hash and resource
                     $translation = '';
                     foreach ($sourceData as $src) {
-                        if ($src['hash'] == $txt['hash']) {
-                            if ($src['resourceId'] == $txt['resourceId'] && $domainType == self::DOMAIN_TYPE_LANGUAGE) {
-                                $translation = $src['target'][0]['target'];
+                        if ($src->getHash() == $txt->getHash()) {
+                            if ($src->getResourceId() == $txt->getResourceId() && $domainType == self::DOMAIN_TYPE_LANGUAGE) {
+                                $translation = $src->getCurrentTarget()->getTarget();
                                 break;
                             }
-                            if ($src['localeId'] == $txt['localeId'] && $domainType == self::DOMAIN_TYPE_RESOURCE) {
-                                $translation = $src['target'][0]['target'];
+                            if ($src->getLocaleId() == $txt->getLocaleId() && $domainType == self::DOMAIN_TYPE_RESOURCE) {
+                                $translation = $src->getCurrentTarget()->getTarget();
                                 break;
                             }
                         }
@@ -433,7 +433,7 @@ class TextRepository extends EntityRepository
         if (count($hashes) && count($locales)) {
             $query = $this->createQueryBuilder('t')
                 ->select('t, tr')
-                ->join('t.target', 'tr')
+                ->leftJoin('t.target', 'tr')
                 ->where(self::FIELD_HASH . ' IN (?1)')
                 ->andWhere(self::FIELD_LOCALE . ' IN (?2)')
                 ->setParameter(1, $hashes)

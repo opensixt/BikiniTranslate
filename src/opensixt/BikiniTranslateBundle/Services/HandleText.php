@@ -35,9 +35,6 @@ abstract class HandleText
     /** @var int */
     protected $paginationLimit;
 
-    /** @var int */
-    protected $paginationPage;
-
     /** @var string */
     public $revisionControlMode;
 
@@ -73,16 +70,6 @@ abstract class HandleText
     public function setLocales($locales)
     {
         $this->locales = $locales;
-    }
-
-    /**
-     * Set current page for pagination
-     *
-     * @param int $page
-     */
-    public function setPaginationPage($page)
-    {
-        $this->paginationPage = $page;
     }
 
     /**
