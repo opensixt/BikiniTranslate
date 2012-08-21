@@ -251,7 +251,6 @@ class TextRepository extends EntityRepository
      * Copy language ($langFrom) contents to another language ($langTo)
      * for available resources.
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $langFrom
      * @param int $langTo
      * @param array $resources
@@ -267,9 +266,16 @@ class TextRepository extends EntityRepository
             $sourceData = $this->getAllByLanguage($langFrom);
 
             // set data for destination locale
-            $textsDestLang = $this->getMessagesByLanguage($sourceData, array($langTo));
-            $translationsCount =
-                $this->updateEmptyTranslations($sourceData, $textsDestLang, self::DOMAIN_TYPE_LANGUAGE);
+            $textsDestLang = $this->getMessagesByLanguage(
+                $sourceData,
+                array($langTo)
+            );
+
+            $translationsCount = $this->updateEmptyTranslations(
+                $sourceData,
+                $textsDestLang,
+                self::DOMAIN_TYPE_LANGUAGE
+            );
         }
         return $translationsCount;
     }
@@ -278,7 +284,6 @@ class TextRepository extends EntityRepository
      * Copy resource ($resFrom) contents to another resource ($resTo)
      * for any locales from $languages
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $resFrom
      * @param int $resTo
      * @param array $languages
@@ -294,9 +299,17 @@ class TextRepository extends EntityRepository
             $sourceData = $this->getAllByResource($resFrom);
 
             // set data for destination resource for any language from $languages
-            $textsDestLang = $this->getMessagesByLanguage($sourceData, $languages, array($resTo));
-            $translationsCount =
-                $this->updateEmptyTranslations($sourceData, $textsDestLang, self::DOMAIN_TYPE_RESOURCE);
+            $textsDestLang = $this->getMessagesByLanguage(
+                $sourceData,
+                $languages,
+                array($resTo)
+            );
+
+            $translationsCount = $this->updateEmptyTranslations(
+                $sourceData,
+                $textsDestLang,
+                self::DOMAIN_TYPE_RESOURCE
+            );
         }
         return $translationsCount;
     }
@@ -304,7 +317,6 @@ class TextRepository extends EntityRepository
     /**
      * Get all contents from Text table by resource
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $resource
      * @return array
      */
@@ -331,7 +343,6 @@ class TextRepository extends EntityRepository
     /**
      * Get all contents from Text table by language
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $locale language id
      * @return array
      */
@@ -356,7 +367,6 @@ class TextRepository extends EntityRepository
     /**
      * Copy translations from sourceData for destLocale language
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $sourceData
      * @param array $textsDestLang array with new values
      * @param int $domainType
@@ -410,7 +420,6 @@ class TextRepository extends EntityRepository
      *
      * $resources - array of resources, - optional filter by it
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param SlidingPagination $texts
      * @param array $locales
      * @param array $resources
@@ -479,7 +488,6 @@ class TextRepository extends EntityRepository
     /**
      * Get array with unique values if key 'hash' from $texts
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array of objects Entity/Text
      * @return array
      */
@@ -499,7 +507,6 @@ class TextRepository extends EntityRepository
      * Set messages in $locale language for any hash from $texts
      * if current locale not equal common language
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param array $texts
      */
     public function setMessagesInCommonLanguage(&$texts)
@@ -520,8 +527,8 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     * Set query parameters by $this->task
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param QueryBuilder $query
      */
     protected function setQueryParameters($query)
@@ -612,7 +619,6 @@ class TextRepository extends EntityRepository
     /**
      * Updates text table: set target = $text for $id
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param int $id
      * @param string $text
      */
@@ -665,9 +671,8 @@ class TextRepository extends EntityRepository
     }
 
     /**
-     * Get language id from table Languages by locale
+     * Get language Id by locale (from table Languages)
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @param string $langId
      */
     public function getIdByLocale($locale)
@@ -681,7 +686,6 @@ class TextRepository extends EntityRepository
 
         $langData = $repository->findBy(array('locale' => $locale));
         return $langData[0]->getId();
-
     }
 
     /**

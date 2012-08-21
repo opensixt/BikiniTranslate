@@ -465,7 +465,6 @@ class TranslateController extends Controller
     /**
      * copylanguage Action
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return Response A Response instance
      */
     public function copylanguageAction()
@@ -503,7 +502,7 @@ class TranslateController extends Controller
             );
 
         $templateParam = array(
-            'form'          => $form->createView(),
+            'form' => $form->createView(),
         );
         if (!empty($translationsCount)) {
             $templateParam['translationsCount'] = $translationsCount;
@@ -521,7 +520,6 @@ class TranslateController extends Controller
     /**
      * copyresource Action
      *
-     * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
      * @return Response A Response instance
      */
     public function copyresourceAction()
