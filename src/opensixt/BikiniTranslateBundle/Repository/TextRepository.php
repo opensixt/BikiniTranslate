@@ -79,7 +79,7 @@ class TextRepository extends EntityRepository
      */
     private $textRevisionControl;
 
-    private $date;
+    private $expiryDate;
 
 
     /**
@@ -165,9 +165,9 @@ class TextRepository extends EntityRepository
         $this->searchString = $searchString;
     }
 
-    public function setDate($date)
+    public function setExpiryDate($date)
     {
-        $this->date = $date;
+        $this->expiryDate = $date;
     }
 
     /**
@@ -565,17 +565,18 @@ class TextRepository extends EntityRepository
                     ->setParameter(1, $this->resources);
 
                 if (!empty($this->locale)) {
-                    $query->andWhere(self::FIELD_LOCALE . ' IN (?2)')
+                    $query->andWhere(self::FIELD_LOCALE . ' = ?2')
                     ->setParameter(2, $this->locale);
-                } elseif (!empty($this->locales)) {
-                    $query->andWhere(self::FIELD_LOCALE . ' IN (?2)')
-                    ->setParameter(2, $this->locales);
+                }
+                if (!empty($this->locales)) {
+                    $query->andWhere(self::FIELD_LOCALE . ' IN (?3)')
+                    ->setParameter(3, $this->locales);
                 }
 
-                if (!empty($this->date)) {
+                if (!empty($this->expiryDate)) {
                     // expired texts
-                    $query->andWhere(self::FIELD_EXPIRY_DATE . ' <= ?3')
-                        ->setParameter(3, $this->date);
+                    $query->andWhere(self::FIELD_EXPIRY_DATE . ' <= ?4')
+                        ->setParameter(4, $this->expiryDate);
                 } else {
                     // non released texts
                     $query->andWhere(self::FIELD_RELEASED . ' IS NULL OR ' . self::FIELD_RELEASED . ' = 0')
