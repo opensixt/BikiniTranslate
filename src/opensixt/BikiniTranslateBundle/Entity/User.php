@@ -99,7 +99,7 @@ class User implements AdvancedUserInterface
     protected $userLanguages;
 
     /**
-     * @ORM\ManyToMany(targetEntity="opensixt\BikiniTranslateBundle\Entity\Groups")
+     * @ORM\ManyToMany(targetEntity="opensixt\BikiniTranslateBundle\Entity\Group")
      * @ORM\JoinTable(name="user_group",
      *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}

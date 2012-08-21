@@ -5,7 +5,7 @@ namespace opensixt\UserAdminBundle\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use opensixt\UserAdminBundle\Form\GroupEdit as GroupEditForm;
-use opensixt\BikiniTranslateBundle\Entity\Groups;
+use opensixt\BikiniTranslateBundle\Entity\Group;
 
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
@@ -115,7 +115,7 @@ class GroupController extends AbstractController
     {
         $this->requireAdminUser();
 
-        $group = new Groups();
+        $group = new Group();
 
         $form = $this->getGroupEditFormForGroup($group);
         $form->bind($this->request);
@@ -136,9 +136,9 @@ class GroupController extends AbstractController
     }
 
     /**
-     * @param Groups $group
+     * @param Group $group
      */
-    private function initAclForNewGroup(Groups $group)
+    private function initAclForNewGroup(Group $group)
     {
         $acl = $this->aclProvider->createAcl(ObjectIdentity::fromDomainObject($group));
 
@@ -153,26 +153,26 @@ class GroupController extends AbstractController
     }
 
     /**
-     * @param Groups $group
+     * @param Group $group
      * @return GroupEditForm|\Symfony\Component\Form\FormInterface
      */
-    private function getGroupEditFormForGroup(Groups $group = null)
+    private function getGroupEditFormForGroup(Group $group = null)
     {
         return $this->formFactory
                     ->create(new GroupEditForm($this->translator), $group);
     }
 
     /**
-     * @return \opensixt\BikiniTranslateBundle\Repository\GroupsRepository
+     * @return \opensixt\BikiniTranslateBundle\Repository\GroupRepository
      */
     private function getGroupRepository()
     {
-        return $this->em->getRepository('opensixtBikiniTranslateBundle:Groups');
+        return $this->em->getRepository('opensixtBikiniTranslateBundle:Group');
     }
 
     /**
      * @param int $id
-     * @return Groups object
+     * @return Group object
      * @throws NotFoundHttpException
      */
     private function requireGroupWithId($id)

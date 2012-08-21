@@ -7,13 +7,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * opensixt\BikiniTranslateBundle\Entity\Groups
+ * opensixt\BikiniTranslateBundle\Entity\Group
  *
  * @ORM\Table(name="groups")
  * @UniqueEntity("name")
- * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\GroupsRepository")
+ * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\GroupRepository")
  */
-class Groups
+class Group
 {
     /**
      * @var int $id

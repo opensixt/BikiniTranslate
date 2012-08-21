@@ -5,11 +5,11 @@ namespace opensixt\BikiniTranslateBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Groups Admin Model
+ * Group Admin Model
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
-class GroupsRepository extends EntityRepository
+class GroupRepository extends EntityRepository
 {
     /**
      * @return \Doctrine\ORM\QueryBuilder

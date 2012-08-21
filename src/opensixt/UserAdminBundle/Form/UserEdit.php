@@ -46,7 +46,7 @@ class UserEdit extends AbstractType
                     'entity',
                     array(
                         'label' => 'groups',
-                        'class' => 'opensixt\BikiniTranslateBundle\Entity\Groups',
+                        'class' => 'opensixt\BikiniTranslateBundle\Entity\Group',
                         'property' => 'name',
                         'multiple' => true,
                         'expanded' => true

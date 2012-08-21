@@ -16,7 +16,7 @@ use opensixt\BikiniTranslateBundle\Entity\Resource;
 use opensixt\BikiniTranslateBundle\Entity\Language;
 use opensixt\BikiniTranslateBundle\Entity\User;
 use opensixt\BikiniTranslateBundle\Entity\Role;
-use opensixt\BikiniTranslateBundle\Entity\Groups;
+use opensixt\BikiniTranslateBundle\Entity\Group;
 
 /**
  * Description of Migrate
@@ -244,11 +244,11 @@ class MigrateCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return \opensixt\BikiniTranslateBundle\Entity\Groups
+     * @return \opensixt\BikiniTranslateBundle\Entity\Group
      */
     protected function getGroupDefault()
     {
-        $group = new Groups;
+        $group = new Group;
 
         $group->setName('Default group');
         $group->setDescription('from initial import');
