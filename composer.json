@@ -13,6 +13,12 @@
             "email": "uwe.pries@sixt.com",
             "homepage": "https://github.com/uwepriessixt",
             "role": "Developer"
+        },
+        {
+            "name": "Paul Seiffert",
+            "email": "paul.seiffert@mayflower.de",
+            "homepage": "https://github.com/seiffert",
+            "role": "Consultant"
         }
     ],
     "support": {

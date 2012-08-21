@@ -25,155 +25,94 @@ use opensixt\BikiniTranslateBundle\Entity\Groups;
  */
 class MigrateCommand extends ContainerAwareCommand
 {
+    private $res = array();
+
+    private $locale = array();
+
+    private $user = array();
+
+    private $role = array();
+
+    private $group = array();
+
     protected function configure()
     {
         $this
             ->setName('bikinitranslate:import')
             ->setDescription('Import live data from gtxt')
-            ->addArgument('url', InputArgument::OPTIONAL, 'Database url?')
+            ->addArgument('dsn', InputArgument::REQUIRED, 'Database DSN (mysql://username:password@host/database)')
             ->addArgument('max_rows', InputArgument::OPTIONAL, 'How many rows do you want to import');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $max_rows = intval($input->getArgument('max_rows') ?: 0);
+        $dsn = $input->getArgument('dsn');
 
         $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $tokens = parse_url($input->getArgument('url'));
 
-        $config = new Configuration();
-        $connectionParams = array(
-            'dbname' => ltrim($tokens['path'], '/'),
-            'user' => $tokens['user'],
-            'password' => $tokens['pass'],
-            'host' => $tokens['host'],
-            'driver' => 'pdo_' . $tokens['scheme'],
-            'driverOptions' => array(
-                1002 => 'SET NAMES utf8'
-            )
-        );
+        $conn = $this->getConnection($dsn);
 
-        $conn = DriverManager::getConnection($connectionParams, $config);
+        $this->loadResourcesAndLocales($conn, $manager);
 
-        $grouped = array(
-            'res' => array(),
-            'locale' => array(),
-            'user' => array(),
-        );
-
-        $sql = "SELECT module, GROUP_CONCAT(distinct locale) as locales FROM gtxt group by module";
-        $stmt = $conn->query($sql);
-        while ($row = $stmt->fetch()) {
-            $res = new Resource;
-
-            $res->setName($row['module']);
-            $res->setDescription($row['module']);
-
-            $locales = explode(',', $row['locales']);
-            foreach ($locales as $loc) {
-                if (!isset($grouped['locale'][$loc])) {
-                    $locale = new Language;
-                    $locale->setLocale($loc);
-                    $locale->setDescription($loc);
-
-                    $manager->persist($locale);
-
-                    $grouped['locale'][$loc] = $locale;
-                }
-            }
-
-            $manager->persist($res);
-            $manager->flush();
-
-            $grouped['res'][$row['module']] = $res;
-        }
-
-        $sql = "SELECT * FROM gtxt" . ($max_rows > 0 ? " LIMIT {$max_rows}" : "");
-        $stmt = $conn->query($sql);
-
-        // default role
-        $role = new Role;
-        $role->setName('User');
-        $role->setLabel('ROLE_USER');
-        $manager->persist($role);
+        // admin role
+        $adminRole = $this->getRoleAdmin();
+        $manager->persist($adminRole);
         $manager->flush();
+
+        $this->role['admin'] = $adminRole;
+
+        // user role
+        $userRole = $this->getRoleUser();
+        $manager->persist($userRole);
+        $manager->flush();
+
+        $this->role['user'] = $userRole;
 
         // default group
-        $defaultgroup = new Groups;
-        $defaultgroup->setName('Default group');
-        $defaultgroup->setDescription('from initial import');
-        $defaultgroup->setResources($grouped['res']);
-
-        $manager->persist($defaultgroup);
+        $groupDefault = $this->getGroupDefault();
+        $manager->persist($groupDefault);
         $manager->flush();
 
-        // no user
-        $nouser = new User;
-        $nouser->setUsername('nouser');
-        $nouser->setPassword('nouser');
-        $nouser->setEmail('nouser@sixt.de');
-        $nouser->setIsactive(User::ACTIVE_USER);
-        $nouser->addUserRole($role);
-        $nouser->setUserLanguages($grouped['locale']);
-        $nouser->setUserGroups(array($defaultgroup));
+        $this->group['default'] = $groupDefault;
 
+        // admin user
+        $admin = $this->getUserAdmin();
+        $manager->persist($admin);
+        $manager->flush();
+
+        $this->user['admin'] = $admin;
+
+        // no user
+        $nouser = $this->getUserNoUser();
         $manager->persist($nouser);
         $manager->flush();
 
-        $grouped['user'][''] = $nouser;
+        $this->user[''] = $nouser;
 
         $i = 0;
         gc_enable(); // Enable Garbage Collector
 
+        $max_rows = intval($input->getArgument('max_rows') ?: 0);
+        $sql = "SELECT * FROM gtxt" . ($max_rows > 0 ? " LIMIT {$max_rows}" : "");
+
+        $stmt = $conn->query($sql);
+
         while ($row = $stmt->fetch()) {
-            $text = new Text;
-
-            if (!isset($grouped['user'][$row['user']])) {
-                $user = new User;
-
-                $user->setUsername($row['user']);
-                $user->setPassword($row['user']);
-                $user->setEmail($row['user'] . '@sixt.de');
-                $user->setIsactive(User::ACTIVE_USER);
-                $user->addUserRole($role);
-                $user->addUserLanguage($grouped['locale'][$row['locale']]);
-                $user->setUserGroups(array($defaultgroup));
+            if (!isset($this->user[$row['user']])) {
+                $user = $this->getUserUser(
+                    $row['user'],
+                    $row['user'],
+                    $row['user'] . '@sixt.de',
+                    $this->locale[$row['locale']]
+                );
 
                 $manager->persist($user);
                 $manager->flush();
 
-                $grouped['user'][$row['user']] = $user;
+                $this->user[$row['user']] = $user;
             }
 
-            $text->setSource($row['msgid']);
-            $text->setResource($grouped['res'][$row['module']]);
-            $text->setLocale($grouped['locale'][$row['locale']]);
-            $text->setUser($grouped['user'][$row['user']]);
-
-            // don't add text TRANSLATE_ME
-            if ($row['msgstr'] != 'TRANSLATE_ME') {
-                $text->addTarget($row['msgstr']);
-            }
-            // flags
-            if ($row['exp']) {
-                $text->setExpiryDate(new \DateTime($row['exp']));
-            }
-            if ($row['rel']) {
-                $text->setReleased(true);
-            }
-            if ($row['hts']) {
-                $text->setTranslationService(true);
-            }
-            if ($row['block']) {
-                $text->setBlock(true);
-            }
-            if ($row['msgstr'] == 'TRANSLATE_ME') {
-                $text->setTranslateMe(true);
-            }
-            if ($row['msgstr'] == 'DONT_TRANSLATE') {
-                $text->setDontTranslate(true);
-            }
-
+            $text = $this->getText($row);
             $manager->persist($text);
 
             // flush every 500th
@@ -190,6 +129,230 @@ class MigrateCommand extends ContainerAwareCommand
         echo "{$i} rows imported\n";
 
         gc_disable(); // Disable Garbage Collector
+    }
+
+    /**
+     * @param $dsn
+     * @return \Doctrine\DBAL\Connection
+     */
+    protected function getConnection($dsn)
+    {
+        $tokens = parse_url($dsn);
+
+        $config = new Configuration();
+        $connectionParams = array(
+            'dbname' => ltrim($tokens['path'], '/'),
+            'driver' => 'pdo_' . $tokens['scheme'],
+            'driverOptions' => array(
+                1002 => 'SET NAMES utf8'
+            )
+        );
+
+        if (!empty($tokens['host'])) {
+            $connectionParams['host'] = $tokens['host'];
+        }
+
+        if (!empty($tokens['user'])) {
+            $connectionParams['user'] = $tokens['user'];
+        }
+
+        if (!empty($tokens['pass'])) {
+            $connectionParams['password'] = $tokens['pass'];
+        }
+
+        return DriverManager::getConnection($connectionParams, $config);
+    }
+
+    protected function loadResourcesAndLocales(\Doctrine\DBAL\Connection $conn, \Doctrine\ORM\EntityManager $manager)
+    {
+        $sql = "SELECT module, GROUP_CONCAT(distinct locale) as locales FROM gtxt group by module";
+        $stmt = $conn->query($sql);
+
+        while ($row = $stmt->fetch()) {
+            $res = $this->getRessource($row['module'], 'Description for ' . $row['module']);
+            $manager->persist($res);
+
+            $locales = explode(',', $row['locales']);
+            foreach ($locales as $loc) {
+                if (!isset($this->locale[$loc])) {
+                    $locale = $this->getLanguage($loc, 'Description for ' . $loc);
+                    $manager->persist($locale);
+
+                    $this->locale[$loc] = $locale;
+                }
+            }
+
+            $manager->flush();
+
+            $this->res[$row['module']] = $res;
+        }
+    }
+
+    /**
+     * @param $name
+     * @param $description
+     * @return \opensixt\BikiniTranslateBundle\Entity\Resource
+     */
+    protected function getRessource($name, $description)
+    {
+        $res = new Resource;
+
+        $res->setName($name);
+        $res->setDescription($description);
+
+        return $res;
+    }
+
+    /**
+     * @param $locale
+     * @return \opensixt\BikiniTranslateBundle\Entity\Language
+     */
+    protected function getLanguage($locale, $description)
+    {
+        $language = new Language;
+
+        $language->setLocale($locale);
+        $language->setDescription($description);
+
+        return $language;
+    }
+
+    /**
+     * @return \opensixt\BikiniTranslateBundle\Entity\Role
+     */
+    protected function getRoleAdmin()
+    {
+        $role = new Role;
+
+        $role->setName('Admin');
+        $role->setLabel('ROLE_ADMIN');
+
+        return $role;
+    }
+
+    /**
+     * @return \opensixt\BikiniTranslateBundle\Entity\Role
+     */
+    protected function getRoleUser()
+    {
+        $role = new Role;
+
+        $role->setName('User');
+        $role->setLabel('ROLE_USER');
+
+        return $role;
+    }
+
+    /**
+     * @return \opensixt\BikiniTranslateBundle\Entity\Groups
+     */
+    protected function getGroupDefault()
+    {
+        $group = new Groups;
+
+        $group->setName('Default group');
+        $group->setDescription('from initial import');
+        $group->setResources($this->res);
+
+        return $group;
+    }
+
+    /**
+     * @return \opensixt\BikiniTranslateBundle\Entity\User
+     */
+    protected function getUserAdmin()
+    {
+        $admin = new User;
+
+        $admin->setUsername('admin');
+        $admin->setPassword('admin');
+        $admin->setEmail('bikinitranslate@sixt.de');
+        $admin->setIsactive(User::ACTIVE_USER);
+        $admin->addUserRole($this->role['admin']);
+        $admin->setUserLanguages($this->locale);
+        $admin->setUserGroups($this->group);
+
+        return $admin;
+    }
+
+    /**
+     * @param $username
+     * @param $password
+     * @param $email
+     * @return \opensixt\BikiniTranslateBundle\Entity\User
+     */
+    protected function getUserUser($username, $password, $email, $locale)
+    {
+        $user = new User;
+
+        $user->setUsername($username);
+        $user->setPassword($password);
+        $user->setEmail($email);
+        $user->setIsactive(User::ACTIVE_USER);
+        $user->addUserRole($this->role['user']);
+        $user->addUserLanguage($locale);
+        $user->setUserGroups($this->group);
+
+        return $user;
+    }
+
+    /**
+     * @return \opensixt\BikiniTranslateBundle\Entity\User
+     */
+    protected function getUserNoUser()
+    {
+        $user = new User;
+
+        $user->setUsername('nouser');
+        $user->setPassword('nouser');
+        $user->setEmail('nouser@sixt.de');
+        $user->setIsactive(User::ACTIVE_USER);
+        $user->addUserRole($this->role['user']);
+        $user->setUserLanguages($this->locale);
+        $user->setUserGroups($this->group);
+
+        return $user;
+    }
+
+    /**
+     * @param $row
+     * @return \opensixt\BikiniTranslateBundle\Entity\Text
+     */
+    protected function getText($row)
+    {
+        $text = new Text;
+
+        $text->setSource($row['msgid']);
+        $text->setResource($this->res[$row['module']]);
+        $text->setLocale($this->locale[$row['locale']]);
+        $text->setUser($this->user[$row['user']]);
+
+        // don't add text TRANSLATE_ME
+        if ($row['msgstr'] != 'TRANSLATE_ME') {
+            $text->addTarget($row['msgstr']);
+        }
+
+        // flags
+        if ($row['exp']) {
+            $text->setExpiryDate(new \DateTime($row['exp']));
+        }
+        if ($row['rel']) {
+            $text->setReleased(true);
+        }
+        if ($row['hts']) {
+            $text->setTranslationService(true);
+        }
+        if ($row['block']) {
+            $text->setBlock(true);
+        }
+        if ($row['msgstr'] == 'TRANSLATE_ME') {
+            $text->setTranslateMe(true);
+        }
+        if ($row['msgstr'] == 'DONT_TRANSLATE') {
+            $text->setDontTranslate(true);
+        }
+
+        return $text;
     }
 }
 

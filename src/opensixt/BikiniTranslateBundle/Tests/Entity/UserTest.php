@@ -30,7 +30,7 @@ class UserTest extends WebTestCase
         $user->setUsername('phpunit');
         $user->setPassword('phpunit');
         $user->setEmail('phpunit@bikinitranslate');
-        $user->setIsactive(1);
+        $user->setIsactive(User::ACTIVE_USER);
         $this->em->persist($user);
         $this->em->flush();
 
