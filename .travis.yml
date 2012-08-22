@@ -10,7 +10,7 @@ before_script:
   - mysql -uroot -e 'create database bikini character set utf8 default character set utf8 collate utf8_general_ci default collate utf8_general_ci;'
   - mysql -uroot -e 'grant all on bikini.* to bikini@localhost identified by "bikini";'
   - php app/console doctrine:schema:create
-  - php app/console doctrine:fixtures:load --append
+  - php app/console --no-interaction doctrine:fixtures:load
   - pyrus install pear/PHP_CodeSniffer
   - pear channel-discover pear.phpunit.de
   - pear channel-discover components.ez.no
