@@ -62,7 +62,10 @@
         </tfoot>
     </table>
 
-    <input type="button" value="{{ 'save'|trans }}" id="btnSaveTranslations">
+    {% if texts is not empty %}
+        <input type="button" value="{{ 'save'|trans }}" id="btnSaveTranslations">
+    {% endif %}
+
     {{ form_rest(form) }}
 
     </form>

@@ -49,7 +49,10 @@
             </tfoot>
         </table>
 
-        <input type="submit" value="{{ 'save'|trans }}" id="btnSaveTranslations">
+        {% if searchResults is not empty %}
+            <input type="submit" value="{{ 'save'|trans }}" id="btnSaveTranslations">
+        {% endif %}
+
         {% endif %}
 
         {{ form_rest(form) }}
