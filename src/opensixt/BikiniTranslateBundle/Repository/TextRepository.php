@@ -393,11 +393,13 @@ class TextRepository extends EntityRepository
                     $translation = '';
                     foreach ($sourceData as $src) {
                         if ($src->getHash() == $txt->getHash()) {
-                            if ($src->getResourceId() == $txt->getResourceId() && $domainType == self::DOMAIN_TYPE_LANGUAGE) {
+                            if ($src->getResourceId() == $txt->getResourceId()
+                                    && $domainType == self::DOMAIN_TYPE_LANGUAGE) {
                                 $translation = $src->getCurrentTarget()->getTarget();
                                 break;
                             }
-                            if ($src->getLocaleId() == $txt->getLocaleId() && $domainType == self::DOMAIN_TYPE_RESOURCE) {
+                            if ($src->getLocaleId() == $txt->getLocaleId()
+                                    && $domainType == self::DOMAIN_TYPE_RESOURCE) {
                                 $translation = $src->getCurrentTarget()->getTarget();
                                 break;
                             }
