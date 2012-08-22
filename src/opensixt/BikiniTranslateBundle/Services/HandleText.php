@@ -12,8 +12,6 @@ use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
 abstract class HandleText
 {
-    const ENTITY_TEXT_NAME  = 'opensixt\BikiniTranslateBundle\Entity\Text';
-
     /** @var repository */
     protected $textRepository;
 
@@ -49,7 +47,8 @@ abstract class HandleText
     public function __construct($doctrine)
     {
         $this->em = $doctrine->getEntityManager();
-        $this->textRepository = $this->em->getRepository(self::ENTITY_TEXT_NAME);
+        $this->textRepository = $this->em
+            ->getRepository(TextRepository::ENTITY_TEXT_NAME);
     }
 
     /**

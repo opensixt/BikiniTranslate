@@ -15,6 +15,8 @@ use opensixt\BikiniTranslateBundle\Entity\TextRevision;
  */
 class TextRepository extends EntityRepository
 {
+    const ENTITY_TEXT_NAME  = 'opensixt\BikiniTranslateBundle\Entity\Text';
+
     const FIELD_ID            = 't.id';
     const FIELD_HASH          = 't.hash';
     const FIELD_SOURCE        = 't.source';
@@ -503,7 +505,6 @@ class TextRepository extends EntityRepository
         }
         return array_values($hashes);
     }
-
 
     /**
      * Set messages in $locale language for any hash from $texts
