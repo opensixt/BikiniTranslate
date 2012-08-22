@@ -1,36 +1,123 @@
 parameters:
-    opensixt_searchstring.class: opensixt\BikiniTranslateBundle\Services\SearchString
-    opensixt_edittext.class: opensixt\BikiniTranslateBundle\Services\EditText
-    opensixt_flaggedtext.class: opensixt\BikiniTranslateBundle\Services\FlaggedText
-    opensixt_copydomain.class: opensixt\BikiniTranslateBundle\Services\CopyDomain
+    opensixt.bikini_translate.controller.abstract.class: opensixt\BikiniTranslateBundle\Controller\AbstractController
+    opensixt.bikini_translate.controller.edittext.class: opensixt\BikiniTranslateBundle\Controller\EditTextController
+    opensixt.bikini_translate.controller.setlocale.class: opensixt\BikiniTranslateBundle\Controller\SetLocaleController
+    opensixt.bikini_translate.controller.searchstring.class: opensixt\BikiniTranslateBundle\Controller\SearchStringController
+    opensixt.bikini_translate.controller.changetext.class: opensixt\BikiniTranslateBundle\Controller\ChangeTextController
+    opensixt.bikini_translate.controller.cleantext.class: opensixt\BikiniTranslateBundle\Controller\CleanTextController
+    opensixt.bikini_translate.controller.releasetext.class: opensixt\BikiniTranslateBundle\Controller\ReleaseTextController
+    opensixt.bikini_translate.controller.sendtotranslationservice.class: opensixt\BikiniTranslateBundle\Controller\SendToTranslationServiceController
+    opensixt.bikini_translate.controller.copylanguage.class: opensixt\BikiniTranslateBundle\Controller\CopyLanguageController
+    opensixt.bikini_translate.controller.copyresource.class: opensixt\BikiniTranslateBundle\Controller\CopyResourceController
+    opensixt.bikini_translate.intermediate.searchstring.class: opensixt\BikiniTranslateBundle\Services\SearchString
+    opensixt.bikini_translate.intermediate.edittext.class: opensixt\BikiniTranslateBundle\Services\EditText
+    opensixt.bikini_translate.intermediate.flaggedtext.class: opensixt\BikiniTranslateBundle\Services\FlaggedText
+    opensixt.bikini_translate.intermediate.copydomain.class: opensixt\BikiniTranslateBundle\Services\CopyDomain
     bikini_export.class: opensixt\BikiniTranslateBundle\Helpers\BikiniExport
     opensixt.bikini_translate.acl.user_permissions.class: opensixt\BikiniTranslateBundle\Acl\UserPermissions
     opensixt.bikini_translate.listener.doctrine.flush.class: opensixt\BikiniTranslateBundle\Listener\Doctrine\Flush
 
 services:
-    opensixt_searchstring:
-        class: %opensixt_searchstring.class%
-        arguments: [@doctrine]
+    opensixt.bikini_translate.controller.abstract:
+        class: %opensixt.bikini_translate.controller.abstract.class%
+        abstract: true
         properties:
-            paginator: @knp_paginator
-            revisionControlMode: %text_revision_control%
+            request: @request
+            session: @session
+            translator: @translator
+            em: @doctrine.orm.entity_manager
+            formFactory: @form.factory
+            templating: @templating
+            securityContext: @security.context
+            aclProvider: @security.acl.provider
+            router: @router
+            toolLanguage: %tool_language%
 
-    opensixt_edittext:
-        class: %opensixt_edittext.class%
+    opensixt.bikini_translate.controller.edittext:
+        class: %opensixt.bikini_translate.controller.edittext.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            editText: @opensixt.bikini_translate.intermediate.edittext
+
+    opensixt.bikini_translate.controller.setlocale:
+        class: %opensixt.bikini_translate.controller.setlocale.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+
+    opensixt.bikini_translate.controller.searchstring:
+        class: %opensixt.bikini_translate.controller.searchstring.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            searcher: @opensixt.bikini_translate.intermediate.searchstring
+
+    opensixt.bikini_translate.controller.changetext:
+        class: %opensixt.bikini_translate.controller.changetext.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            searcher: @opensixt.bikini_translate.intermediate.searchstring
+
+    opensixt.bikini_translate.controller.cleantext:
+        class: %opensixt.bikini_translate.controller.cleantext.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            searcher: @opensixt.bikini_translate.intermediate.flaggedtext
+
+    opensixt.bikini_translate.controller.releasetext:
+        class: %opensixt.bikini_translate.controller.releasetext.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            searcher: @opensixt.bikini_translate.intermediate.flaggedtext
+
+    opensixt.bikini_translate.controller.sendtotranslationservice:
+        class: %opensixt.bikini_translate.controller.sendtotranslationservice.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            searcher: @opensixt.bikini_translate.intermediate.edittext
+
+    opensixt.bikini_translate.controller.copylanguage:
+        class: %opensixt.bikini_translate.controller.copylanguage.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            searcher: @opensixt.bikini_translate.intermediate.copydomain
+
+    opensixt.bikini_translate.controller.copyresource:
+        class: %opensixt.bikini_translate.controller.copyresource.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            searcher: @opensixt.bikini_translate.intermediate.copydomain
+
+
+    opensixt.bikini_translate.intermediate.edittext:
+        class: %opensixt.bikini_translate.intermediate.edittext.class%
         arguments: [@doctrine, %common_language%]
         properties:
             paginator: @knp_paginator
             revisionControlMode: %text_revision_control%
             exportChunkLimit: %export_chunk_limit%
 
-    opensixt_flaggedtext:
-        class: %opensixt_flaggedtext.class%
+    opensixt.bikini_translate.intermediate.searchstring:
+        class: %opensixt.bikini_translate.intermediate.searchstring.class%
+        arguments: [@doctrine]
+        properties:
+            paginator: @knp_paginator
+            revisionControlMode: %text_revision_control%
+
+    opensixt.bikini_translate.intermediate.flaggedtext:
+        class: %opensixt.bikini_translate.intermediate.flaggedtext.class%
         arguments: [@doctrine]
         properties:
             paginator: @knp_paginator
 
-    opensixt_copydomain:
-        class: %opensixt_copydomain.class%
+    opensixt.bikini_translate.intermediate.copydomain:
+        class: %opensixt.bikini_translate.intermediate.copydomain.class%
         arguments: [@doctrine, %common_language%]
         properties:
             revisionControlMode: %text_revision_control%

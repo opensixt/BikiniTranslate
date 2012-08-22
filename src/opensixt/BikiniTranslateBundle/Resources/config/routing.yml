@@ -21,46 +21,46 @@ _translate_home:
 
 _translate_setlocale:
     pattern: /translate/setlocale/
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:setlocale }
+    defaults: { _controller: opensixt.bikini_translate.controller.setlocale:setlocaleAction }
 
 _translate_edittext:
     pattern: /translate/edittext/{locale}/{page}
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:edittext, locale: 'empty', page: 1 }
+    defaults: { _controller: opensixt.bikini_translate.controller.edittext:edittextAction, locale: 'empty', page: 1 }
     requirements:
         page: \d+
 
 _translate_searchstring:
     pattern: /translate/searchstring/{page}
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:searchstring, page: 1 }
+    defaults: { _controller: opensixt.bikini_translate.controller.searchstring:searchstringAction, page: 1 }
     requirements:
         page: \d+
 
 _translate_changetext:
     pattern: /translate/changetext/{page}
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:changetext, page: 1 }
+    defaults: { _controller: opensixt.bikini_translate.controller.changetext:changetextAction, page: 1 }
     requirements:
         page: \d+
 
 _translate_cleantext:
     pattern: /translate/cleantext/{page}
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:cleantext, page: 1 }
+    defaults: { _controller: opensixt.bikini_translate.controller.cleantext:cleantextAction, page: 1 }
     requirements:
         page: \d+
 
 _translate_copylanguage:
     pattern: /translate/copylanguage/
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:copylanguage }
+    defaults: { _controller: opensixt.bikini_translate.controller.copylanguage:copylanguageAction }
 
 _translate_copyresource:
     pattern: /translate/copyresource/
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:copyresource }
+    defaults: { _controller: opensixt.bikini_translate.controller.copyresource:copyresourceAction }
 
 _translate_releasetext:
     pattern: /translate/releasetext/{page}
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:releasetext, page: 1 }
+    defaults: { _controller: opensixt.bikini_translate.controller.releasetext:releasetextAction, page: 1 }
     requirements:
         page: \d+
 
 _translate_sendtots:
     pattern: /translate/sendtots/{locale}
-    defaults: { _controller: opensixtBikiniTranslateBundle:Translate:sendtots, locale: 'empty' }
+    defaults: { _controller: opensixt.bikini_translate.controller.sendtotranslationservice:sendtotsAction, locale: 'empty' }
