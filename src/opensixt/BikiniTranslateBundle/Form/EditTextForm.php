@@ -43,7 +43,6 @@ class EditTextForm extends AbstractType
                 );
             }
         }
-
     }
 
     /**

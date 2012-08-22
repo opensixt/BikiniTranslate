@@ -71,7 +71,7 @@ class TranslateController extends Controller
 
             if (isset($formData['action']) && $formData['action'] == 'save') {
                 $editText->updateTexts(
-                    $this->getTextsToSaveFromRequest($formData)
+                    $this->getTextsToSaveFromRequest($formData, 'text')
                 );
             }
         }
@@ -89,12 +89,7 @@ class TranslateController extends Controller
             $getSuggestionsFlag
         );
 
-        $ids = array();
-        if (isset($data)) {
-            foreach ($data as $elem) {
-                $ids[] = $elem->getId();
-            }
-        }
+        $ids = $this->getIdsFromResults($data);
 
         $searchResource = $this->getFieldFromRequest('resource');
         $form = $this->get('form.factory')
@@ -296,13 +291,12 @@ class TranslateController extends Controller
 
             if (isset($formData['action']) && $formData['action'] == 'save') {
                 $searcher->updateTexts(
-                    $this->getTextsToSaveFromRequest($formData)
+                    $this->getTextsToSaveFromRequest($formData, 'text')
                 );
             }
         }
 
         if (strlen($searchPhrase)) {
-
             // set search parameters
             $searchResources = $this->getSearchResources();
             $searcher->setSearchParameters($searchPhrase);
@@ -313,14 +307,9 @@ class TranslateController extends Controller
                 $searchLanguage,
                 $searchResources
             );
-        }
 
-        // ids of texts for textarreas
-        $ids = array();
-        if (isset($results)) {
-            foreach ($results as $elem) {
-                $ids[] = $elem->getId();
-            }
+            // ids of texts for textareas
+            $ids = $this->getIdsFromResults($results);
         }
 
         $form = $this->get('form.factory')
@@ -333,7 +322,7 @@ class TranslateController extends Controller
                     'resources'       => $resources,
                     'searchLanguage'  => $searchLanguage,
                     'locales'         => $locales,
-                    'ids'             => $ids,
+                    'ids'             => !empty($ids) ? $ids : array(),
                 )
             );
 
@@ -419,6 +408,7 @@ class TranslateController extends Controller
      */
     public function releasetextAction($page)
     {
+        $request = $this->getRequest();
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
 
@@ -429,21 +419,43 @@ class TranslateController extends Controller
 
         $searcher = $this->get('opensixt_flaggedtext');
 
+        // Update texts with entered values
+        if ($request->getMethod() == 'POST') {
+            $formData = $this->getRequestData($request);
+
+            if (isset($formData['action']) && $formData['action'] == 'search') {
+                $page = 1;
+            }
+            if (isset($formData['action']) && $formData['action'] == 'save') {
+                $textsToRelease = $this->getTextsToSaveFromRequest(
+                    $formData,
+                    'chk'
+                );
+                if (count($textsToRelease)) {
+                    $searcher->releaseTexts(array_keys($textsToRelease));
+                }
+            }
+        }
+
         // set search parameters
         $searcher->setLocales(array_keys($locales));
 
         // get search results
         $results = $searcher->getData($page, $searchLanguage, $searchResources);
 
+        // ids of texts
+        $ids = $this->getIdsFromResults($results);
+
         $form = $this->get('form.factory')
             ->create(
                 new ReleaseTextForm(),
                 null,
                 array(
-                    'searchResource'   => $searchResource,
-                    'resources'        => $resources,
-                    'searchLanguage'   => $searchLanguage,
-                    'locales'          => $locales,
+                    'searchResource' => $searchResource,
+                    'resources'      => $resources,
+                    'searchLanguage' => $searchLanguage,
+                    'locales'        => $locales,
+                    'ids'            => $ids,
                 )
             );
 
@@ -756,21 +768,40 @@ class TranslateController extends Controller
      * Return Texts (text_[number]) to save from $_REQUEST
      *
      * @param array $formData equals _REQUEST
+     * @param string $fieldNamePrefix, 'text', 'chk', etc
      * @return array
      */
-    private function getTextsToSaveFromRequest($formData)
+    private function getTextsToSaveFromRequest($formData, $fieldNamePrefix)
     {
         $textsToSave = array();
         if (!empty($formData)) {
             foreach ($formData as $key => $value) {
                 // for all textareas with name 'text_[number]'
-                if (preg_match("/text_([0-9]+)/", $key, $matches) && strlen($value)) {
+                if (preg_match("/" . $fieldNamePrefix . "_([0-9]+)/", $key, $matches) && strlen($value)) {
                     $textsToSave[$matches[1]] = $value;
                 }
             }
         }
 
         return $textsToSave;
+    }
+
+    /**
+     * Get Array of Ids from $results
+     *
+     * @param ArrayCollection $results
+     * @return array
+     */
+    private function getIdsFromResults($results)
+    {
+        $ids = array();
+        if (!empty($results)) {
+            foreach ($results as $elem) {
+                $ids[] = $elem->getId();
+            }
+        }
+
+        return $ids;
     }
 }
 

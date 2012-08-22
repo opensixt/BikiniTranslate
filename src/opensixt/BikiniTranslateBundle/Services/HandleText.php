@@ -84,6 +84,7 @@ abstract class HandleText
     }
 
     /**
+     * Update texts
      *
      * @param array $texts
      */
@@ -95,16 +96,19 @@ abstract class HandleText
                 __METHOD__ . ': revisionControlMode is not set. Please set text_revision_control in parameters.yml !'
             );
         }
-
         $this->textRepository->setTextRevisionControl($this->revisionControlMode);
 
-        if (!empty($texts)) {
-            foreach ($texts as $key => $value) {
-                if ($key > 0 && strlen($value)) {
-                    $this->textRepository->updateText($key, $value);
-                }
-            }
-        }
+        $this->textRepository->updateTexts($texts);
+    }
+
+    /**
+     * Set texts as released
+     *
+     * @param array $textIds
+     */
+    public function releaseTexts(array $textIds)
+    {
+        $this->textRepository->releaseTexts($textIds);
     }
 }
 

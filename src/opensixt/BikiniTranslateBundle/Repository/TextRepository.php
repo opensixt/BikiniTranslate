@@ -377,6 +377,8 @@ class TextRepository extends EntityRepository
     protected function updateEmptyTranslations($sourceData, $textsDestLang, $domainType)
     {
         $changesCount = 0;
+        $translations = array();
+
         // merge all empty translations in destination language
         foreach ($textsDestLang as $txt) {
             if ($txt->getTranslateMe() === false) {
@@ -392,29 +394,32 @@ class TextRepository extends EntityRepository
                 // if destination text belongs to available resource
                 if (in_array($txt->getResourceId(), $this->resources)) {
                     // get text from $sourceData by hash and resource
-                    $translation = '';
+
                     foreach ($sourceData as $src) {
                         if ($src->getHash() == $txt->getHash()) {
                             if ($src->getResourceId() == $txt->getResourceId()
                                     && $domainType == self::DOMAIN_TYPE_LANGUAGE) {
-                                $translation = $src->getCurrentTarget()->getTarget();
+                                $translations[$txtId] = $src->getCurrentTarget()->getTarget();
                                 break;
                             }
                             if ($src->getLocaleId() == $txt->getLocaleId()
                                     && $domainType == self::DOMAIN_TYPE_RESOURCE) {
-                                $translation = $src->getCurrentTarget()->getTarget();
+                                $translations[$txtId] = $src->getCurrentTarget()->getTarget();
                                 break;
                             }
                         }
                     }
-                    // if text found, update destination
-                    if (!empty($translation)) {
-                        $changesCount++;
-                        $this->updateText($txtId, $translation);
-                    }
+
                 }
             }
         }
+
+        // if $translation not empty, update texts
+        if (!empty($translations)) {
+            $changesCount = count($translations);
+            $this->updateTexts($translations);
+        }
+
         return $changesCount;
     }
 
@@ -620,27 +625,51 @@ class TextRepository extends EntityRepository
     }
 
     /**
-     * Updates text table: set target = $text for $id
+     * Updates texts: set target = $text for $id
      *
-     * @param int $id
-     * @param string $text
+     * @param array $texts
      */
-    public function updateText($id, $text)
+    public function updateTexts(array $texts)
     {
-        if ($id) {
-            // TODO: $this->_textRevisionControl == 'off'
-
+        if (!empty($texts)) {
             $em = $this->getEntityManager();
+            $textRep = $em->getRepository(self::ENTITY_TEXT_NAME);
 
-            $textRep = $em->getRepository('opensixtBikiniTranslateBundle:Text');
+            foreach ($texts as $id => $text) {
+                if ($id > 0 && strlen($text)) {
+                    $objText = $textRep->find($id);
+                    if (is_null($objText)) {
+                        throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
+                    }
 
-            $objText = $textRep->find($id);
-            if (is_null($objText)) {
-                throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
+                    $objText->addTarget($text);
+                    $em->persist($objText);
+                }
             }
+            $em->flush();
+        }
+    }
 
-            $objText->addTarget($text);
-            $em->persist($objText);
+    /**
+     * Set texts with $ids as released
+     *
+     * @param array $ids
+     */
+    public function releaseTexts(array $ids)
+    {
+        if (!empty($ids)) {
+            $em = $this->getEntityManager();
+            $textRep = $em->getRepository(self::ENTITY_TEXT_NAME);
+
+            foreach ($ids as $id) {
+                $objText = $textRep->find($id);
+                if (is_null($objText)) {
+                    throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
+                }
+
+                $objText->setReleased(true);
+                $em->persist($objText);
+            }
             $em->flush();
         }
     }

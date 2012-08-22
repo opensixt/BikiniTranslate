@@ -238,6 +238,10 @@
                 <source>suggestion_text</source>
                 <target>At vero eos et accusam et justo duo dolores et ea rebum.</target>
             </trans-unit>
+            <trans-unit id="270">
+                <source>release</source>
+                <target>Release</target>
+            </trans-unit>
 
         </body>
     </file>
