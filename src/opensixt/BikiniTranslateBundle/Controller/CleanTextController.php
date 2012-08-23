@@ -41,6 +41,25 @@ class CleanTextController extends AbstractController
         $searchLanguage = $this->getFieldFromRequest('locale');
         $searchResources = $this->getSearchResources();
 
+        // Update texts or new search
+        if ($this->request->getMethod() == 'POST') {
+            $formData = $this->getRequestData($this->request);
+
+            if (isset($formData['action']) && $formData['action'] == 'search') {
+                $page = 1;
+            }
+            if (isset($formData['action']) && $formData['action'] == 'save') {
+                $textsToRelease = $this->getTextsToSaveFromRequest(
+                    $formData,
+                    'chk'
+                );
+
+                if (count($textsToRelease)) {
+                    $this->searcher->deleteTexts(array_keys($textsToRelease));
+                }
+            }
+        }
+
         // set search parameters
         $this->searcher->setLocales(array_keys($locales));
 
@@ -52,15 +71,19 @@ class CleanTextController extends AbstractController
             date("Y-m-d")
         );
 
+        // ids of texts
+        $ids = $this->getIdsFromResults($results);
+
         $form = $this->formFactory
             ->create(
                 new CleanTextForm(),
                 null,
                 array(
-                    'searchResource'   => $searchResource,
-                    'resources'        => $resources,
-                    'searchLanguage'   => $searchLanguage,
-                    'locales'          => $locales,
+                    'searchResource' => $searchResource,
+                    'resources'      => $resources,
+                    'searchLanguage' => $searchLanguage,
+                    'locales'        => $locales,
+                    'ids'            => $ids,
                 )
             );
 

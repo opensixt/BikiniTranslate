@@ -242,6 +242,10 @@
                 <source>release</source>
                 <target>Release</target>
             </trans-unit>
+            <trans-unit id="275">
+                <source>delete</source>
+                <target>Delete</target>
+            </trans-unit>
 
         </body>
     </file>

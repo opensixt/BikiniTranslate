@@ -242,6 +242,10 @@
                 <source>release</source>
                 <target>Freischalten</target>
             </trans-unit>
+            <trans-unit id="275">
+                <source>delete</source>
+                <target>Löschen</target>
+            </trans-unit>
 
         </body>
     </file>

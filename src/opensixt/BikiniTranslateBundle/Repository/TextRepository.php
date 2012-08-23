@@ -682,6 +682,31 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     * Mark texts with $ids as deleted
+     *
+     * @param array $ids
+     */
+    public function markTextsAsDeleted(array $ids)
+    {
+        if (!empty($ids)) {
+            $em = $this->getEntityManager();
+            $textRep = $em->getRepository(self::ENTITY_TEXT_NAME);
+            $now = new \DateTime();
+
+            foreach ($ids as $id) {
+                $objText = $textRep->find($id);
+                if (is_null($objText)) {
+                    throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
+                }
+
+                $objText->setDeletedDate($now);
+                $em->persist($objText);
+            }
+            $em->flush();
+        }
+    }
+
+    /**
      * Set translation_service=1 for each id from $ids
      *
      * @param array $ids

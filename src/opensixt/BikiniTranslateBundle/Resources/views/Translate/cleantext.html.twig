@@ -14,7 +14,7 @@
 
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
         {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        <input type="submit" value="{{ 'submit_page'|trans }}"/>
+        <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
 
         {% if searchResults is defined %}
         <table class="list">
@@ -24,7 +24,7 @@
                     <th >{{ 'cleantext_text'|trans }}</th>
                     <th >{{ 'cleantext_author'|trans }}</th>
                     <th >{{ 'cleantext_date'|trans }}</th>
-
+                    <th >{{ 'delete'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,26 +35,48 @@
                     <td>{{ item.target.0.target }}</td>
                     <td>{{ item.user.username }}</td>
                     <td>{{ item.expiryDate|date('date_format'|trans) }}</td>
+                    <td>{{ form_widget(form['chk_' ~ item.id]) }}</td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="2">{{ 'no_translation_found'|trans }}</td>
+                    <td colspan="4">{{ 'no_translation_found'|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="4">
                         {# navigation #}
                         {{ searchResults.render()|raw }}
                     </td>
                 </tr>
             </tfoot>
         </table>
+
+        {% if searchResults is not empty %}
+            <input type="submit" value="{{ 'delete'|trans }}" id="btnSaveChanges">
+        {% endif %}
+
         {% endif %}
 
         {{ form_rest(form) }}
     </form>
 
+{% endblock %}
 
+{% block javascripts %}
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        // no conflict mode, use $ in here
+
+        $('#btnSaveChanges').click(function() {
+            $('#action').val('save');
+        });
+
+        $('#btnSearch').click(function() {
+            $('#action').val('search');
+        });
+
+    });
+    </script>
 {% endblock %}

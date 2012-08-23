@@ -110,5 +110,15 @@ abstract class HandleText
     {
         $this->textRepository->releaseTexts($textIds);
     }
+
+    /**
+     * Set texts as released
+     *
+     * @param array $textIds
+     */
+    public function deleteTexts(array $textIds)
+    {
+        $this->textRepository->markTextsAsDeleted($textIds);
+    }
 }
 

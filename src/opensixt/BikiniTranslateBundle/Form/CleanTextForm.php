@@ -39,7 +39,21 @@ class CleanTextForm extends AbstractType
                 'required'    => false,
                 'data'        => $options['searchLanguage'],
             )
-        );
+        )
+        ->add('action', 'hidden');
+
+        // checkboxes
+        if (!empty($options['ids'])) {
+            foreach ($options['ids'] as $id) {
+                $builder->add(
+                    'chk_' . $id,
+                    'checkbox',
+                    array(
+                        'required' => false,
+                    )
+                );
+            }
+        }
     }
 
     /**
@@ -49,7 +63,7 @@ class CleanTextForm extends AbstractType
      */
     public function getName()
     {
-        return 'form';
+        return '';
     }
 
     /**
@@ -65,6 +79,7 @@ class CleanTextForm extends AbstractType
             'searchResource' => 0,
             'locales'        => array(),
             'searchLanguage' => 0,
+            'ids'            => array(),
         );
     }
 }
