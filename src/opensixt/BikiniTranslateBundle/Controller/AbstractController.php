@@ -102,9 +102,14 @@ abstract class AbstractController
             $userLang[$locale->getId()] = $locale->getLocale();
         }
 
-        uasort($userLang, function($a, $b) {
-            return strcmp($a, $b);
-        });
+        uasort(
+            $userLang,
+            // @codingStandardsIgnoreStart
+            function ($a, $b) {
+            // @codingStandardsIgnoreEnd
+                return strcmp($a, $b);
+            }
+        );
 
         return $userLang;
     }

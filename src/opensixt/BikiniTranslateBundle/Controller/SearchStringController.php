@@ -107,3 +107,4 @@ class SearchStringController extends AbstractController
         );
     }
 }
+
