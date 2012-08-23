@@ -382,7 +382,7 @@ class TextRepository extends EntityRepository
 
         // merge all empty translations in destination language
         foreach ($textsDestLang as $txt) {
-            if ($txt->getTranslateMe() === false) {
+            if ($txt->getTranslateMe() === true) {
                 $txtId = $txt->getId();
 
                 // if the list of availabte resources is not set
