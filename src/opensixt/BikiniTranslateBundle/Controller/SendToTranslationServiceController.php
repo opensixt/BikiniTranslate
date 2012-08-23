@@ -23,6 +23,9 @@ class SendToTranslationServiceController extends AbstractController
      */
     public $searcher;
 
+    /** @var \opensixt\BikiniTranslateBundle\Helpers\BikiniExport */
+    public $exporter;
+
     /** @var \opensixt\BikiniTranslateBundle\Acl\UserPermissions */
     public $userPermissions;
 
@@ -77,12 +80,11 @@ class SendToTranslationServiceController extends AbstractController
                 if (isset($formData['action']) && $formData['action'] == 'send') {
                     $chunks = $this->searcher->prepareExportData($data);
 
-                    $export = $this->get('bikini_export');
-                    $export->setTargetLanguage($locale);
-                    $export->initXliff('human_translation_service');
+                    $this->exporter->setTargetLanguage($locale);
+                    $this->exporter->initXliff('human_translation_service');
 
                     foreach ($chunks as $chunk) {
-                        $exportXliff = $export->getDataAsXliff($chunk);
+                        $exportXliff = $this->exporter->getDataAsXliff($chunk);
                         $this->searcher->sendToTranslationService($exportXliff, $chunk);
                     }
                     $templateParam['success'] = 1;

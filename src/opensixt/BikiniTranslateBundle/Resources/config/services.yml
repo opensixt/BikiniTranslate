@@ -13,7 +13,7 @@ parameters:
     opensixt.bikini_translate.intermediate.edittext.class: opensixt\BikiniTranslateBundle\Services\EditText
     opensixt.bikini_translate.intermediate.flaggedtext.class: opensixt\BikiniTranslateBundle\Services\FlaggedText
     opensixt.bikini_translate.intermediate.copydomain.class: opensixt\BikiniTranslateBundle\Services\CopyDomain
-    bikini_export.class: opensixt\BikiniTranslateBundle\Helpers\BikiniExport
+    opensixt.bikini_translate.sevices.exporter.class: opensixt\BikiniTranslateBundle\Helpers\BikiniExport
     opensixt.bikini_translate.acl.user_permissions.class: opensixt\BikiniTranslateBundle\Acl\UserPermissions
     opensixt.bikini_translate.listener.doctrine.flush.class: opensixt\BikiniTranslateBundle\Listener\Doctrine\Flush
 
@@ -79,6 +79,7 @@ services:
         scope: request
         properties:
             searcher: @opensixt.bikini_translate.intermediate.edittext
+            exporter: @opensixt.bikini_translate.sevices.exporter
 
     opensixt.bikini_translate.controller.copylanguage:
         class: %opensixt.bikini_translate.controller.copylanguage.class%
@@ -122,8 +123,8 @@ services:
         properties:
             revisionControlMode: %text_revision_control%
 
-    bikini_export:
-        class: %bikini_export.class%
+    opensixt.bikini_translate.sevices.exporter:
+        class: %opensixt.bikini_translate.sevices.exporter.class%
         arguments: [%tool_language%]
 
     opensixt.bikini_translate.menu_builder:
