@@ -124,6 +124,13 @@ class Text
     private $expiryDate;
 
     /**
+     * @var date $expiryDate
+     *
+     * @ORM\Column(name="deleted_date", type="date", nullable=true)
+     */
+    private $deletedDate;
+
+    /**
      * @var boolean $released
      *
      * @ORM\Column(name="released", type="boolean", nullable=true)
@@ -482,6 +489,26 @@ class Text
     public function getExpiryDate()
     {
         return $this->expiryDate;
+    }
+
+    /**
+     * Set deletedDate
+     *
+     * @param date $del
+     */
+    public function setDeletedDate($del)
+    {
+        $this->deletedDate = $del;
+    }
+
+    /**
+     * Get deletedDate
+     *
+     * @return date
+     */
+    public function getDeletedDate()
+    {
+        return $this->deletedDate;
     }
 
     /**

@@ -26,6 +26,7 @@ class TextRepository extends EntityRepository
     const FIELD_LOCALE        = 't.localeId';
     const FIELD_USER          = 't.userId';
     const FIELD_EXPIRY_DATE   = 't.expiryDate';
+    const FIELD_DELETED_DATE  = 't.deletedDate';
     const FIELD_RELEASED      = 't.released';
     const FIELD_TS            = 't.translationService';
     const FIELD_BLOCK         = 't.block';
@@ -445,6 +446,7 @@ class TextRepository extends EntityRepository
                 ->leftJoin('t.target', 'tr')
                 ->where(self::FIELD_HASH . ' IN (?1)')
                 ->andWhere(self::FIELD_LOCALE . ' IN (?2)')
+                ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                 ->setParameter(1, $hashes)
                 ->setParameter(2, $locales);
 
@@ -484,6 +486,7 @@ class TextRepository extends EntityRepository
                 ->andWhere(self::FIELD_LOCALE . ' = ?2')
                 ->andWhere(self::FIELD_RESOURCE . ' != ?3')
                 ->andWhere(self::FIELD_RESOURCE . ' in (?4)')
+                ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                 ->setParameter(1, $hash)
                 ->setParameter(2, $locale)
                 ->setParameter(3, $resource)
@@ -552,6 +555,7 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
                     ->andWhere(self::FIELD_LOCALE . ' = ?3')
                     ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                     ->setParameter(1, $this->searchString)
                     ->setParameter(2, $this->resources)
                     ->setParameter(3, $this->locale);
@@ -562,6 +566,7 @@ class TextRepository extends EntityRepository
                 $query->join('t.target', 'tr')
                     ->where(self::FIELD_LOCALE . ' IN (?1)')
                     ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                     ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
                     ->setParameter(1, $this->locales);
 
@@ -577,6 +582,7 @@ class TextRepository extends EntityRepository
             case self::TASK_SEARCH_FLAGGED_TEXTS:
                 $query->join('t.target', 'tr')
                     ->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
+                    ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                     ->setParameter(1, $this->resources);
 
                 if (!empty($this->locale)) {
@@ -606,6 +612,7 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_LOCALE . ' = ?2')
                     ->andWhere(self::FIELD_DONTTRANSLATE . ' IS NULL OR ' . self::FIELD_DONTTRANSLATE . ' = 0')
                     ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                     ->andWhere(self::FIELD_RELEASED . ' = 1')
                     ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
                     ->setParameter(1, $this->resources)
