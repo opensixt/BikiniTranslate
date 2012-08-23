@@ -52,7 +52,7 @@ class SetLocaleController extends AbstractController
 
             if ($form->isValid()) {
                 if ($form->get('locale')->getData()) {
-                    //echo $form->get('locale')->getData();
+
                     $localeId = $form->get('locale')->getData();
                     $locale = isset($locales[$localeId]) ? $locales[$localeId] : '';
 

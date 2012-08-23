@@ -42,7 +42,7 @@ class ReleaseTextController extends AbstractController
         $searchLanguage = $this->getFieldFromRequest('locale');
         $searchResources = $this->getSearchResources();
 
-        // Update texts with entered values
+        // Update texts or new search
         if ($this->request->getMethod() == 'POST') {
             $formData = $this->getRequestData($this->request);
 
