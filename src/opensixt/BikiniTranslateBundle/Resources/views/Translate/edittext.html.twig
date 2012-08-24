@@ -19,7 +19,7 @@
     <form action="{{ path('_translate_edittext', {'locale':locale}) }}" method="post">
 
     {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
-    <input id="btnSearch" type="button" value="{{ 'submit_page'|trans }}"/>
+    <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
 
     <table class="list">
         <thead>
@@ -63,7 +63,7 @@
     </table>
 
     {% if texts is not empty %}
-        <input type="button" value="{{ 'save'|trans }}" id="btnSaveTranslations">
+        <input type="submit" value="{{ 'save'|trans }}" id="btnSaveTranslations" />
     {% endif %}
 
     {{ form_rest(form) }}
@@ -77,14 +77,26 @@
     jQuery(document).ready(function($) {
         // no conflict mode, use $ in here
 
-        $('#btnSaveTranslations').click(function() {
-            $('#action').val('save');
-            $(this.form).submit();
+        $('#btnSaveTranslations').click(function(e) {
+            e.preventDefault();
+
+            var closure = function(buttonSaveChanges) {
+                return function() {
+                    $('#action').val('save');
+                    buttonSaveChanges.form.submit();
+                };
+            };
+
+            bikiniConfirm(
+                '{{ 'confirm_text'|trans }}',
+                '{{ 'confirm_ok'|trans }}',
+                '{{ 'confirm_cancel'|trans }}',
+                closure(this)
+            );
         });
 
         $('#btnSearch').click(function() {
             $('#action').val('search');
-            $(this.form).submit();
         });
 
         $('a.suggestion').click(function(e) {

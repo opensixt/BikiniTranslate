@@ -14,7 +14,7 @@
 
         {{ form_label(form.lang_from) }} {{ form_widget(form.lang_from) }}
         {{ form_label(form.lang_to) }} {{ form_widget(form.lang_to) }}
-        <input type="submit" value="{{ 'submit_page'|trans }}"/>
+        <input id="btnCopyContent" type="submit" value="{{ 'submit_page'|trans }}"/>
 
         {% if translateMade is defined and translateMade == 'done' %}
             <br/>
@@ -31,4 +31,30 @@
 
         {{ form_rest(form) }}
     </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        // no conflict mode, use $ in here
+
+        $('#btnCopyContent').click(function(e) {
+            e.preventDefault();
+
+            var closure = function(buttonSaveChanges) {
+                return function() {
+                    buttonSaveChanges.form.submit();
+                };
+            };
+
+            bikiniConfirm(
+                '{{ 'confirm_text'|trans }}',
+                '{{ 'confirm_ok'|trans }}',
+                '{{ 'confirm_cancel'|trans }}',
+                closure(this)
+            );
+        });
+    });
+
+    </script>
 {% endblock %}

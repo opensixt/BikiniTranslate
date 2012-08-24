@@ -52,7 +52,7 @@
         </table>
 
         {% if searchResults is not empty %}
-            <input type="submit" value="{{ 'release'|trans }}" id="btnSaveChanges">
+            <input type="submit" value="{{ 'release'|trans }}" id="btnSaveChanges" />
         {% endif %}
 
         {% endif %}
@@ -67,8 +67,22 @@
     jQuery(document).ready(function($) {
         // no conflict mode, use $ in here
 
-        $('#btnSaveChanges').click(function() {
-            $('#action').val('save');
+        $('#btnSaveChanges').click(function(e) {
+            e.preventDefault();
+
+            var closure = function(buttonSaveChanges) {
+                return function() {
+                    $('#action').val('save');
+                    buttonSaveChanges.form.submit();
+                };
+            };
+
+            bikiniConfirm(
+                '{{ 'confirm_text'|trans }}',
+                '{{ 'confirm_ok'|trans }}',
+                '{{ 'confirm_cancel'|trans }}',
+                closure(this)
+            );
         });
 
         $('#btnSearch').click(function() {

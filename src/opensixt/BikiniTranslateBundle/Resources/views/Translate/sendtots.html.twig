@@ -39,7 +39,7 @@
         </table>
         {% endif %}
 
-         <input type="button" value="{{ 'send'|trans }}" id="btnSendToTS"/>
+         <input type="submit" value="{{ 'send'|trans }}" id="btnSendToTS"/>
 
         {{ form_rest(form) }}
     </form>
@@ -52,10 +52,23 @@
     jQuery(document).ready(function($) {
         // no conflict mode, use $ in here
 
-        $('#btnSendToTS').click(function() {
-            $('#form_action').val('send');
-            $(this.form).submit();
-            });
+        $('#btnSendToTS').click(function(e) {
+            e.preventDefault();
+
+            var closure = function(buttonSaveChanges) {
+                return function() {
+                    $('#action').val('send');
+                    buttonSaveChanges.form.submit();
+                };
+            };
+
+            bikiniConfirm(
+                '{{ 'confirm_text'|trans }}',
+                '{{ 'confirm_ok'|trans }}',
+                '{{ 'confirm_cancel'|trans }}',
+                closure(this)
+            );
+        });
     });
 
     </script>

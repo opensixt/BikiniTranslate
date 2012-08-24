@@ -246,6 +246,18 @@
                 <source>delete</source>
                 <target>Delete</target>
             </trans-unit>
+            <trans-unit id="280">
+                <source>confirm_text</source>
+                <target>At vero eos et accusam et justo duo dolores et ea rebum.</target>
+            </trans-unit>
+            <trans-unit id="285">
+                <source>confirm_ok</source>
+                <target>Ok</target>
+            </trans-unit>
+            <trans-unit id="290">
+                <source>confirm_cancel</source>
+                <target>Cancel</target>
+            </trans-unit>
 
         </body>
     </file>
