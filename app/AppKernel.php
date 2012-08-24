@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new opensixt\BikiniTranslateBundle\opensixtBikiniTranslateBundle(),
             new opensixt\UserAdminBundle\opensixtUserAdminBundle(),
+            new opensixt\SxTranslateBundle\opensixtSxTranslateBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

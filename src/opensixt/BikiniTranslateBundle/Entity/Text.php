@@ -135,7 +135,7 @@ class Text
      *
      * @ORM\Column(name="released", type="boolean", nullable=true)
      */
-    private $released;
+    private $released = true;
 
     /**
      * @var boolean $translationService
@@ -156,7 +156,7 @@ class Text
      *
      * @ORM\Column(name="translate_me", type="boolean", nullable=true)
      */
-    private $translateMe;
+    private $translateMe = true;
 
     /**
      * @var boolean dont_translate

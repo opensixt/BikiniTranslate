@@ -1,6 +1,6 @@
 <?php
 
-namespace opensixt\BikiniTranslateBundle\Command;
+namespace opensixt\SxTranslateBundle\Command;
 
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
@@ -19,9 +19,9 @@ use opensixt\BikiniTranslateBundle\Entity\Role;
 use opensixt\BikiniTranslateBundle\Entity\Group;
 
 /**
- * Description of Migrate
+ * Description of MigrateCommand
  *
- * @author pries
+ * @author Uwe Pries <uwe.pries@sixt.com>
  */
 class MigrateCommand extends ContainerAwareCommand
 {
@@ -35,15 +35,23 @@ class MigrateCommand extends ContainerAwareCommand
 
     private $group = array();
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this
-            ->setName('bikinitranslate:import')
+            ->setName('sxtranslate:import')
             ->setDescription('Import live data from gtxt')
             ->addArgument('dsn', InputArgument::REQUIRED, 'Database DSN (mysql://username:password@host/database)')
             ->addArgument('max_rows', InputArgument::OPTIONAL, 'How many rows do you want to import');
     }
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return int|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dsn = $input->getArgument('dsn');
@@ -51,6 +59,8 @@ class MigrateCommand extends ContainerAwareCommand
         $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $conn = $this->getConnection($dsn);
+
+        $this->loadGroupsAndResources($conn, $manager);
 
         $this->loadResourcesAndLocales($conn, $manager);
 
@@ -163,14 +173,63 @@ class MigrateCommand extends ContainerAwareCommand
         return DriverManager::getConnection($connectionParams, $config);
     }
 
-    protected function loadResourcesAndLocales(\Doctrine\DBAL\Connection $conn, \Doctrine\ORM\EntityManager $manager)
+    /**
+     * @param \Doctrine\DBAL\Connection $conn
+     * @param \Doctrine\ORM\EntityManager $manager
+     */
+    protected function loadGroupsAndResources(\Doctrine\DBAL\Connection $conn, \Doctrine\ORM\EntityManager $manager)
     {
-        $sql = "SELECT module, GROUP_CONCAT(distinct locale) as locales FROM gtxt group by module";
+        $sql = "SELECT a.name `group`, GROUP_CONCAT(DISTINCT c.name) AS `resources`
+                FROM groups a
+                JOIN group_resource b
+                ON b.group_id=a.id
+                JOIN resource c
+                ON c.id=b.resource_id
+                GROUP BY `group`";
         $stmt = $conn->query($sql);
 
         while ($row = $stmt->fetch()) {
-            $res = $this->getRessource($row['module'], 'Description for ' . $row['module']);
-            $manager->persist($res);
+            $group = $this->getGroup($row['group'], 'Description for ' . $row['group']);
+
+            $resources = explode(',', $row['resources']);
+            $my_resources = array(); // for this group
+
+            foreach ($resources as $name) {
+                if (isset($this->res[$name])) {
+                    $my_resources[] = $this->res[$name];
+                } else {
+                    $resource = $this->getResource($name, 'Description for ' . $name);
+                    $manager->persist($resource);
+
+                    $this->res[$name] = $resource;
+                    $my_resources[] = $resource;
+                }
+            }
+
+            $group->setResources($my_resources);
+            $manager->persist($group);
+            $manager->flush();
+
+            $this->group[$row['group']] = $group;
+        }
+    }
+
+    /**
+     * @param \Doctrine\DBAL\Connection $conn
+     * @param \Doctrine\ORM\EntityManager $manager
+     */
+    protected function loadResourcesAndLocales(\Doctrine\DBAL\Connection $conn, \Doctrine\ORM\EntityManager $manager)
+    {
+        $sql = "SELECT `module`, GROUP_CONCAT(DISTINCT locale) AS `locales` FROM gtxt GROUP BY `module`";
+        $stmt = $conn->query($sql);
+
+        while ($row = $stmt->fetch()) {
+            if (isset($this->res[$row['module']])) {
+                $res = $this->res[$row['module']];
+            } else {
+                $res = $this->getResource($row['module'], 'Description for ' . $row['module']);
+                $manager->persist($res);
+            }
 
             $locales = explode(',', $row['locales']);
             foreach ($locales as $loc) {
@@ -191,9 +250,24 @@ class MigrateCommand extends ContainerAwareCommand
     /**
      * @param $name
      * @param $description
+     * @return \opensixt\BikiniTranslateBundle\Entity\Group
+     */
+    protected function getGroup($name, $description)
+    {
+        $group = new Group;
+
+        $group->setName($name);
+        $group->setDescription($description);
+
+        return $group;
+    }
+
+    /**
+     * @param $name
+     * @param $description
      * @return \opensixt\BikiniTranslateBundle\Entity\Resource
      */
-    protected function getRessource($name, $description)
+    protected function getResource($name, $description)
     {
         $res = new Resource;
 
@@ -279,6 +353,7 @@ class MigrateCommand extends ContainerAwareCommand
      * @param $username
      * @param $password
      * @param $email
+     * @param $locale
      * @return \opensixt\BikiniTranslateBundle\Entity\User
      */
     protected function getUserUser($username, $password, $email, $locale)
