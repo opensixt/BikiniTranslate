@@ -2,6 +2,7 @@
 
 namespace opensixt\BikiniTranslateBundle\Entity;
 
+use Symfony\Component\Security\Core\Role\Role as BaseRole;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;

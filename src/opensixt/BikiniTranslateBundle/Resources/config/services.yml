@@ -26,7 +26,8 @@ parameters:
     opensixt.bikini_translate.sevices.flash.class: opensixt\BikiniTranslateBundle\Helpers\BikiniFlash
 
     opensixt.bikini_translate.acl.user_permissions.class: opensixt\BikiniTranslateBundle\Acl\UserPermissions
-    opensixt.bikini_translate.listener.doctrine.flush.class: opensixt\BikiniTranslateBundle\Listener\Doctrine\Flush
+    opensixt.bikini_translate.listener.doctrine.flush.class: opensixt\BikiniTranslateBundle\EventListener\Doctrine\Flush
+    opensixt.bikini_translate.listener.kernel.controller.class: opensixt\BikiniTranslateBundle\EventListener\Kernel\Controller
 
 services:
     opensixt.bikini_translate.controller.abstract:
@@ -179,3 +180,11 @@ services:
         tags:
           - { name: doctrine.event_listener, event: postFlush }
           - { name: doctrine.event_listener, event: onFlush }
+
+
+    opensixt.bikini_translate.listener.kernel.controller:
+        class: %opensixt.bikini_translate.listener.kernel.controller.class%
+        properties:
+          securityContext: @security.context
+        tags:
+          - { name: kernel.event_listener, event: kernel.controller, method: onController }

@@ -14,22 +14,22 @@ class RoleFixture extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $super_admin = new Role;
+        $super_admin = new Role('Super Admin');
         $super_admin->setName('Super Admin');
         $super_admin->setLabel('ROLE_SUPER_ADMIN');
         $manager->persist($super_admin);
 
-        $admin = new Role;
+        $admin = new Role('Admin');
         $admin->setName('Admin');
         $admin->setLabel('ROLE_ADMIN');
         $manager->persist($admin);
 
-        $user = new Role;
+        $user = new Role('User');
         $user->setName('User');
         $user->setLabel('ROLE_USER');
         $manager->persist($user);
 
-        $guest = new Role;
+        $guest = new Role('Guest');
         $guest->setName('Guest');
         $guest->setLabel('ROLE_GUEST');
         $manager->persist($guest);

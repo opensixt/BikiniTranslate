@@ -1,6 +1,6 @@
 <?php
 
-namespace opensixt\BikiniTranslateBundle\Listener\Doctrine;
+namespace opensixt\BikiniTranslateBundle\EventListener\Doctrine;
 
 use \Doctrine\ORM\Event\PostFlushEventArgs;
 use \Doctrine\ORM\Event\OnFlushEventArgs;
