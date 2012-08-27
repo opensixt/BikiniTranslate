@@ -48,14 +48,7 @@ class TextRepository extends EntityRepository
     /** @var array */
     private $resources;
 
-    /**
-     * @var int
-     */
-    private $hts;
-
-    /**
-     * @var int
-     */
+    /** @var int */
     private $locale;
 
     /** @var array */
@@ -90,15 +83,6 @@ class TextRepository extends EntityRepository
     public function setResources($resources)
     {
         $this->resources = $resources;
-    }
-
-    /**
-     *
-     * @param int $hts
-     */
-    public function setHts($hts)
-    {
-        $this->hts = $hts;
     }
 
     /**
@@ -168,14 +152,12 @@ class TextRepository extends EntityRepository
      * @param int $task
      * @param int $locale locale id
      * @param array $resources
-     * @param bool $hts
      */
-    public function init($task, $locale, $resources, $hts = false)
+    public function init($task, $locale, $resources)
     {
         $this->setTask($task);
         $this->setLocale($locale);
         $this->setResources($resources);
-        $this->setHts($hts);
     }
 
     /**
@@ -606,12 +588,10 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
                     ->setParameter(1, $this->resources)
                     ->setParameter(2, $this->locale);
+
                 // just get the unflagged translations
-                // 0 = open state
-                // 1 = already sent to hts
-                //     if ($this->hts === true) {
-                    $query->andWhere(self::FIELD_TS . ' IS NULL OR ' . self::FIELD_TS . ' = 0');
-                //     }
+                // 0 = open state, 1 = already sent to translation service
+                $query->andWhere(self::FIELD_TS . ' IS NULL OR ' . self::FIELD_TS . ' = 0');
 
                 break;
         }
@@ -627,23 +607,24 @@ class TextRepository extends EntityRepository
      */
     public function updateTexts(array $texts)
     {
-        if (!empty($texts)) {
-            $em = $this->getEntityManager();
-            $textRep = $em->getRepository(self::ENTITY_TEXT_NAME);
-
-            foreach ($texts as $id => $text) {
-                if ($id > 0 && strlen($text)) {
-                    $objText = $textRep->find($id);
-                    if (is_null($objText)) {
-                        throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
-                    }
-
-                    $objText->addTarget($text);
-                    $em->persist($objText);
-                }
-            }
-            $em->flush();
+        if (!count($ids)) {
+            return;
         }
+
+        $em = $this->getEntityManager();
+
+        foreach ($texts as $id => $text) {
+            if ($id > 0 && strlen($text)) {
+                $objText = $this->find($id);
+                if (is_null($objText)) {
+                    throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
+                }
+
+                $objText->addTarget($text);
+                $em->persist($objText);
+            }
+        }
+        $em->flush();
     }
 
     /**
@@ -653,21 +634,22 @@ class TextRepository extends EntityRepository
      */
     public function releaseTexts(array $ids)
     {
-        if (!empty($ids)) {
-            $em = $this->getEntityManager();
-            $textRep = $em->getRepository(self::ENTITY_TEXT_NAME);
-
-            foreach ($ids as $id) {
-                $objText = $textRep->find($id);
-                if (is_null($objText)) {
-                    throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
-                }
-
-                $objText->setReleased(true);
-                $em->persist($objText);
-            }
-            $em->flush();
+        if (!count($ids)) {
+            return;
         }
+
+        $em = $this->getEntityManager();
+
+        foreach ($ids as $id) {
+            $objText = $this->find($id);
+            if (is_null($objText)) {
+                throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
+            }
+
+            $objText->setReleased(true);
+            $em->persist($objText);
+        }
+        $em->flush();
     }
 
     /**
@@ -677,22 +659,23 @@ class TextRepository extends EntityRepository
      */
     public function markTextsAsDeleted(array $ids)
     {
-        if (!empty($ids)) {
-            $em = $this->getEntityManager();
-            $textRep = $em->getRepository(self::ENTITY_TEXT_NAME);
-            $now = new \DateTime();
-
-            foreach ($ids as $id) {
-                $objText = $textRep->find($id);
-                if (is_null($objText)) {
-                    throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
-                }
-
-                $objText->setDeletedDate($now);
-                $em->persist($objText);
-            }
-            $em->flush();
+        if (!count($ids)) {
+            return;
         }
+
+        $em = $this->getEntityManager();
+        $now = new \DateTime();
+
+        foreach ($ids as $id) {
+            $objText = $this->find($id);
+            if (is_null($objText)) {
+                throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
+            }
+
+            $objText->setDeletedDate($now);
+            $em->persist($objText);
+        }
+        $em->flush();
     }
 
     /**
@@ -706,21 +689,18 @@ class TextRepository extends EntityRepository
             return;
         }
 
-        $this->createQueryBuilder('t')
-            ->update()
-            ->set(self::FIELD_TS, '1')
-            ->where(self::FIELD_ID . ' IN (?1)')
-            ->setParameter(1, $ids)
-            ->getQuery()
-            ->execute();
-        // TODO: ORM update
-        /*foreach ($ids as $id) {
-            $objText = $this->_em->find('opensixtBikiniTranslateBundle:Text', $id);
-            $objText->setTranslationService(1);
+        $em = $this->getEntityManager();
+
+        foreach ($ids as $id) {
+            $objText = $this->find($id);
+            if (is_null($objText)) {
+                throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
+            }
+
+            $objText->setTranslationService(true);
+            $em->persist($objText);
         }
-        $this->_em->persist($objText);
-        $this->_em->flush();
-         */
+        $em->flush();
     }
 
     /**
