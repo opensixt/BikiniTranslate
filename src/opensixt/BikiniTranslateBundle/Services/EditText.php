@@ -13,9 +13,7 @@ use opensixt\BikiniTranslateBundle\Repository\TextRepository;
  */
 class EditText extends HandleText
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $exportChunkLimit;
 
     public function __construct($doctrine, $locale)

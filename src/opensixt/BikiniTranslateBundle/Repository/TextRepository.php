@@ -42,14 +42,10 @@ class TextRepository extends EntityRepository
     const DOMAIN_TYPE_LANGUAGE = 1;
     const DOMAIN_TYPE_RESOURCE = 2;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $task;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $resources;
 
     /**
@@ -62,26 +58,19 @@ class TextRepository extends EntityRepository
      */
     private $locale;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $locales;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $commonLanguage;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $commonLanguageId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $textRevisionControl;
 
+    /** @var Datetime */
     private $expiryDate;
 
 
@@ -746,7 +735,7 @@ class TextRepository extends EntityRepository
         }
 
         $repository = $this->getEntityManager()
-            ->getRepository('opensixtBikiniTranslateBundle:Language');
+            ->getRepository('opensixt\BikiniTranslateBundle\Entity\Language');
 
         $langData = $repository->findBy(array('locale' => $locale));
         return $langData[0]->getId();
