@@ -60,6 +60,8 @@ class MigrateCommand extends ContainerAwareCommand
 
         $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
+        $user_permissions = $this->getContainer()->get('opensixt.bikini_translate.acl.user_permissions');
+
         $conn = $this->getConnection($dsn);
 
         $this->loadGroupsAndResources($conn, $manager);
@@ -102,12 +104,16 @@ class MigrateCommand extends ContainerAwareCommand
 
         $this->user['admin'] = $admin;
 
+        $user_permissions->initAclForNewUser($admin);
+
         // no user
         $nouser = $this->getUserNoUser();
         $manager->persist($nouser);
         $manager->flush();
 
         $this->user[''] = $nouser;
+
+        $user_permissions->initAclForNewUser($nouser);
 
         $i = 0;
         gc_enable(); // Enable Garbage Collector
@@ -116,6 +122,8 @@ class MigrateCommand extends ContainerAwareCommand
         $sql = "SELECT * FROM gtxt" . ($max_rows > 0 ? " LIMIT {$max_rows}" : "");
 
         $stmt = $conn->query($sql);
+
+        $usersToAcl = array();
 
         while ($row = $stmt->fetch()) {
             if (isset($this->user[$row['user']])) {
@@ -129,6 +137,7 @@ class MigrateCommand extends ContainerAwareCommand
                     $this->locale[$row['locale']]
                 );
 
+                $usersToAcl[] = $user;
                 $this->user[$row['user']] = $user;
             }
 
@@ -145,6 +154,12 @@ class MigrateCommand extends ContainerAwareCommand
             if ($i > 0 && $i % 500 === 0) {
                 echo "{$i} rows imported\n";
                 $manager->flush();
+
+                foreach ($usersToAcl as $user) {
+                    $user_permissions->initAclForNewUser($user);
+                }
+                $usersToAcl = array();
+
                 gc_collect_cycles();
             }
 
