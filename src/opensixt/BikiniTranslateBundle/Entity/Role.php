@@ -2,10 +2,10 @@
 
 namespace opensixt\BikiniTranslateBundle\Entity;
 
-use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\Role\Role as BaseRole;
 
 /**
  * opensixt\BikiniTranslateBundle\Entity\Role
@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity("name")
  * @UniqueEntity("label")
  */
-class Role implements RoleInterface
+class Role extends BaseRole
 {
     const ENTITY_ROLE  = 'opensixt\BikiniTranslateBundle\Entity\Role';
 
