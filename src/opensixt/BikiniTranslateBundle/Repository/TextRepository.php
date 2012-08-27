@@ -607,7 +607,7 @@ class TextRepository extends EntityRepository
      */
     public function updateTexts(array $texts)
     {
-        if (!count($ids)) {
+        if (!count($texts)) {
             return;
         }
 
