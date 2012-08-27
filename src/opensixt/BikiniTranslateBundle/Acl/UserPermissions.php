@@ -39,12 +39,7 @@ class UserPermissions
      */
     private function addAdminRoleAce(MutableAclInterface $acl)
     {
-        $roleIdentity = new RoleSecurityIdentity('ROLE_ADMIN');
-
-        $maskBuilder = new MaskBuilder();
-        $maskBuilder->add('master');
-
-        $acl->insertObjectAce($roleIdentity, $maskBuilder->get());
+        $acl->insertObjectAce(new RoleSecurityIdentity('ROLE_ADMIN'), MaskBuilder::MASK_MASTER);
     }
 
     /**
@@ -58,7 +53,6 @@ class UserPermissions
         $maskBuilder = new MaskBuilder();
         $maskBuilder->add('view')
                     ->add(256);
-
 
         $acl->insertObjectAce($userIdentity, $maskBuilder->get());
     }
