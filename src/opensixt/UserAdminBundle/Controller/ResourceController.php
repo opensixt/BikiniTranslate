@@ -15,7 +15,7 @@ use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 class ResourceController extends AbstractController
 {
     /** @var int */
-    public $listNumItems;
+    public $paginationLimit;
 
     /**
      * @param int $page
@@ -27,7 +27,7 @@ class ResourceController extends AbstractController
 
         $query = $this->getResourceRepository()
                       ->getQueryForAllResources();
-        $pagination = $this->paginator->paginate($query, $page, $this->listNumItems);
+        $pagination = $this->paginator->paginate($query, $page, $this->paginationLimit);
 
         return $this->templating->renderResponse(
             'opensixtUserAdminBundle:Resource:list.html.twig',

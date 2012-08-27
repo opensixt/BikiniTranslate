@@ -39,13 +39,13 @@ opensixt_bikini_translate: ~
 
 opensixt_user_admin:
   user:
-    list_num_items: 4
+    pagination_limit: 15
   group:
-    list_num_items: 4
+    pagination_limit: 15
   language:
-    list_num_items: 5
+    pagination_limit: 15
   resource:
-    list_num_items: 10
+    pagination_limit: 15
 
 # Doctrine Configuration
 doctrine:

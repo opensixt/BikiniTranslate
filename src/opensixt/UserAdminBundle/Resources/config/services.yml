@@ -25,7 +25,7 @@ services:
     parent: opensixt.user_admin.controller.abstract
     scope: request
     properties:
-      listNumItems: %opensixt.user_admin.controller.user.list.num_items%
+      paginationLimit: %opensixt.user_admin.controller.user.pagination_limit%
       userPermissions: @opensixt.bikini_translate.acl.user_permissions
 
   opensixt.user_admin.controller.group:
@@ -33,21 +33,21 @@ services:
     parent: opensixt.user_admin.controller.abstract
     scope: request
     properties:
-      listNumItems: %opensixt.user_admin.controller.group.list.num_items%
+      paginationLimit: %opensixt.user_admin.controller.group.pagination_limit%
 
   opensixt.user_admin.controller.language:
     class: %opensixt.user_admin.controller.language.class%
     parent: opensixt.user_admin.controller.abstract
     scope: request
     properties:
-      listNumItems: %opensixt.user_admin.controller.language.list.num_items%
+      paginationLimit: %opensixt.user_admin.controller.language.pagination_limit%
 
   opensixt.user_admin.controller.resource:
     class: %opensixt.user_admin.controller.resource.class%
     parent: opensixt.user_admin.controller.abstract
     scope: request
     properties:
-      listNumItems: %opensixt.user_admin.controller.resource.list.num_items%
+      paginationLimit: %opensixt.user_admin.controller.resource.pagination_limit%
 
   opensixt.user_admin.event_listener.menu_configure:
     class: opensixt\UserAdminBundle\EventListener\ConfigureMenuListener

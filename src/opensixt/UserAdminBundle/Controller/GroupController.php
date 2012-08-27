@@ -16,7 +16,7 @@ use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 class GroupController extends AbstractController
 {
     /** @var int */
-    public $listNumItems;
+    public $paginationLimit;
 
     /**
      * @param int $page
@@ -28,7 +28,7 @@ class GroupController extends AbstractController
 
         $query = $this->getGroupRepository()
                       ->getQueryForAllGroups();
-        $pagination = $this->paginator->paginate($query, $page, $this->listNumItems);
+        $pagination = $this->paginator->paginate($query, $page, $this->paginationLimit);
 
         return $this->templating->renderResponse(
             'opensixtUserAdminBundle:Group:list.html.twig',

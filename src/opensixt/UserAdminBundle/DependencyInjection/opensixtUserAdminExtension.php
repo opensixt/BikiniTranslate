@@ -23,20 +23,20 @@ class opensixtUserAdminExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter(
-            'opensixt.user_admin.controller.user.list.num_items',
-            $config['user']['list_num_items']
+            'opensixt.user_admin.controller.user.pagination_limit',
+            $config['user']['pagination_limit']
         );
         $container->setParameter(
-            'opensixt.user_admin.controller.group.list.num_items',
-            $config['group']['list_num_items']
+            'opensixt.user_admin.controller.group.pagination_limit',
+            $config['group']['pagination_limit']
         );
         $container->setParameter(
-            'opensixt.user_admin.controller.language.list.num_items',
-            $config['language']['list_num_items']
+            'opensixt.user_admin.controller.language.pagination_limit',
+            $config['language']['pagination_limit']
         );
         $container->setParameter(
-            'opensixt.user_admin.controller.resource.list.num_items',
-            $config['resource']['list_num_items']
+            'opensixt.user_admin.controller.resource.pagination_limit',
+            $config['resource']['pagination_limit']
         );
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
