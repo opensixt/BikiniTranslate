@@ -130,6 +130,8 @@ class User implements AdvancedUserInterface
         //$this->setSalt('');
         $this->userRoles = new ArrayCollection();
         $this->userLanguages = new ArrayCollection();
+        $this->userGroups = new ArrayCollection();
+
         $this->setIsactive(self::NOT_ACTIVE_USER);
         $this->setCreated(new \DateTime());
         $this->setUpdated(new \DateTime());
@@ -275,6 +277,10 @@ class User implements AdvancedUserInterface
      */
     public function addUserRole($role)
     {
+        if ($this->userRoles->contains($role)) {
+            return false;
+        }
+
         return $this->userRoles->add($role);
     }
 
@@ -305,6 +311,10 @@ class User implements AdvancedUserInterface
      */
     public function addUserLanguage($userLanguage)
     {
+        if ($this->userLanguages->contains($userLanguage)) {
+            return false;
+        }
+
         return $this->userLanguages->add($userLanguage);
     }
 
@@ -326,6 +336,20 @@ class User implements AdvancedUserInterface
     public function getUserLanguages()
     {
         return $this->userLanguages;
+    }
+
+    /**
+     * @param $userGroup
+     *
+     * @return bool
+     */
+    public function addUserGroup($userGroup)
+    {
+        if ($this->userGroups->contains($userGroup)) {
+            return false;
+        }
+
+        return $this->userGroups->add($userGroup);
     }
 
     /**

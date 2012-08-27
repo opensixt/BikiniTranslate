@@ -35,6 +35,8 @@ class MigrateCommand extends ContainerAwareCommand
 
     private $group = array();
 
+    private $resToGroup = array();
+
     /**
      *
      */
@@ -108,7 +110,10 @@ class MigrateCommand extends ContainerAwareCommand
         $stmt = $conn->query($sql);
 
         while ($row = $stmt->fetch()) {
-            if (!isset($this->user[$row['user']])) {
+            if (isset($this->user[$row['user']])) {
+                $user = $this->user[$row['user']];
+                $user->addUserLanguage($this->locale[$row['locale']]);
+            } else {
                 $user = $this->getUserUser(
                     $row['user'],
                     $row['user'],
@@ -116,11 +121,14 @@ class MigrateCommand extends ContainerAwareCommand
                     $this->locale[$row['locale']]
                 );
 
-                $manager->persist($user);
-                $manager->flush();
-
                 $this->user[$row['user']] = $user;
             }
+
+            // get the group by resource name
+            $userGroup = $this->resToGroup[$row['module']];
+            $user->addUserGroup($userGroup);
+
+            $manager->persist($user);
 
             $text = $this->getText($row);
             $manager->persist($text);
@@ -202,6 +210,8 @@ class MigrateCommand extends ContainerAwareCommand
                     $manager->persist($resource);
 
                     $this->res[$name] = $resource;
+                    $this->resToGroup[$name] = $group;
+
                     $my_resources[] = $resource;
                 }
             }
@@ -366,7 +376,6 @@ class MigrateCommand extends ContainerAwareCommand
         $user->setIsactive(User::ACTIVE_USER);
         $user->addUserRole($this->role['user']);
         $user->addUserLanguage($locale);
-        $user->setUserGroups($this->group);
 
         return $user;
     }
@@ -384,7 +393,6 @@ class MigrateCommand extends ContainerAwareCommand
         $user->setIsactive(User::ACTIVE_USER);
         $user->addUserRole($this->role['user']);
         $user->setUserLanguages($this->locale);
-        $user->setUserGroups($this->group);
 
         return $user;
     }
