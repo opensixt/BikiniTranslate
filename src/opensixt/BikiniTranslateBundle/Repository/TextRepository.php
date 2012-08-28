@@ -7,6 +7,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 
 use opensixt\BikiniTranslateBundle\Entity\TextRevision;
+use opensixt\BikiniTranslateBundle\Entity\Text;
 
 /**
  * Text Model
@@ -32,6 +33,7 @@ class TextRepository extends EntityRepository
     const FIELD_BLOCK         = 't.block';
     const FIELD_TRANSLATE_ME  = 't.translateMe';
     const FIELD_DONTTRANSLATE = 't.dontTranslate';
+    const TRANSLATION_TYPE    = 't.translationType';
 
     const TASK_MISSING_TRANS_BY_LANG = 0;
     const TASK_SEARCH_PHRASE_BY_LANG = 1;
@@ -418,12 +420,14 @@ class TextRepository extends EntityRepository
                 ->where(self::FIELD_HASH . ' IN (?1)')
                 ->andWhere(self::FIELD_LOCALE . ' IN (?2)')
                 ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
+                ->andWhere(self::TRANSLATION_TYPE . ' = ?3')
                 ->setParameter(1, $hashes)
-                ->setParameter(2, $locales);
+                ->setParameter(2, $locales)
+                ->setParameter(3, Text::TRANSLATION_TYPE_TEXT);
 
             if (count($resources)) {
-                $query->andWhere(self::FIELD_RESOURCE . ' IN  (?3)')
-                    ->setParameter(3, $resources);
+                $query->andWhere(self::FIELD_RESOURCE . ' IN  (?4)')
+                    ->setParameter(4, $resources);
             }
 
             // needed to access last text revision via target.0.target or $ele['target'][0]['target']
@@ -458,10 +462,12 @@ class TextRepository extends EntityRepository
                 ->andWhere(self::FIELD_RESOURCE . ' != ?3')
                 ->andWhere(self::FIELD_RESOURCE . ' in (?4)')
                 ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
+                ->andWhere(self::TRANSLATION_TYPE . ' = ?5')
                 ->setParameter(1, $hash)
                 ->setParameter(2, $locale)
                 ->setParameter(3, $resource)
-                ->setParameter(4, $allresources);
+                ->setParameter(4, $allresources)
+                ->setParameter(5, Text::TRANSLATION_TYPE_TEXT);
             $suggestions = $query->getQuery()->getArrayResult();
         }
 
@@ -527,9 +533,11 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_LOCALE . ' = ?3')
                     ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
+                    ->andWhere(self::TRANSLATION_TYPE . ' = ?4')
                     ->setParameter(1, $this->searchString)
                     ->setParameter(2, $this->resources)
                     ->setParameter(3, $this->locale)
+                    ->setParameter(4, Text::TRANSLATION_TYPE_TEXT)
                     ->orderBy(self::FIELD_ID, "ASC");
 
                 break;
@@ -540,11 +548,13 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                     ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
-                    ->setParameter(1, $this->locales);
+                    ->andWhere(self::TRANSLATION_TYPE . ' = ?2')
+                    ->setParameter(1, $this->locales)
+                    ->setParameter(2, Text::TRANSLATION_TYPE_TEXT);
 
                 if (!empty($this->resources)) {
-                    $query->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
-                    ->setParameter(2, $this->resources);
+                    $query->andWhere(self::FIELD_RESOURCE . ' IN (?3)')
+                    ->setParameter(3, $this->resources);
                 }
                 if ($this->locale == $this->commonLanguageId) {
                     $query->andWhere(self::FIELD_RELEASED . ' = 1');
@@ -555,22 +565,24 @@ class TextRepository extends EntityRepository
                 $query->join('t.target', 'tr')
                     ->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
+                    ->andWhere(self::TRANSLATION_TYPE . ' = ?2')
                     ->setParameter(1, $this->resources)
+                    ->setParameter(2, Text::TRANSLATION_TYPE_TEXT)
                     ->orderBy(self::FIELD_ID, "ASC");
 
                 if (!empty($this->locale)) {
-                    $query->andWhere(self::FIELD_LOCALE . ' = ?2')
-                    ->setParameter(2, $this->locale);
+                    $query->andWhere(self::FIELD_LOCALE . ' = ?3')
+                    ->setParameter(3, $this->locale);
                 }
                 if (!empty($this->locales)) {
-                    $query->andWhere(self::FIELD_LOCALE . ' IN (?3)')
-                    ->setParameter(3, $this->locales);
+                    $query->andWhere(self::FIELD_LOCALE . ' IN (?4)')
+                    ->setParameter(4, $this->locales);
                 }
 
                 if (!empty($this->expiryDate)) {
                     // expired texts
-                    $query->andWhere(self::FIELD_EXPIRY_DATE . ' <= ?4')
-                        ->setParameter(4, $this->expiryDate);
+                    $query->andWhere(self::FIELD_EXPIRY_DATE . ' <= ?5')
+                        ->setParameter(5, $this->expiryDate);
                 } else {
                     // non released texts
                     $query->andWhere(self::FIELD_RELEASED . ' IS NULL OR ' . self::FIELD_RELEASED . ' = 0')
@@ -588,8 +600,10 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                     ->andWhere(self::FIELD_RELEASED . ' = 1')
                     ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
+                    ->andWhere(self::TRANSLATION_TYPE . ' = ?3')
                     ->setParameter(1, $this->resources)
                     ->setParameter(2, $this->locale)
+                    ->setParameter(3, Text::TRANSLATION_TYPE_TEXT)
                     ->orderBy(self::FIELD_ID, "ASC");
 
                 // just get the unflagged translations

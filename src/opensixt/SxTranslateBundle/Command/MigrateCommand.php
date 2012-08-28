@@ -409,6 +409,7 @@ class MigrateCommand extends ContainerAwareCommand
         $text->setResource($this->res[$row['module']]);
         $text->setLocale($this->locale[$row['locale']]);
         $text->setUser($this->user[$row['user']]);
+        $text->setTranslationType(Text::TRANSLATION_TYPE_TEXT);
 
         // don't add text TRANSLATE_ME
         if ($row['msgstr'] != 'TRANSLATE_ME') {

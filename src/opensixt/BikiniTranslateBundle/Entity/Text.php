@@ -16,6 +16,10 @@ use opensixt\BikiniTranslateBundle\Entity\TextRevision;
  */
 class Text
 {
+    const TRANSLATION_TYPE_TEXT   = 1;
+    const TRANSLATION_TYPE_FTEXT  = 2;
+    const TRANSLATION_TYPE_MOBILE = 3;
+
     /**
      * @var int $id
      *
@@ -163,7 +167,14 @@ class Text
      *
      * @ORM\Column(name="dont_translate", type="boolean", nullable=true)
      */
-    private $dontTranslate;
+    private $dontTranslate = false;
+
+    /**
+     * @var int translation_type
+     *
+     * @ORM\Column(name="translation_type", type="integer", nullable=true)
+     */
+    private $translationType = self::TRANSLATION_TYPE_TEXT;
 
     /** @var text */
     private $textInCommonLanguage;
@@ -609,6 +620,26 @@ class Text
     public function getDontTranslate()
     {
         return $this->dontTranslate;
+    }
+
+    /**
+     * Set translationType
+     *
+     * @param int $type
+     */
+    public function setTranslationType($type)
+    {
+        $this->translationType = $type;
+    }
+
+    /**
+     * Get translationType
+     *
+     * @return int
+     */
+    public function getTranslationType()
+    {
+        return $this->translationType;
     }
 
     /**
