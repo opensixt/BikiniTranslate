@@ -53,7 +53,7 @@ class SendToTranslationServiceController extends AbstractController
 
         // set search parameters
         $resources = $this->getUserResources(); // all available resources
-        $this->searcher->setPaginationLimit(0);
+        $this->searcher->setPaginationLimit(0); // pagination off
 
         // get search results
         $data = $this->searcher

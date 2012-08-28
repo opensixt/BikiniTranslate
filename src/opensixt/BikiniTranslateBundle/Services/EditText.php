@@ -18,7 +18,6 @@ class EditText extends HandleText
 
     public function __construct($doctrine, $locale)
     {
-        $this->paginationLimit = 15;
         $this->commonLanguage = $locale;
 
         parent::__construct($doctrine);

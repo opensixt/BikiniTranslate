@@ -9,10 +9,18 @@ parameters:
     opensixt.bikini_translate.controller.sendtotranslationservice.class: opensixt\BikiniTranslateBundle\Controller\SendToTranslationServiceController
     opensixt.bikini_translate.controller.copylanguage.class: opensixt\BikiniTranslateBundle\Controller\CopyLanguageController
     opensixt.bikini_translate.controller.copyresource.class: opensixt\BikiniTranslateBundle\Controller\CopyResourceController
+
     opensixt.bikini_translate.intermediate.searchstring.class: opensixt\BikiniTranslateBundle\Services\SearchString
+    opensixt.bikini_translate.intermediate.searchstring.pagination_limit: "15"
+
     opensixt.bikini_translate.intermediate.edittext.class: opensixt\BikiniTranslateBundle\Services\EditText
+    opensixt.bikini_translate.intermediate.edittext.pagination_limit: "15"
+
     opensixt.bikini_translate.intermediate.flaggedtext.class: opensixt\BikiniTranslateBundle\Services\FlaggedText
+    opensixt.bikini_translate.intermediate.flaggedtext.pagination_limit: "15"
+
     opensixt.bikini_translate.intermediate.copydomain.class: opensixt\BikiniTranslateBundle\Services\CopyDomain
+
     opensixt.bikini_translate.sevices.exporter.class: opensixt\BikiniTranslateBundle\Helpers\BikiniExport
     opensixt.bikini_translate.acl.user_permissions.class: opensixt\BikiniTranslateBundle\Acl\UserPermissions
     opensixt.bikini_translate.listener.doctrine.flush.class: opensixt\BikiniTranslateBundle\Listener\Doctrine\Flush
@@ -103,6 +111,7 @@ services:
             paginator: @knp_paginator
             revisionControlMode: %text_revision_control%
             exportChunkLimit: %export_chunk_limit%
+            paginationLimit: %opensixt.bikini_translate.intermediate.edittext.pagination_limit%
 
     opensixt.bikini_translate.intermediate.searchstring:
         class: %opensixt.bikini_translate.intermediate.searchstring.class%
@@ -110,12 +119,14 @@ services:
         properties:
             paginator: @knp_paginator
             revisionControlMode: %text_revision_control%
+            paginationLimit: %opensixt.bikini_translate.intermediate.searchstring.pagination_limit%
 
     opensixt.bikini_translate.intermediate.flaggedtext:
         class: %opensixt.bikini_translate.intermediate.flaggedtext.class%
         arguments: [@doctrine]
         properties:
             paginator: @knp_paginator
+            paginationLimit: %opensixt.bikini_translate.intermediate.flaggedtext.pagination_limit%
 
     opensixt.bikini_translate.intermediate.copydomain:
         class: %opensixt.bikini_translate.intermediate.copydomain.class%

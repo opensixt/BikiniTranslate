@@ -12,12 +12,6 @@ use opensixt\BikiniTranslateBundle\Repository\TextRepository;
  */
 class FlaggedText extends HandleText
 {
-    public function __construct($doctrine)
-    {
-        $this->paginationLimit = 15;
-        parent::__construct($doctrine);
-    }
-
     /**
      * Returns search results and pagination data
      * if $this->date is set - get expired texts

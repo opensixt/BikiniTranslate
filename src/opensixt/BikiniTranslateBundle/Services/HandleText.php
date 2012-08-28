@@ -31,7 +31,7 @@ abstract class HandleText
     protected $commonLanguageId;
 
     /** @var int */
-    protected $paginationLimit;
+    public $paginationLimit;
 
     /** @var string */
     public $revisionControlMode;
