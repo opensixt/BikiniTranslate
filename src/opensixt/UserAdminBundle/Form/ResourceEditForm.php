@@ -28,12 +28,21 @@ class ResourceEditForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $translator = $this->translator;
-        $builder->add('name', 'text', array('label' => $translator->trans('resource_name') . ': '))
-                ->add(
-                    'description',
-                    'text',
-                    array('label' => $translator->trans('description') . ': ', 'required'  => false)
-                );
+        $builder->add(
+            'name',
+            'text',
+            array(
+                'label' => $translator->trans('resource_name') . ': ',
+            )
+        )
+        ->add(
+            'description',
+            'text',
+            array(
+                'label' => $translator->trans('description') . ': ',
+                'required'  => false
+            )
+        );
     }
 
     /**

@@ -24,15 +24,15 @@ class UserRepository extends EntityRepository
     public function getQueryForUserSearch($searchTerm)
     {
         $q = $this->createQueryBuilder('u')
-                  ->select('u');
+            ->select('u')
+            ->orderBy(self::USER_NAME, 'ASC');
 
         if (!empty($searchTerm)) {
             $searchTerm = '%' . $searchTerm . '%';
 
             $q->where(self::USER_NAME . ' LIKE ?1')
               ->orWhere(self::USER_EMAIL . ' LIKE ?1')
-              ->setParameter(1, $searchTerm)
-              ->orderBy(self::USER_NAME);
+              ->setParameter(1, $searchTerm);
         }
         return $q;
     }

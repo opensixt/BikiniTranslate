@@ -64,7 +64,7 @@
             </trans-unit>
             <trans-unit id="75">
                 <source>new_user</source>
-                <target>New user</target>
+                <target>Add new user</target>
             </trans-unit>
             <trans-unit id="80">
                 <source>active</source>
@@ -84,7 +84,7 @@
             </trans-unit>
             <trans-unit id="100">
                 <source>new_group</source>
-                <target>New group</target>
+                <target>Add new group</target>
             </trans-unit>
             <trans-unit id="105">
                 <source>group</source>
@@ -116,7 +116,7 @@
             </trans-unit>
             <trans-unit id="140">
                 <source>new_language</source>
-                <target>New locale</target>
+                <target>Add new locale</target>
             </trans-unit>
             <trans-unit id="145">
                 <source>language_list</source>
@@ -132,7 +132,7 @@
             </trans-unit>
             <trans-unit id="160">
                 <source>new_resource</source>
-                <target>New resource</target>
+                <target>Add new resource</target>
             </trans-unit>
             <trans-unit id="165">
                 <source>resource_list</source>
@@ -177,6 +177,10 @@
             <trans-unit id="204">
                 <source>menu.resources</source>
                 <target>Resources</target>
+            </trans-unit>
+            <trans-unit id="210">
+                <source>btn_search</source>
+                <target>Ok</target>
             </trans-unit>
         </body>
     </file>

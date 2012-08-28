@@ -178,6 +178,11 @@
                 <source>menu.resources</source>
                 <target>Ressourcen</target>
             </trans-unit>
+            <trans-unit id="210">
+                <source>btn_search</source>
+                <target>Ok</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

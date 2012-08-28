@@ -10,7 +10,9 @@
 
     <form action="{{ path('_admin_userlist') }}" method="get" {{ form_enctype(form) }}>
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
-        <input type="submit" value="{{ 'save_locale'|trans }}"/>
+        <input type="submit" value="{{ 'btn_search'|trans }}"/>
+
+        &nbsp;&nbsp;&nbsp;<a href="{{ path('_admin_user_create') }}">{{ 'new_user'|trans }}</a>
         {{ form_rest(form) }}
     </form>
 

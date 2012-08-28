@@ -17,7 +17,8 @@ class LanguageRepository extends EntityRepository
     public function getQueryForAllLanguages()
     {
         $q = $this->createQueryBuilder('l')
-                  ->select('l');
+            ->select('l')
+            ->orderBy('l.locale', 'ASC');
         return $q;
     }
 }

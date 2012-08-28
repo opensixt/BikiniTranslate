@@ -28,12 +28,21 @@ class LanguageEditForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $translator = $this->translator;
-        $builder->add('locale', 'text', array('label' => $translator->trans('language_name') . ': '))
-                ->add(
-                    'description',
-                    'text',
-                    array('label' => $translator->trans('description') . ': ', 'required'  => false)
-                );
+        $builder->add(
+            'locale',
+            'text',
+            array(
+                'label' => $translator->trans('language_name') . ': ',
+            )
+        )
+        ->add(
+            'description',
+            'text',
+            array(
+                'label' => $translator->trans('description') . ': ',
+                'required'  => true,
+            )
+        );
     }
 
     /**

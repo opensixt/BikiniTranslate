@@ -555,7 +555,8 @@ class TextRepository extends EntityRepository
                 $query->join('t.target', 'tr')
                     ->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
-                    ->setParameter(1, $this->resources);
+                    ->setParameter(1, $this->resources)
+                    ->orderBy(self::FIELD_ID, "ASC");
 
                 if (!empty($this->locale)) {
                     $query->andWhere(self::FIELD_LOCALE . ' = ?2')

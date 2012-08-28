@@ -17,7 +17,8 @@ class ResourceRepository extends EntityRepository
     public function getQueryForAllResources()
     {
         $q = $this->createQueryBuilder('r')
-                  ->select('r');
+            ->select('r')
+            ->orderBy('r.name', 'ASC');
         return $q;
     }
 }

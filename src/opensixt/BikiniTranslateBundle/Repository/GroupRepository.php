@@ -17,7 +17,8 @@ class GroupRepository extends EntityRepository
     public function getQueryForAllGroups()
     {
         $q = $this->createQueryBuilder('g')
-                  ->select('g');
+            ->select('g')
+            ->orderBy('g.name', 'ASC');
         return $q;
     }
 }
