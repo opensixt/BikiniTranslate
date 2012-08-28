@@ -109,18 +109,13 @@ class EditText extends HandleText
      */
     public function prepareExportData($data)
     {
-        $chunks = array();
-        if (count($data)) {
-            foreach ($data as &$elem) {
-                $elem['target'][0]['target'] = $elem['source'];
-            }
-        }
         if (!empty($this->exportChunkLimit)) {
             // chunks an array into $this->exportChunkLimit large chunks
-            $chunks = array_chunk($data, $this->exportChunkLimit);
+            $chunks = array_chunk($data->getItems(), $this->exportChunkLimit);
         } else {
-            $chunks[0] = $data;
+            $chunks = array($data);
         }
+
         return $chunks;
     }
 
@@ -137,16 +132,10 @@ class EditText extends HandleText
         file_put_contents($fname, $exportXliff);
 
         // and set translation_service flag for fields from $chunk
-        $ids = array_reduce(
-            $chunk,
-            // @codingStandardsIgnoreStart
-            function ($ids, $elem) {
-            // @codingStandardsIgnoreEnd
-                $ids[] = $elem['id'];
-                return $ids;
-            },
-            array()
-        );
+        $ids = array();
+        foreach ($chunk as $elem) {
+            $ids[] = $elem->getId();
+        }
 
         $this->textRepository->setTranslationServiceFlag($ids);
         // TODO: return send result or throw exception

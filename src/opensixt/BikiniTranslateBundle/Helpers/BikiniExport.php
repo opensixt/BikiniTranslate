@@ -108,7 +108,7 @@ class BikiniExport
         }
 
         $ret = '';
-        if (is_array($data) && count($data)) {
+        if (count($data)) {
             $dom = new \DOMDocument('1.0', "UTF-8");
 
             $dom->preserveWhiteSpace = false;
@@ -133,17 +133,25 @@ class BikiniExport
             foreach ($data as $elem) {
                 $transUnit = $dom->createElement('trans-unit');
                 $id = $dom->createAttribute('id');
-                $id->value = $elem['hash'] . '_' . $elem['resource']['name'];
+                $id->value = $elem->getHash() . '_' . $elem->getResource()->getName();
                 $transUnit->appendChild($id);
 
-                $source = $dom->createElement('source', $elem['source']);
+                $source = $dom->createElement('source', $elem->getSource());
                 foreach ($this->xliffSourceAttributes as $key => $value) {
                     $attribute = $dom->createAttribute($key);
                     $attribute->value = $value;
                     $source->appendChild($attribute);
                 }
 
-                $target = $dom->createElement('target', $elem['target'][0]['target']);
+                // if target is not set, return source
+                $targetObject = $elem->getCurrentTarget();
+                if (empty($targetObject)) {
+                    $targetValue = $elem->getSource();
+                } else {
+                    $targetValue = $targetObject->getTarget();
+                }
+
+                $target = $dom->createElement('target', $targetValue);
                 foreach ($this->xliffTargetAttributes as $key => $value) {
                     $attribute = $dom->createAttribute($key);
                     $attribute->value = $value;

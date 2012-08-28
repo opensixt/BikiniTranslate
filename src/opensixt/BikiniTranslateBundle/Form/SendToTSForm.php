@@ -28,7 +28,7 @@ class SendToTSForm extends AbstractType
      */
     public function getName()
     {
-        return 'form';
+        return '';
     }
 }
 
