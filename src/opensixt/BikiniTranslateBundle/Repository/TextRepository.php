@@ -529,7 +529,8 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                     ->setParameter(1, $this->searchString)
                     ->setParameter(2, $this->resources)
-                    ->setParameter(3, $this->locale);
+                    ->setParameter(3, $this->locale)
+                    ->orderBy(self::FIELD_ID, "ASC");
 
                 break;
             case self::TASK_ALL_CONTENT_BY_LANG:
@@ -587,7 +588,8 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_RELEASED . ' = 1')
                     ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
                     ->setParameter(1, $this->resources)
-                    ->setParameter(2, $this->locale);
+                    ->setParameter(2, $this->locale)
+                    ->orderBy(self::FIELD_ID, "ASC");
 
                 // just get the unflagged translations
                 // 0 = open state, 1 = already sent to translation service
