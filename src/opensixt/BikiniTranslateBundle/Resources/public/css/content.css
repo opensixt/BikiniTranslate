@@ -7,6 +7,12 @@ body { line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px;
 #wrapper a { text-decoration: none; color: #F48A00; }
 #wrapper span.highlight { color: #F48A00; }
 
+div.flash { padding: 10px; background: #CCCCCC; border: 1px solid; color: #444444; margin-bottom: 10px; cursor: pointer; }
+
+div.flash.notice { background: #DFF2BF; color: #4F8A10; }
+
+div.flash.error { background: #FFDFBF; color: #AA4F10; }
+
 #header { border-bottom: 1px solid #ccc; margin-bottom: 20px; }
 #header .top { /*border-bottom: 1px solid #ccc; margin-bottom: 10px;*/ }
 #header ul.navigation { list-style: none; }

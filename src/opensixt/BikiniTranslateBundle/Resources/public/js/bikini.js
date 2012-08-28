@@ -1,3 +1,21 @@
+jQuery(document).ready(function($) {
+    // symfony flasher
+    // wait 5 seconds, then fade out slowly each second.
+    // if mouseover was triggered, stop fading out
+    $('div.flash', 'section.main').each(function(idx, ele) {
+        var $ele = $(ele);
+        var callback = function() {
+            $ele.fadeOut('slow');
+        };
+
+        $ele.mouseover(function() {
+            clearTimeout($ele.data('timer'));
+        }).click(function() {
+            $ele.data('timer', setTimeout(callback, 1000));
+        }).data('timer', setTimeout(callback, 5000 + idx * 1000));
+    });
+});
+
 function bikiniConfirm(confirmMessage, okLabel, cancelLabel, okCallback, cancelCallback)
 {
     var html = [];

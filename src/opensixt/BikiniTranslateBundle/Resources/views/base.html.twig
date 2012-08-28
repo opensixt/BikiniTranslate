@@ -1,5 +1,15 @@
 {% extends '::layout.html.twig' %}
 
+{% block flash %}
+    {% for type, messages in app.session.getFlashBag.all() %}
+        {% for message in messages %}
+            <div class="flash {{ type }}" title="{{ 'click_to_close'|trans }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
+
 {% block javascript_includes %}
 <script src="/bundles/opensixtbikinitranslate/js/bikini.js"></script>
 {% endblock %}

@@ -258,7 +258,10 @@
                 <source>confirm_cancel</source>
                 <target>Cancel</target>
             </trans-unit>
-
+            <trans-unit id="295">
+                <source>click_to_close</source>
+                <target>Click to close</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
