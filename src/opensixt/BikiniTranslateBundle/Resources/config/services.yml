@@ -9,6 +9,7 @@ parameters:
     opensixt.bikini_translate.controller.sendtotranslationservice.class: opensixt\BikiniTranslateBundle\Controller\SendToTranslationServiceController
     opensixt.bikini_translate.controller.copylanguage.class: opensixt\BikiniTranslateBundle\Controller\CopyLanguageController
     opensixt.bikini_translate.controller.copyresource.class: opensixt\BikiniTranslateBundle\Controller\CopyResourceController
+    opensixt.bikini_translate.controller.ajaxresponder.class: opensixt\BikiniTranslateBundle\Controller\AjaxResponderController
 
     opensixt.bikini_translate.intermediate.searchstring.class: opensixt\BikiniTranslateBundle\Services\SearchString
     opensixt.bikini_translate.intermediate.searchstring.pagination_limit: "15"
@@ -102,6 +103,13 @@ services:
         scope: request
         properties:
             searcher: @opensixt.bikini_translate.intermediate.copydomain
+
+    opensixt.bikini_translate.controller.ajaxresponder:
+        class: %opensixt.bikini_translate.controller.ajaxresponder.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            searcher: @opensixt.bikini_translate.intermediate.searchstring
 
 
     opensixt.bikini_translate.intermediate.edittext:

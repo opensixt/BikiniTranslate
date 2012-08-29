@@ -538,7 +538,7 @@ class TextRepository extends EntityRepository
                     ->setParameter(2, $this->resources)
                     ->setParameter(3, $this->locale)
                     ->setParameter(4, Text::TRANSLATION_TYPE_TEXT)
-                    ->orderBy(self::FIELD_ID, "ASC");
+                    ->addOrderBy(self::FIELD_ID, "ASC");
 
                 break;
             case self::TASK_ALL_CONTENT_BY_LANG:
@@ -568,7 +568,7 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::TRANSLATION_TYPE . ' = ?2')
                     ->setParameter(1, $this->resources)
                     ->setParameter(2, Text::TRANSLATION_TYPE_TEXT)
-                    ->orderBy(self::FIELD_ID, "ASC");
+                    ->addOrderBy(self::FIELD_ID, "ASC");
 
                 if (!empty($this->locale)) {
                     $query->andWhere(self::FIELD_LOCALE . ' = ?3')
@@ -604,7 +604,7 @@ class TextRepository extends EntityRepository
                     ->setParameter(1, $this->resources)
                     ->setParameter(2, $this->locale)
                     ->setParameter(3, Text::TRANSLATION_TYPE_TEXT)
-                    ->orderBy(self::FIELD_ID, "ASC");
+                    ->addOrderBy(self::FIELD_ID, "ASC");
 
                 // just get the unflagged translations
                 // 0 = open state, 1 = already sent to translation service
