@@ -15,29 +15,8 @@ class BikiniExport
     protected $xliffSourceAttributes;
     protected $xliffTargetAttributes;
 
-    protected $sourceLanguage;
+    public $sourceLanguage;
     protected $targetLanguage;
-    protected $toolLanguage;
-
-    /**
-     * Constructor
-     *
-     * @param string $toolLanguage
-     */
-    public function __construct($toolLanguage)
-    {
-        $this->toolLanguage = $toolLanguage;
-    }
-
-    /**
-     * Set source language
-     *
-     * @param string $language
-     */
-    public function setSourceLanguage($language)
-    {
-        $this->sourceLanguage = $language;
-    }
 
     /**
      * Set target language
@@ -51,12 +30,13 @@ class BikiniExport
 
     public function initXliff($version)
     {
+        // TODO: Exception if $sourceLanguage is not set
+
         if (!empty($version)) {
             $this->version = $version;
 
             switch ($version) {
                 case 'human_translation_service':
-                    $this->sourceLanguage = $this->toolLanguage;
                     $this->xliffAttributes = array (
                         'version' => '1.1',
                         'xmlns' => 'urn:oasis:names:tc:xliff:document:1.1',
@@ -172,6 +152,43 @@ class BikiniExport
         }
 
         return $ret;
+    }
+
+    /**
+     * Parse xliff-string and write data to array
+     *
+     * @param string $xml
+     * @return array
+     */
+    public function parseXliffToTexts($xml)
+    {
+        $result = array();
+
+        $doc = new \DOMDocument();
+        $doc->loadXML($xml);
+
+        $nodes = $doc->getElementsByTagName("trans-unit");
+        for ($i = 0; $i < $nodes->length; $i++) {
+            $text = $nodes->item($i);
+            $row = array(
+                'hash' => '',
+                'resource' => '',
+                'target' => '',
+                'locale' => '',
+            );
+            $id = $text->getAttribute('id');
+            if (!empty($id)) {
+                $data = explode('_', $id);
+                $row['hash'] = trim($data[0]);
+                $row['resource'] = trim($data[1]);
+            }
+            $target = $text->getElementsByTagName("target");
+            $row['target'] = $target->item(0)->nodeValue;
+            $row['locale'] = $target->item(0)->getAttribute('xml:lang');
+            $result[] = $row;
+        }
+
+        return $result;
     }
 }
 

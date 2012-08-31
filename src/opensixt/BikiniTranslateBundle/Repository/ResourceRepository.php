@@ -23,5 +23,24 @@ class ResourceRepository extends EntityRepository
             ->orderBy('r.name', 'ASC');
         return $q;
     }
+
+    /**
+     * execute QueryBuilder from getQueryForAllResources()
+     *
+     * @return array
+     */
+    public function getAllResources()
+    {
+        $result = array();
+        $allResources = $this->getQueryForAllResources()->getQuery()
+            ->getResult();
+
+        if (count($allResources)) {
+            foreach ($allResources as $resource) {
+                $result[$resource->getId()] = $resource->getName();
+            }
+        }
+        return $result;
+    }
 }
 

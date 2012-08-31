@@ -440,7 +440,8 @@ class TextRepository extends EntityRepository
      *
      * @param string $hash md5 string
      * @param int $locale source langiage
-     * @param type $resource source resource
+     * @param int $resource source resource
+     * @param array $allresources available resources
      * @return array texts with same hash and language and with another resources
      */
     public function getSuggestionByHashAndLanguage($hash, $locale, $resource, $allresources)
@@ -467,6 +468,41 @@ class TextRepository extends EntityRepository
         }
 
         return $suggestions;
+    }
+
+    /**
+     * Get Text Id by hash, locale and resource
+     * !!! ONLY for getFromTranslationService
+     *
+     * @param string $hash md5 string
+     * @param int $locale source langiage
+     * @param int $resource source resource
+     * @return array texts with same hash and language and with another resources
+     */
+    public function getIdByHashAndLocaleAndResource($hash, $locale, $resource)
+    {
+        // TODO: source getFromTranslationService Wheres
+        $id = 0;
+        if (strlen($hash) && $locale && $resource) {
+            $query = $this->createQueryBuilder('t')
+                ->select('t')
+                ->where(self::FIELD_HASH . ' = ?1')
+                ->andWhere(self::FIELD_LOCALE . ' = ?2')
+                ->andWhere(self::FIELD_RESOURCE . ' = ?3')
+                ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
+                ->andWhere(self::FIELD_TS . ' = 1')
+                ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
+                ->andWhere(self::TRANSLATION_TYPE . ' = ?4')
+                ->setParameter(1, $hash)
+                ->setParameter(2, $locale)
+                ->setParameter(3, $resource)
+                ->setParameter(4, Text::TRANSLATION_TYPE_TEXT);
+            $result = $query->getQuery()->getOneOrNullResult();
+            if (is_object($result)) {
+                $id = $result->getId();
+            }
+        }
+        return $id;
     }
 
     /**
@@ -610,8 +646,9 @@ class TextRepository extends EntityRepository
      * Updates texts: set target = $text for $id
      *
      * @param array $texts
+     * @param boolean $translationService if true set texts as not released and translated
      */
-    public function updateTexts(array $texts)
+    public function updateTexts(array $texts, $translationService = false)
     {
         if (!count($texts)) {
             return;
@@ -627,6 +664,12 @@ class TextRepository extends EntityRepository
                 }
 
                 $objText->setTarget($text);
+                if ($translationService === true) {
+                    // set texts as not released and translated
+                    $objText->setReleased(false);
+                    $objText->setTranslateMe(false);
+                    $objText->setTranslationService(false);
+                }
                 $em->persist($objText);
             }
         }

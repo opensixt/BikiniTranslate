@@ -1,7 +1,10 @@
 parameters:
-#    opensixt_sx_translate.example.class: opensixt\SxTranslateBundle\Example
+    opensixt.sx_translate.controller.import.class: opensixt\SxTranslateBundle\Controller\ImportController
 
 services:
-#    opensixt_sx_translate.example:
-#        class: %opensixt_sx_translate.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    opensixt.sx_translate.controller.import:
+        class: %opensixt.sx_translate.controller.import.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            importer: @opensixt.bikini_translate.sevices.exporter

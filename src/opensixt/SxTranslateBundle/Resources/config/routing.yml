@@ -1,3 +1,7 @@
 opensixtSxTranslateBundle_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: opensixtSxTranslateBundle:Default:index }
+
+_sxtranslate_getfromts:
+    pattern: /sxtranslate/getfromts/
+    defaults: { _controller: opensixt.sx_translate.controller.import:getFromTsAction}
