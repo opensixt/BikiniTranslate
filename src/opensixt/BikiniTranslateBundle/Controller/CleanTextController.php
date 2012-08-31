@@ -53,9 +53,12 @@ class CleanTextController extends AbstractController
                     $formData,
                     'chk'
                 );
-
                 if (count($textsToRelease)) {
                     $this->searcher->deleteTexts(array_keys($textsToRelease));
+                    $this->session->getFlashBag()->add(
+                        'notice',
+                        $this->translator->trans('save_success')
+                    );
                 }
             }
         }

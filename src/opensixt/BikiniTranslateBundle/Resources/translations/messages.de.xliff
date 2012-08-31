@@ -262,6 +262,10 @@
                 <source>click_to_close</source>
                 <target>Zum Schließen bitte klicken</target>
             </trans-unit>
+            <trans-unit id="300">
+                <source>save_success</source>
+                <target>Die Änderungen wurden gespeichert!</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

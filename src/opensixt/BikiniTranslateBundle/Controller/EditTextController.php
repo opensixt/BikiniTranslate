@@ -64,9 +64,17 @@ class EditTextController extends AbstractController
             }
 
             if (isset($formData['action']) && $formData['action'] == 'save') {
-                $this->editText->updateTexts(
-                    $this->getTextsToSaveFromRequest($formData, 'text')
+                $textsToSave = $this->getTextsToSaveFromRequest(
+                    $formData,
+                    'text'
                 );
+                if (count($textsToSave)) {
+                    $this->editText->updateTexts($textsToSave);
+                    $this->session->getFlashBag()->add(
+                        'notice',
+                        $this->translator->trans('save_success')
+                    );
+                }
             }
         }
 

@@ -51,9 +51,17 @@ class ChangeTextController extends AbstractController
             }
 
             if (isset($formData['action']) && $formData['action'] == 'save') {
-                $this->searcher->updateTexts(
-                    $this->getTextsToSaveFromRequest($formData, 'text')
+                $textsToSave = $this->getTextsToSaveFromRequest(
+                    $formData,
+                    'text'
                 );
+                if (count($textsToSave)) {
+                    $this->searcher->updateTexts($textsToSave);
+                    $this->session->getFlashBag()->add(
+                        'notice',
+                        $this->translator->trans('save_success')
+                    );
+                }
             }
         }
 
