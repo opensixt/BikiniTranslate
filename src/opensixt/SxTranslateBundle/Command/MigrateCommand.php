@@ -413,7 +413,7 @@ class MigrateCommand extends ContainerAwareCommand
 
         // don't add text TRANSLATE_ME
         if ($row['msgstr'] != 'TRANSLATE_ME') {
-            $text->addTarget($row['msgstr']);
+            $text->setTarget($row['msgstr']);
         }
 
         // flags

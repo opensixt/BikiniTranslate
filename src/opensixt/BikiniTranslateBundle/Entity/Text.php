@@ -58,6 +58,13 @@ class Text
     private $source;
 
     /**
+     * @var text $target
+     *
+     * @ORM\Column(name="target", type="text", nullable=true)
+     */
+    private $target;
+
+    /**
      * @var int $textRevisionId
      *
      * @ORM\Column(name="text_revision_id", type="integer", nullable=true)
@@ -71,9 +78,9 @@ class Text
      *     joinColumns={@ORM\JoinColumn(name="text_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="text_revision_id", referencedColumnName="id")}
      *
-     * @var ArrayCollection $target
+     * @var ArrayCollection $targets
      */
-    private $target;
+    private $targets;
 
     /**
      * @var int $resourceId
@@ -186,7 +193,7 @@ class Text
     {
         $this->setCreated(new \DateTime());
         $this->setUpdated(new \DateTime());
-        $this->target = new ArrayCollection;
+        $this->targets = new ArrayCollection;
     }
 
     /**
@@ -281,6 +288,45 @@ class Text
     }
 
     /**
+     * Set target
+     *
+     * @param string $target
+     */
+    public function setTarget($target)
+    {
+        if (!empty($this->target)) {
+            $textRev = new TextRevision;
+            $textRev->setTarget($this->target);
+            $this->targets[] = $textRev;
+        }
+
+        $this->target = $target;
+
+        // mark as translated
+        $this->setTranslateMe(false);
+    }
+
+    /**
+     * Get target
+     *
+     * @return string $target
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
+     * Get target
+     *
+     * @return ArrayCollection
+     */
+    public function getTargets()
+    {
+        return $this->targets;
+    }
+
+    /**
      * Set textRevisionId
      *
      * @param int $textRevisionId
@@ -298,68 +344,6 @@ class Text
     public function getTextRevisionId()
     {
         return $this->textRevisionId;
-    }
-
-    /**
-     * Set target
-     *
-     * @param string $target
-     */
-    public function addTarget($target)
-    {
-        $textRev = new TextRevision;
-        $textRev->setTarget($target);
-
-        $this->target[] = $textRev;
-
-        // mark as translated
-        $this->setTranslateMe(false);
-    }
-
-    /**
-     * Set target
-     *
-     * @param ArrayCollection $target
-     */
-    public function setTarget(array $target)
-    {
-        // transform array of strings to array of TextRevision
-        $this->target = array_map(
-            function ($target) {
-                $textRev = new TextRevision;
-                $textRev->setTarget($target);
-
-                return $textRev;
-            },
-            $target
-        );
-
-        // mark as translated
-        $this->setTranslateMe(false);
-    }
-
-    /**
-     * Get target
-     *
-     * @return ArrayCollection
-     */
-    public function getTarget()
-    {
-        return $this->target;
-    }
-
-    /**
-     * Get the first element from target ArrayCollection
-     *
-     * @return ArrayCollection
-     */
-    public function getCurrentTarget()
-    {
-        if (!count($this->target)) {
-            return null;
-        }
-
-        return $this->target[0];
     }
 
     /**

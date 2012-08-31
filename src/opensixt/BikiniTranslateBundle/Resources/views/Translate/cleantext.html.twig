@@ -32,7 +32,7 @@
             {% for item in searchResults %}
                 <tr>
                     <td>{{ item.resource.name }} ({{ item.locale.locale }})<br/><br/>  </td>
-                    <td>{{ item.target.0.target }}</td>
+                    <td>{{ item.target }}</td>
                     <td>{{ item.user.username }}</td>
                     <td>{{ item.expiryDate|date('date_format'|trans) }}</td>
                     <td>{{ form_widget(form['chk_' ~ item.id]) }}</td>

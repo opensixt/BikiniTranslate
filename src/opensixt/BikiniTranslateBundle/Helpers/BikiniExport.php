@@ -144,11 +144,11 @@ class BikiniExport
                 }
 
                 // if target is not set, return source
-                $targetObject = $elem->getCurrentTarget();
-                if (empty($targetObject)) {
+                $targetText = $elem->getTarget();
+                if (empty($targetText)) {
                     $targetValue = $elem->getSource();
                 } else {
-                    $targetValue = $targetObject->getTarget();
+                    $targetValue = $elem->getTarget();
                 }
 
                 $target = $dom->createElement('target', $targetValue);

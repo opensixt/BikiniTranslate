@@ -29,7 +29,7 @@
 
             {% for item in searchResults %}
                 <tr>
-                    <td>{{ item.resource.name }} ({{ item.locale.locale }}):<br/><br/> {{ item.target.0.target }} </td>
+                    <td>{{ item.resource.name }} ({{ item.locale.locale }}):<br/><br/> {{ item.target }} </td>
                     <td>{{ form_widget(form['text_' ~ item.id]) }}</td>
                 </tr>
             {% else %}

@@ -21,7 +21,7 @@ class TextRepository extends EntityRepository
     const FIELD_ID            = 't.id';
     const FIELD_HASH          = 't.hash';
     const FIELD_SOURCE        = 't.source';
-    const FIELD_TARGET        = 'tr.target';
+    const FIELD_TARGET        = 't.target';
     const FIELD_REVISION_ID   = 't.textRevisionId';
     const FIELD_RESOURCE      = 't.resourceId';
     const FIELD_LOCALE        = 't.localeId';
@@ -195,7 +195,7 @@ class TextRepository extends EntityRepository
     public function getMissingTranslations()
     {
         $query = $this->createQueryBuilder('t')
-            ->select('t, l, r, u, tr')
+            ->select('t, l, r, u')
             ->leftJoin('t.locale', 'l')
             ->leftJoin('t.resource', 'r')
             ->leftJoin('t.user', 'u');
@@ -213,7 +213,7 @@ class TextRepository extends EntityRepository
     public function getSearchResults()
     {
         $query = $this->createQueryBuilder('t')
-            ->select('t, r, l, u, tr')
+            ->select('t, r, l, u')
             ->leftJoin('t.resource', 'r')
             ->leftJoin('t.locale', 'l')
             ->leftJoin('t.user', 'u');
@@ -303,7 +303,7 @@ class TextRepository extends EntityRepository
             $this->setTask(self::TASK_ALL_CONTENT_BY_RES);
 
             $query = $this->createQueryBuilder('t')
-                ->select('t, r, tr')
+                ->select('t, r')
                 ->leftJoin('t.resource', 'r');
 
             $this->setQueryParameters($query);
@@ -330,7 +330,7 @@ class TextRepository extends EntityRepository
             $this->setLocales(array($locale));
 
             $query = $this->createQueryBuilder('t')
-                ->select('t, r, tr')
+                ->select('t, r')
                 ->leftJoin('t.resource', 'r');
 
             $this->setQueryParameters($query);
@@ -373,12 +373,12 @@ class TextRepository extends EntityRepository
                         if ($src->getHash() == $txt->getHash()) {
                             if ($src->getResourceId() == $txt->getResourceId()
                                     && $domainType == self::DOMAIN_TYPE_LANGUAGE) {
-                                $translations[$txtId] = $src->getCurrentTarget()->getTarget();
+                                $translations[$txtId] = $src->getTarget();
                                 break;
                             }
                             if ($src->getLocaleId() == $txt->getLocaleId()
                                     && $domainType == self::DOMAIN_TYPE_RESOURCE) {
-                                $translations[$txtId] = $src->getCurrentTarget()->getTarget();
+                                $translations[$txtId] = $src->getTarget();
                                 break;
                             }
                         }
@@ -415,8 +415,7 @@ class TextRepository extends EntityRepository
 
         if (count($hashes) && count($locales)) {
             $query = $this->createQueryBuilder('t')
-                ->select('t, tr')
-                ->leftJoin('t.target', 'tr')
+                ->select('t')
                 ->where(self::FIELD_HASH . ' IN (?1)')
                 ->andWhere(self::FIELD_LOCALE . ' IN (?2)')
                 ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
@@ -429,9 +428,6 @@ class TextRepository extends EntityRepository
                 $query->andWhere(self::FIELD_RESOURCE . ' IN  (?4)')
                     ->setParameter(4, $resources);
             }
-
-            // needed to access last text revision via target.0.target or $ele['target'][0]['target']
-            $query->addOrderBy('tr.id', 'DESC');
 
             $messages = $query->getQuery()->getResult();
         }
@@ -453,9 +449,8 @@ class TextRepository extends EntityRepository
 
         if (strlen($hash) && $locale) {
             $query = $this->createQueryBuilder('t')
-                ->select('t, r, tr')
+                ->select('t, r')
                 ->leftJoin('t.resource', 'r')
-                ->join('t.target', 'tr')
                 ->where(self::FIELD_HASH . ' = ?1')
                 ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
                 ->andWhere(self::FIELD_LOCALE . ' = ?2')
@@ -505,7 +500,7 @@ class TextRepository extends EntityRepository
                 $message = '';
                 foreach ($textsLang as $textLang) {
                     if ($text->getHash() == $textLang->getHash()) {
-                        $message = $textLang->getCurrentTarget()->getTarget();
+                        $message = $textLang->getTarget();
                         break;
                     }
                 }
@@ -528,7 +523,7 @@ class TextRepository extends EntityRepository
 
         switch ($this->task) {
             case self::TASK_SEARCH_PHRASE_BY_LANG:
-                $query->join('t.target', 'tr', Join::WITH, "tr.target LIKE ?1")
+                $query->andWhere(self::FIELD_TARGET . ' LIKE ?1')
                     ->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
                     ->andWhere(self::FIELD_LOCALE . ' = ?3')
                     ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
@@ -543,8 +538,7 @@ class TextRepository extends EntityRepository
                 break;
             case self::TASK_ALL_CONTENT_BY_LANG:
             case self::TASK_ALL_CONTENT_BY_RES:
-                $query->join('t.target', 'tr')
-                    ->where(self::FIELD_LOCALE . ' IN (?1)')
+                $query->where(self::FIELD_LOCALE . ' IN (?1)')
                     ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                     ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
@@ -562,8 +556,7 @@ class TextRepository extends EntityRepository
 
                 break;
             case self::TASK_SEARCH_FLAGGED_TEXTS:
-                $query->join('t.target', 'tr')
-                    ->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
+                $query->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                     ->andWhere(self::TRANSLATION_TYPE . ' = ?2')
                     ->setParameter(1, $this->resources)
@@ -592,8 +585,7 @@ class TextRepository extends EntityRepository
                 break;
             case self::TASK_MISSING_TRANS_BY_LANG:
             default:
-                $query->leftJoin('t.target', 'tr')
-                    ->where(self::FIELD_RESOURCE . ' IN (?1)')
+                $query->where(self::FIELD_RESOURCE . ' IN (?1)')
                     ->andWhere(self::FIELD_LOCALE . ' = ?2')
                     ->andWhere(self::FIELD_DONTTRANSLATE . ' IS NULL OR ' . self::FIELD_DONTTRANSLATE . ' = 0')
                     ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
@@ -612,9 +604,6 @@ class TextRepository extends EntityRepository
 
                 break;
         }
-
-        // needed to access last text revision via target.0.target or $ele['target'][0]['target']
-        $query->addOrderBy('tr.id', 'DESC');
     }
 
     /**
@@ -637,7 +626,7 @@ class TextRepository extends EntityRepository
                     throw new \Exception(__METHOD__ . ': no such text id: ' . $id);
                 }
 
-                $objText->addTarget($text);
+                $objText->setTarget($text);
                 $em->persist($objText);
             }
         }
@@ -740,14 +729,14 @@ class TextRepository extends EntityRepository
 
     /**
      * @param \opensixt\BikiniTranslateBundle\Entity\TextRevision $target
-     * @return \opensixt\BikiniTranslateBundle\Entity\Text[]
+     * @return \opensixt\BikiniTranslateBundle\Entity\Text
      */
     public function findOneByTarget(TextRevision $target)
     {
         $qb = $this->createQueryBuilder('t');
         $qb ->select('t')
-            ->join('t.target', 'ta')
-            ->where('ta.id = ?1');
+            ->join('t.targets', 'tr')
+            ->where('tr.id = ?1');
         $result = $qb->getQuery()->execute(array('1' => $target->getId()));
 
         return current($result);
