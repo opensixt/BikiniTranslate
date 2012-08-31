@@ -168,7 +168,8 @@ class GroupController extends AbstractController
      */
     private function getGroupRepository()
     {
-        return $this->em->getRepository('opensixtBikiniTranslateBundle:Group');
+        return $this->em
+            ->getRepository('opensixt\BikiniTranslateBundle\Entity\Group');
     }
 
     /**
