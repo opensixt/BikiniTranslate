@@ -6,7 +6,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use opensixt\UserAdminBundle\Form\LanguageEditForm;
 use opensixt\BikiniTranslateBundle\Entity\Language;
-use opensixt\BikiniTranslateBundle\Repository\LanguageRepository as LangRepo;
 
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
@@ -166,7 +165,7 @@ class LanguageController extends AbstractController
      */
     private function getLanguageRepository()
     {
-        return $this->em->getRepository(LangRepo::ENTITY_LANGUAGE);
+        return $this->em->getRepository(Language::ENTITY_LANGUAGE);
     }
 
     /**

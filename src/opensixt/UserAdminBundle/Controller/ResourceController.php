@@ -6,7 +6,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use opensixt\UserAdminBundle\Form\ResourceEditForm;
 use opensixt\BikiniTranslateBundle\Entity\Resource;
-use opensixt\BikiniTranslateBundle\Repository\ResourceRepository as ResRepo;
 
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
@@ -166,7 +165,7 @@ class ResourceController extends AbstractController
      */
     private function getResourceRepository()
     {
-        return $this->em->getRepository(ResRepo::ENTITY_RESOURCE);
+        return $this->em->getRepository(Resource::ENTITY_RESOURCE);
     }
 
     /**

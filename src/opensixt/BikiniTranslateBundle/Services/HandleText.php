@@ -2,7 +2,7 @@
 
 namespace opensixt\BikiniTranslateBundle\Services;
 
-use opensixt\BikiniTranslateBundle\Repository\TextRepository;
+use opensixt\BikiniTranslateBundle\Entity\Text;
 
 /**
  * HandleText
@@ -47,8 +47,7 @@ abstract class HandleText
     public function __construct($doctrine)
     {
         $this->em = $doctrine->getEntityManager();
-        $this->textRepository = $this->em
-            ->getRepository(TextRepository::ENTITY_TEXT_NAME);
+        $this->textRepository = $this->em->getRepository(Text::ENTITY_TEXT);
     }
 
     /**

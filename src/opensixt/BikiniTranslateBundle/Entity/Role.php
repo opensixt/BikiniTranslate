@@ -14,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Role implements RoleInterface
 {
+    const ENTITY_ROLE  = 'opensixt\BikiniTranslateBundle\Entity\Role';
+
     /**
      * @var int $id
      *

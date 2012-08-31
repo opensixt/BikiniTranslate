@@ -17,6 +17,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Group
 {
+    const ENTITY_GROUP  = 'opensixt\BikiniTranslateBundle\Entity\Group';
+
     /**
      * @var int $id
      *

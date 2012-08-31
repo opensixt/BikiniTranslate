@@ -11,8 +11,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class LanguageRepository extends EntityRepository
 {
-    const ENTITY_LANGUAGE  = 'opensixt\BikiniTranslateBundle\Entity\Language';
-
     /**
      * @return \Doctrine\ORM\QueryBuilder
      */

@@ -2,6 +2,9 @@
 
 namespace opensixt\UserAdminBundle\Form;
 
+use opensixt\BikiniTranslateBundle\Entity\Language;
+use opensixt\BikiniTranslateBundle\Entity\Group;
+use opensixt\BikiniTranslateBundle\Entity\Role;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
@@ -24,7 +27,7 @@ class UserEditForm extends AbstractType
                     'entity',
                     array(
                         'label' => 'roles',
-                        'class' => 'opensixt\BikiniTranslateBundle\Entity\Role',
+                        'class' => Role::ENTITY_ROLE,
                         'property' => 'label',
                         'multiple' => true,
                         'expanded' => true
@@ -35,7 +38,7 @@ class UserEditForm extends AbstractType
                     'entity',
                     array(
                         'label' => 'languages',
-                        'class' => 'opensixt\BikiniTranslateBundle\Entity\Language',
+                        'class' => Language::ENTITY_LANGUAGE,
                         'property' => 'locale',
                         'multiple' => true,
                         'expanded' => true
@@ -46,7 +49,7 @@ class UserEditForm extends AbstractType
                     'entity',
                     array(
                         'label' => 'groups',
-                        'class' => 'opensixt\BikiniTranslateBundle\Entity\Group',
+                        'class' => Group::ENTITY_GROUP,
                         'property' => 'name',
                         'multiple' => true,
                         'expanded' => true

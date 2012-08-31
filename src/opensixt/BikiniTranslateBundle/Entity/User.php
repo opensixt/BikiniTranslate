@@ -25,6 +25,8 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
  */
 class User implements AdvancedUserInterface
 {
+    const ENTITY_USER  = 'opensixt\BikiniTranslateBundle\Entity\User';
+
     const ACTIVE_USER     = 1;
     const NOT_ACTIVE_USER = 0;
 

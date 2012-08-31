@@ -13,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Language
 {
+    const ENTITY_LANGUAGE  = 'opensixt\BikiniTranslateBundle\Entity\Language';
+
     /**
      * @var int $id
      *

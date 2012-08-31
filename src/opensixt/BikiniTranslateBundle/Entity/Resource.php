@@ -13,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Resource
 {
+    const ENTITY_RESOURCE  = 'opensixt\BikiniTranslateBundle\Entity\Resource';
+
     /**
      * @var int $id
      *

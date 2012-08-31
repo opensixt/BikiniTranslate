@@ -180,8 +180,7 @@ class UserController extends AbstractController
      */
     private function getUserRepository()
     {
-        return $this->em
-            ->getRepository('opensixt\BikiniTranslateBundle\Entity\User');
+        return $this->em->getRepository(User::ENTITY_USER);
     }
 
     /**

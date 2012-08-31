@@ -2,6 +2,7 @@
 
 namespace opensixt\UserAdminBundle\Form;
 
+use opensixt\BikiniTranslateBundle\Entity\Resource;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
@@ -39,7 +40,7 @@ class GroupEditForm extends AbstractType
                     'entity',
                     array(
                         'label'     => $translator->trans('resources') . ': ',
-                        'class'     => 'opensixt\BikiniTranslateBundle\Entity\Resource',
+                        'class'     => Resource::ENTITY_RESOURCE,
                         'property'  => 'name',
                         'multiple'  => true,
                         'expanded'  => true

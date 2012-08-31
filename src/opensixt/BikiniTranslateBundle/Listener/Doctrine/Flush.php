@@ -6,7 +6,7 @@ use \Doctrine\ORM\Event\PostFlushEventArgs;
 use \Doctrine\ORM\Event\OnFlushEventArgs;
 
 use \opensixt\BikiniTranslateBundle\Entity\TextRevision;
-use \opensixt\BikiniTranslateBundle\Repository\TextRepository;
+use opensixt\BikiniTranslateBundle\Entity\Text;
 
 class Flush
 {
@@ -37,7 +37,7 @@ class Flush
         $em = $args->getEntityManager();
 
         /** @var $textRepository \opensixt\BikiniTranslateBundle\Repository\TextRepository */
-        $textRepository = $em->getRepository(TextRepository::ENTITY_TEXT_NAME);
+        $textRepository = $em->getRepository(Text::ENTITY_TEXT);
 
         $changedFlag = false;
         foreach ($this->newEntities as $entity) {

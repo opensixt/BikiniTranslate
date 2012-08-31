@@ -3,9 +3,9 @@ namespace opensixt\SxTranslateBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use opensixt\BikiniTranslateBundle\Controller\AbstractController;
-use opensixt\BikiniTranslateBundle\Repository\TextRepository;
-use opensixt\BikiniTranslateBundle\Repository\ResourceRepository as ResRepo;
-use opensixt\BikiniTranslateBundle\Repository\LanguageRepository as LangRepo;
+use opensixt\BikiniTranslateBundle\Entity\Text;
+use opensixt\BikiniTranslateBundle\Entity\Resource;
+use opensixt\BikiniTranslateBundle\Entity\Language;
 
 /**
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
@@ -25,11 +25,10 @@ class ImportController extends AbstractController
      */
     public function getFromTsAction()
     {
-        $this->textRepository = $this->em
-            ->getRepository(TextRepository::ENTITY_TEXT_NAME);
+        $this->textRepository = $this->em->getRepository(Text::ENTITY_TEXT);
 
-        $langRepository = $this->em->getRepository(LangRepo::ENTITY_LANGUAGE);
-        $resRepository = $this->em->getRepository(ResRepo::ENTITY_RESOURCE);
+        $langRepository = $this->em->getRepository(Language::ENTITY_LANGUAGE);
+        $resRepository = $this->em->getRepository(Resource::ENTITY_RESOURCE);
 
         $allLanguages = array_flip($langRepository->getAllLanguages());
         $allResources = array_flip($resRepository->getAllResources());

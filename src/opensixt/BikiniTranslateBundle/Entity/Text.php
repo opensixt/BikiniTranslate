@@ -16,6 +16,8 @@ use opensixt\BikiniTranslateBundle\Entity\TextRevision;
  */
 class Text
 {
+    const ENTITY_TEXT = 'opensixt\BikiniTranslateBundle\Entity\Text';
+
     const TRANSLATION_TYPE_TEXT   = 1;
     const TRANSLATION_TYPE_FTEXT  = 2;
     const TRANSLATION_TYPE_MOBILE = 3;

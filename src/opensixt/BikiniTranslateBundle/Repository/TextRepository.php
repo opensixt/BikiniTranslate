@@ -8,6 +8,7 @@ use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 
 use opensixt\BikiniTranslateBundle\Entity\TextRevision;
 use opensixt\BikiniTranslateBundle\Entity\Text;
+use opensixt\BikiniTranslateBundle\Entity\Language;
 
 /**
  * Text Model
@@ -16,8 +17,6 @@ use opensixt\BikiniTranslateBundle\Entity\Text;
  */
 class TextRepository extends EntityRepository
 {
-    const ENTITY_TEXT_NAME  = 'opensixt\BikiniTranslateBundle\Entity\Text';
-
     const FIELD_ID            = 't.id';
     const FIELD_HASH          = 't.hash';
     const FIELD_SOURCE        = 't.source';
@@ -764,7 +763,7 @@ class TextRepository extends EntityRepository
         }
 
         $repository = $this->getEntityManager()
-            ->getRepository('opensixt\BikiniTranslateBundle\Entity\Language');
+            ->getRepository(Language::ENTITY_LANGUAGE);
 
         $langData = $repository->findBy(array('locale' => $locale));
         return $langData[0]->getId();
