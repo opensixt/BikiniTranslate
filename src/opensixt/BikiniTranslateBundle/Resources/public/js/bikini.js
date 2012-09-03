@@ -7,12 +7,14 @@ jQuery(document).ready(function($) {
         var callback = function() {
             $ele.fadeOut('slow');
         };
-
-        $ele.mouseover(function() {
-            clearTimeout($ele.data('timer'));
-        }).click(function() {
-            $ele.data('timer', setTimeout(callback, 1000));
-        }).data('timer', setTimeout(callback, 5000 + idx * 1000));
+        // turn fade off, if class contain 'permanent'
+        if ($ele.attr('class').indexOf('permanent') < 0) {
+            $ele.mouseover(function() {
+                clearTimeout($ele.data('timer'));
+            }).click(function() {
+                $ele.data('timer', setTimeout(callback, 1000));
+            }).data('timer', setTimeout(callback, 5000 + idx * 1000));
+        }
     });
 });
 
