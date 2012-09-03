@@ -11,6 +11,7 @@ services:
     abstract: true
     properties:
       request: @request
+      session: @session
       translator: @translator
       em: @doctrine.orm.entity_manager
       formFactory: @form.factory

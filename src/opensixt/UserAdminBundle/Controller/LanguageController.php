@@ -79,6 +79,12 @@ class LanguageController extends AbstractController
             $this->em->persist($language);
             $this->em->flush();
 
+            // flash success message
+            $this->session->getFlashBag()->add(
+                'notice',
+                $this->translator->trans('save_success')
+            );
+
             return $this->redirect($this->generateUrl('_admin_language', array('id' => $id)));
         }
 
@@ -121,6 +127,12 @@ class LanguageController extends AbstractController
         if ($form->isValid()) {
             $this->em->persist($language);
             $this->em->flush();
+
+            // flash success message
+            $this->session->getFlashBag()->add(
+                'notice',
+                $this->translator->trans('save_success')
+            );
 
             $this->initAclForNewLanguage($language);
 

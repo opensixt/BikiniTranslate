@@ -79,6 +79,12 @@ class ResourceController extends AbstractController
             $this->em->persist($resource);
             $this->em->flush();
 
+            // flash success message
+            $this->session->getFlashBag()->add(
+                'notice',
+                $this->translator->trans('save_success')
+            );
+
             return $this->redirect($this->generateUrl('_admin_resource', array('id' => $id)));
         }
 
@@ -121,6 +127,12 @@ class ResourceController extends AbstractController
         if ($form->isValid()) {
             $this->em->persist($resource);
             $this->em->flush();
+
+            // flash success message
+            $this->session->getFlashBag()->add(
+                'notice',
+                $this->translator->trans('save_success')
+            );
 
             $this->initAclForNewResource($resource);
 

@@ -101,6 +101,12 @@ class UserController extends AbstractController
             $this->em->persist($user);
             $this->em->flush();
 
+            // flash success message
+            $this->session->getFlashBag()->add(
+                'notice',
+                $this->translator->trans('save_success')
+            );
+
             return $this->redirect($this->generateUrl('_admin_user', array('id' => $id)));
         }
 
@@ -146,6 +152,12 @@ class UserController extends AbstractController
 
             $this->em->persist($user);
             $this->em->flush();
+
+            // flash success message
+            $this->session->getFlashBag()->add(
+                'notice',
+                $this->translator->trans('save_success')
+            );
 
             $this->userPermissions->initAclForNewUser($user);
 
