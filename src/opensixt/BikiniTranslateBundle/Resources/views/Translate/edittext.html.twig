@@ -113,7 +113,7 @@
             var text = '';
             for (var i = 0, row; row = suggestions[ids[1]][i]; i++) {
                 if (row.id == ids[2]) {
-                    text = row.target.target;
+                    text = row.target;
                     break;
                 }
             }
@@ -138,7 +138,7 @@
                 html.push('<br/>');
                 html.push('<label for="' + radio_id + '">' + row.resource.name + '</label><br/>');
                 html.push('<input type="radio" name="suggestions" id="' + radio_id + '" class="text ui-widget-content ui-corner-all" />');
-                html.push('<label for="' + radio_id + '">' +  row.target.target + '</label><br/>');
+                html.push('<label for="' + radio_id + '">' +  row.target + '</label><br/>');
             }
             html.push('</fieldset>');
 
