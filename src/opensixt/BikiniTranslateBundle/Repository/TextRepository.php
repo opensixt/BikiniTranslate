@@ -440,10 +440,10 @@ class TextRepository extends EntityRepository
      * @param string $hash md5 string
      * @param int $locale source langiage
      * @param int $resource source resource
-     * @param array $allresources available resources
+     * @param array $allResources available resources
      * @return array texts with same hash and language and with another resources
      */
-    public function getSuggestionByHashAndLanguage($hash, $locale, $resource, $allresources)
+    public function getSuggestionByHashAndLanguage($hash, $locale, $resource, $allResources)
     {
         $suggestions = array();
 
@@ -461,7 +461,7 @@ class TextRepository extends EntityRepository
                 ->setParameter(1, $hash)
                 ->setParameter(2, $locale)
                 ->setParameter(3, $resource)
-                ->setParameter(4, $allresources)
+                ->setParameter(4, $allResources)
                 ->setParameter(5, Text::TRANSLATION_TYPE_TEXT);
             $suggestions = $query->getQuery()->getArrayResult();
         }

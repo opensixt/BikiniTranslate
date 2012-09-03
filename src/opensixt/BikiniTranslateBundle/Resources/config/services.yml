@@ -145,7 +145,7 @@ services:
     opensixt.bikini_translate.sevices.exporter:
         class: %opensixt.bikini_translate.sevices.exporter.class%
         properties:
-            sourceLanguage: [%tool_language%]
+            sourceLanguage: %tool_language%
 
     opensixt.bikini_translate.menu_builder:
         class: opensixt\BikiniTranslateBundle\Menu\MenuBuilder
