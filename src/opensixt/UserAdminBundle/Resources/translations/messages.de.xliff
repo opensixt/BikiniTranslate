@@ -50,6 +50,10 @@
                 <source>user</source>
                 <target>Benutzer</target>
             </trans-unit>
+            <trans-unit id="56">
+                <source>create_user</source>
+                <target>Neuer Benutzer</target>
+            </trans-unit>
             <trans-unit id="60">
                 <source>email</source>
                 <target>Email</target>
@@ -90,6 +94,10 @@
                 <source>group</source>
                 <target>Gruppe</target>
             </trans-unit>
+            <trans-unit id="106">
+                <source>create_group</source>
+                <target>Neue Gruppe</target>
+            </trans-unit>
             <trans-unit id="110">
                 <source>description</source>
                 <target>Beschreibung</target>
@@ -108,7 +116,11 @@
             </trans-unit>
             <trans-unit id="130">
                 <source>language</source>
-                <target>Locale</target>
+                <target>Sprache</target>
+            </trans-unit>
+            <trans-unit id="131">
+                <source>create_language</source>
+                <target>Neue Sprache</target>
             </trans-unit>
             <trans-unit id="135">
                 <source>no_languages_found</source>
@@ -141,6 +153,10 @@
             <trans-unit id="170">
                 <source>resource</source>
                 <target>Ressource</target>
+            </trans-unit>
+            <trans-unit id="171">
+                <source>create_resource</source>
+                <target>Neue Ressource</target>
             </trans-unit>
             <trans-unit id="175">
                 <source>no_resources_found</source>
