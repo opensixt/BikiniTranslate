@@ -2,7 +2,7 @@
 
 namespace opensixt\BikiniTranslateBundle\Controller;
 
-use opensixt\BikiniTranslateBundle\Services\SearchString;
+use opensixt\BikiniTranslateBundle\IntermediateLayer\SearchString;
 use opensixt\BikiniTranslateBundle\Form\SearchStringForm;
 
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
@@ -20,7 +20,7 @@ class SearchStringController extends AbstractController
     /**
      * intermediate layer
      *
-     * @var \opensixt\BikiniTranslateBundle\Services\SearchString
+     * @var \opensixt\BikiniTranslateBundle\IntermediateLayer\SearchString
      */
     public $searcher;
 

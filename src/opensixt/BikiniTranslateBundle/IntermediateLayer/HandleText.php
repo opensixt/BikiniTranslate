@@ -1,6 +1,6 @@
 <?php
 
-namespace opensixt\BikiniTranslateBundle\Services;
+namespace opensixt\BikiniTranslateBundle\IntermediateLayer;
 
 use opensixt\BikiniTranslateBundle\Entity\Text;
 
@@ -120,4 +120,3 @@ abstract class HandleText
         $this->textRepository->markTextsAsDeleted($textIds);
     }
 }
-

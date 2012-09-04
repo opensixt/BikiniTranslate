@@ -11,16 +11,16 @@ parameters:
     opensixt.bikini_translate.controller.copyresource.class: opensixt\BikiniTranslateBundle\Controller\CopyResourceController
     opensixt.bikini_translate.controller.ajaxresponder.class: opensixt\BikiniTranslateBundle\Controller\AjaxResponderController
 
-    opensixt.bikini_translate.intermediate.searchstring.class: opensixt\BikiniTranslateBundle\Services\SearchString
+    opensixt.bikini_translate.intermediate.searchstring.class: opensixt\BikiniTranslateBundle\IntermediateLayer\SearchString
     opensixt.bikini_translate.intermediate.searchstring.pagination_limit: "15"
 
-    opensixt.bikini_translate.intermediate.edittext.class: opensixt\BikiniTranslateBundle\Services\EditText
+    opensixt.bikini_translate.intermediate.edittext.class: opensixt\BikiniTranslateBundle\IntermediateLayer\EditText
     opensixt.bikini_translate.intermediate.edittext.pagination_limit: "15"
 
-    opensixt.bikini_translate.intermediate.flaggedtext.class: opensixt\BikiniTranslateBundle\Services\FlaggedText
+    opensixt.bikini_translate.intermediate.flaggedtext.class: opensixt\BikiniTranslateBundle\IntermediateLayer\FlaggedText
     opensixt.bikini_translate.intermediate.flaggedtext.pagination_limit: "15"
 
-    opensixt.bikini_translate.intermediate.copydomain.class: opensixt\BikiniTranslateBundle\Services\CopyDomain
+    opensixt.bikini_translate.intermediate.copydomain.class: opensixt\BikiniTranslateBundle\IntermediateLayer\CopyDomain
 
     opensixt.bikini_translate.sevices.exporter.class: opensixt\BikiniTranslateBundle\Helpers\BikiniExport
     opensixt.bikini_translate.acl.user_permissions.class: opensixt\BikiniTranslateBundle\Acl\UserPermissions

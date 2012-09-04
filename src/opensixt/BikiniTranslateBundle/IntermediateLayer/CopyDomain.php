@@ -1,7 +1,7 @@
 <?php
-namespace opensixt\BikiniTranslateBundle\Services;
+namespace opensixt\BikiniTranslateBundle\IntermediateLayer;
 
-use opensixt\BikiniTranslateBundle\Services\HandleText;
+use opensixt\BikiniTranslateBundle\IntermediateLayer\HandleText;
 
 /**
  * CopyDomain
@@ -96,4 +96,3 @@ class CopyDomain extends HandleText
         return $translationsCount;
     }
 }
-

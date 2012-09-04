@@ -19,7 +19,7 @@ class CleanTextController extends AbstractController
     /**
      * intermediate layer
      *
-     * @var \opensixt\BikiniTranslateBundle\Services\FlaggedText
+     * @var \opensixt\BikiniTranslateBundle\IntermediateLayer\FlaggedText
      */
     public $searcher;
 

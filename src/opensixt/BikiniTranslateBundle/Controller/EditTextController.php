@@ -19,7 +19,7 @@ class EditTextController extends AbstractController
     /**
      * intermediate layer
      *
-     * @var \opensixt\BikiniTranslateBundle\Services\EditText
+     * @var \opensixt\BikiniTranslateBundle\IntermediateLayer\EditText
      */
     public $editText;
 

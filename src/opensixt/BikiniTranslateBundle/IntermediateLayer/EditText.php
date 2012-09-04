@@ -1,8 +1,8 @@
 <?php
 
-namespace opensixt\BikiniTranslateBundle\Services;
+namespace opensixt\BikiniTranslateBundle\IntermediateLayer;
 
-use opensixt\BikiniTranslateBundle\Services\HandleText;
+use opensixt\BikiniTranslateBundle\IntermediateLayer\HandleText;
 use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
 /**
@@ -141,4 +141,3 @@ class EditText extends HandleText
         // TODO: return send result or throw exception
     }
 }
-

@@ -1,7 +1,7 @@
 <?php
-namespace opensixt\BikiniTranslateBundle\Services;
+namespace opensixt\BikiniTranslateBundle\IntermediateLayer;
 
-use opensixt\BikiniTranslateBundle\Services\HandleText;
+use opensixt\BikiniTranslateBundle\IntermediateLayer\HandleText;
 use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
 /**
@@ -56,4 +56,3 @@ class FlaggedText extends HandleText
         return $data;
     }
 }
-

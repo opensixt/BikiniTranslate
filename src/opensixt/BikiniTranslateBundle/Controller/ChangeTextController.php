@@ -19,7 +19,7 @@ class ChangeTextController extends AbstractController
     /**
      * intermediate layer
      *
-     * @var \opensixt\BikiniTranslateBundle\Services\SearchString
+     * @var \opensixt\BikiniTranslateBundle\IntermediateLayer\SearchString
      */
     public $searcher;
 
