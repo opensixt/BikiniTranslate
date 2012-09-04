@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="sxTranslate_1">
+                <source>freetext.title</source>
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_2">
+                <source>freetext.text</source>
+                <target>Text</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_3">
+                <source>freetext.language</source>
+                <target>Sprache</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_4">
+                <source>freetext.save</source>
+                <target>Speichern</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_5">
+                <source>addfreetext.explanation</source>
+                <target>Hier können eigene Texte eingefügt werden, die anschließend von den Übersetzern übersetzt werden.</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>
+

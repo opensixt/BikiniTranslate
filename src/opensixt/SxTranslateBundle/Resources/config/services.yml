@@ -1,5 +1,7 @@
 parameters:
     opensixt.sx_translate.controller.import.class: opensixt\SxTranslateBundle\Controller\ImportController
+    opensixt.sx_translate.controller.freetext.class: opensixt\SxTranslateBundle\Controller\FreeTextController
+    opensixt.sx_translate.intermediate.handlefreetext.class: opensixt\SxTranslateBundle\IntermediateLayer\HandleFreeText
 
 services:
     opensixt.sx_translate.controller.import:
@@ -8,3 +10,21 @@ services:
         scope: request
         properties:
             importer: @opensixt.bikini_translate.sevices.exporter
+
+    opensixt.sx_translate.controller.freetext:
+        class: %opensixt.sx_translate.controller.freetext.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            handleFreeText: @opensixt.sx_translate.intermediate.handlefreetext
+            doctrine: @doctrine
+            toolLanguage: %tool_language%
+            commonLanguage: %common_language%
+
+
+    opensixt.sx_translate.intermediate.handlefreetext:
+        class: %opensixt.sx_translate.intermediate.handlefreetext.class%
+        properties:
+            em: @doctrine.orm.entity_manager
+            doctrine: @doctrine
+            securityContext: @security.context

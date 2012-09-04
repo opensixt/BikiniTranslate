@@ -5,3 +5,8 @@ opensixtSxTranslateBundle_homepage:
 _sxtranslate_getfromts:
     pattern: /sxtranslate/getfromts/
     defaults: { _controller: opensixt.sx_translate.controller.import:getFromTsAction}
+
+_sxfreetext_add:
+    pattern: /freetext/add/
+    defaults: { _controller: opensixt.sx_translate.controller.freetext:addfreetextAction}
+

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="sxTranslate_1">
+                <source>freetext.title</source>
+                <target>Title</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_2">
+                <source>freetext.text</source>
+                <target>Text</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_3">
+                <source>freetext.language</source>
+                <target>Language</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_4">
+                <source>freetext.save</source>
+                <target>Save</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_5">
+                <source>addfreetext.explanation</source>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
+

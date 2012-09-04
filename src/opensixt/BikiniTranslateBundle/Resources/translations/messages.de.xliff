@@ -266,6 +266,11 @@
                 <source>save_success</source>
                 <target>Die Änderungen wurden gespeichert!</target>
             </trans-unit>
+            <trans-unit id="305">
+                <source>error_empty_required_fields</source>
+                <target>Füllen Sie bitte alle Felder aus!</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>
