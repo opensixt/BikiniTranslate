@@ -58,7 +58,7 @@ class ChangeTextController extends AbstractController
                 if (count($textsToSave)) {
                     $this->searcher->updateTexts($textsToSave);
                     $this->session->getFlashBag()->add(
-                        'permanent notice',
+                        'notice',
                         $this->translator->trans('save_success')
                     );
                 }
