@@ -351,7 +351,7 @@ class Text
     /**
      * Set resourceId
      *
-     * @param string $resourceId
+     * @param int $resourceId
      */
     public function setResourceId($resourceId)
     {
@@ -361,7 +361,7 @@ class Text
     /**
      * Get resourceId
      *
-     * @return string
+     * @return int
      */
     public function getResourceId()
     {
