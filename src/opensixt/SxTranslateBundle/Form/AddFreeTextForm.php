@@ -45,11 +45,12 @@ class AddFreeTextForm extends AbstractType
                 'label'       => 'freetext.language',
                 'empty_value' => '',
                 'choices'     => $options['locales'],
-                'data'        => $options['frmLanguage'],
+                'data'        => $options['frmLanguages'],
                 'required'    => true,
+                'expanded'    => true,
+                'multiple'    => true,
             )
-        )
-        ->add('action', 'hidden');
+        );
     }
 
     /**
@@ -71,10 +72,10 @@ class AddFreeTextForm extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'headline' => '',
-            'text'     => '',
-            'locales'  => array(),
-            'frmLanguage' => 0,
+            'headline'     => '',
+            'text'         => '',
+            'locales'      => array(),
+            'frmLanguages' => array(),
         );
     }
 }

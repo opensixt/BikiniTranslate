@@ -45,17 +45,24 @@ class FreeTextController extends AbstractController
             unset($locales[$flipLocales[$this->commonLanguage]]);
         }
 
-        $frmLanguage = $this->getFieldFromRequest('locale');
+        $frmLanguages = $this->getFieldFromRequest('locale');
         $frmTitle = $this->getFieldFromRequest('headline');
         $frmText = $this->getFieldFromRequest('text');
 
-        if (!empty($frmLanguage) && empty($locales[$frmLanguage])) {
-            $frmLanguage = 0;
+        // unset all unavailable locales
+        if (!empty($frmLanguages)) {
+            for ($i = 0; $i < count($frmLanguages); $i++) {
+                if (empty($locales[$frmLanguages[$i]])) {
+                    unset($frmLanguages[$i]);
+                }
+            }
+        } else {
+            $frmLanguages = array();
         }
 
         // Update texts with entered values
         if ($this->request->getMethod() == 'POST') {
-            if (!empty($frmLanguage) && !empty($frmTitle) && !empty($frmText)) {
+            if (count($frmLanguages) && !empty($frmTitle) && !empty($frmText)) {
 
                 $toolLanguageId = $this->doctrine
                     ->getRepository(Language::ENTITY_LANGUAGE)
@@ -75,11 +82,14 @@ class FreeTextController extends AbstractController
                     '',
                     $commonLanguageId
                 );
-                $this->handleFreeText->addFreeText(
-                    $frmTitle,
-                    '',
-                    $frmLanguage
-                );
+
+                foreach ($frmLanguages as $frmLanguage) {
+                    $this->handleFreeText->addFreeText(
+                        $frmTitle,
+                        '',
+                        $frmLanguage
+                    );
+                }
 
                 $this->session->getFlashBag()->add(
                     'notice',
@@ -98,10 +108,10 @@ class FreeTextController extends AbstractController
                 new AddFreeTextForm(),
                 null,
                 array(
-                    'headline' => $frmTitle,
-                    'text' => $frmText,
-                    'locales'  => $locales,
-                    'frmLanguage' => $frmLanguage,
+                    'headline'     => $frmTitle,
+                    'text'         => $frmText,
+                    'locales'      => $locales,
+                    'frmLanguages' => $frmLanguages,
                 )
             );
 
