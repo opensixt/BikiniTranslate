@@ -141,3 +141,4 @@ class EditText extends HandleText
         // TODO: return send result or throw exception
     }
 }
+

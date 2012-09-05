@@ -56,3 +56,4 @@ class FlaggedText extends HandleText
         return $data;
     }
 }
+

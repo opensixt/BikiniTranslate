@@ -96,3 +96,4 @@ class CopyDomain extends HandleText
         return $translationsCount;
     }
 }
+

@@ -90,3 +90,4 @@ class SearchString extends HandleText
         return $data;
     }
 }
+
