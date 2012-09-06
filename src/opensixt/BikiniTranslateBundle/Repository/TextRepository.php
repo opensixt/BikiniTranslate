@@ -2,6 +2,7 @@
 
 namespace opensixt\BikiniTranslateBundle\Repository;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
@@ -411,11 +412,11 @@ class TextRepository extends EntityRepository
      * @param SlidingPagination $texts
      * @param array $locales
      * @param array $resources
-     * @return array
+     * @return ArrayCollection
      */
     protected function getMessagesByLanguage(/*SlidingPagination*/ $texts, array $locales, array $resources = array())
     {
-        $messages = array();
+        $messages = new ArrayCollection;
         $hashes = $this->getHashes($texts);
 
         $query = $this->createQueryBuilder('t')
