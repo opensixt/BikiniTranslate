@@ -26,6 +26,18 @@
                 <source>editfreetext.explanation</source>
                 <target>Please translate the following texts.</target>
             </trans-unit>
+            <trans-unit id="sxTranslate_7">
+                <source>menu.freetext</source>
+                <target>Freetexts</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_8">
+                <source>menu.addfreetext</source>
+                <target>Add</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_9">
+                <source>menu.editfreetext</source>
+                <target>Edit</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

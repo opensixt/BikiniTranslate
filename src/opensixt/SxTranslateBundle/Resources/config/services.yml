@@ -41,3 +41,12 @@ services:
             paginator: @knp_paginator
             paginationLimit: %opensixt.sx_translate.controller.editfreetext.pagination_limit%
             revisionControlMode: %text_revision_control%
+
+    opensixt.sx_translate.event_listener.menu_configure:
+        class: opensixt\SxTranslateBundle\EventListener\ConfigureMenuListener
+        properties:
+            securityContext: @security.context
+            translator: @translator
+        tags:
+            - { name: kernel.event_listener, event: opensixt_bikini_translate.menu_configure, method: onMenuConfigure }
+

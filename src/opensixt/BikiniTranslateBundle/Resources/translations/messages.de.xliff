@@ -6,10 +6,6 @@
                 <source>date_format</source>
                 <target>d.m.Y</target>
             </trans-unit>
-            <trans-unit id="2">
-                <source>mnu_translate</source>
-                <target>Übersetzen</target>
-            </trans-unit>
             <trans-unit id="5">
                 <source>translation_tool</source>
                 <target>Translation Tool</target>
@@ -37,14 +33,6 @@
             <trans-unit id="35">
                 <source>save_locale</source>
                 <target>Ok</target>
-            </trans-unit>
-            <trans-unit id="40">
-                <source>mnu_search</source>
-                <target>Suchen</target>
-            </trans-unit>
-            <trans-unit id="45">
-                <source>mnu_change</source>
-                <target>Ändern</target>
             </trans-unit>
             <trans-unit id="50">
                 <source>save</source>
@@ -90,10 +78,6 @@
                 <source>submit_page</source>
                 <target>Ok</target>
             </trans-unit>
-            <trans-unit id="105">
-                <source>mnu_copylanguage</source>
-                <target>Sprachinhalte kopieren</target>
-            </trans-unit>
             <trans-unit id="110">
                 <source>copy_lang_content_from</source>
                 <target>Kopiere die Inhalte der Sprache</target>
@@ -110,10 +94,6 @@
                 <source>copy_nothing</source>
                 <target>Keine Inhalte zum Kopieren gefunden.</target>
             </trans-unit>
-            <trans-unit id="130">
-                <source>mnu_copyresource</source>
-                <target>Ressourceinhalte kopieren</target>
-            </trans-unit>
             <trans-unit id="135">
                 <source>copy_res_content_from</source>
                 <target>Kopiere die Inhalte des Moduls</target>
@@ -129,10 +109,6 @@
             <trans-unit id="150">
                 <source>copy_res_success %count%</source>
                 <target>Ressourceinhalte erfolgreich kopiert. (%count% Datensätze aktualisiert)</target>
-            </trans-unit>
-            <trans-unit id="155">
-                <source>mnu_cleantext</source>
-                <target>Löschen veralteter Texte</target>
             </trans-unit>
             <trans-unit id="160">
                 <source>cleantext_explanation</source>
@@ -173,10 +149,6 @@
             <trans-unit id="210">
                 <source>cleantext_text</source>
                 <target>Text</target>
-            </trans-unit>
-            <trans-unit id="215">
-                <source>mnu_releasetext</source>
-                <target>Übersetzungen freischalten</target>
             </trans-unit>
             <trans-unit id="220">
                 <source>releasetext_explanation</source>
