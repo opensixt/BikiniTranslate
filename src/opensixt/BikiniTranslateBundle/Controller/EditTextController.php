@@ -35,18 +35,11 @@ class EditTextController extends AbstractController
      */
     public function edittextAction($locale, $page = 1)
     {
-        // if $locale is not set, redirect to setlocale action
-        if (!$locale || $locale == 'empty') {
-            // store an attribute for reuse during a later user request
-            $this->session->set('targetRoute', '_translate_edittext');
-            return $this->redirect($this->generateUrl('_translate_setlocale'));
-        } else {
-            // get language id with locale
-            $userLang = array_flip($this->getUserLocales());
-            $languageId = isset($userLang[$locale]) ? $userLang[$locale] : 0;
-        }
+        $languageId = $this->getLanguageId($locale);
         if (!$languageId) {
+            // save current ruote in session (for comeback)
             $this->session->set('targetRoute', '_translate_edittext');
+            // if $locale is not set, redirect to setlocale action
             return $this->redirect($this->generateUrl('_translate_setlocale'));
         }
 

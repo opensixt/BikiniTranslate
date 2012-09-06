@@ -236,5 +236,23 @@ abstract class AbstractController
 
         return $ids;
     }
+
+    /**
+     * If $locale is not set, redirect to route _translate_setlocale
+     * else return languageId
+     *
+     * @param string $locale
+     * @return int
+     */
+    protected function getLanguageId($locale)
+    {
+        $languageId = 0;
+        if ($locale && $locale != 'empty') {
+            // get language id by locale
+            $userLang = array_flip($this->getUserLocales());
+            $languageId = isset($userLang[$locale]) ? $userLang[$locale] : 0;
+        }
+        return $languageId;
+    }
 }
 
