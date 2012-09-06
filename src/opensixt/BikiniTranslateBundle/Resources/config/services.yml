@@ -23,6 +23,8 @@ parameters:
     opensixt.bikini_translate.intermediate.copydomain.class: opensixt\BikiniTranslateBundle\IntermediateLayer\CopyDomain
 
     opensixt.bikini_translate.sevices.exporter.class: opensixt\BikiniTranslateBundle\Helpers\BikiniExport
+    opensixt.bikini_translate.sevices.flash.class: opensixt\BikiniTranslateBundle\Helpers\BikiniFlash
+
     opensixt.bikini_translate.acl.user_permissions.class: opensixt\BikiniTranslateBundle\Acl\UserPermissions
     opensixt.bikini_translate.listener.doctrine.flush.class: opensixt\BikiniTranslateBundle\Listener\Doctrine\Flush
 
@@ -41,6 +43,7 @@ services:
             aclProvider: @security.acl.provider
             router: @router
             toolLanguage: %tool_language%
+            bikiniFlash: @opensixt.bikini_translate.sevices.flash
 
     opensixt.bikini_translate.controller.edittext:
         class: %opensixt.bikini_translate.controller.edittext.class%
@@ -146,6 +149,12 @@ services:
         class: %opensixt.bikini_translate.sevices.exporter.class%
         properties:
             sourceLanguage: %tool_language%
+
+    opensixt.bikini_translate.sevices.flash:
+        class: %opensixt.bikini_translate.sevices.flash.class%
+        properties:
+            session: @session
+            translator: @translator
 
     opensixt.bikini_translate.menu_builder:
         class: opensixt\BikiniTranslateBundle\Menu\MenuBuilder

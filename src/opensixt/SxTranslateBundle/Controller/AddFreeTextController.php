@@ -90,16 +90,9 @@ class AddFreeTextController extends AbstractController
                         $frmLanguage
                     );
                 }
-
-                $this->session->getFlashBag()->add(
-                    'notice',
-                    $this->translator->trans('save_success')
-                );
+                $this->bikiniFlash->successSave();
             } else {
-                $this->session->getFlashBag()->add(
-                    'error',
-                    $this->translator->trans('error_empty_required_fields')
-                );
+                $this->bikiniFlash->errorEmptyRequiredFields();
             }
         }
 

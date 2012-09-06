@@ -40,6 +40,9 @@ abstract class AbstractController
     /** @var string */
     public $toolLanguage;
 
+    /** @var \opensixt\BikiniTranslateBundle\Helpers\BikiniFlash */
+    public $bikiniFlash;
+
     /**
      * @param string $url
      * @param int $status

@@ -57,10 +57,7 @@ class ChangeTextController extends AbstractController
                 );
                 if (count($textsToSave)) {
                     $this->searcher->updateTexts($textsToSave);
-                    $this->session->getFlashBag()->add(
-                        'notice',
-                        $this->translator->trans('save_success')
-                    );
+                    $this->bikiniFlash->successSave();
                 }
             }
         }

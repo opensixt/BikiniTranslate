@@ -28,6 +28,9 @@ abstract class AbstractController
     /** @var \Symfony\Component\Security\Core\SecurityContext */
     public $securityContext;
 
+    /** @var \opensixt\BikiniTranslateBundle\Helpers\BikiniFlash */
+    public $bikiniFlash;
+
     /** @var \Symfony\Bundle\FrameworkBundle\Routing\Router */
     public $router;
 

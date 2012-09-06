@@ -56,10 +56,7 @@ class ReleaseTextController extends AbstractController
                 );
                 if (count($textsToRelease)) {
                     $this->searcher->releaseTexts(array_keys($textsToRelease));
-                    $this->session->getFlashBag()->add(
-                        'notice',
-                        $this->translator->trans('save_success')
-                    );
+                    $this->bikiniFlash->successSave();
                 }
             }
         }

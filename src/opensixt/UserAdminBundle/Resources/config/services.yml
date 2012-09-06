@@ -20,6 +20,7 @@ services:
       securityContext: @security.context
       aclProvider: @security.acl.provider
       router: @router
+      bikiniFlash: @opensixt.bikini_translate.sevices.flash
 
   opensixt.user_admin.controller.user:
     class: %opensixt.user_admin.controller.user.class%

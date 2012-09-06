@@ -62,10 +62,7 @@ class EditFreeTextController extends AbstractController
             );
             if (count($textsToSave)) {
                 $this->handleFreeText->updateTexts($textsToSave);
-                $this->session->getFlashBag()->add(
-                    'notice',
-                    $this->translator->trans('save_success')
-                );
+                $this->bikiniFlash->successSave();
             }
         }
 
