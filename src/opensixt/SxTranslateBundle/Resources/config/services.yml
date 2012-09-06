@@ -29,7 +29,6 @@ services:
             securityContext: @security.context
             paginator: @knp_paginator
             paginationLimit: %opensixt.sx_translate.controller.editfreetext.pagination_limit%
-            revisionControlMode: %text_revision_control%
 
     opensixt.sx_translate.event_listener.menu_configure:
         class: opensixt\SxTranslateBundle\EventListener\ConfigureMenuListener

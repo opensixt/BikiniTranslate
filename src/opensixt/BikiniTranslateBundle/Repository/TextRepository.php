@@ -62,9 +62,6 @@ class TextRepository extends EntityRepository
     /** @var int */
     private $commonLanguageId;
 
-    /** @var string */
-    private $textRevisionControl;
-
     /** @var Datetime */
     private $expiryDate;
 
@@ -126,15 +123,6 @@ class TextRepository extends EntityRepository
     public function setCommonLanguageId($id)
     {
         $this->commonLanguageId = $id;
-    }
-
-    /**
-     *
-     * @param string $textRevisionControl
-     */
-    public function setTextRevisionControl($textRevisionControl)
-    {
-        $this->textRevisionControl = $textRevisionControl;
     }
 
     /**

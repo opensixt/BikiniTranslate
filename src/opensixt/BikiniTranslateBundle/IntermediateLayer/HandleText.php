@@ -36,9 +36,6 @@ abstract class HandleText
     /** @var int */
     public $paginationLimit;
 
-    /** @var string */
-    public $revisionControlMode;
-
     /** @var \Knp\Component\Pager\Paginator */
     public $paginator;
 
@@ -93,14 +90,6 @@ abstract class HandleText
      */
     public function updateTexts(array $texts)
     {
-        // Exception
-        if (!isset($this->revisionControlMode)) {
-            throw new \Exception(
-                __METHOD__ . ': revisionControlMode is not set. Please set text_revision_control in parameters.yml !'
-            );
-        }
-        $this->textRepository->setTextRevisionControl($this->revisionControlMode);
-
         $this->textRepository->updateTexts($texts);
     }
 

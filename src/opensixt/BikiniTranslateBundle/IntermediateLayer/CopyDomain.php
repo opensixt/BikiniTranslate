@@ -30,19 +30,12 @@ class CopyDomain extends HandleText
      */
     public function copyLanguage($from, $to, $resources)
     {
-        // Exception
-        if (!isset($this->revisionControlMode)) {
-            throw new \Exception(
-                __METHOD__ . ': revisionControlMode is not set. Please set text_revision_control in parameters.yml !'
-            );
-        }
         if (!isset($this->commonLanguage)) {
             throw new \Exception(
                 __METHOD__ . ': _commonLanguage is not set. Please set common_language in parameters.yml !'
             );
         }
 
-        $this->textRepository->setTextRevisionControl($this->revisionControlMode);
         $this->textRepository->setCommonLanguage($this->commonLanguage);
         $this->textRepository->setCommonLanguageId($this->commonLanguageId);
 
@@ -65,12 +58,6 @@ class CopyDomain extends HandleText
      */
     public function copyResource($from, $to, $resources)
     {
-        // Exception
-        if (!isset($this->revisionControlMode)) {
-            throw new \Exception(
-                __METHOD__ . ': revisionControlMode is not set. Please set text_revision_control in parameters.yml !'
-            );
-        }
         if (!isset($this->commonLanguage)) {
             throw new \Exception(
                 __METHOD__ . ': _commonLanguage is not set. Please set common_language in parameters.yml !'
@@ -82,7 +69,6 @@ class CopyDomain extends HandleText
             );
         }
 
-        $this->textRepository->setTextRevisionControl($this->revisionControlMode);
         $this->textRepository->setCommonLanguage($this->commonLanguage);
         $this->textRepository->setCommonLanguageId($this->commonLanguageId);
         $this->textRepository->setResources($resources);
