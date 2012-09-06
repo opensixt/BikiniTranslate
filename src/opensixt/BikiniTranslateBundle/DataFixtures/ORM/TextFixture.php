@@ -17,7 +17,7 @@ class TextFixture extends AbstractFixture implements OrderedFixtureInterface
         // first text
         $text = new Text;
         $text->setSource('Hallo Welt');
-        $text->setResource($manager->merge($this->getReference('res-dummy')));
+        $text->setResource($manager->merge($this->getReference('res-default')));
         $text->setLocale($manager->merge($this->getReference('language-en_GB')));
         $text->setUser($manager->merge($this->getReference('users-user')));
         $text->setTarget('Hello world');
@@ -28,7 +28,7 @@ class TextFixture extends AbstractFixture implements OrderedFixtureInterface
         // second text
         $text2 = new Text;
         $text2->setSource('Hallo Welt2');
-        $text2->setResource($manager->merge($this->getReference('res-dummy')));
+        $text2->setResource($manager->merge($this->getReference('res-default')));
         $text2->setLocale($manager->merge($this->getReference('language-en_GB')));
         $text2->setUser($manager->merge($this->getReference('users-user')));
         $text2->setTarget('Hello world2');

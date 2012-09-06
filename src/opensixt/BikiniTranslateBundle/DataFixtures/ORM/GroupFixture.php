@@ -15,14 +15,14 @@ class GroupFixture extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $dummygroup = new Group;
-        $dummygroup->setName('Dummygroup');
-        $dummygroup->setDescription('Just a dummy group');
-        $dummygroup->setResources(array($manager->merge($this->getReference('res-dummy'))));
+        $dummygroup->setName('Default');
+        $dummygroup->setDescription('Just a default group');
+        $dummygroup->setResources(array($manager->merge($this->getReference('res-default'))));
 
         $manager->persist($dummygroup);
         $manager->flush();
 
-        $this->addReference('groups-dummy', $dummygroup);
+        $this->addReference('groups-default', $dummygroup);
 
         $admingroup = new Group;
         $admingroup->setName('Admingroup');

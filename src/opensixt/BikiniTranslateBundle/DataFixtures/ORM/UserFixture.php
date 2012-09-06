@@ -47,7 +47,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setIsactive(User::ACTIVE_USER);
         $user->addUserRole($manager->merge($this->getReference('role-3')));
         $user->setUserLanguages(array($manager->merge($this->getReference('language-de_DE'))));
-        $user->setUserGroups(array($manager->merge($this->getReference('groups-dummy'))));
+        $user->setUserGroups(array($manager->merge($this->getReference('groups-default'))));
 
         $manager->persist($user);
 

@@ -15,13 +15,13 @@ class ResourceFixture extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $res = new Resource;
-        $res->setName('Dummyres');
-        $res->setDescription('Just a dummy resource');
+        $res->setName('Default');
+        $res->setDescription('Just a default resource');
         $manager->persist($res);
 
         $manager->flush();
 
-        $this->addReference('res-dummy', $res);
+        $this->addReference('res-default', $res);
 
         $adminres = new Resource;
         $adminres->setName('Adminres');

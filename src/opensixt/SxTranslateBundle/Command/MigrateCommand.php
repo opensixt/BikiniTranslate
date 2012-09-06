@@ -81,7 +81,15 @@ class MigrateCommand extends ContainerAwareCommand
         $this->role['user'] = $userRole;
 
         // default group
+        $resourceDefault = $this->getResourceDefault();
+        $manager->persist($resourceDefault);
+        $manager->flush();
+
+        $this->res['default'] = $resourceDefault;
+
+        // default group
         $groupDefault = $this->getGroupDefault();
+        $groupDefault->setResources(array($resourceDefault));
         $manager->persist($groupDefault);
         $manager->flush();
 
@@ -330,15 +338,17 @@ class MigrateCommand extends ContainerAwareCommand
     /**
      * @return \opensixt\BikiniTranslateBundle\Entity\Group
      */
+    protected function getResourceDefault()
+    {
+        return $this->getResource('Default', 'from initial import');
+    }
+
+    /**
+     * @return \opensixt\BikiniTranslateBundle\Entity\Group
+     */
     protected function getGroupDefault()
     {
-        $group = new Group;
-
-        $group->setName('Default group');
-        $group->setDescription('from initial import');
-        $group->setResources($this->res);
-
-        return $group;
+        return $this->getGroup('Default', 'from initial import');
     }
 
     /**
