@@ -31,10 +31,17 @@ class HandleFreeText extends HandleText
     {
         $ftext = new Text;
 
-        $ftext->setResource(
-            $this->doctrine->getRepository(Resource::ENTITY_RESOURCE)
-                ->findOneByName('Default')
-        );
+        $defaultResource = $this->doctrine
+            ->getRepository(Resource::ENTITY_RESOURCE)
+                ->findOneByName('Default');
+
+        if (!$defaultResource) {
+            throw new \Exception(
+                __METHOD__ . ': resource "Default" not found!'
+            );
+        }
+
+        $ftext->setResource($defaultResource);
 
         $ftext->setLocale(
             $this->em->find(
@@ -67,8 +74,18 @@ class HandleFreeText extends HandleText
      */
     public function getMissingTranslations($page, $languageId)
     {
-        $resourceId = $this->doctrine->getRepository(Resource::ENTITY_RESOURCE)
-            ->findOneByName('Default')->getId();
+
+        $defaultResource = $this->doctrine
+            ->getRepository(Resource::ENTITY_RESOURCE)
+                ->findOneByName('Default');
+
+        if (!$defaultResource) {
+            throw new \Exception(
+                __METHOD__ . ': resource "Default" not found!'
+            );
+        }
+
+        $resourceId = $defaultResource->getId();
         $this->textRepository->init(
             TextRepository::TASK_MISSING_TRANS_BY_LANG,
             $languageId,
