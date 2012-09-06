@@ -1,7 +1,6 @@
 parameters:
     opensixt.sx_translate.controller.import.class: opensixt\SxTranslateBundle\Controller\ImportController
-    opensixt.sx_translate.controller.addfreetext.class: opensixt\SxTranslateBundle\Controller\AddFreeTextController
-    opensixt.sx_translate.controller.editfreetext.class: opensixt\SxTranslateBundle\Controller\EditFreeTextController
+    opensixt.sx_translate.controller.freetext.class: opensixt\SxTranslateBundle\Controller\FreeTextController
 
     opensixt.sx_translate.intermediate.handlefreetext.class: opensixt\SxTranslateBundle\IntermediateLayer\HandleFreeText
     opensixt.sx_translate.controller.editfreetext.pagination_limit: "15"
@@ -14,24 +13,14 @@ services:
         properties:
             importer: @opensixt.bikini_translate.sevices.exporter
 
-    opensixt.sx_translate.controller.addfreetext:
-        class: %opensixt.sx_translate.controller.addfreetext.class%
+    opensixt.sx_translate.controller.freetext:
+        class: %opensixt.sx_translate.controller.freetext.class%
         parent: opensixt.bikini_translate.controller.abstract
         scope: request
         properties:
             handleFreeText: @opensixt.sx_translate.intermediate.handlefreetext
             doctrine: @doctrine
             commonLanguage: %common_language%
-
-    opensixt.sx_translate.controller.editfreetext:
-        class: %opensixt.sx_translate.controller.editfreetext.class%
-        parent: opensixt.bikini_translate.controller.abstract
-        scope: request
-        properties:
-            handleFreeText: @opensixt.sx_translate.intermediate.handlefreetext
-            doctrine: @doctrine
-            commonLanguage: %common_language%
-
 
     opensixt.sx_translate.intermediate.handlefreetext:
         class: %opensixt.sx_translate.intermediate.handlefreetext.class%

@@ -8,9 +8,9 @@ _sxtranslate_getfromts:
 
 _sxfreetext_add:
     pattern: /freetext/add/
-    defaults: { _controller: opensixt.sx_translate.controller.addfreetext:addAction}
+    defaults: { _controller: opensixt.sx_translate.controller.freetext:addAction}
 
 _sxfreetext_edit:
     pattern: /freetext/edit/{locale}/{page}
-    defaults: { _controller: opensixt.sx_translate.controller.editfreetext:editAction, locale: 'empty', page: 1 }
+    defaults: { _controller: opensixt.sx_translate.controller.freetext:editAction, locale: 'empty', page: 1 }
 
