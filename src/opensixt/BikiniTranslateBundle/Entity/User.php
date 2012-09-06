@@ -18,10 +18,10 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
  * opensixt\BikiniTranslateBundle\Entity\User
  *
  * @ORM\Table(name="user")
- * @UniqueEntity("username")
- * @UniqueEntity("email")
  * @ORM\Entity(repositoryClass="opensixt\UserAdminBundle\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("username")
+ * @UniqueEntity("email")
  */
 class User implements AdvancedUserInterface
 {

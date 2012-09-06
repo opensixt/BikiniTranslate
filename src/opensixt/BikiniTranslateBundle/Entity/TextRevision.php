@@ -31,7 +31,7 @@ class TextRevision
     /**
      * @var text $target
      *
-     * @ORM\Column(name="target", type="text", nullable=false)
+     * @ORM\Column(name="target", type="text", nullable=true)
      */
     private $target;
 

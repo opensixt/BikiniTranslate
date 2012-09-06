@@ -17,22 +17,22 @@ use opensixt\BikiniTranslateBundle\Entity\Language;
  */
 class TextRepository extends EntityRepository
 {
-    const FIELD_ID            = 't.id';
-    const FIELD_HASH          = 't.hash';
-    const FIELD_SOURCE        = 't.source';
-    const FIELD_TARGET        = 't.target';
-    const FIELD_REVISION_ID   = 't.textRevisionId';
-    const FIELD_RESOURCE      = 't.resourceId';
-    const FIELD_LOCALE        = 't.localeId';
-    const FIELD_USER          = 't.userId';
-    const FIELD_EXPIRY_DATE   = 't.expiryDate';
-    const FIELD_DELETED_DATE  = 't.deletedDate';
-    const FIELD_RELEASED      = 't.released';
-    const FIELD_TS            = 't.translationService';
-    const FIELD_BLOCK         = 't.block';
-    const FIELD_TRANSLATE_ME  = 't.translateMe';
-    const FIELD_DONTTRANSLATE = 't.dontTranslate';
-    const TRANSLATION_TYPE    = 't.translationType';
+    const FIELD_ID               = 't.id';
+    const FIELD_HASH             = 't.hash';
+    const FIELD_SOURCE           = 't.source';
+    const FIELD_TARGET           = 't.target';
+    const FIELD_REVISION_ID      = 't.textRevisionId';
+    const FIELD_RESOURCE         = 't.resourceId';
+    const FIELD_LOCALE           = 't.localeId';
+    const FIELD_USER             = 't.userId';
+    const FIELD_EXPIRY_DATE      = 't.expiryDate';
+    const FIELD_DELETED_DATE     = 't.deletedDate';
+    const FIELD_RELEASED         = 't.released';
+    const FIELD_TS               = 't.translationService';
+    const FIELD_BLOCK            = 't.block';
+    const FIELD_TRANSLATE_ME     = 't.translateMe';
+    const FIELD_DONTTRANSLATE    = 't.dontTranslate';
+    const FIELD_TRANSLATION_TYPE = 't.translationType';
 
     const TASK_MISSING_TRANS_BY_LANG = 0;
     const TASK_SEARCH_PHRASE_BY_LANG = 1;
@@ -406,6 +406,8 @@ class TextRepository extends EntityRepository
      *
      * $resources - array of resources, - optional filter by it
      *
+     * INDEX: IDX_getMessagesResourceByLanguage, IDX_getMessagesByLanguage
+     *
      * @param SlidingPagination $texts
      * @param array $locales
      * @param array $resources
@@ -416,21 +418,23 @@ class TextRepository extends EntityRepository
         $messages = array();
         $hashes = $this->getHashes($texts);
 
+        $query = $this->createQueryBuilder('t')
+            ->select('t');
+
+        if (count($resources)) {
+            $query->andWhere(self::FIELD_RESOURCE . ' IN  (?4)')
+                ->setParameter(4, $resources);
+        }
+
         if (count($hashes) && count($locales)) {
-            $query = $this->createQueryBuilder('t')
-                ->select('t')
-                ->where(self::FIELD_HASH . ' IN (?1)')
+            $query
                 ->andWhere(self::FIELD_LOCALE . ' IN (?2)')
+                ->andWhere(self::FIELD_TRANSLATION_TYPE . ' = ?3')
                 ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
-                ->andWhere(self::TRANSLATION_TYPE . ' = ?3')
+                ->andWhere(self::FIELD_HASH . ' IN (?1)')
                 ->setParameter(1, $hashes)
                 ->setParameter(2, $locales)
                 ->setParameter(3, $this->translationType);
-
-            if (count($resources)) {
-                $query->andWhere(self::FIELD_RESOURCE . ' IN  (?4)')
-                    ->setParameter(4, $resources);
-            }
 
             $messages = $query->getQuery()->getResult();
         }
@@ -440,6 +444,8 @@ class TextRepository extends EntityRepository
 
     /**
      * Get suggegstions (translations with same hash from other resources)
+     *
+     * INDEX: IDX_getSuggestionByHashAndLanguage
      *
      * @param string $hash md5 string
      * @param int $locale source langiage
@@ -455,13 +461,13 @@ class TextRepository extends EntityRepository
             $query = $this->createQueryBuilder('t')
                 ->select('t, r')
                 ->leftJoin('t.resource', 'r')
-                ->where(self::FIELD_HASH . ' = ?1')
-                ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
-                ->andWhere(self::FIELD_LOCALE . ' = ?2')
                 ->andWhere(self::FIELD_RESOURCE . ' != ?3')
                 ->andWhere(self::FIELD_RESOURCE . ' in (?4)')
+                ->andWhere(self::FIELD_LOCALE . ' = ?2')
+                ->andWhere(self::FIELD_TRANSLATION_TYPE . ' = ?5')
                 ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
-                ->andWhere(self::TRANSLATION_TYPE . ' = ?5')
+                ->andwhere(self::FIELD_HASH . ' = ?1')
+                ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
                 ->setParameter(1, $hash)
                 ->setParameter(2, $locale)
                 ->setParameter(3, $resource)
@@ -477,8 +483,10 @@ class TextRepository extends EntityRepository
      * Get Text Id by hash, locale and resource
      * !!! ONLY for getFromTranslationService
      *
+     * INDEX: IDX_getIdByHashAndLocaleAndResource
+     *
      * @param string $hash md5 string
-     * @param int $locale source langiage
+     * @param int $locale source language
      * @param int $resource source resource
      * @return array texts with same hash and language and with another resources
      */
@@ -489,13 +497,13 @@ class TextRepository extends EntityRepository
         if (strlen($hash) && $locale && $resource) {
             $query = $this->createQueryBuilder('t')
                 ->select('t')
-                ->where(self::FIELD_HASH . ' = ?1')
-                ->andWhere(self::FIELD_LOCALE . ' = ?2')
                 ->andWhere(self::FIELD_RESOURCE . ' = ?3')
+                ->andWhere(self::FIELD_LOCALE . ' = ?2')
+                ->andWhere(self::FIELD_TRANSLATION_TYPE . ' = ?4')
+                ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
+                ->andwhere(self::FIELD_HASH . ' = ?1')
                 ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
                 ->andWhere(self::FIELD_TS . ' = 1')
-                ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
-                ->andWhere(self::TRANSLATION_TYPE . ' = ?4')
                 ->setParameter(1, $hash)
                 ->setParameter(2, $locale)
                 ->setParameter(3, $resource)
@@ -562,12 +570,12 @@ class TextRepository extends EntityRepository
 
         switch ($this->task) {
             case self::TASK_SEARCH_PHRASE_BY_LANG:
-                $query->andWhere(self::FIELD_TARGET . ' LIKE ?1')
-                    ->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
+                $query->andWhere(self::FIELD_RESOURCE . ' IN (?2)')
                     ->andWhere(self::FIELD_LOCALE . ' = ?3')
-                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_TRANSLATION_TYPE . ' = ?4')
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
-                    ->andWhere(self::TRANSLATION_TYPE . ' = ?4')
+                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_TARGET . ' LIKE ?1')
                     ->setParameter(1, $this->searchString)
                     ->setParameter(2, $this->resources)
                     ->setParameter(3, $this->locale)
@@ -577,39 +585,38 @@ class TextRepository extends EntityRepository
                 break;
             case self::TASK_ALL_CONTENT_BY_LANG:
             case self::TASK_ALL_CONTENT_BY_RES:
-                $query->where(self::FIELD_LOCALE . ' IN (?1)')
-                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
-                    ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
-                    ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
-                    ->andWhere(self::TRANSLATION_TYPE . ' = ?2')
-                    ->setParameter(1, $this->locales)
-                    ->setParameter(2, $this->translationType);
-
                 if (!empty($this->resources)) {
                     $query->andWhere(self::FIELD_RESOURCE . ' IN (?3)')
-                    ->setParameter(3, $this->resources);
+                        ->setParameter(3, $this->resources);
                 }
+
+                $query->andwhere(self::FIELD_LOCALE . ' IN (?1)')
+                    ->andWhere(self::FIELD_TRANSLATION_TYPE . ' = ?2')
+                    ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0');
+
                 if ($this->locale == $this->commonLanguageId) {
                     $query->andWhere(self::FIELD_RELEASED . ' = 1');
                 }
 
+                $query->setParameter(1, $this->locales)
+                    ->setParameter(2, $this->translationType);
+
                 break;
             case self::TASK_SEARCH_FLAGGED_TEXTS:
-                $query->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
-                    ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
-                    ->andWhere(self::TRANSLATION_TYPE . ' = ?2')
-                    ->setParameter(1, $this->resources)
-                    ->setParameter(2, $this->translationType)
-                    ->addOrderBy(self::FIELD_ID, "ASC");
-
                 if (!empty($this->locale)) {
                     $query->andWhere(self::FIELD_LOCALE . ' = ?3')
-                    ->setParameter(3, $this->locale);
+                        ->setParameter(3, $this->locale);
                 }
+
                 if (!empty($this->locales)) {
                     $query->andWhere(self::FIELD_LOCALE . ' IN (?4)')
-                    ->setParameter(4, $this->locales);
+                        ->setParameter(4, $this->locales);
                 }
+
+                $query->andWhere(self::FIELD_TRANSLATION_TYPE . ' = ?2')
+                    ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL');
 
                 if (!empty($this->expiryDate)) {
                     // expired texts
@@ -617,29 +624,32 @@ class TextRepository extends EntityRepository
                         ->setParameter(5, $this->expiryDate);
                 } else {
                     // non released texts
-                    $query->andWhere(self::FIELD_RELEASED . ' IS NULL OR ' . self::FIELD_RELEASED . ' = 0')
-                        ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL');
+                    $query->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                        ->andWhere(self::FIELD_RELEASED . ' IS NULL OR ' . self::FIELD_RELEASED . ' = 0');
                 }
+
+                $query->setParameter(1, $this->resources)
+                    ->setParameter(2, $this->translationType)
+                    ->addOrderBy(self::FIELD_ID, "ASC");
 
                 break;
             case self::TASK_MISSING_TRANS_BY_LANG:
             default:
                 $query->where(self::FIELD_RESOURCE . ' IN (?1)')
                     ->andWhere(self::FIELD_LOCALE . ' = ?2')
-                    ->andWhere(self::FIELD_DONTTRANSLATE . ' IS NULL OR ' . self::FIELD_DONTTRANSLATE . ' = 0')
-                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_TRANSLATION_TYPE . ' = ?3')
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
-                    ->andWhere(self::FIELD_RELEASED . ' = 1')
+                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
                     ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
-                    ->andWhere(self::TRANSLATION_TYPE . ' = ?3')
+                    ->andWhere(self::FIELD_RELEASED . ' = 1')
+                    ->andWhere(self::FIELD_DONTTRANSLATE . ' IS NULL OR ' . self::FIELD_DONTTRANSLATE . ' = 0')
+                    // just get the unflagged translations
+                    // 0 = open state, 1 = already sent to translation service
+                    ->andWhere(self::FIELD_TS . ' IS NULL OR ' . self::FIELD_TS . ' = 0')
                     ->setParameter(1, $this->resources)
                     ->setParameter(2, $this->locale)
                     ->setParameter(3, $this->translationType)
                     ->addOrderBy(self::FIELD_ID, "ASC");
-
-                // just get the unflagged translations
-                // 0 = open state, 1 = already sent to translation service
-                $query->andWhere(self::FIELD_TS . ' IS NULL OR ' . self::FIELD_TS . ' = 0');
 
                 break;
         }

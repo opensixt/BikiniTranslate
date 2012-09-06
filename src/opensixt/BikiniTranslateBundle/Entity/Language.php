@@ -4,12 +4,16 @@ namespace opensixt\BikiniTranslateBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * opensixt\BikiniTranslateBundle\Entity\Language
  *
  * @ORM\Table(name="language")
  * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\LanguageRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("locale")
  */
 class Language
 {
@@ -41,14 +45,17 @@ class Language
     /**
      * @var string $locale
      *
-     * @ORM\Column(name="locale", type="string", length=5, nullable=false)
+     * @Assert\NotBlank()
+     * @Assert\MinLength(limit=2)
+     *
+     * @ORM\Column(name="locale", type="string", length=5, nullable=false, unique=true)
      */
     private $locale;
 
     /**
      * @var string $description
      *
-     * @ORM\Column(name="description", type="string", length=100, nullable=false)
+     * @ORM\Column(name="description", type="string", length=100, nullable=true)
      */
     private $description;
 

@@ -2,6 +2,7 @@
 
 namespace opensixt\BikiniTranslateBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -11,9 +12,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  * opensixt\BikiniTranslateBundle\Entity\Group
  *
  * @ORM\Table(name="groups")
- * @UniqueEntity("name")
  * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\GroupRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("name")
  */
 class Group
 {
@@ -45,7 +46,10 @@ class Group
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=100, nullable=true)
+     * @Assert\NotBlank()
+     * @Assert\MinLength(limit=2)
+     *
+     * @ORM\Column(name="name", type="string", length=100, nullable=false, unique=true)
      */
     private $name;
 

@@ -2,6 +2,8 @@
 
 namespace opensixt\BikiniTranslateBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -10,7 +12,76 @@ use opensixt\BikiniTranslateBundle\Entity\TextRevision;
 /**
  * opensixt\BikiniTranslateBundle\Entity\Text
  *
- * @ORM\Table(name="text")
+ * @ORM\Table(
+ *     name="text",
+ *     indexes={
+ *         @ORM\Index(name="IDX_text_expiry_date", columns={"expiry_date"}),
+ *         @ORM\Index(name="IDX_text_translate_me", columns={"translate_me"}),
+ *         @ORM\Index(name="IDX_text_dont_translate", columns={"dont_translate"}),
+ *         @ORM\Index(name="IDX_text_translation_type", columns={"translation_type"}),
+ *
+ *         @ORM\Index(name="IDX_resource_locale_type_deleted", columns={
+ *             "resource_id", "locale_id", "translation_type", "deleted_date"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_resource_locale_transtype_deleted_expiry", columns={
+ *             "resource_id", "locale_id", "translation_type", "deleted_date", "expiry_date"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_getMessagesResourceByLanguage", columns={
+ *             "resource_id", "locale_id", "translation_type", "deleted_date", "hash"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_getMessagesByLanguage", columns={
+ *             "locale_id", "translation_type", "deleted_date", "hash"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_getSuggestionByHashAndLanguage", columns={
+ *             "resource_id", "locale_id", "translation_type", "deleted_date", "hash", "translate_me"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_getIdByHashAndLocaleAndResource", columns={
+ *             "resource_id", "locale_id", "translation_type", "deleted_date", "hash", "translate_me",
+ *             "translation_service"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_TASK_SEARCH_PHRASE_BY_LANG", columns={
+ *             "resource_id", "locale_id", "translation_type", "deleted_date", "expiry_date"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_TASK_ALL_CONTENT_BY_LANG_OR_RES", columns={
+ *             "resource_id", "locale_id", "translation_type", "deleted_date", "expiry_date", "translate_me", "released"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_TASK_ALL_CONTENT_BY_DOMAIN", columns={
+ *             "locale_id", "translation_type", "deleted_date", "expiry_date", "translate_me", "released"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_TASK_SEARCH_FLAGGED_TEXTS_LOCALE_EXPIRY", columns={
+ *             "resource_id", "locale_id", "translation_type", "deleted_date", "expiry_date", "released"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_TASK_SEARCH_FLAGGED_TEXTS_LOCALE", columns={
+ *             "resource_id", "locale_id", "translation_type", "deleted_date", "released"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_TASK_SEARCH_FLAGGED_TEXTS_EXPIRY", columns={
+ *             "resource_id", "translation_type", "deleted_date", "expiry_date", "released"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_TASK_SEARCH_FLAGGED_TEXTS", columns={
+ *             "resource_id", "translation_type", "deleted_date", "released"
+ *         }),
+ *
+ *         @ORM\Index(name="IDX_TASK_MISSING_TRANS_BY_LANG", columns={
+ *             "resource_id", "locale_id", "translation_type", "deleted_date", "expiry_date",
+ *             "translate_me", "released", "dont_translate", "translation_service"
+ *         }),
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="UNIQ_text_res_loc_hash", columns={"resource_id", "locale_id", "hash"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="opensixt\BikiniTranslateBundle\Repository\TextRepository")
  * @ORM\HasLifecycleCallbacks
  */
@@ -54,6 +125,8 @@ class Text
 
     /**
      * @var text $source
+     *
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="source", type="text", nullable=false)
      */
@@ -249,6 +322,7 @@ class Text
     }
 
     /**
+     * CAUTION: only ::setSource must set hash and only once
      * Set hash
      *
      * @param string $hash
@@ -275,8 +349,12 @@ class Text
      */
     public function setSource($source)
     {
+        // set hash once only
+        if (!$this->hash) {
+            $this->setHash(md5($source));
+        }
+
         $this->source = $source;
-        $this->setHash(md5($source));
     }
 
     /**

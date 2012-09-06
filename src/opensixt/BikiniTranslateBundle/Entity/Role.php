@@ -5,12 +5,16 @@ namespace opensixt\BikiniTranslateBundle\Entity;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * opensixt\BikiniTranslateBundle\Entity\Role
  *
  * @ORM\Table(name="role")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("name")
+ * @UniqueEntity("label")
  */
 class Role implements RoleInterface
 {
@@ -42,14 +46,14 @@ class Role implements RoleInterface
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=45, nullable=false)
+     * @ORM\Column(name="name", type="string", length=45, nullable=false, unique=true)
      */
     private $name;
 
     /**
      * @var string $label
      *
-     * @ORM\Column(name="label", type="string", length=100, nullable=false)
+     * @ORM\Column(name="label", type="string", length=100, nullable=false, unique=true)
      */
     private $label;
 
