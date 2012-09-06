@@ -19,14 +19,17 @@
         {% if translateMade is defined and translateMade == 'done' %}
             <br/>
             <br/>
-            <div class="message">
             {% if translationsCount is defined and translationsCount > 0 %}
-                {% set count = translationsCount %}
-                {% trans %}copy_lang_success %count%{% endtrans %}
+                <div class="flash permanent notice">
+                    {% set count = translationsCount %}
+                    {% trans %}copy_lang_success %count%{% endtrans %}
+                </div>
             {% else %}
-                {{ 'copy_nothing'|trans }}
+                <div class="flash permanent">
+                    {{ 'copy_nothing'|trans }}
+                </div>
             {% endif %}
-            </div>
+
         {% endif %}
 
         {{ form_rest(form) }}
