@@ -10,7 +10,7 @@ use opensixt\BikiniTranslateBundle\Entity\Language;
 /**
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
-class FreeTextController extends AbstractController
+class AddFreeTextController extends AbstractController
 {
     /**
      * intermediate layer
@@ -33,7 +33,7 @@ class FreeTextController extends AbstractController
      *
      * @return Response A Response instance
      */
-    public function addfreetextAction()
+    public function addAction()
     {
         $locales = $this->getUserLocales();
 

@@ -12,10 +12,13 @@ use opensixt\BikiniTranslateBundle\Entity\Text;
 
 abstract class HandleText
 {
-    /** @var repository */
+    /** @var Doctrine\Bundle\DoctrineBundle\Registry */
+    protected $doctrine;
+
+    /** @var opensixt\BikiniTranslateBundle\Repository\TextRepository */
     protected $textRepository;
 
-    /** @var EntityManager */
+    /** @var \Doctrine\ORM\EntityManager */
     protected $em;
 
     /** @var int */
@@ -46,6 +49,7 @@ abstract class HandleText
      */
     public function __construct($doctrine)
     {
+        $this->doctrine = $doctrine;
         $this->em = $doctrine->getEntityManager();
         $this->textRepository = $this->em->getRepository(Text::ENTITY_TEXT);
     }
@@ -120,3 +124,4 @@ abstract class HandleText
         $this->textRepository->markTextsAsDeleted($textIds);
     }
 }
+

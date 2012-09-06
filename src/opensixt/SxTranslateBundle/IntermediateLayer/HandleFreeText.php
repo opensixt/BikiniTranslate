@@ -1,9 +1,11 @@
 <?php
 namespace opensixt\SxTranslateBundle\IntermediateLayer;
 
+use opensixt\BikiniTranslateBundle\IntermediateLayer\HandleText;
 use opensixt\BikiniTranslateBundle\Entity\Text;
 use opensixt\BikiniTranslateBundle\Entity\Resource;
 use opensixt\BikiniTranslateBundle\Entity\Language;
+use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
 /**
  * Handle FreeText
@@ -11,14 +13,8 @@ use opensixt\BikiniTranslateBundle\Entity\Language;
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
-class HandleFreeText
+class HandleFreeText extends HandleText
 {
-    /** @var \Doctrine\ORM\EntityManager */
-    public $em;
-
-    /** @var Doctrine\Bundle\DoctrineBundle\Registry */
-    public $doctrine;
-
     /** @var \Symfony\Component\Security\Core\SecurityContext */
     public $securityContext;
 
@@ -60,6 +56,34 @@ class HandleFreeText
 
         $this->em->persist($ftext);
         $this->em->flush();
+    }
+
+    /**
+     * Returns search results and pagination data
+     *
+     * @param int $page
+     * @param int $locale
+     * @return Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    public function getMissingTranslations($page, $languageId)
+    {
+        $resourceId = $this->doctrine->getRepository(Resource::ENTITY_RESOURCE)
+            ->findOneByName('Default')->getId();
+        $this->textRepository->init(
+            TextRepository::TASK_MISSING_TRANS_BY_LANG,
+            $languageId,
+            $resourceId,
+            Text::TRANSLATION_TYPE_FTEXT
+        );
+
+        $query = $this->textRepository->getMissingTranslations();
+
+        if (empty($this->paginationLimit)) {
+            $this->paginationLimit = PHP_INT_MAX;
+        }
+        $data = $this->paginator->paginate($query, $page, $this->paginationLimit);
+
+        return $data;
     }
 }
 

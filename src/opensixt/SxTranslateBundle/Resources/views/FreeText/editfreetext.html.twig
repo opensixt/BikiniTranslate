@@ -1,0 +1,78 @@
+{% extends 'opensixtBikiniTranslateBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'translation_tool'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ 'translation_tool'|trans }}</h3>
+
+    <div class="textblock">{{ 'editfreetext.explanation'|trans }}</div>
+
+    <form action="{{ path('_sxfreetext_edit', {'locale':locale}) }}" method="post">
+
+    <table class="list">
+        <thead>
+            <tr>
+                <th>{{ 'source_lang'|trans }}</th>
+                <th>{{ 'translation'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in texts %}
+            <tr id="item_{{ item.id }}">
+                <td>
+                    {{ item.source }}
+                </td>
+                <td>{{ form_widget(form['text_' ~ item.id]) }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">{{ 'no_translation_found'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    {# navigation #}
+                    {{ texts.render()|raw }}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+    {% if texts is not empty %}
+        <input type="submit" value="{{ 'freetext.save'|trans }}" id="btnSaveTranslations" />
+    {% endif %}
+
+    {{ form_rest(form) }}
+
+    </form>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        // no conflict mode, use $ in here
+
+        var $buttonSaveChanges = $('#btnSaveTranslations');
+
+        $buttonSaveChanges.click(function(e) {
+            e.preventDefault();
+
+            bikiniConfirm(
+                '{{ 'confirm_text'|trans }}',
+                '{{ 'confirm_ok'|trans }}',
+                '{{ 'confirm_cancel'|trans }}',
+                function() {
+                    $buttonSaveChanges.get(0).form.submit();
+                }
+            );
+        });
+    });
+    </script>
+{% endblock %}
+

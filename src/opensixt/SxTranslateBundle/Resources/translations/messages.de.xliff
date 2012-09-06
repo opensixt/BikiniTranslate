@@ -22,6 +22,10 @@
                 <source>addfreetext.explanation</source>
                 <target>Hier können eigene Texte eingefügt werden, die anschließend von den Übersetzern übersetzt werden.</target>
             </trans-unit>
+            <trans-unit id="sxTranslate_6">
+                <source>editfreetext.explanation</source>
+                <target>Bitte übersetzen Sie folgende Texte.</target>
+            </trans-unit>
 
         </body>
     </file>

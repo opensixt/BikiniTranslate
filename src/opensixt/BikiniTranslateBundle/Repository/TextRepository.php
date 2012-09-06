@@ -67,6 +67,9 @@ class TextRepository extends EntityRepository
     /** @var Datetime */
     private $expiryDate;
 
+    /** @var int */
+    private $translationType = Text::TRANSLATION_TYPE_TEXT;
+
 
     /**
      *
@@ -154,11 +157,12 @@ class TextRepository extends EntityRepository
      * @param int $locale locale id
      * @param array $resources
      */
-    public function init($task, $locale, $resources)
+    public function init($task, $locale, $resources, $translationType = Text::TRANSLATION_TYPE_TEXT)
     {
         $this->setTask($task);
         $this->setLocale($locale);
         $this->setResources($resources);
+        $this->translationType = $translationType;
     }
 
     /**
@@ -421,7 +425,7 @@ class TextRepository extends EntityRepository
                 ->andWhere(self::TRANSLATION_TYPE . ' = ?3')
                 ->setParameter(1, $hashes)
                 ->setParameter(2, $locales)
-                ->setParameter(3, Text::TRANSLATION_TYPE_TEXT);
+                ->setParameter(3, $this->translationType);
 
             if (count($resources)) {
                 $query->andWhere(self::FIELD_RESOURCE . ' IN  (?4)')
@@ -462,7 +466,7 @@ class TextRepository extends EntityRepository
                 ->setParameter(2, $locale)
                 ->setParameter(3, $resource)
                 ->setParameter(4, $allResources)
-                ->setParameter(5, Text::TRANSLATION_TYPE_TEXT);
+                ->setParameter(5, $this->translationType);
             $suggestions = $query->getQuery()->getArrayResult();
         }
 
@@ -495,7 +499,7 @@ class TextRepository extends EntityRepository
                 ->setParameter(1, $hash)
                 ->setParameter(2, $locale)
                 ->setParameter(3, $resource)
-                ->setParameter(4, Text::TRANSLATION_TYPE_TEXT);
+                ->setParameter(4, $this->translationType);
             $result = $query->getQuery()->getOneOrNullResult();
             if (is_object($result)) {
                 $id = $result->getId();
@@ -567,7 +571,7 @@ class TextRepository extends EntityRepository
                     ->setParameter(1, $this->searchString)
                     ->setParameter(2, $this->resources)
                     ->setParameter(3, $this->locale)
-                    ->setParameter(4, Text::TRANSLATION_TYPE_TEXT)
+                    ->setParameter(4, $this->translationType)
                     ->addOrderBy(self::FIELD_ID, "ASC");
 
                 break;
@@ -579,7 +583,7 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
                     ->andWhere(self::TRANSLATION_TYPE . ' = ?2')
                     ->setParameter(1, $this->locales)
-                    ->setParameter(2, Text::TRANSLATION_TYPE_TEXT);
+                    ->setParameter(2, $this->translationType);
 
                 if (!empty($this->resources)) {
                     $query->andWhere(self::FIELD_RESOURCE . ' IN (?3)')
@@ -595,7 +599,7 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
                     ->andWhere(self::TRANSLATION_TYPE . ' = ?2')
                     ->setParameter(1, $this->resources)
-                    ->setParameter(2, Text::TRANSLATION_TYPE_TEXT)
+                    ->setParameter(2, $this->translationType)
                     ->addOrderBy(self::FIELD_ID, "ASC");
 
                 if (!empty($this->locale)) {
@@ -630,7 +634,7 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::TRANSLATION_TYPE . ' = ?3')
                     ->setParameter(1, $this->resources)
                     ->setParameter(2, $this->locale)
-                    ->setParameter(3, Text::TRANSLATION_TYPE_TEXT)
+                    ->setParameter(3, $this->translationType)
                     ->addOrderBy(self::FIELD_ID, "ASC");
 
                 // just get the unflagged translations

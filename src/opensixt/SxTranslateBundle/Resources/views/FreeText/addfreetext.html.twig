@@ -9,7 +9,7 @@
     <h3>{{ 'translation_tool'|trans }}</h3>
 
     <div class="textblock">{{ 'addfreetext.explanation'|trans }}</div>
-
+    
     <form action="{{ path('_sxfreetext_add') }}" method="post" {{ form_enctype(form) }}>
         <div class="textblock">{{ form_label(form.locale) }} {{ form_widget(form.locale) }}</div>
         <div class="textblock">{{ form_label(form.headline) }} {{ form_widget(form.headline) }}</div>
