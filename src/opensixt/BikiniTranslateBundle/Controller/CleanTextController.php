@@ -56,6 +56,10 @@ class CleanTextController extends AbstractController
                 if (count($textsToRelease)) {
                     $this->searcher->deleteTexts(array_keys($textsToRelease));
                     $this->bikiniFlash->successSave();
+                    return $this->redirectAfterSave(
+                        '_translate_cleantext',
+                        $page
+                    );
                 }
             }
         }

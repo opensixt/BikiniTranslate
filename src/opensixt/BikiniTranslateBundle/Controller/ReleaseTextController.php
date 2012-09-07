@@ -57,6 +57,10 @@ class ReleaseTextController extends AbstractController
                 if (count($textsToRelease)) {
                     $this->searcher->releaseTexts(array_keys($textsToRelease));
                     $this->bikiniFlash->successSave();
+                    return $this->redirectAfterSave(
+                        '_translate_releasetext',
+                        $page
+                    );
                 }
             }
         }

@@ -13,6 +13,8 @@ use opensixt\BikiniTranslateBundle\Entity\Language;
  */
 class FreeTextController extends AbstractController
 {
+    const ROUTE_EDIT = '_sxfreetext_edit';
+
     /**
      * intermediate layer
      *
@@ -131,7 +133,7 @@ class FreeTextController extends AbstractController
         $languageId = $this->getLanguageId($locale);
         if (!$languageId) {
             // save current ruote in session (for comeback)
-            $this->session->set('targetRoute', '_sxfreetext_edit');
+            $this->session->set('targetRoute', self::ROUTE_EDIT);
             // if $locale is not set, redirect to setlocale action
             return $this->redirect($this->generateUrl('_translate_setlocale'));
         }
@@ -147,6 +149,11 @@ class FreeTextController extends AbstractController
             if (count($textsToSave)) {
                 $this->handleFreeText->updateTexts($textsToSave);
                 $this->bikiniFlash->successSave();
+                return $this->redirectAfterSave(
+                    self::ROUTE_EDIT,
+                    $page,
+                    $locale
+                );
             }
         }
 
@@ -168,9 +175,9 @@ class FreeTextController extends AbstractController
             );
 
         $templateParam = array(
-            'form'                    => $form->createView(),
-            'texts'                   => $data,
-            'locale'                  => $locale,
+            'form'   => $form->createView(),
+            'texts'  => $data,
+            'locale' => $locale,
         );
 
         return $this->render(

@@ -16,6 +16,8 @@ use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
  */
 class EditTextController extends AbstractController
 {
+    const CURRENT_ROUTE = '_translate_edittext';
+
     /**
      * intermediate layer
      *
@@ -38,7 +40,7 @@ class EditTextController extends AbstractController
         $languageId = $this->getLanguageId($locale);
         if (!$languageId) {
             // save current ruote in session (for comeback)
-            $this->session->set('targetRoute', '_translate_edittext');
+            $this->session->set('targetRoute', self::CURRENT_ROUTE);
             // if $locale is not set, redirect to setlocale action
             return $this->redirect($this->generateUrl('_translate_setlocale'));
         }
@@ -64,6 +66,11 @@ class EditTextController extends AbstractController
                 if (count($textsToSave)) {
                     $this->editText->updateTexts($textsToSave);
                     $this->bikiniFlash->successSave();
+                    return $this->redirectAfterSave(
+                        self::CURRENT_ROUTE,
+                        $page,
+                        $locale
+                    );
                 }
             }
         }

@@ -254,5 +254,31 @@ abstract class AbstractController
         }
         return $languageId;
     }
+
+    /**
+     * Redirest to route $route with parameters $locale and $page
+     *
+     * @param string $route
+     * @param int $page
+     * @param string $locale
+     * @return mixed
+     */
+    protected function redirectAfterSave($route, $page, $locale = '')
+    {
+        $parameters = array();
+        if (strlen($locale)) {
+            $parameters['locale'] = $locale;
+        }
+        if ($page) {
+            $parameters['page'] = $page;
+        }
+
+        return $this->redirect(
+            $this->generateUrl(
+                $route,
+                $parameters
+            )
+        );
+    }
 }
 

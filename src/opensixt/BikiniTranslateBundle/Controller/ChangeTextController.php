@@ -58,6 +58,10 @@ class ChangeTextController extends AbstractController
                 if (count($textsToSave)) {
                     $this->searcher->updateTexts($textsToSave);
                     $this->bikiniFlash->successSave();
+                    return $this->redirectAfterSave(
+                        '_translate_changetext',
+                        $page
+                    );
                 }
             }
         }
