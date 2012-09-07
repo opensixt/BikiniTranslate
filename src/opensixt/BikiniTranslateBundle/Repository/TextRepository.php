@@ -594,6 +594,9 @@ class TextRepository extends EntityRepository
 
                 break;
             case self::TASK_SEARCH_FLAGGED_TEXTS:
+                $query->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
+                    ->setParameter(1, $this->resources);
+
                 if (!empty($this->locale)) {
                     $query->andWhere(self::FIELD_LOCALE . ' = ?3')
                         ->setParameter(3, $this->locale);
@@ -605,6 +608,7 @@ class TextRepository extends EntityRepository
                 }
 
                 $query->andWhere(self::FIELD_TRANSLATION_TYPE . ' = ?2')
+                    ->setParameter(2, $this->translationType)
                     ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL');
 
                 if (!empty($this->expiryDate)) {
@@ -616,10 +620,7 @@ class TextRepository extends EntityRepository
                     $query->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
                         ->andWhere(self::FIELD_RELEASED . ' IS NULL OR ' . self::FIELD_RELEASED . ' = 0');
                 }
-
-                $query->setParameter(1, $this->resources)
-                    ->setParameter(2, $this->translationType)
-                    ->addOrderBy(self::FIELD_ID, "ASC");
+                $query->addOrderBy(self::FIELD_ID, "ASC");
 
                 break;
             case self::TASK_MISSING_TRANS_BY_LANG:
