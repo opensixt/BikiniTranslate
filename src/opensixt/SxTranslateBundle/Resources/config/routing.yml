@@ -14,3 +14,7 @@ _sxfreetext_edit:
     pattern: /freetext/edit/{locale}/{page}
     defaults: { _controller: opensixt.sx_translate.controller.freetext:editAction, locale: 'empty', page: 1 }
 
+_sxfreetext_status:
+    pattern: /freetext/status/{page}
+    defaults: { _controller: opensixt.sx_translate.controller.freetext:statusAction, page: 1 }
+

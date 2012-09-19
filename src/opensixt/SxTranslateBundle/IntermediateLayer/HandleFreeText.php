@@ -21,13 +21,13 @@ class HandleFreeText extends HandleText
     /**
      * Add a new free text
      *
-     * @param string $title  headline
-     * @param string $text   text
-     * @param int    $locale free text locale
+     * @param string $title      headline
+     * @param string $text       text
+     * @param int    $languageId free text locale
      *
      * @return void
      */
-    public function addFreeText($title, $text, $locale)
+    public function addFreeText($title, $text, $languageId)
     {
         $ftext = new Text;
 
@@ -46,7 +46,7 @@ class HandleFreeText extends HandleText
         $ftext->setLocale(
             $this->em->find(
                 Language::ENTITY_LANGUAGE,
-                $locale
+                $languageId
             )
         );
         $ftext->setSource($title);
@@ -69,7 +69,7 @@ class HandleFreeText extends HandleText
      * Returns search results and pagination data
      *
      * @param int $page
-     * @param int $locale
+     * @param int $languageId
      * @return Knp\Component\Pager\Pagination\PaginationInterface
      */
     public function getMissingTranslations($page, $languageId)
@@ -100,6 +100,63 @@ class HandleFreeText extends HandleText
         }
         $data = $this->paginator->paginate($query, $page, $this->paginationLimit);
 
+        return $data;
+    }
+
+    /**
+     * Returns search results and pagination data
+     *
+     * @param int $page
+     * @param int $languageId
+     * @return Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    public function getDataByStatus($page, $languageId, $searchMode)
+    {
+        $defaultResource = $this->doctrine
+            ->getRepository(Resource::ENTITY_RESOURCE)
+                ->findOneByName('Default');
+
+        if (!$defaultResource) {
+            throw new \Exception(
+                __METHOD__ . ': resource "Default" not found!'
+            );
+        }
+
+        $resourceId = $defaultResource->getId();
+
+        $this->textRepository->init(
+            TextRepository::TASK_SEARCH_BY_TRANSLATED_STATUS,
+            $languageId,
+            $resourceId,
+            Text::TRANSLATION_TYPE_FTEXT
+        );
+
+        switch ($searchMode) {
+            case Text::TRANSLATED:
+                $this->textRepository->setTranslated(true);
+                break;
+            default:
+            case Text::NOT_TRANSLATED:
+                $this->textRepository->setTranslated(false);
+                break;
+        }
+
+        if (empty($this->locales)) {
+            $this->textRepository->setLocales($this->locales);
+        }
+
+        $query = $this->textRepository->getMissingTranslations();
+
+        if (empty($this->paginationLimit)) {
+            $this->paginationLimit = PHP_INT_MAX;
+        }
+        $data = $this->paginator->paginate($query, $page, $this->paginationLimit);
+
+        // set GET parameter for paginator links
+        $data->setParam('mode', $searchMode);
+        if (!empty($languageId)) {
+            $data->setParam('locale', $languageId);
+        }
         return $data;
     }
 }

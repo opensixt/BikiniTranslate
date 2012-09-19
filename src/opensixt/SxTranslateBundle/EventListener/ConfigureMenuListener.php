@@ -24,6 +24,7 @@ class ConfigureMenuListener
 
             $menu->addChild($this->translator->trans('menu.addfreetext'), array('route' => '_sxfreetext_add'));
             $menu->addChild($this->translator->trans('menu.editfreetext'), array('route' => '_sxfreetext_edit'));
+            $menu->addChild($this->translator->trans('menu.statusfreetext'), array('route' => '_sxfreetext_status'));
         }
     }
 }

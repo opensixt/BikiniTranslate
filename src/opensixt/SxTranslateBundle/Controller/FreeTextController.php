@@ -4,8 +4,12 @@ namespace opensixt\SxTranslateBundle\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 use opensixt\BikiniTranslateBundle\Controller\AbstractController;
+use opensixt\BikiniTranslateBundle\Entity\Text;
+
 use opensixt\SxTranslateBundle\Form\AddFreeTextForm;
 use opensixt\SxTranslateBundle\Form\EditFreeTextForm;
+use opensixt\SxTranslateBundle\Form\StatusFreeTextForm;
+
 use opensixt\BikiniTranslateBundle\Entity\Language;
 
 /**
@@ -182,6 +186,63 @@ class FreeTextController extends AbstractController
 
         return $this->render(
             'opensixtSxTranslateBundle:FreeText:editfreetext.html.twig',
+            $templateParam
+        );
+    }
+
+    /**
+     * freetext status Action
+     *
+     * @param int $page
+     * @return Response A Response instance
+     */
+    public function statusAction($page)
+    {
+        $locales = $this->getUserLocales();
+        $translator = $this->translator;
+        $mode = array(
+            Text::TRANSLATED => $translator->trans('translated'),
+            Text::NOT_TRANSLATED => $translator->trans('not_translated'),
+        );
+
+        // retrieve request parameters
+        $searchMode     = $this->getFieldFromRequest('mode');
+        $searchLanguage = $this->getFieldFromRequest('locale');
+
+        if (!empty($searchMode)) {
+            // set search parameters
+            $this->handleFreeText->setLocales(array_keys($locales));
+            // get search results
+            $results = $this->handleFreeText->getDataByStatus(
+                $page,
+                $searchLanguage,
+                $searchMode
+            );
+        }
+
+        $form = $this->formFactory
+            ->create(
+                new StatusFreeTextForm(),
+                null,
+                array(
+                    'searchLanguage' => $searchLanguage,
+                    'locales'        => $locales,
+                    'searchMode'     => $searchMode,
+                    'mode'           => $mode,
+                )
+            );
+
+        $templateParam = array(
+            'form'     => $form->createView(),
+            'mode'     => $searchMode,
+            'locale'   => $searchLanguage,
+        );
+        if (isset($results)) {
+            $templateParam['searchResults'] = $results;
+        }
+
+        return $this->render(
+            'opensixtSxTranslateBundle:FreeText:status.html.twig',
             $templateParam
         );
     }

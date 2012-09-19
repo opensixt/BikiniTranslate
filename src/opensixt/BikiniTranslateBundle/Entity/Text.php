@@ -93,6 +93,9 @@ class Text
     const TRANSLATION_TYPE_FTEXT  = 2;
     const TRANSLATION_TYPE_MOBILE = 3;
 
+    const TRANSLATED     = 1;
+    const NOT_TRANSLATED = 2;
+
     /**
      * @var int $id
      *

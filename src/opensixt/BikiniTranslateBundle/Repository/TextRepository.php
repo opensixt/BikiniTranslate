@@ -35,11 +35,12 @@ class TextRepository extends EntityRepository
     const FIELD_DONTTRANSLATE    = 't.dontTranslate';
     const FIELD_TRANSLATION_TYPE = 't.translationType';
 
-    const TASK_MISSING_TRANS_BY_LANG = 0;
-    const TASK_SEARCH_PHRASE_BY_LANG = 1;
-    const TASK_ALL_CONTENT_BY_LANG   = 2;
-    const TASK_ALL_CONTENT_BY_RES    = 3;
-    const TASK_SEARCH_FLAGGED_TEXTS  = 4;
+    const TASK_MISSING_TRANS_BY_LANG       = 0;
+    const TASK_SEARCH_PHRASE_BY_LANG       = 1;
+    const TASK_ALL_CONTENT_BY_LANG         = 2;
+    const TASK_ALL_CONTENT_BY_RES          = 3;
+    const TASK_SEARCH_FLAGGED_TEXTS        = 4;
+    const TASK_SEARCH_BY_TRANSLATED_STATUS = 5;
 
     const DOMAIN_TYPE_LANGUAGE = 1;
     const DOMAIN_TYPE_RESOURCE = 2;
@@ -68,6 +69,8 @@ class TextRepository extends EntityRepository
     /** @var int */
     private $translationType = Text::TRANSLATION_TYPE_TEXT;
 
+    /** @var boolean */
+    private $translated;
 
     /**
      *
@@ -134,9 +137,24 @@ class TextRepository extends EntityRepository
         $this->searchString = $searchString;
     }
 
+    /**
+     * Set expiryDate attribute for search
+     *
+     * @param date $date
+     */
     public function setExpiryDate($date)
     {
         $this->expiryDate = $date;
+    }
+
+    /**
+     * Set translated attribute for search
+     *
+     * @param boolean $flag
+     */
+    public function setTranslated($flag)
+    {
+        $this->translated = $flag;
     }
 
     /**
@@ -601,7 +619,6 @@ class TextRepository extends EntityRepository
                     $query->andWhere(self::FIELD_LOCALE . ' = ?3')
                         ->setParameter(3, $this->locale);
                 }
-
                 if (!empty($this->locales)) {
                     $query->andWhere(self::FIELD_LOCALE . ' IN (?4)')
                         ->setParameter(4, $this->locales);
@@ -620,6 +637,29 @@ class TextRepository extends EntityRepository
                     $query->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
                         ->andWhere(self::FIELD_RELEASED . ' IS NULL OR ' . self::FIELD_RELEASED . ' = 0');
                 }
+                $query->addOrderBy(self::FIELD_ID, "ASC");
+
+                break;
+            case self::TASK_SEARCH_BY_TRANSLATED_STATUS:
+                $query->andWhere(self::FIELD_RESOURCE . ' IN (?1)')
+                    ->setParameter(1, $this->resources);
+
+                if (!empty($this->locale)) {
+                    $query->andWhere(self::FIELD_LOCALE . ' = ?3')
+                        ->setParameter(3, $this->locale);
+                }
+                if (!empty($this->locales)) {
+                    $query->andWhere(self::FIELD_LOCALE . ' IN (?4)')
+                        ->setParameter(4, $this->locales);
+                }
+
+                $query->andWhere(self::FIELD_TRANSLATION_TYPE . ' = ?2')
+                    ->setParameter(2, $this->translationType)
+                    ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL');
+
+                $query->andWhere(self::FIELD_TRANSLATE_ME . ' = ?5')
+                    ->setParameter(5, intval(!$this->translated));
+
                 $query->addOrderBy(self::FIELD_ID, "ASC");
 
                 break;

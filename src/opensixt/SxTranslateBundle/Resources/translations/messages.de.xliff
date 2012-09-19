@@ -38,6 +38,26 @@
                 <source>menu.editfreetext</source>
                 <target>Bearbeiten</target>
             </trans-unit>
+            <trans-unit id="sxTranslate_10">
+                <source>translated</source>
+                <target>Übersetzt</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_11">
+                <source>not_translated</source>
+                <target>Nicht übersetzt</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_12">
+                <source>menu.statusfreetext</source>
+                <target>Status</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_13">
+                <source>statusfreetext.explanation</source>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_14">
+                <source>statusfreetext.status</source>
+                <target>Status</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
