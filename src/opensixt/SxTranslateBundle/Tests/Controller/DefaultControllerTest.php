@@ -19,4 +19,3 @@ class DefaultControllerTest extends WebTestCase
         */
     }
 }
-

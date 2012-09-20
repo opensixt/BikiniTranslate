@@ -94,11 +94,11 @@ class InitControllerAclCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        foreach($this->userRoutes as $route) {
+        foreach ($this->userRoutes as $route) {
             $this->initRouteAclForRole($route, 'ROLE_USER');
             $output->writeln('Configuring access for <info>ROLE_USER</info> to route <info>' . $route . '</info>');
         }
-        foreach($this->adminRoutes as $route) {
+        foreach ($this->adminRoutes as $route) {
             $this->initRouteAclForRole($route, 'ROLE_ADMIN');
             $output->writeln('Configuring access for <info>ROLE_ADMIN</info> to route <info>' . $route . '</info>');
         }
