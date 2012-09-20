@@ -54,6 +54,9 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
         mysql -uroot -p -e 'grant all on bikini.* to bikini@localhost identified by "bikini";'
         php app/console doctrine:schema:create
         php app/console doctrine:fixtures:load
+        php app/console bikinitranslate:init_controller_acl
+        php app/console assets:install web --symlink
+
     ```
 
 9.  Create a vhost, eg "bikini.dev", which points to /path/to/BikiniTranslate/web
