@@ -97,8 +97,6 @@ class MigrateCommand extends ContainerAwareCommand
 
         $this->group['default'] = $groupDefault;
 
-        $userPermissions->initAclForNew($groupDefault);
-
         // admin user
         $admin = $this->getUserAdmin();
         $manager->persist($admin);
@@ -139,6 +137,8 @@ class MigrateCommand extends ContainerAwareCommand
                     $row['user'] . '@sixt.de',
                     $this->locale[$row['locale']]
                 );
+                $manager->persist($user);
+                $manager->flush();
 
                 $usersToAcl[] = $user;
                 $this->user[$row['user']] = $user;
@@ -164,15 +164,11 @@ class MigrateCommand extends ContainerAwareCommand
                 $manager->flush();
 
                 foreach ($usersToAcl as $user) {
-                    $user_permissions->initAclForNewUser($user);
+                    $userPermissions->initAclForNewUser($user);
                 }
                 $usersToAcl = array();
 
                 gc_collect_cycles();
-
-                foreach ($texts as $text) {
-                    $userPermissions->initAclForNew($text);
-                }
             }
 
             $i++;
@@ -283,16 +279,12 @@ class MigrateCommand extends ContainerAwareCommand
                     $manager->flush();
 
                     $this->locale[$loc] = $locale;
-
-                    //$userPermissions->initAclForNew($locale);
                 }
             }
 
             $manager->flush();
 
             $this->res[$row['module']] = $res;
-
-            //$userPermissions->initAclForNew($res);
         }
     }
 
