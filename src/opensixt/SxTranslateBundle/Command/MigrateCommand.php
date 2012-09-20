@@ -142,8 +142,6 @@ class MigrateCommand extends ContainerAwareCommand
 
                 $usersToAcl[] = $user;
                 $this->user[$row['user']] = $user;
-
-                $userPermissions->initAclForNewUser($user);
             }
 
             // get the group by resource name
