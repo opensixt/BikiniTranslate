@@ -66,8 +66,8 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $client->submit(
             $form,
             array(
-                '_username' => 'bikini',
-                '_password' => 'bikini'
+                '_username' => 'admin',
+                '_password' => 'admin'
             )
         );
 
