@@ -18,6 +18,9 @@ class GroupController extends AbstractController
     /** @var int */
     public $paginationLimit;
 
+    /** @var \opensixt\BikiniTranslateBundle\AclHelper\Group */
+    public $aclHelper;
+
     /**
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
@@ -131,7 +134,7 @@ class GroupController extends AbstractController
             // flash success message
             $this->bikiniFlash->successSave();
 
-            $this->initAclForNewGroup($group);
+            $this->aclHelper->initAclForNewGroup($group);
 
             return $this->redirect($this->generateUrl('_admin_grouplist'));
         }
@@ -144,26 +147,12 @@ class GroupController extends AbstractController
 
     /**
      * @param Group $group
-     */
-    private function initAclForNewGroup(Group $group)
-    {
-        $userPermissions = $this->getContainer()->get('opensixt.bikini_translate.acl.user_permissions');
-
-        $userPermissions->initAclForNew($group);
-    }
-
-    /**
-     * @param Group $group
      * @return GroupEditForm|\Symfony\Component\Form\FormInterface
      */
     private function getGroupEditFormForGroup(Group $group = null)
     {
-        return $this
-            ->formFactory
-            ->create(
-                new GroupEditForm($this->translator),
-                $group
-            );
+        return $this->formFactory
+                    ->create(new GroupEditForm($this->translator), $group);
     }
 
     /**
