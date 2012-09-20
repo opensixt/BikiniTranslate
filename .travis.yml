@@ -16,10 +16,10 @@ before_script:
   - pyrus install pear/PHP_CodeSniffer
   - pear channel-discover pear.phpunit.de
   - pear channel-discover components.ez.no
-  - pear install phpunit/phpcpd
+#  - pear install phpunit/phpcpd
   - phpenv rehash
 
 script:
   - phpunit -c app/phpunit.xml
   - phpcs --standard=PSR2 ./src/
-  - phpcpd ./src/
+#  - phpcpd ./src/
