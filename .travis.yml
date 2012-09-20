@@ -20,4 +20,4 @@ before_script:
 script:
   - phpunit -c app/phpunit.xml
   - phpcs --standard=PSR2 ./src/
-  - phpcpd ./src/
+#  - phpcpd ./src/
