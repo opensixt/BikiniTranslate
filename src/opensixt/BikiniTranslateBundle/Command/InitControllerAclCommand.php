@@ -27,48 +27,56 @@ class InitControllerAclCommand extends ContainerAwareCommand
      *
      * @var array
      */
-    private $userRoutes = array('_home',
-                                '_page',
-                                '_logout',
-                                '_translate_home',
-                                '_translate_setlocale',
-                                '_translate_edittext',
-                                '_translate_searchstring',
-                                '_translate_changetext',
-                                '_translate_cleantext',
-                                '_translate_copylanguage',
-                                '_translate_copyresource',
-                                '_translate_releasetext',
-                                '_translate_sendtots',
-                                '_wdt',
-                                '_profiler',
-                                '_user_admin_home',
-                                '_admin_user',
-                                '_admin_user_save');
+    private $userRoutes = array(
+        '_home',
+        '_page',
+        '_logout',
+        '_translate_home',
+        '_translate_setlocale',
+        '_translate_edittext',
+        '_translate_searchstring',
+        '_translate_changetext',
+        '_translate_cleantext',
+        '_translate_copylanguage',
+        '_translate_copyresource',
+        '_translate_releasetext',
+        '_translate_sendtots',
+        '_wdt',
+        '_profiler',
+        '_user_admin_home',
+        '_admin_user',
+        '_admin_user_save',
+        '_sxtranslate_getfromts',
+        '_sxfreetext_add',
+        '_sxfreetext_edit',
+        '_sxfreetext_status',
+    );
 
     /**
      * Array of routes that should have ADMIN access only.
      *
      * @var array
      */
-    private $adminRoutes = array('_admin_userlist',
-                                 '_admin_user_create',
-                                 '_admin_user_save_new',
-                                 '_admin_grouplist',
-                                 '_admin_group_create',
-                                 '_admin_group_save_new',
-                                 '_admin_group',
-                                 '_admin_group_save',
-                                 '_admin_langlist',
-                                 '_admin_language_create',
-                                 '_admin_language_save_new',
-                                 '_admin_language',
-                                 '_admin_language_save',
-                                 '_admin_reslist',
-                                 '_admin_resource_create',
-                                 '_admin_resource_save_new',
-                                 '_admin_resource',
-                                 '_admin_resource_save');
+    private $adminRoutes = array(
+        '_admin_userlist',
+        '_admin_user_create',
+        '_admin_user_save_new',
+        '_admin_grouplist',
+        '_admin_group_create',
+        '_admin_group_save_new',
+        '_admin_group',
+        '_admin_group_save',
+        '_admin_langlist',
+        '_admin_language_create',
+        '_admin_language_save_new',
+        '_admin_language',
+        '_admin_language_save',
+        '_admin_reslist',
+        '_admin_resource_create',
+        '_admin_resource_save_new',
+        '_admin_resource',
+        '_admin_resource_save',
+    );
 
     /**
      *
