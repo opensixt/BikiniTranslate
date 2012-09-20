@@ -12,7 +12,6 @@ before_script:
   - php app/console doctrine:schema:create
   - php app/console --no-interaction doctrine:fixtures:load
   - php app/console bikinitranslate:init_controller_acl
-  - php app/console assets:install web --symlink
   - pyrus install pear/PHP_CodeSniffer
   - pear channel-discover pear.phpunit.de
   - pear channel-discover components.ez.no
