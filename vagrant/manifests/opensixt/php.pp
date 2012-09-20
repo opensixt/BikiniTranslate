@@ -23,7 +23,8 @@ class opensixt::php {
         command => "/srv/www/vhosts/bikini/app/console --force doctrine:database:drop \
                     && /srv/www/vhosts/bikini/app/console doctrine:database:create \
                     && /srv/www/vhosts/bikini/app/console doctrine:schema:create \
-                    && /srv/www/vhosts/bikini/app/console --no-interaction doctrine:fixtures:load",
+                    && /srv/www/vhosts/bikini/app/console --no-interaction doctrine:fixtures:load \
+                    && /srv/www/vhosts/bikini/app/console bikinitranslate:init_controller_acl\",
         require => [Exec["composer_init_project"]],
     }
 
