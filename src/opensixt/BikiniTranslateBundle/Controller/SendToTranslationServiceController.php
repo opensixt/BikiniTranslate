@@ -26,7 +26,7 @@ class SendToTranslationServiceController extends AbstractController
     /** @var \opensixt\BikiniTranslateBundle\Helpers\BikiniExport */
     public $exporter;
 
-    /** @var \opensixt\BikiniTranslateBundle\Acl\UserPermissions */
+    /** @var \opensixt\BikiniTranslateBundle\AclHelper\UserPermissions */
     public $userPermissions;
 
     /**

@@ -60,7 +60,7 @@ class MigrateCommand extends ContainerAwareCommand
 
         $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $userPermissions = $this->getContainer()->get('opensixt.bikini_translate.acl.user_permissions');
+        $userPermissions = $this->getContainer()->get('opensixt.bikini_translate.acl_helper.user');
 
         $conn = $this->getConnection($dsn);
 

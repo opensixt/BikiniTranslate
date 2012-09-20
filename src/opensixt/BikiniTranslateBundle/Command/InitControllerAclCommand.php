@@ -10,11 +10,6 @@ use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 
-/**
- * Description of Migrate
- *
- * @author pries
- */
 class InitControllerAclCommand extends ContainerAwareCommand
 {
     /**

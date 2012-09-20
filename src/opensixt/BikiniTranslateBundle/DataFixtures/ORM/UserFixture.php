@@ -55,8 +55,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
 
         $manager->flush();
 
-        $this->getUserPermissions()->initAclForNewUser($admin);
-        $this->getUserPermissions()->initAclForNewUser($user);
+        $this->getUserAclHelper()->initAclForNewUser($admin);
+        $this->getUserAclHelper()->initAclForNewUser($user);
     }
 
     public function getOrder()
@@ -77,11 +77,11 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
     }
 
     /**
-     * @return \opensixt\BikiniTranslateBundle\Acl\UserPermissions
+     * @return \opensixt\BikiniTranslateBundle\AclHelper\User
      */
-    private function getUserPermissions()
+    private function getUserAclHelper()
     {
-        return $this->container->get('opensixt.bikini_translate.acl.user_permissions');
+        return $this->container->get('opensixt.bikini_translate.acl_helper.user');
     }
 }
 

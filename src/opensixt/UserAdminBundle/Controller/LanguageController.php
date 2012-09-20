@@ -17,6 +17,9 @@ class LanguageController extends AbstractController
     /** @var int */
     public $paginationLimit;
 
+    /** @var \opensixt\BikiniTranslateBundle\AclHelper\Language */
+    public $aclHelper;
+
     /**
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
@@ -128,7 +131,7 @@ class LanguageController extends AbstractController
             // flash success message
             $this->bikiniFlash->successSave();
 
-            $this->initAclForNewLanguage($language);
+            $this->aclHelper->initAclForNewUser($language);
 
             return $this->redirect($this->generateUrl('_admin_langlist'));
         }
@@ -137,16 +140,6 @@ class LanguageController extends AbstractController
             'opensixtUserAdminBundle:Language:create.html.twig',
             array('form' => $form->createView())
         );
-    }
-
-    /**
-     * @param Language $language
-     */
-    private function initAclForNewLanguage(Language $language)
-    {
-        $userPermissions = $this->getContainer()->get('opensixt.bikini_translate.acl.user_permissions');
-
-        $userPermissions->initAclForNew($group);
     }
 
     /**

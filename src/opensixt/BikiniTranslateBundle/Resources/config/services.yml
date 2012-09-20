@@ -25,7 +25,9 @@ parameters:
     opensixt.bikini_translate.sevices.exporter.class: opensixt\BikiniTranslateBundle\Helpers\BikiniExport
     opensixt.bikini_translate.sevices.flash.class: opensixt\BikiniTranslateBundle\Helpers\BikiniFlash
 
-    opensixt.bikini_translate.acl.user_permissions.class: opensixt\BikiniTranslateBundle\Acl\UserPermissions
+    opensixt.bikini_translate.acl_helper.abstract.class: opensixt\BikiniTranslateBundle\AclHelper\AbstractHelper
+    opensixt.bikini_translate.acl_helper.user.class: opensixt\BikiniTranslateBundle\AclHelper\User
+    opensixt.bikini_translate.acl_helper.language.class: opensixt\BikiniTranslateBundle\AclHelper\Language
     opensixt.bikini_translate.listener.doctrine.flush.class: opensixt\BikiniTranslateBundle\EventListener\Doctrine\Flush
     opensixt.bikini_translate.listener.kernel.controller.class: opensixt\BikiniTranslateBundle\EventListener\Kernel\Controller
 
@@ -170,10 +172,19 @@ services:
         tags:
             - { name: knp_menu.menu, alias: bikini_translate.sidebar_menu }
 
-    opensixt.bikini_translate.acl.user_permissions:
-        class: %opensixt.bikini_translate.acl.user_permissions.class%
+    opensixt.bikini_translate.acl_helper.abstract:
+        class: %opensixt.bikini_translate.acl_helper.abstract.class%
+        abstract: true
         properties:
           aclProvider: @security.acl.provider
+
+    opensixt.bikini_translate.acl_helper.user:
+        class: %opensixt.bikini_translate.acl_helper.user.class%
+        parent: opensixt.bikini_translate.acl_helper.abstract
+
+    opensixt.bikini_translate.acl_helper.language:
+        class: %opensixt.bikini_translate.acl_helper.language.class%
+        parent: opensixt.bikini_translate.acl_helper.abstract
 
     opensixt.bikini_translate.listener.doctrine.flush:
         class: %opensixt.bikini_translate.listener.doctrine.flush.class%

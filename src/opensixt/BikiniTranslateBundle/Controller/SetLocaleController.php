@@ -17,7 +17,7 @@ use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
  */
 class SetLocaleController extends AbstractController
 {
-    /** @var \opensixt\BikiniTranslateBundle\Acl\UserPermissions */
+    /** @var \opensixt\BikiniTranslateBundle\AclHelper\UserPermissions */
     public $userPermissions;
 
     /**

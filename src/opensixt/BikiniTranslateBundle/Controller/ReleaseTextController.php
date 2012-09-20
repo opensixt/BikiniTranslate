@@ -23,7 +23,7 @@ class ReleaseTextController extends AbstractController
      */
     public $searcher;
 
-    /** @var \opensixt\BikiniTranslateBundle\Acl\UserPermissions */
+    /** @var \opensixt\BikiniTranslateBundle\AclHelper\UserPermissions */
     public $userPermissions;
 
 

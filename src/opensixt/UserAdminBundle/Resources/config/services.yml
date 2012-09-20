@@ -28,7 +28,7 @@ services:
     scope: request
     properties:
       paginationLimit: %opensixt.user_admin.controller.user.pagination_limit%
-      userPermissions: @opensixt.bikini_translate.acl.user_permissions
+      userPermissions: @opensixt.bikini_translate.acl_helper.user
 
   opensixt.user_admin.controller.group:
     class: %opensixt.user_admin.controller.group.class%
@@ -43,6 +43,7 @@ services:
     scope: request
     properties:
       paginationLimit: %opensixt.user_admin.controller.language.pagination_limit%
+      aclHelper: @opensixt.bikini_translate.acl_helper.language
 
   opensixt.user_admin.controller.resource:
     class: %opensixt.user_admin.controller.resource.class%

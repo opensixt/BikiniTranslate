@@ -21,8 +21,8 @@ class UserController extends AbstractController
     /** @var int */
     public $paginationLimit;
 
-    /** @var \opensixt\BikiniTranslateBundle\Acl\UserPermissions */
-    public $userPermissions;
+    /** @var \opensixt\BikiniTranslateBundle\AclHelper\User */
+    public $aclHelper;
 
     /**
      * @param int $page
@@ -153,7 +153,7 @@ class UserController extends AbstractController
             // flash success message
             $this->bikiniFlash->successSave();
 
-            $this->userPermissions->initAclForNewUser($user);
+            $this->aclHelper->initAclForNewUser($user);
 
             return $this->redirect($this->generateUrl('_admin_userlist'));
         }
