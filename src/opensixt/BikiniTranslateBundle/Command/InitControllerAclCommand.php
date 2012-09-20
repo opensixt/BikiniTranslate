@@ -23,6 +23,54 @@ class InitControllerAclCommand extends ContainerAwareCommand
     private $aclProvider;
 
     /**
+     * Array of routes that should have USER access.
+     *
+     * @var array
+     */
+    private $userRoutes = array('_home',
+                                '_page',
+                                '_logout',
+                                '_translate_home',
+                                '_translate_setlocale',
+                                '_translate_edittext',
+                                '_translate_searchstring',
+                                '_translate_changetext',
+                                '_translate_cleantext',
+                                '_translate_copylanguage',
+                                '_translate_copyresource',
+                                '_translate_releasetext',
+                                '_translate_sendtots',
+                                '_wdt',
+                                '_profiler',
+                                '_user_admin_home',
+                                '_admin_user',
+                                '_admin_user_save');
+
+    /**
+     * Array of routes that should have ADMIN access only.
+     *
+     * @var array
+     */
+    private $adminRoutes = array('_admin_userlist',
+                                 '_admin_user_create',
+                                 '_admin_user_save_new',
+                                 '_admin_grouplist',
+                                 '_admin_group_create',
+                                 '_admin_group_save_new',
+                                 '_admin_group',
+                                 '_admin_group_save',
+                                 '_admin_langlist',
+                                 '_admin_language_create',
+                                 '_admin_language_save_new',
+                                 '_admin_language',
+                                 '_admin_language_save',
+                                 '_admin_reslist',
+                                 '_admin_resource_create',
+                                 '_admin_resource_save_new',
+                                 '_admin_resource',
+                                 '_admin_resource_save');
+
+    /**
      *
      */
     protected function configure()
@@ -38,44 +86,14 @@ class InitControllerAclCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->initRouteAclForRole('_home', 'ROLE_USER');
-        $this->initRouteAclForRole('_page', 'ROLE_USER');
-        $this->initRouteAclForRole('_logout', 'ROLE_USER');
-        $this->initRouteAclForRole('_translate_home', 'ROLE_USER');
-        $this->initRouteAclForRole('_translate_setlocale', 'ROLE_USER');
-        $this->initRouteAclForRole('_translate_edittext', 'ROLE_USER');
-        $this->initRouteAclForRole('_translate_searchstring', 'ROLE_USER');
-        $this->initRouteAclForRole('_translate_changetext', 'ROLE_USER');
-        $this->initRouteAclForRole('_translate_cleantext', 'ROLE_USER');
-        $this->initRouteAclForRole('_translate_copylanguage', 'ROLE_USER');
-        $this->initRouteAclForRole('_translate_copyresource', 'ROLE_USER');
-        $this->initRouteAclForRole('_translate_releasetext', 'ROLE_USER');
-        $this->initRouteAclForRole('_translate_sendtots', 'ROLE_USER');
-        $this->initRouteAclForRole('_wdt', 'ROLE_USER');
-        $this->initRouteAclForRole('_profiler', 'ROLE_USER');
-
-        $this->initRouteAclForRole('_user_admin_home', 'ROLE_USER');
-        $this->initRouteAclForRole('_admin_userlist', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_user_create', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_user_save_new', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_user', 'ROLE_USER');
-        $this->initRouteAclForRole('_admin_user_save', 'ROLE_USER');
-        $this->initRouteAclForRole('_admin_grouplist', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_group_create', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_group_save_new', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_group', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_group_save', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_langlist', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_language_create', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_language_save_new', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_language', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_language_save', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_reslist', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_resource_create', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_resource_save_new', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_resource', 'ROLE_ADMIN');
-        $this->initRouteAclForRole('_admin_resource_save', 'ROLE_ADMIN');
-
+        foreach($this->userRoutes as $route) {
+            $this->initRouteAclForRole($route, 'ROLE_USER');
+            $output->writeln('Configuring access for <info>ROLE_USER</info> to route <info>' . $route . '</info>');
+        }
+        foreach($this->adminRoutes as $route) {
+            $this->initRouteAclForRole($route, 'ROLE_ADMIN');
+            $output->writeln('Configuring access for <info>ROLE_ADMIN</info> to route <info>' . $route . '</info>');
+        }
     }
 
     /**
@@ -85,6 +103,12 @@ class InitControllerAclCommand extends ContainerAwareCommand
     private function initRouteAclForRole($route, $role)
     {
         $objectIdentity = new ObjectIdentity($route, 'route');
+
+        /**
+         * Remove any previously configured ACL.
+         */
+        $this->getAclProvider()->deleteAcl($objectIdentity);
+
         $acl = $this->getAclProvider()->createAcl($objectIdentity);
 
         $roleIdentity = new RoleSecurityIdentity($role);
