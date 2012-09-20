@@ -162,7 +162,7 @@ class FreeTextController extends AbstractController
         }
 
         // get search results
-        $data = $this->handleFreeText->getMissingTranslations(
+        $data = $this->handleFreeText->getTranslations(
             $page,
             $languageId
         );

@@ -68,7 +68,7 @@ class EditText extends HandleText
             $searchResources
         );
 
-        $query = $this->textRepository->getMissingTranslations();
+        $query = $this->textRepository->getTranslations();
 
         if (empty($this->paginationLimit)) {
             $this->paginationLimit = PHP_INT_MAX;

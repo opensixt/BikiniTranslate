@@ -72,7 +72,7 @@ class HandleFreeText extends HandleText
      * @param int $languageId
      * @return Knp\Component\Pager\Pagination\PaginationInterface
      */
-    public function getMissingTranslations($page, $languageId)
+    public function getTranslations($page, $languageId)
     {
 
         $defaultResource = $this->doctrine
@@ -93,7 +93,7 @@ class HandleFreeText extends HandleText
             Text::TRANSLATION_TYPE_FTEXT
         );
 
-        $query = $this->textRepository->getMissingTranslations();
+        $query = $this->textRepository->getTranslations();
 
         if (empty($this->paginationLimit)) {
             $this->paginationLimit = PHP_INT_MAX;
@@ -145,7 +145,7 @@ class HandleFreeText extends HandleText
             $this->textRepository->setLocales($this->locales);
         }
 
-        $query = $this->textRepository->getMissingTranslations();
+        $query = $this->textRepository->getTranslations();
 
         if (empty($this->paginationLimit)) {
             $this->paginationLimit = PHP_INT_MAX;

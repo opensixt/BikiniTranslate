@@ -202,7 +202,7 @@ class TextRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getMissingTranslations()
+    public function getTranslations()
     {
         $query = $this->createQueryBuilder('t')
             ->select('t, l, r, u')
