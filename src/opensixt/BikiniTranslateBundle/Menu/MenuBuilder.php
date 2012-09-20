@@ -29,7 +29,7 @@ class MenuBuilder
         $menu = $this->factory->createItem('root');
 
         if ($this->securityContext->isGranted('ROLE_USER')) {
-            $menu->setCurrentUri($request->getRequestUri());
+            //$menu->setCurrentUri($request->getRequestUri());
 
             $this->addTranslationMenu($menu);
         }
