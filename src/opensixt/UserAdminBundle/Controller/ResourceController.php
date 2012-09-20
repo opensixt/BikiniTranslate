@@ -17,6 +17,9 @@ class ResourceController extends AbstractController
     /** @var int */
     public $paginationLimit;
 
+    /** @var \opensixt\BikiniTranslateBundle\AclHelper\Resource */
+    public $aclHelper;
+
     /**
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
@@ -128,7 +131,7 @@ class ResourceController extends AbstractController
             // flash success message
             $this->bikiniFlash->successSave();
 
-            $this->initAclForNewResource($resource);
+            $this->aclHelper->initAclForNewResource($resource);
 
             return $this->redirect($this->generateUrl('_admin_reslist'));
         }
@@ -137,16 +140,6 @@ class ResourceController extends AbstractController
             'opensixtUserAdminBundle:Resource:create.html.twig',
             array('form' => $form->createView())
         );
-    }
-
-    /**
-     * @param Resource $resource
-     */
-    private function initAclForNewResource(Resource $resource)
-    {
-        $userPermissions = $this->getContainer()->get('opensixt.bikini_translate.acl.user_permissions');
-
-        $userPermissions->initAclForNew($group);
     }
 
     /**

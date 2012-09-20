@@ -52,6 +52,7 @@ services:
     scope: request
     properties:
       paginationLimit: %opensixt.user_admin.controller.resource.pagination_limit%
+      aclHelper: @opensixt.bikini_translate.acl_helper.language
 
   opensixt.user_admin.event_listener.menu_configure:
     class: opensixt\UserAdminBundle\EventListener\ConfigureMenuListener

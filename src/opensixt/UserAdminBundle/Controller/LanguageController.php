@@ -131,7 +131,7 @@ class LanguageController extends AbstractController
             // flash success message
             $this->bikiniFlash->successSave();
 
-            $this->aclHelper->initAclForNewUser($language);
+            $this->aclHelper->initAclForNewLanguage($language);
 
             return $this->redirect($this->generateUrl('_admin_langlist'));
         }

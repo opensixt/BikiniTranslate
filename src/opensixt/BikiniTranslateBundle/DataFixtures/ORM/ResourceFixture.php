@@ -6,22 +6,26 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use opensixt\BikiniTranslateBundle\Entity\Resource;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @author uwe.pries@sixt.com
  */
-class ResourceFixture extends AbstractFixture implements OrderedFixtureInterface
+class ResourceFixture extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
+    /** @var ContainerInterface */
+    private $container;
+
+    /**
+     * @param \Doctrine\Common\Persistence\ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $res = new Resource;
         $res->setName('Default');
         $res->setDescription('Just a default resource');
         $manager->persist($res);
-
-        $manager->flush();
-
-        $this->addReference('res-default', $res);
 
         $adminres = new Resource;
         $adminres->setName('Adminres');
@@ -31,11 +35,34 @@ class ResourceFixture extends AbstractFixture implements OrderedFixtureInterface
         $manager->flush();
 
         $this->addReference('res-admin', $adminres);
+        $this->addReference('res-default', $res);
+
+        $this->getResourceAclHelper()->initAclForNewResource($adminres);
+        $this->getResourceAclHelper()->initAclForNewResource($res);
     }
 
+    /**
+     * @return int
+     */
     public function getOrder()
     {
         return 3;
+    }
+
+    /**
+     * @return \opensixt\BikiniTranslateBundle\AclHelper\Resource
+     */
+    private function getResourceAclHelper()
+    {
+        return $this->container->get('opensixt.bikini_translate.acl_helper.resource');
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
     }
 }
 

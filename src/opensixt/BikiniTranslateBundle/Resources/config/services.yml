@@ -29,6 +29,7 @@ parameters:
     opensixt.bikini_translate.acl_helper.user.class: opensixt\BikiniTranslateBundle\AclHelper\User
     opensixt.bikini_translate.acl_helper.language.class: opensixt\BikiniTranslateBundle\AclHelper\Language
     opensixt.bikini_translate.acl_helper.group.class: opensixt\BikiniTranslateBundle\AclHelper\Group
+    opensixt.bikini_translate.acl_helper.resource.class: opensixt\BikiniTranslateBundle\AclHelper\Resource
 
     opensixt.bikini_translate.listener.doctrine.flush.class: opensixt\BikiniTranslateBundle\EventListener\Doctrine\Flush
     opensixt.bikini_translate.listener.kernel.controller.class: opensixt\BikiniTranslateBundle\EventListener\Kernel\Controller
@@ -186,6 +187,10 @@ services:
 
     opensixt.bikini_translate.acl_helper.language:
         class: %opensixt.bikini_translate.acl_helper.language.class%
+        parent: opensixt.bikini_translate.acl_helper.abstract
+
+    opensixt.bikini_translate.acl_helper.resource:
+        class: %opensixt.bikini_translate.acl_helper.resource.class%
         parent: opensixt.bikini_translate.acl_helper.abstract
 
     opensixt.bikini_translate.acl_helper.group:
