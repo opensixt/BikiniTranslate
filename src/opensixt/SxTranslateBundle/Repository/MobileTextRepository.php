@@ -34,3 +34,4 @@ class MobileTextRepository extends TextRepository
         return $query;
     }
 }
+

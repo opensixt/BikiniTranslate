@@ -33,9 +33,14 @@ abstract class AbstractHelper
      */
     protected function addUserAce(MutableAclInterface $acl, User $user, $masks = array(MaskBuilder::MASK_VIEW))
     {
-        $this->addAceForIdentityWithMasks($acl,
-                                          new UserSecurityIdentity($user->getUsername(), get_class($user)),
-                                          $masks);
+        $this->addAceForIdentityWithMasks(
+            $acl,
+            new UserSecurityIdentity(
+                $user->getUsername(),
+                get_class($user)
+            ),
+            $masks
+        );
     }
 
     /**
@@ -43,19 +48,21 @@ abstract class AbstractHelper
      * @param SecurityIdentityInterface $identity
      * @param array $masks
      */
-    public function addAceForIdentityWithMasks(MutableAclInterface $acl,
-                                               SecurityIdentityInterface $identity,
-                                               $masks = array())
-    {
+    public function addAceForIdentityWithMasks(
+        MutableAclInterface $acl,
+        SecurityIdentityInterface $identity,
+        $masks = array()
+    ) {
         if (!is_array($masks)) {
             $masks = array($masks);
         }
 
         $maskBuilder = new MaskBuilder();
-        foreach($masks as $mask) {
+        foreach ($masks as $mask) {
             $maskBuilder->add($mask);
         }
 
         $acl->insertObjectAce($identity, $maskBuilder->get(0));
     }
 }
+

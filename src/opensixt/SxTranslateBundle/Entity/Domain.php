@@ -163,3 +163,4 @@ class Domain
         $this->setUpdated(new \DateTime());
     }
 }
+

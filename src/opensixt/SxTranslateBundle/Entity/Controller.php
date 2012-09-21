@@ -163,3 +163,4 @@ class Controller
         $this->setUpdated(new \DateTime());
     }
 }
+

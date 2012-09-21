@@ -64,3 +64,4 @@ class HandleMobile extends HandleText
         return $data;
     }
 }
+

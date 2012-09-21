@@ -163,3 +163,4 @@ class Device
         $this->setUpdated(new \DateTime());
     }
 }
+
