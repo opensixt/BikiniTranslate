@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * opensixt\SxTranslateBundle\Entity\Domain
  *
- * @ORM\Table(name="domain")
+ * @ORM\Table(name="mobile_domain")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("name")
