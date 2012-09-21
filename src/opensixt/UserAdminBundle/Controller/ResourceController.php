@@ -28,9 +28,12 @@ class ResourceController extends AbstractController
     {
         $this->requireAdminUser();
 
-        $query = $this->getResourceRepository()
-                      ->getQueryForAllResources();
-        $pagination = $this->paginator->paginate($query, $page, $this->paginationLimit);
+        $query = $this->getResourceRepository()->getQueryForAllResources();
+        $pagination = $this->paginator->paginate(
+            $query,
+            $page,
+            $this->paginationLimit
+        );
 
         return $this->templating->renderResponse(
             'opensixtUserAdminBundle:Resource:list.html.twig',

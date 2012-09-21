@@ -15,6 +15,7 @@
             <tr>
                 <th style="width:150px">{{ 'resource'|trans }}</th>
                 <th style="width:350px">{{ 'description'|trans }}</th>
+                <th>{{ 'visibility'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -22,6 +23,7 @@
             <tr>
                 <td><a href="{{ path('_admin_resource', {'id': item.id}) }}">{{ item.name }}</a></td>
                 <td>{{ item.description }}</td>
+                <td><input type="checkbox" disabled="disabled" {% if item.visibility %}checked="checked"{% endif %} /></td>
             </tr>
         {% else %}
             <tr>

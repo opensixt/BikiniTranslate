@@ -242,6 +242,10 @@
                 <source>error_empty_required_fields</source>
                 <target>Please fill out all the fields!</target>
             </trans-unit>
+            <trans-unit id="306">
+                <source>visibility</source>
+                <target>Visibility</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

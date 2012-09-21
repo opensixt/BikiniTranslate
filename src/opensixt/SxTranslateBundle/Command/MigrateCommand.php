@@ -304,14 +304,16 @@ class MigrateCommand extends ContainerAwareCommand
     /**
      * @param $name
      * @param $description
+     * @param $visibility
      * @return \opensixt\BikiniTranslateBundle\Entity\Resource
      */
-    protected function getResource($name, $description)
+    protected function getResource($name, $description, $visibility = true)
     {
         $res = new Resource;
 
         $res->setName($name);
         $res->setDescription($description);
+        $res->setVisibility($visibility);
 
         return $res;
     }
@@ -361,7 +363,8 @@ class MigrateCommand extends ContainerAwareCommand
      */
     protected function getResourceDefault()
     {
-        return $this->getResource('Default', 'from initial import');
+        $visibility = false;
+        return $this->getResource('Default', 'from initial import', $visibility);
     }
 
     /**

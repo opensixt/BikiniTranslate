@@ -130,10 +130,19 @@ abstract class AbstractController
         foreach ($groups as $grp) {
             $resources = $grp->getResources();
             foreach ($resources as $res) {
-                $result[$res->getId()] = $res->getName();
+                if ($res->getVisibility()) {
+                    $result[$res->getId()] = $res->getName();
+                }
             }
         }
-
+        uasort(
+            $result,
+            // @codingStandardsIgnoreStart
+            function ($a, $b) {
+            // @codingStandardsIgnoreEnd
+                return strcmp($a, $b);
+            }
+        );
         return $result;
     }
 

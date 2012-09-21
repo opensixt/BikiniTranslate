@@ -60,6 +60,13 @@ class Resource
     private $description;
 
     /**
+     * @var boolean $visibility
+     *
+     * @ORM\Column(name="visibility", type="boolean", nullable=true)
+     */
+    private $visibility = true;
+
+    /**
      *
      */
     public function __construct()
@@ -156,6 +163,26 @@ class Resource
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set visibility
+     *
+     * @param boolean $visibility
+     */
+    public function setVisibility($visibility)
+    {
+        $this->visibility = $visibility;
+    }
+
+    /**
+     * Get visibility
+     *
+     * @return boolean
+     */
+    public function getVisibility()
+    {
+        return $this->visibility;
     }
 
     /** @ORM\PrePersist */
