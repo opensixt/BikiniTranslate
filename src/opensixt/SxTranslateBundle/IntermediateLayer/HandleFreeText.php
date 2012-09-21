@@ -53,7 +53,6 @@ class HandleFreeText extends HandleText
 
         if (strlen(trim($text))) {
             $ftext->setTarget($text);
-            $ftext->setTranslateMe(false);
         } else {
             $ftext->setTranslateMe(true);
         }

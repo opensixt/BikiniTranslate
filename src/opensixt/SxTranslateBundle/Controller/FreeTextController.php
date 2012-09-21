@@ -22,7 +22,7 @@ class FreeTextController extends AbstractController
     /**
      * intermediate layer
      *
-     * @var \opensixt\BikiniTranslateBundle\IntermediateLayer\HandleFreeText
+     * @var \opensixt\SxTranslateBundle\IntermediateLayer\HandleFreeText
      */
     public $handleFreeText;
 
