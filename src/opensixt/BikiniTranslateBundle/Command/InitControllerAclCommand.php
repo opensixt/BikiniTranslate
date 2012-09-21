@@ -38,6 +38,7 @@ class InitControllerAclCommand extends ContainerAwareCommand
         '_translate_sendtots',
         '_wdt',
         '_profiler',
+        '_internal', // needed for _profiler
         '_user_admin_home',
         '_admin_user',
         '_admin_user_save',
