@@ -46,6 +46,7 @@ class InitControllerAclCommand extends ContainerAwareCommand
         '_sxfreetext_add',
         '_sxfreetext_edit',
         '_sxfreetext_status',
+        '_sxmobile_edit',
     );
 
     /**

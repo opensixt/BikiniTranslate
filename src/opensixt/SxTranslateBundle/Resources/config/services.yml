@@ -1,9 +1,12 @@
 parameters:
     opensixt.sx_translate.controller.import.class: opensixt\SxTranslateBundle\Controller\ImportController
     opensixt.sx_translate.controller.freetext.class: opensixt\SxTranslateBundle\Controller\FreeTextController
+    opensixt.sx_translate.controller.mobile.class: opensixt\SxTranslateBundle\Controller\MobileController
 
     opensixt.sx_translate.intermediate.handlefreetext.class: opensixt\SxTranslateBundle\IntermediateLayer\HandleFreeText
     opensixt.sx_translate.controller.editfreetext.pagination_limit: "15"
+    opensixt.sx_translate.intermediate.handlemobile.class: opensixt\SxTranslateBundle\IntermediateLayer\HandleMobile
+    opensixt.sx_translate.controller.editmobile.pagination_limit: "15"
 
 services:
     opensixt.sx_translate.controller.import:
@@ -22,6 +25,17 @@ services:
             doctrine: @doctrine
             commonLanguage: %common_language%
 
+    opensixt.sx_translate.controller.mobile:
+        class: %opensixt.sx_translate.controller.mobile.class%
+        parent: opensixt.bikini_translate.controller.abstract
+        scope: request
+        properties:
+            handleMobile: @opensixt.sx_translate.intermediate.handlemobile
+            handleText: @opensixt.sx_translate.intermediate.handlefreetext
+            doctrine: @doctrine
+            commonLanguage: %common_language%
+
+
     opensixt.sx_translate.intermediate.handlefreetext:
         class: %opensixt.sx_translate.intermediate.handlefreetext.class%
         arguments: [@doctrine]
@@ -29,6 +43,14 @@ services:
             securityContext: @security.context
             paginator: @knp_paginator
             paginationLimit: %opensixt.sx_translate.controller.editfreetext.pagination_limit%
+
+    opensixt.sx_translate.intermediate.handlemobile:
+        class: %opensixt.sx_translate.intermediate.handlemobile.class%
+        arguments: [@doctrine]
+        properties:
+            securityContext: @security.context
+            paginator: @knp_paginator
+            paginationLimit: %opensixt.sx_translate.controller.editmobile.pagination_limit%
 
     opensixt.sx_translate.event_listener.menu_configure:
         class: opensixt\SxTranslateBundle\EventListener\ConfigureMenuListener

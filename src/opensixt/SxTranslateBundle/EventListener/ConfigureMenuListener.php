@@ -17,14 +17,24 @@ class ConfigureMenuListener
      */
     public function onMenuConfigure(ConfigureMenuEvent $event)
     {
+        // Freetexts
         if ($this->securityContext->isGranted('ROLE_USER')) {
-            $menu = $event->getMenu();
+            $menuF = $event->getMenu();
 
-            $menu = $menu->addChild($this->translator->trans('menu.freetext'));
+            $menuF = $menuF->addChild($this->translator->trans('menu.freetext'));
 
-            $menu->addChild($this->translator->trans('menu.addfreetext'), array('route' => '_sxfreetext_add'));
-            $menu->addChild($this->translator->trans('menu.editfreetext'), array('route' => '_sxfreetext_edit'));
-            $menu->addChild($this->translator->trans('menu.statusfreetext'), array('route' => '_sxfreetext_status'));
+            $menuF->addChild($this->translator->trans('menu.addfreetext'), array('route' => '_sxfreetext_add'));
+            $menuF->addChild($this->translator->trans('menu.editfreetext'), array('route' => '_sxfreetext_edit'));
+            $menuF->addChild($this->translator->trans('menu.statusfreetext'), array('route' => '_sxfreetext_status'));
+        }
+
+        // Mobile Texts
+        if ($this->securityContext->isGranted('ROLE_USER')) {
+            $menuM = $event->getMenu();
+
+            $menuM = $menuM->addChild($this->translator->trans('menu.mobile'));
+
+            $menuM->addChild($this->translator->trans('menu.editmobile'), array('route' => '_sxmobile_edit'));
         }
     }
 }

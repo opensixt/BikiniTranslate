@@ -18,3 +18,6 @@ _sxfreetext_status:
     pattern: /freetext/status/{page}
     defaults: { _controller: opensixt.sx_translate.controller.freetext:statusAction, page: 1 }
 
+_sxmobile_edit:
+    pattern: /mobile/edit/{locale}/{page}
+    defaults: { _controller: opensixt.sx_translate.controller.mobile:editAction, locale: 'empty', page: 1 }
