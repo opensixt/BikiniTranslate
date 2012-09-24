@@ -1,9 +1,8 @@
 <?php
 namespace opensixt\SxTranslateBundle\IntermediateLayer;
 
-use opensixt\BikiniTranslateBundle\IntermediateLayer\HandleText;
+use opensixt\BikiniTranslateBundle\IntermediateLayer\EditText;
 use opensixt\BikiniTranslateBundle\Entity\Resource;
-use opensixt\BikiniTranslateBundle\Entity\Language;
 
 use opensixt\BikiniTranslateBundle\Entity\Text;
 use opensixt\SxTranslateBundle\Entity\Mobile;
@@ -15,26 +14,28 @@ use opensixt\SxTranslateBundle\Repository\MobileTextRepository as TextRepository
  *
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
  */
-class HandleMobile extends HandleText
+class HandleMobile extends EditText
 {
     /** @var \Symfony\Component\Security\Core\SecurityContext */
     public $securityContext;
 
-    public function __construct($doctrine)
+    public function __construct($doctrine, $locale)
     {
-        parent::__construct($doctrine);
+        parent::__construct($doctrine, $locale);
         $this->textRepository = $this->em->getRepository(Mobile::ENTITY_MOBILE);
     }
 
     /**
      * Returns search results and pagination data
      *
-     * @param int $page
-     * @param int $languageId
+     * @param int   $page
+     * @param int   $languageId
+     * @param array $searchDomains
      * @return Knp\Component\Pager\Pagination\PaginationInterface
      */
-    public function getTranslations($page, $languageId)
+    public function getTranslations($page, $languageId, $searchDomains)
     {
+        $this->textRepository->setCommonLanguage($this->commonLanguage);
 
         $defaultResource = $this->doctrine
             ->getRepository(Resource::ENTITY_RESOURCE)
@@ -54,12 +55,21 @@ class HandleMobile extends HandleText
             Text::TRANSLATION_TYPE_MOBILE
         );
 
+        $this->textRepository->setDomains($searchDomains);
+
         $query = $this->textRepository->getTranslations();
 
         if (empty($this->paginationLimit)) {
             $this->paginationLimit = PHP_INT_MAX;
         }
         $data = $this->paginator->paginate($query, $page, $this->paginationLimit);
+
+        if (count($searchDomains) == 1) {
+            $data->setParam('domain', $searchDomains[0]);
+        }
+
+        // set messages in common language for any text in $translations
+        $this->textRepository->setMessagesInCommonLanguage($data);
 
         return $data;
     }

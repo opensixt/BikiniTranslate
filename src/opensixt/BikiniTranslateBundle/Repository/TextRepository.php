@@ -46,31 +46,31 @@ class TextRepository extends EntityRepository
     const DOMAIN_TYPE_RESOURCE = 2;
 
     /** @var string */
-    private $task;
+    protected $task;
 
     /** @var array */
-    private $resources;
+    protected $resources;
 
     /** @var int */
-    private $locale;
+    protected $locale;
 
     /** @var array */
-    private $locales;
+    protected $locales;
 
     /** @var string */
-    private $commonLanguage;
+    protected $commonLanguage;
 
     /** @var int */
-    private $commonLanguageId;
+    protected $commonLanguageId;
 
     /** @var Datetime */
-    private $expiryDate;
+    protected $expiryDate;
 
     /** @var int */
-    private $translationType = Text::TRANSLATION_TYPE_TEXT;
+    protected $translationType = Text::TRANSLATION_TYPE_TEXT;
 
     /** @var boolean */
-    private $translated;
+    protected $translated;
 
     /**
      *
@@ -117,6 +117,7 @@ class TextRepository extends EntityRepository
     public function setCommonLanguage($locale)
     {
         $this->commonLanguage = $locale;
+        $this->commonLanguageId = $this->getIdByLocale($locale);
     }
 
     /**
@@ -425,8 +426,7 @@ class TextRepository extends EntityRepository
         $messages = new ArrayCollection;
         $hashes = $this->getHashes($texts);
 
-        $query = $this->createQueryBuilder('t')
-            ->select('t');
+        $query = $this->getBaseQuery();
 
         if (count($resources)) {
             $query->andWhere(self::FIELD_RESOURCE . ' IN  (?4)')
@@ -447,6 +447,17 @@ class TextRepository extends EntityRepository
         }
 
         return $messages;
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    protected function getBaseQuery()
+    {
+        $query = $this->createQueryBuilder('t')
+            ->select('t');
+
+        return $query;
     }
 
     /**

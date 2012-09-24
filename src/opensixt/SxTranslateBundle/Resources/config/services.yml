@@ -46,7 +46,7 @@ services:
 
     opensixt.sx_translate.intermediate.handlemobile:
         class: %opensixt.sx_translate.intermediate.handlemobile.class%
-        arguments: [@doctrine]
+        arguments: [@doctrine, %common_language%]
         properties:
             securityContext: @security.context
             paginator: @knp_paginator

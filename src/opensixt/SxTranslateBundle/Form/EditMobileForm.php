@@ -18,6 +18,19 @@ class EditMobileForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add(
+            'domain',
+            'choice',
+            array(
+              'label'       => 'editmobile.domain',
+              'empty_value' => 'all_values',
+              'choices'     => $options['domains'],
+              'required'    => false,
+              'data'        => $options['searchDomain']
+            )
+        )
+        ->add('action', 'hidden');
+
         if (!empty($options['ids'])) {
             foreach ($options['ids'] as $id) {
                 $builder->add(
@@ -51,7 +64,9 @@ class EditMobileForm extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'ids' => array(),
+            'ids'          => array(),
+            'domains'      => array(),
+            'searchDomain' => 0,
         );
     }
 }

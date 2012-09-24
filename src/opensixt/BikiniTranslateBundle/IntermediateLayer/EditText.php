@@ -60,7 +60,6 @@ class EditText extends HandleText
     public function getData($page, $locale, $searchResources, $resources, $suggestionsFlag = false)
     {
         $this->textRepository->setCommonLanguage($this->commonLanguage);
-        $this->textRepository->setCommonLanguageId($this->commonLanguageId);
 
         $this->textRepository->init(
             TextRepository::TASK_MISSING_TRANS_BY_LANG,

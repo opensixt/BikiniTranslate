@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use opensixt\BikiniTranslateBundle\Controller\AbstractController;
 
 use opensixt\SxTranslateBundle\Form\EditMobileForm;
+use opensixt\SxTranslateBundle\Entity\Domain;
 
 /**
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
@@ -55,30 +56,50 @@ class MobileController extends AbstractController
             return $this->redirect($this->generateUrl('_translate_setlocale'));
         }
 
+        $currentLangIsCommonLang = $this->handleMobile
+            ->compareCommonAndCurrentLocales($languageId);
+
+        $domains = $this->getDomains();
+
         // Update texts with entered values
         if ($this->request->getMethod() == 'POST') {
             $formData = $this->getRequestData($this->request);
 
-            $textsToSave = $this->getTextsToSaveFromRequest(
-                $formData,
-                'text'
-            );
-
-            if (count($textsToSave)) {
-                $this->handleText->updateTexts($textsToSave);
-                $this->bikiniFlash->successSave();
-                return $this->redirectAfterSave(
-                    self::ROUTE_EDIT,
-                    $page,
-                    $locale
-                );
+            if (isset($formData['action']) && $formData['action'] == 'search') {
+                $page = 1;
             }
+
+            if (isset($formData['action']) && $formData['action'] == 'save') {
+                $textsToSave = $this->getTextsToSaveFromRequest(
+                    $formData,
+                    'text'
+                );
+
+                if (count($textsToSave)) {
+                    $this->handleText->updateTexts($textsToSave);
+                    $this->bikiniFlash->successSave();
+                    return $this->redirectAfterSave(
+                        self::ROUTE_EDIT,
+                        $page,
+                        $locale
+                    );
+                }
+            }
+        }
+
+        $searchDomain = $this->getFieldFromRequest('domain');
+
+        if (!empty($searchDomain)) {
+            $searchDomains = array($searchDomain);
+        } else {
+            $searchDomains = array_keys($domains);
         }
 
         // get search results
         $data = $this->handleMobile->getTranslations(
             $page,
-            $languageId
+            $languageId,
+            $searchDomains
         );
 
         $ids = array();
@@ -93,7 +114,9 @@ class MobileController extends AbstractController
                 new EditMobileForm(),
                 null,
                 array(
-                    'ids' => $ids,
+                    'ids'          => $ids,
+                    'domains'      => $domains,
+                    'searchDomain' => $searchDomain,
                 )
             );
 
@@ -101,12 +124,43 @@ class MobileController extends AbstractController
             'form'   => $form->createView(),
             'texts'  => $data,
             'locale' => $locale,
+            'currentLangIsCommonLang' => $currentLangIsCommonLang,
         );
 
         return $this->render(
-            'opensixtSxTranslateBundle:FreeText:editmobile.html.twig',
+            'opensixtSxTranslateBundle:Mobile:editmobile.html.twig',
             $templateParam
         );
+    }
+
+    /**
+     * Returns array of domains
+     *
+     * @return array
+     */
+    protected function getDomains()
+    {
+        $result = array();
+
+        $data = $this->doctrine
+            ->getRepository(Domain::ENTITY_DOMAIN)
+                ->findAll();
+
+        if (count($data)) {
+            foreach ($data as $elem) {
+                $result[$elem->getId()] = $elem->getName();
+            }
+            uasort(
+                $result,
+                // @codingStandardsIgnoreStart
+                function ($a, $b) {
+                // @codingStandardsIgnoreEnd
+                    return strcmp($a, $b);
+                }
+            );
+        }
+
+        return $result;
     }
 }
 

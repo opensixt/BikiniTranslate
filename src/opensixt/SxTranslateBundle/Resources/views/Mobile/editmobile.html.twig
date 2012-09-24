@@ -12,10 +12,16 @@
 
     <form action="{{ path('_sxmobile_edit', {'locale':locale}) }}" method="post">
 
+    {{ form_label(form.domain) }} {{ form_widget(form.domain) }}
+    <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+
     <table class="list">
         <thead>
             <tr>
-                <th>{{ 'source_lang'|trans }}</th>
+                <th>{{ 'key'|trans }}</th>
+                {% if not currentLangIsCommonLang %}
+                <th>{{ 'english'|trans }}</th>
+                {% endif %}
                 <th>{{ 'translation'|trans }}</th>
             </tr>
         </thead>
@@ -23,9 +29,10 @@
         {% for item in texts %}
             {% set foo = item.text.id %}
             <tr id="item_{{ item.text.id }}">
-                <td>
-                    {{ item.text.source }}
-                </td>
+                <td>{{ item.text.source }}</td>
+                {% if not currentLangIsCommonLang %}
+                <td>{{ item.text.textInCommonLanguage }}</td>
+                {% endif %}
                 <td>{{ form_widget(form['text_' ~ item.text.id]) }}</td>
             </tr>
         {% else %}
@@ -69,9 +76,14 @@
                 '{{ 'confirm_ok'|trans }}',
                 '{{ 'confirm_cancel'|trans }}',
                 function() {
+                    $('#action').val('save');
                     $buttonSaveChanges.get(0).form.submit();
                 }
             );
+        });
+
+        $('#btnSearch').click(function() {
+            $('#action').val('search');
         });
     });
     </script>

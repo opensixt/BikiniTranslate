@@ -5,12 +5,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 use opensixt\BikiniTranslateBundle\Controller\AbstractController;
 use opensixt\BikiniTranslateBundle\Entity\Text;
+use opensixt\BikiniTranslateBundle\Entity\Language;
 
 use opensixt\SxTranslateBundle\Form\AddFreeTextForm;
 use opensixt\SxTranslateBundle\Form\EditFreeTextForm;
 use opensixt\SxTranslateBundle\Form\StatusFreeTextForm;
-
-use opensixt\BikiniTranslateBundle\Entity\Language;
 
 /**
  * @author Dmitri Mansilia <dmitri.mansilia@sixt.com>
