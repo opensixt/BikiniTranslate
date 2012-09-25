@@ -71,7 +71,7 @@ class SearchString extends HandleText
             $resources
         );
 
-        $query = $this->textRepository->getSearchResults();
+        $query = $this->textRepository->getTranslations();
 
         if (empty($this->paginationLimit)) {
             $this->paginationLimit = PHP_INT_MAX;

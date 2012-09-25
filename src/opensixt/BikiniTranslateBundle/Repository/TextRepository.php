@@ -205,30 +205,7 @@ class TextRepository extends EntityRepository
      */
     public function getTranslations()
     {
-        $query = $this->createQueryBuilder('t')
-            ->select('t, l, r, u')
-            ->leftJoin('t.locale', 'l')
-            ->leftJoin('t.resource', 'r')
-            ->leftJoin('t.user', 'u');
-
-        $this->setQueryParameters($query);
-
-        return $query;
-    }
-
-    /**
-     * Get search results
-     *
-     * @return QueryBuilder
-     */
-    public function getSearchResults()
-    {
-        $query = $this->createQueryBuilder('t')
-            ->select('t, r, l, u')
-            ->leftJoin('t.resource', 'r')
-            ->leftJoin('t.locale', 'l')
-            ->leftJoin('t.user', 'u');
-
+        $query = $this->getBaseQuery();
         $this->setQueryParameters($query);
 
         return $query;
@@ -455,7 +432,10 @@ class TextRepository extends EntityRepository
     protected function getBaseQuery()
     {
         $query = $this->createQueryBuilder('t')
-            ->select('t');
+            ->select('t, r, l, u')
+            ->leftJoin('t.resource', 'r')
+            ->leftJoin('t.locale', 'l')
+            ->leftJoin('t.user', 'u');
 
         return $query;
     }
