@@ -3,7 +3,6 @@ namespace opensixt\SxTranslateBundle\IntermediateLayer;
 
 use opensixt\BikiniTranslateBundle\IntermediateLayer\HandleText;
 use opensixt\BikiniTranslateBundle\Entity\Text;
-use opensixt\BikiniTranslateBundle\Entity\Resource;
 use opensixt\BikiniTranslateBundle\Entity\Language;
 use opensixt\BikiniTranslateBundle\Repository\TextRepository;
 
@@ -31,15 +30,7 @@ class HandleFreeText extends HandleText
     {
         $ftext = new Text;
 
-        $defaultResource = $this->doctrine
-            ->getRepository(Resource::ENTITY_RESOURCE)
-                ->findOneByName('Default');
-
-        if (!$defaultResource) {
-            throw new \Exception(
-                __METHOD__ . ': resource "Default" not found!'
-            );
-        }
+        $defaultResource = $this->getDefaultResource();
 
         $ftext->setResource($defaultResource);
 
@@ -74,17 +65,9 @@ class HandleFreeText extends HandleText
     public function getTranslations($page, $languageId)
     {
 
-        $defaultResource = $this->doctrine
-            ->getRepository(Resource::ENTITY_RESOURCE)
-                ->findOneByName('Default');
-
-        if (!$defaultResource) {
-            throw new \Exception(
-                __METHOD__ . ': resource "Default" not found!'
-            );
-        }
-
+        $defaultResource = $this->getDefaultResource();
         $resourceId = $defaultResource->getId();
+
         $this->textRepository->init(
             TextRepository::TASK_MISSING_TRANS_BY_LANG,
             $languageId,
@@ -111,16 +94,7 @@ class HandleFreeText extends HandleText
      */
     public function getDataByStatus($page, $languageId, $searchMode)
     {
-        $defaultResource = $this->doctrine
-            ->getRepository(Resource::ENTITY_RESOURCE)
-                ->findOneByName('Default');
-
-        if (!$defaultResource) {
-            throw new \Exception(
-                __METHOD__ . ': resource "Default" not found!'
-            );
-        }
-
+        $defaultResource = $this->getDefaultResource();
         $resourceId = $defaultResource->getId();
 
         $this->textRepository->init(

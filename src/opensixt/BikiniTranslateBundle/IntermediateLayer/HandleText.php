@@ -3,6 +3,7 @@
 namespace opensixt\BikiniTranslateBundle\IntermediateLayer;
 
 use opensixt\BikiniTranslateBundle\Entity\Text;
+use opensixt\BikiniTranslateBundle\Entity\Resource;
 
 /**
  * HandleText
@@ -111,6 +112,24 @@ abstract class HandleText
     public function deleteTexts(array $textIds)
     {
         $this->textRepository->markTextsAsDeleted($textIds);
+    }
+
+    /**
+     * Get Default resource
+     */
+    public function getDefaultResource()
+    {
+        $defaultResource = $this->doctrine
+            ->getRepository(Resource::ENTITY_RESOURCE)
+                ->findOneByName('Default');
+
+        if (!$defaultResource) {
+            throw new \Exception(
+                __METHOD__ . ': resource "Default" not found!'
+            );
+        }
+
+        return $defaultResource;
     }
 }
 
