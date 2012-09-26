@@ -30,26 +30,6 @@ class MobileTextRepository extends TextRepository
     }
 
     /**
-     * Gets list of texts without translations
-     *
-     * @return QueryBuilder
-     */
-    public function getTranslations()
-    {
-        $query = $this->createQueryBuilder('m')
-            ->select('m, t, l, r, dev')
-            ->leftJoin('m.text', 't')
-            ->leftJoin('m.device', 'dev')
-            ->leftJoin('t.locale', 'l')
-            ->leftJoin('t.resource', 'r')
-            ->leftJoin('t.user', 'u');
-
-        $this->setQueryParameters($query);
-
-        return $query;
-    }
-
-    /**
      * Set query parameters by $this->task
      *
      * @param QueryBuilder $query
