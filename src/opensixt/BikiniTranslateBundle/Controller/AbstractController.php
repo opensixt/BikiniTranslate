@@ -272,9 +272,9 @@ abstract class AbstractController
      * @param string $locale
      * @return mixed
      */
-    protected function redirectAfterSave($route, $page, $locale = '')
+    protected function redirectAfterSave($route, $page, $locale = '', $params = array())
     {
-        $parameters = array();
+        $parameters = $params;
         if (strlen($locale)) {
             $parameters['locale'] = $locale;
         }

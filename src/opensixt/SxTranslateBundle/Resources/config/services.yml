@@ -7,6 +7,8 @@ parameters:
     opensixt.sx_translate.controller.editfreetext.pagination_limit: "15"
     opensixt.sx_translate.intermediate.handlemobile.class: opensixt\SxTranslateBundle\IntermediateLayer\HandleMobile
     opensixt.sx_translate.controller.editmobile.pagination_limit: "15"
+    opensixt.sx_translate.intermediate.searchmobile.class: opensixt\SxTranslateBundle\IntermediateLayer\SearchMobile
+    opensixt.sx_translate.controller.changemobile.pagination_limit: "15"
 
 services:
     opensixt.sx_translate.controller.import:
@@ -31,6 +33,7 @@ services:
         scope: request
         properties:
             handleMobile: @opensixt.sx_translate.intermediate.handlemobile
+            handleSearch: @opensixt.sx_translate.intermediate.searchmobile
             handleText: @opensixt.sx_translate.intermediate.handlefreetext
             doctrine: @doctrine
             commonLanguage: %common_language%
@@ -51,6 +54,14 @@ services:
             securityContext: @security.context
             paginator: @knp_paginator
             paginationLimit: %opensixt.sx_translate.controller.editmobile.pagination_limit%
+
+    opensixt.sx_translate.intermediate.searchmobile:
+        class: %opensixt.sx_translate.intermediate.searchmobile.class%
+        arguments: [@doctrine]
+        properties:
+            securityContext: @security.context
+            paginator: @knp_paginator
+            paginationLimit: %opensixt.sx_translate.controller.changemobile.pagination_limit%
 
     opensixt.sx_translate.event_listener.menu_configure:
         class: opensixt\SxTranslateBundle\EventListener\ConfigureMenuListener

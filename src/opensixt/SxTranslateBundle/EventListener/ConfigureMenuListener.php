@@ -35,6 +35,7 @@ class ConfigureMenuListener
             $menuM = $menuM->addChild($this->translator->trans('menu.mobile'));
 
             $menuM->addChild($this->translator->trans('menu.editmobile'), array('route' => '_sxmobile_edit'));
+            $menuM->addChild($this->translator->trans('menu.changemobile'), array('route' => '_sxmobile_change'));
         }
     }
 }

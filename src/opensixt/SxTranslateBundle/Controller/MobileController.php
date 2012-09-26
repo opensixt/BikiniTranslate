@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use opensixt\BikiniTranslateBundle\Controller\AbstractController;
 
 use opensixt\SxTranslateBundle\Form\EditMobileForm;
+use opensixt\SxTranslateBundle\Form\ChangeMobileForm;
 use opensixt\SxTranslateBundle\Entity\Domain;
 
 /**
@@ -21,6 +22,13 @@ class MobileController extends AbstractController
      * @var \opensixt\SxTranslateBundle\IntermediateLayer\HandleMobile
      */
     public $handleMobile;
+
+    /**
+     * intermediate layer
+     *
+     * @var \opensixt\SxTranslateBundle\IntermediateLayer\SearchMobile
+     */
+    public $handleSearch;
 
     /**
      * intermediate layer
@@ -89,11 +97,8 @@ class MobileController extends AbstractController
 
         $searchDomain = $this->getFieldFromRequest('domain');
 
-        if (!empty($searchDomain)) {
-            $searchDomains = array($searchDomain);
-        } else {
-            $searchDomains = array_keys($domains);
-        }
+        // array with all domains or with only search domain
+        $searchDomains = $this->getSearchDomains();
 
         // get search results
         $data = $this->handleMobile->getTranslations(
@@ -102,12 +107,7 @@ class MobileController extends AbstractController
             $searchDomains
         );
 
-        $ids = array();
-        if (!empty($data)) {
-            foreach ($data as $elem) {
-                $ids[] = $elem->getText()->getId();
-            }
-        }
+        $ids = $this->getIdsFromResults($data);
 
         $form = $this->formFactory
             ->create(
@@ -129,6 +129,104 @@ class MobileController extends AbstractController
 
         return $this->render(
             'opensixtSxTranslateBundle:Mobile:editmobile.html.twig',
+            $templateParam
+        );
+    }
+
+    /**
+     * change Action
+     *
+     * @param int $page
+     * @return Response A Response instance
+     */
+    public function changeAction($page)
+    {
+        $domains = $this->getDomains();
+        $locales = $this->getUserLocales();
+
+        // retrieve request parameters
+        $searchPhrase   = $this->getFieldFromRequest('search');
+        $searchLanguage = $this->getFieldFromRequest('locale');
+        $searchDomain   = $this->getFieldFromRequest('domain');
+
+        // Update texts with entered values
+        if ($this->request->getMethod() == 'POST') {
+            $formData = $this->getRequestData($this->request);
+
+            if (isset($formData['action']) && $formData['action'] == 'search') {
+                $page = 1;
+            }
+
+            if (isset($formData['action']) && $formData['action'] == 'save') {
+                $textsToSave = $this->getTextsToSaveFromRequest(
+                    $formData,
+                    'text'
+                );
+                if (count($textsToSave)) {
+                    $this->handleText->updateTexts($textsToSave);
+                    $this->bikiniFlash->successSave();
+
+                    $params = array();
+                    if (!empty($searchPhrase)) {
+                        $params['search'] = $searchPhrase;
+                    }
+                    if (!empty($searchDomain)) {
+                        $params['domain'] = $searchDomain;
+                    }
+
+                    return $this->redirectAfterSave(
+                        '_sxmobile_change',
+                        $page,
+                        $searchLanguage,
+                        $params
+                    );
+                }
+            }
+        }
+
+        if (strlen($searchPhrase)) {
+            // set search parameters
+            $searchDomains = $this->getSearchDomains();
+            $this->handleSearch->setSearchParameters($searchPhrase);
+
+            // get search results
+            $results = $this->handleSearch->getData(
+                $page,
+                $searchLanguage,
+                $searchDomains
+            );
+
+            // ids of texts for textareas
+            $ids = $this->getIdsFromResults($results);
+        }
+
+        $form = $this->formFactory
+            ->create(
+                new ChangeMobileForm(),
+                null,
+                array(
+                    'searchPhrase'    => $searchPhrase,
+                    'searchDomain'    => $searchDomain,
+                    'domains'         => $domains,
+                    'searchLanguage'  => $searchLanguage,
+                    'locales'         => $locales,
+                    'ids'             => !empty($ids) ? $ids : array(),
+                )
+            );
+
+        $templateParam = array(
+            'form'         => $form->createView(),
+            'search'       => urlencode($searchPhrase),
+            'searchPhrase' => $searchPhrase,
+            'locale'       => $searchLanguage,
+            'domain'       => $searchDomain,
+        );
+        if (isset($results)) {
+            $templateParam['searchResults'] = $results;
+        }
+
+        return $this->render(
+            'opensixtSxTranslateBundle:Mobile:changemobile.html.twig',
             $templateParam
         );
     }
@@ -161,6 +259,45 @@ class MobileController extends AbstractController
         }
 
         return $result;
+    }
+
+    /**
+     * Get search resources
+     *
+     * @return array
+     */
+    protected function getSearchDomains()
+    {
+        // retrieve resource from request
+        $searchDomain = $this->getFieldFromRequest('domain');
+        $domains = $this->getDomains();
+
+        if (!empty($searchDomain) && !empty($domains[$searchDomain])) {
+            // if $searchDomain is set and available
+            $searchDomains = array($searchDomain);
+        } else {
+            // all available resources
+            $searchDomains = array_keys($domains);
+        }
+        return $searchDomains;
+    }
+
+    /**
+     * Get Array of Ids from $results
+     *
+     * @param ArrayCollection $results
+     * @return array
+     */
+    protected function getIdsFromResults($results)
+    {
+        $ids = array();
+        if (!empty($results)) {
+            foreach ($results as $elem) {
+                $ids[] = $elem->getText()->getId();
+            }
+        }
+
+        return $ids;
     }
 }
 

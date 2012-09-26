@@ -37,10 +37,11 @@ class MobileTextRepository extends TextRepository
     public function getTranslations()
     {
         $query = $this->createQueryBuilder('m')
-            ->select('m, t, l, dev')
+            ->select('m, t, l, r, dev')
             ->leftJoin('m.text', 't')
             ->leftJoin('m.device', 'dev')
             ->leftJoin('t.locale', 'l')
+            ->leftJoin('t.resource', 'r')
             ->leftJoin('t.user', 'u');
 
         $this->setQueryParameters($query);
@@ -64,6 +65,7 @@ class MobileTextRepository extends TextRepository
         }
 
         switch ($this->task) {
+            case self::TASK_SEARCH_PHRASE_BY_LANG:
             case self::TASK_MISSING_TRANS_BY_LANG:
             default:
                 parent::setQueryParameters($query);
@@ -109,8 +111,11 @@ class MobileTextRepository extends TextRepository
     protected function getBaseQuery()
     {
         $query = $this->createQueryBuilder('m')
-            ->select('m, t')
-            ->leftJoin('m.text', 't');
+            ->select('m, t, r, l, u')
+            ->leftJoin('m.text', 't')
+            ->leftJoin('t.resource', 'r')
+            ->leftJoin('t.locale', 'l')
+            ->leftJoin('t.user', 'u');
 
         return $query;
     }

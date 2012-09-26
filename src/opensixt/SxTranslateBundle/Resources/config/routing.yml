@@ -21,3 +21,9 @@ _sxfreetext_status:
 _sxmobile_edit:
     pattern: /mobile/edit/{locale}/{page}
     defaults: { _controller: opensixt.sx_translate.controller.mobile:editAction, locale: 'empty', page: 1 }
+
+_sxmobile_change:
+    pattern: /mobile/change/{page}
+    defaults: { _controller: opensixt.sx_translate.controller.mobile:changeAction, page: 1 }
+    requirements:
+        page: \d+

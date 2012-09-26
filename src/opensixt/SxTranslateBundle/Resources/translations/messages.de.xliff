@@ -78,6 +78,18 @@
                 <source>key</source>
                 <target>Key</target>
             </trans-unit>
+            <trans-unit id="sxTranslate_20">
+                <source>menu.changemobile</source>
+                <target>Ändern</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_21">
+                <source>changemobile.explanation</source>
+                <target>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_22">
+                <source>with_domain</source>
+                <target>in der Domain</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
