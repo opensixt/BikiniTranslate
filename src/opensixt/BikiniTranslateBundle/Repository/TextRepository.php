@@ -4,12 +4,14 @@ namespace opensixt\BikiniTranslateBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 
 use opensixt\BikiniTranslateBundle\Entity\TextRevision;
 use opensixt\BikiniTranslateBundle\Entity\Text;
 use opensixt\BikiniTranslateBundle\Entity\Language;
+
+use opensixt\BikiniTranslateBundle\Repository\ResourceRepository as ResourceRepo;
+use opensixt\BikiniTranslateBundle\Repository\LanguageRepository as LanguageRepo;
 
 /**
  * Text Model
@@ -578,7 +580,8 @@ class TextRepository extends EntityRepository
                     ->setParameter(2, $this->resources)
                     ->setParameter(3, $this->locale)
                     ->setParameter(4, $this->translationType)
-                    ->addOrderBy(self::FIELD_ID, "ASC");
+                    ->addOrderBy(ResourceRepo::FIELD_NAME, 'ASC')
+                    ->addOrderBy(self::FIELD_TARGET, 'ASC');
 
                 break;
             case self::TASK_ALL_CONTENT_BY_LANG:
@@ -628,7 +631,10 @@ class TextRepository extends EntityRepository
                     $query->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
                         ->andWhere(self::FIELD_RELEASED . ' IS NULL OR ' . self::FIELD_RELEASED . ' = 0');
                 }
-                $query->addOrderBy(self::FIELD_ID, "ASC");
+
+                $query->addOrderBy(ResourceRepo::FIELD_NAME, 'ASC')
+                    ->addOrderBy(LanguageRepo::FIELD_LOCALE, 'ASC')
+                    ->addOrderBy(self::FIELD_TARGET, 'ASC');
 
                 break;
             case self::TASK_SEARCH_BY_TRANSLATED_STATUS:
@@ -651,7 +657,8 @@ class TextRepository extends EntityRepository
                 $query->andWhere(self::FIELD_TRANSLATE_ME . ' = ?5')
                     ->setParameter(5, intval(!$this->translated));
 
-                $query->addOrderBy(self::FIELD_ID, "ASC");
+                $query->addOrderBy(LanguageRepo::FIELD_LOCALE, 'ASC')
+                    ->addOrderBy(self::FIELD_SOURCE, 'ASC');
 
                 break;
             case self::TASK_MISSING_TRANS_BY_LANG:
@@ -669,8 +676,10 @@ class TextRepository extends EntityRepository
                     ->andWhere(self::FIELD_TS . ' IS NULL OR ' . self::FIELD_TS . ' = 0')
                     ->setParameter(1, $this->resources)
                     ->setParameter(2, $this->locale)
-                    ->setParameter(3, $this->translationType)
-                    ->addOrderBy(self::FIELD_ID, "ASC");
+                    ->setParameter(3, $this->translationType);
+
+                $query->addOrderBy(ResourceRepo::FIELD_NAME, 'ASC')
+                    ->addOrderBy(self::FIELD_SOURCE, 'ASC');
 
                 break;
         }

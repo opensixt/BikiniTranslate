@@ -11,6 +11,10 @@ use Doctrine\ORM\EntityRepository;
  */
 class LanguageRepository extends EntityRepository
 {
+    const FIELD_ID     = 'l.id';
+    const FIELD_LOCALE = 'l.locale';
+    const FIELD_DESCR  = 'l.description';
+
     /**
      * @return \Doctrine\ORM\QueryBuilder
      */

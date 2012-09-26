@@ -11,6 +11,10 @@ use Doctrine\ORM\EntityRepository;
  */
 class ResourceRepository extends EntityRepository
 {
+    const FIELD_ID     = 'r.id';
+    const FIELD_NAME   = 'r.name';
+    const FIELD_DESCR  = 'r.description';
+
     /**
      * @return \Doctrine\ORM\QueryBuilder
      */
