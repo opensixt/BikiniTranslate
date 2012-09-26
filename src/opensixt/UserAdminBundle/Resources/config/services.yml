@@ -1,9 +1,13 @@
 parameters:
   opensixt.user_admin.controller.abstract.class: 'opensixt\UserAdminBundle\Controller\AbstractController'
   opensixt.user_admin.controller.user.class: 'opensixt\UserAdminBundle\Controller\UserController'
+  opensixt.user_admin.controller.user.pagination_limit: "15"
   opensixt.user_admin.controller.group.class: 'opensixt\UserAdminBundle\Controller\GroupController'
+  opensixt.user_admin.controller.group.pagination_limit: "15"
   opensixt.user_admin.controller.language.class: 'opensixt\UserAdminBundle\Controller\LanguageController'
+  opensixt.user_admin.controller.language.pagination_limit: "15"
   opensixt.user_admin.controller.resource.class: 'opensixt\UserAdminBundle\Controller\ResourceController'
+  opensixt.user_admin.controller.resource.pagination_limit: "15"
 
 services:
   opensixt.user_admin.controller.abstract:

@@ -37,16 +37,6 @@ twig:
 
 opensixt_bikini_translate: ~
 
-opensixt_user_admin:
-  user:
-    pagination_limit: 15
-  group:
-    pagination_limit: 15
-  language:
-    pagination_limit: 15
-  resource:
-    pagination_limit: 15
-
 # Doctrine Configuration
 doctrine:
     dbal:
