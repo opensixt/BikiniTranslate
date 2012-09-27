@@ -19,9 +19,9 @@ class HandleMobile extends EditText
     /** @var \Symfony\Component\Security\Core\SecurityContext */
     public $securityContext;
 
-    public function __construct($doctrine, $locale)
+    public function __construct($doctrine)
     {
-        parent::__construct($doctrine, $locale);
+        parent::__construct($doctrine);
         $this->textRepository = $this->em->getRepository(Mobile::ENTITY_MOBILE);
     }
 

@@ -123,9 +123,10 @@ services:
 
     opensixt.bikini_translate.intermediate.edittext:
         class: %opensixt.bikini_translate.intermediate.edittext.class%
-        arguments: [@doctrine, %common_language%]
+        arguments: [@doctrine]
         properties:
             paginator: @knp_paginator
+            commonLanguage: %common_language%
             exportChunkLimit: %export_chunk_limit%
             paginationLimit: %opensixt.bikini_translate.intermediate.edittext.pagination_limit%
 

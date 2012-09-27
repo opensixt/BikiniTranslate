@@ -29,7 +29,7 @@ abstract class HandleText
     protected $locales;
 
     /** @var string */
-    protected $commonLanguage;
+    public $commonLanguage;
 
     /** @var int */
     protected $commonLanguageId;

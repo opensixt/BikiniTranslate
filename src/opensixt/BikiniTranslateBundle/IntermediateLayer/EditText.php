@@ -16,14 +16,6 @@ class EditText extends HandleText
     /** @var int */
     public $exportChunkLimit;
 
-    public function __construct($doctrine, $locale)
-    {
-        $this->commonLanguage = $locale;
-
-        parent::__construct($doctrine);
-        $this->commonLanguageId = $this->textRepository->getIdByLocale($locale);
-    }
-
     /**
      * Compares common and current locales
      *
@@ -33,11 +25,14 @@ class EditText extends HandleText
     public function compareCommonAndCurrentLocales($currentLocale)
     {
         // Exceptions
-        if (!$this->commonLanguageId) {
+        if (!$this->commonLanguage) {
             throw new \Exception(
                 __METHOD__ . ': commonLanguage is not set. Please set common_language in parameters.yml !'
             );
         }
+
+        $this->commonLanguageId = $this->textRepository
+            ->getIdByLocale($this->commonLanguage);
 
         $isEqual = false;
         if ($this->commonLanguageId == $currentLocale) {

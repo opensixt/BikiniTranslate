@@ -50,9 +50,10 @@ services:
 
     opensixt.sx_translate.intermediate.handlemobile:
         class: %opensixt.sx_translate.intermediate.handlemobile.class%
-        arguments: [@doctrine, %common_language%]
+        arguments: [@doctrine]
         properties:
             securityContext: @security.context
+            commonLanguage: %common_language%
             paginator: @knp_paginator
             paginationLimit: %opensixt.sx_translate.controller.editmobile.pagination_limit%
 
