@@ -256,7 +256,7 @@ class MigrateCommand extends ContainerAwareCommand
     protected function loadResourcesAndLocales(
         \Doctrine\DBAL\Connection $conn,
         \Doctrine\ORM\EntityManager $manager,
-        \opensixt\BikiniTranslateBundle\Acl\UserPermissions $userPermissions
+        \opensixt\BikiniTranslateBundle\AclHelper\User $userPermissions
     ) {
         $sql = "SELECT module, GROUP_CONCAT(distinct locale) as locales FROM gtxt group by module";
         $stmt = $conn->query($sql);
