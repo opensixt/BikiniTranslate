@@ -50,10 +50,15 @@ Translation tool which generates translation files in formats .xliff, .mo/.po, j
 
 8.  Setup the database, the schema and load fixtures
     ```bash
+        wget http://getcomposer.org/composer.phar
+        php composer.phar install
+
         mysql -uroot -p -e 'create database bikini character set utf8 default character set utf8 collate utf8_general_ci default collate utf8_general_ci;'
         mysql -uroot -p -e 'grant all on bikini.* to bikini@localhost identified by "bikini";'
+
         php app/console doctrine:schema:create
         php app/console doctrine:fixtures:load
+
         php app/console bikinitranslate:init_controller_acl
         php app/console assets:install web --symlink
 
