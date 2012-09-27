@@ -20,7 +20,7 @@ class BikiniFlash
     public function successSave()
     {
         $this->session->getFlashBag()->add(
-            'notice',
+            'success',
             $this->translator->trans('save_success')
         );
     }

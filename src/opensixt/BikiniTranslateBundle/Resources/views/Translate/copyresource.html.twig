@@ -21,12 +21,12 @@
             <br/>
             <br/>
             {% if translationsCount is defined and translationsCount > 0 %}
-                <div class="flash permanent notice">
+                <div class="alert permanent notice">
                     {% set count = translationsCount %}
                     {% trans %}copy_res_success %count%{% endtrans %}
                 </div>
             {% else %}
-                <div class="flash permanent">
+                <div class="alert permanent">
                     {{ 'copy_nothing'|trans }}
                 </div>
             {% endif %}
