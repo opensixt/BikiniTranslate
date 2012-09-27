@@ -17,6 +17,9 @@ class HandleFreeText extends HandleText
     /** @var \Symfony\Component\Security\Core\SecurityContext */
     public $securityContext;
 
+    /** @var string */
+    public $toolLanguage;
+
     /**
      * Add a new free text
      *
@@ -124,6 +127,14 @@ class HandleFreeText extends HandleText
             $this->paginationLimit = PHP_INT_MAX;
         }
         $data = $this->paginator->paginate($query, $page, $this->paginationLimit);
+
+        if ($searchMode != Text::TRANSLATED) {
+            // use toolLanguage as commonLanguage for free texts;
+            // set messages in tool language for any text in $translations
+            $toolLanguageId = $this->textRepository
+                ->getIdByLocale($this->toolLanguage);
+            $this->textRepository->setMessagesInLanguage($data, $toolLanguageId);
+        }
 
         // set GET parameter for paginator links
         $data->setParam('mode', $searchMode);

@@ -232,9 +232,10 @@ class FreeTextController extends AbstractController
             );
 
         $templateParam = array(
-            'form'     => $form->createView(),
-            'mode'     => $searchMode,
-            'locale'   => $searchLanguage,
+            'form'            => $form->createView(),
+            'mode'            => $searchMode,
+            'locale'          => $searchLanguage,
+            'mode_translated' => Text::TRANSLATED,
         );
         if (isset($results)) {
             $templateParam['searchResults'] = $results;

@@ -539,20 +539,31 @@ class TextRepository extends EntityRepository
      *
      * @param array $texts
      */
+    public function setMessagesInLanguage(&$texts, $languageId)
+    {
+        $textsLang = $this->getMessagesByLanguage($texts, array($languageId));
+        foreach ($texts as $text) {
+            $message = '';
+            foreach ($textsLang as $textLang) {
+                if ($text->getHash() == $textLang->getHash()) {
+                    $message = $textLang->getTarget();
+                    break;
+                }
+            }
+            $text->setTextInCommonLanguage($message);
+        }
+    }
+
+    /**
+     * Set messages in $locale language for any hash from $texts
+     * if current locale not equal common language
+     *
+     * @param array $texts
+     */
     public function setMessagesInCommonLanguage(&$texts)
     {
         if ($this->locale != $this->commonLanguageId) {
-            $textsLang = $this->getMessagesByLanguage($texts, array($this->commonLanguageId));
-            foreach ($texts as $text) {
-                $message = '';
-                foreach ($textsLang as $textLang) {
-                    if ($text->getHash() == $textLang->getHash()) {
-                        $message = $textLang->getTarget();
-                        break;
-                    }
-                }
-                $text->setTextInCommonLanguage($message);
-            }
+            $this->setMessagesInLanguage($texts, $this->commonLanguageId);
         }
     }
 

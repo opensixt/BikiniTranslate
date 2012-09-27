@@ -63,25 +63,23 @@ class MobileTextRepository extends TextRepository
      *
      * @param array $texts
      */
-    public function setMessagesInCommonLanguage(&$data)
+    public function setMessagesInLanguage(&$data, $languageId)
     {
         $texts = array();
         foreach ($data as $mobile) {
             $texts[] = $mobile->getText();
         }
 
-        if ($this->locale != $this->commonLanguageId) {
-            $textsLang = $this->getMessagesByLanguage($texts, array($this->commonLanguageId));
-            foreach ($data as $mobile) {
-                $message = '';
-                foreach ($textsLang as $textLang) {
-                    if ($mobile->getText()->getHash() == $textLang->getText()->getHash()) {
-                        $message = $textLang->getText()->getTarget();
-                        break;
-                    }
+        $textsLang = $this->getMessagesByLanguage($texts, array($languageId));
+        foreach ($data as $mobile) {
+            $message = '';
+            foreach ($textsLang as $textLang) {
+                if ($mobile->getText()->getHash() == $textLang->getText()->getHash()) {
+                    $message = $textLang->getText()->getTarget();
+                    break;
                 }
-                $mobile->getText()->setTextInCommonLanguage($message);
             }
+            $mobile->getText()->setTextInCommonLanguage($message);
         }
     }
 

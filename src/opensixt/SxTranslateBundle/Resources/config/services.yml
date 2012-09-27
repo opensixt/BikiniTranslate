@@ -44,6 +44,7 @@ services:
         arguments: [@doctrine]
         properties:
             securityContext: @security.context
+            toolLanguage: %tool_language%
             paginator: @knp_paginator
             paginationLimit: %opensixt.sx_translate.controller.editfreetext.pagination_limit%
 

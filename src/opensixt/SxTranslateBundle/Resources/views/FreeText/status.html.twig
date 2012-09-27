@@ -22,21 +22,34 @@
     <table class="list">
         <thead>
             <tr>
-                <th>{{ 'results'|trans }}</th>
+                <th>{{ 'key'|trans }}</th>
+                <th/>
+                <th>
+                    {% if mode_translated == mode %}
+                        {{ 'translation'|trans }}
+                    {% else %}
+                        {{ 'source_lang'|trans }}
+                    {% endif %}
+                </th>
+                <th/>
+                <th/>
             </tr>
         </thead>
         <tbody>
 
         {% for item in searchResults %}
             <tr>
+                <td>"{{ item.source }}"</td>
+                <td>({{ item.locale.locale }})</td>
                 <td>
-                    "{{ item.source }}" ({{ item.locale.locale }})
-                    {% if item.target %}
-                    : <div id="text_{{ item.id }}" class="textItems inline">{{ item.target }}</div>
+                    {% if mode_translated == mode %}
+                        <div id="text_{{ item.id }}" class="textItems inline">{{ item.target }}</div>
                     {% else %}
-                    {{ item.user.username }} - {{ item.created.date|date('date_format'|trans) }}
+                        {{ item.textInCommonLanguage }}
                     {% endif %}
                 </td>
+                <td>{{ item.user.username }}</td>
+                <td>{{ item.created.date|date('date_format'|trans) }}</td>
             </tr>
         {% else %}
             <tr>
