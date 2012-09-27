@@ -15,6 +15,13 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
+        $breadcrumbs = $this->get("white_october_breadcrumbs");
+
+        // Simple example
+        $breadcrumbs
+            ->addItem($this->get('translator')->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->get('translator')->trans('admin_home'), $this->generateUrl('_user_admin_home'));
+
         return $this->render('opensixtUserAdminBundle:Default:index.html.twig');
     }
 }

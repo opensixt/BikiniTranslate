@@ -47,7 +47,8 @@
         "jms/di-extra-bundle": "1.0.*",
         "knplabs/knp-paginator-bundle": "*",
         "knplabs/knp-menu-bundle": "*",
-        "friendsofsymfony/rest-bundle": "*"
+        "friendsofsymfony/rest-bundle": "*",
+        "whiteoctober/breadcrumbs-bundle": "2.1.x-dev"
     },
     "minimum-stability": "dev",
     "scripts": {

@@ -37,6 +37,9 @@ abstract class AbstractController
     /** @var \Symfony\Component\Security\Acl\Model\MutableAclProviderInterface */
     public $aclProvider;
 
+    /** @var \WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs */
+    public $breadcrumbs;
+
     /**
      * @param string $url
      * @param int $status

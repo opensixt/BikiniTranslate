@@ -30,6 +30,10 @@ class UserController extends AbstractController
      */
     public function listAction($page = 1)
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('user_list'));
+
         $this->requireAdminUser();
 
         $searchTerm = $this->request->get('search', '');
@@ -58,6 +62,12 @@ class UserController extends AbstractController
      */
     public function viewAction($id)
     {
+        // Simple example
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('user_list'), $this->generateUrl('_admin_userlist'))
+            ->addItem($this->translator->trans('user'));
+
         $user = $this->requireUserWithId($id);
 
         if (!$this->securityContext->isGranted('VIEW', $user)) {
@@ -122,6 +132,12 @@ class UserController extends AbstractController
     public function createAction()
     {
         $this->requireAdminUser();
+
+        // Simple example
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('user_list'), $this->generateUrl('_admin_userlist'))
+            ->addItem($this->translator->trans('create_user'));
 
         $form = $this->getEditUserFormForUser();
 
