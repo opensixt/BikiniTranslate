@@ -19,13 +19,13 @@ security:
             entity: { class: OpensixtBikiniTranslateBundle:User, property: username }
 
     firewalls:
-
         main:
             pattern: ^/
             form_login:
                 check_path: /login_check
                 login_path: /login
-                default_target_path: /admin
+                default_target_path: /admin/
+                always_use_default_target_path: true
                 use_referer: true
             logout:
                 target: /admin
