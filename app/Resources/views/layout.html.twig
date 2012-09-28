@@ -2,64 +2,110 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{{ 'welcome'|trans }}{% endblock %} :: opensixt/BikiniTranslate</title>
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        <link href="http://fonts.googleapis.com/css?family=Cabin+Condensed" rel="stylesheet" type="text/css">
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css">
-        <link href="{{ asset('/bundles/opensixtbikinitranslate/css/content.css') }}" type="text/css" rel="stylesheet" />
-        <link href="{{ asset('/bundles/opensixtbikinitranslate/css/menu.css') }}" type="text/css" rel="stylesheet" />
+        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" type="text/css">
+        <link href="{{ asset('/skins/' ~ skin ~ '/css/default.css') }}" type="text/css" rel="stylesheet" />
+        <!--link href="{{ asset('/bundles/opensixtbikinitranslate/css/content.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('/bundles/opensixtbikinitranslate/css/menu.css') }}" type="text/css" rel="stylesheet" /-->
         {% block stylesheets %}
         {% endblock %}
     </head>
     <body>
 
         <section id="wrapper">
-            <header id="header">
-                <div class="top">
-                    {% block navigation %}
-                        <nav>
-                            <ul class="navigation">
-                                <li class="left"><a href="{{ path('_home') }}">{{ 'home'|trans }}</a></li>
-                                <li class="left"><a href="#">{{ 'about'|trans }}</a></li>
-                                <li class="left"><a href="#">{{ 'contact'|trans }}</a></li>
-                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                <li class="right"><a href="{{ path('_logout') }}">{{ 'logout'|trans }}</a></li>
-                                <li class="right"><a href="{{ path('_user_admin_home') }}">{{ 'admin_home'|trans }}</a></li>
-                            {% else %}
-                                <li class="right"><a href="{{ path('_login') }}">{{ 'login'|trans }}</a></li>
-                            {% endif %}
-                            </ul>
-                        </nav>
-                    {% endblock %}
-                </div>
 
-                <hgroup>
-                    <h2>{% block blog_title %}<a href="#">BikiniTranslate</a>{% endblock %}</h2>
-                    <h3>{% block blog_tagline %}<a href="#">opensixt/BikiniTranslate</a>{% endblock %}</h3>
-                </hgroup>
-            </header>
+            <section id="header">
+                <img id="logo_header" src="/skins/{{ skin }}/img/logo_header.png"/>
+            </section>
 
-            <section class="main">
+            <div id="nav">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a>{{ 'admin_home'|trans }}</a>
+                    <a href="{{ path('_logout') }}">{{ 'logout'|trans }}</a>
+                {% else %}
+                    <a href="{{ path('_login') }}">{{ 'login'|trans }}</a>
+                {% endif %}
+
+                <form class="navbar-search pull-right">
+                    <input type="text" class="search-query" placeholder="Search">
+                </form>
+            </div>
+
+            <section id="main">
+                {{ wo_render_breadcrumbs() }}
                 {% block flash %}{% endblock %}
                 {% block body %}{% endblock %}
             </section>
+
+            <section id="footer">
+                {% block footer %}
+                    <a href="#">Bikini Translate Policy</a>
+                    <a href="#">Licence</a>
+                    <a href="#">Usage</a>
+                    <a href="https://github.com/opensixt/">opensixt on github</a>
+                {% endblock %}
+            </section>
+
+        </section>
+
+        <section style="display: none;" id="_wrapper">
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <!-- brand class is from bootstrap.css  -->
+                        <a class="brand" href="{{ path('_user_admin_home') }}">BikiniTranslate</a>
+                        <div class="nav-collapse">
+                            <ul class="nav">
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                    <li class="dropdown">
+                                        <a href="{{ path('_user_admin_home') }}" class="dropdown-toggle" data-toggle="dropdown">{{ 'admin_home'|trans }} <b class="caret"></b></a>
+                                        {{ knp_menu_render('bikini_translate.sidebar_menu', { 'id': 'foo', 'currentClass': 'dropdown-menu' }) }}
+                                    </li>
+                                    <li><a href="{{ path('_logout') }}">{{ 'logout'|trans }}</a></li>
+                                {% else %}
+                                    <li><a href="{{ path('_login') }}">{{ 'login'|trans }}</a></li>
+                                {% endif %}
+                            </ul>
+                            <form class="navbar-search pull-right">
+                                <input type="text" class="search-query" placeholder="Search">
+                            </form>
+                        </div><!-- /.nav-collapse -->
+                    </div>
+                </div><!-- /navbar-inner -->
+            </div><!-- /navbar -->
+
             <aside class="sidebar">
                 {% block sidebar %}
                     {{ knp_menu_render('bikini_translate.sidebar_menu') }}
                 {% endblock %}
             </aside>
 
-            <div id="footer">
-                {% block footer %}
-                    <a href="https://github.com/opensixt/">opensixt on github</a>
-                {% endblock %}
-            </div>
         </section>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.22/jquery-ui.min.js"></script>
+        <script src="/bootstrap/js/bootstrap.js"></script>
+        <script src="/js/default.js"></script>
+        <script>
+            jQuery(document).ready(function($) {
+                // add css class to knpmenu
+                jQuery(document).ready(function($) {
+                    $('div.navbar a.dropdown-toggle').next('ul').addClass('dropdown-menu');
+
+                    $('div.navbar ul.dropdown-menu > li').addClass('nav-header');
+
+                    //$('div.navbar ul.dropdown-menu > li > ul').addClass('nav-header');
+
+                    //$('aside.sidebar ul').addClass('nav nav-list');
+                });
+            });
+        </script>
         {% block javascript_includes %}
         {% endblock %}
         {% block javascripts %}

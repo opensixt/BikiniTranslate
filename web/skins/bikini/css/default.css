@@ -1,0 +1,57 @@
+/* here goes licence */
+
+/* here goes css */
+body {
+    background: #f8feff url(../img/bg_header.png) repeat-x;
+}
+
+#wrapper {
+
+}
+
+#header {
+    border-bottom: 1px solid white;
+    height: 116px;
+}
+
+#logo_header {
+    margin: 10px 0 0 29px;
+}
+
+#nav {
+    background: white url(../img/bg_nav_box.png) repeat-x;
+    height: 44px;
+    list-style: none;
+    padding: 0;
+    padding-left: 44px;
+    margin: 0;
+}
+
+#nav > a {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    padding: 12px 22px;
+}
+
+#nav > a:hover {
+    background: white url(../img/bg_nav_hover.png) repeat-x;
+    color: #26b0df;
+}
+
+#nav .navbar-search {
+    margin: 8px 6px 0 0;
+}
+
+#main {
+    background: url(../img/bg_body.png) repeat-x;
+    min-height: 500px;
+}
+
+#footer {
+    height: 43px;
+    clear:both;
+    padding-top:20px;
+    color:#959698;
+    background: #2e2e2e;
+}
