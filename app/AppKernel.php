@@ -23,9 +23,9 @@ class AppKernel extends Kernel
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new WhiteOctober\BreadcrumbsBundle\WhiteOctoberBreadcrumbsBundle(),
-            new opensixt\BikiniTranslateBundle\opensixtBikiniTranslateBundle(),
-            new opensixt\UserAdminBundle\opensixtUserAdminBundle(),
-            new opensixt\SxTranslateBundle\opensixtSxTranslateBundle(),
+            new Opensixt\BikiniTranslateBundle\OpensixtBikiniTranslateBundle(),
+            new Opensixt\UserAdminBundle\OpensixtUserAdminBundle(),
+            new Opensixt\SxTranslateBundle\OpensixtSxTranslateBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -1,0 +1,43 @@
+{% extends 'OpensixtBikiniTranslateBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'languages'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ 'languages'|trans }}</h3>
+
+    <a href="{{ path('_admin_language_create') }}">{{ 'new_language'|trans }}</a>
+
+    <table class="list">
+        <thead>
+            <tr>
+                <th style="width:150px">{{ 'language'|trans }}</th>
+                <th style="width:350px">{{ 'description'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in pagination %}
+            <tr>
+                <td><a href="{{ path('_admin_language', {'id': item.id}) }}">{{ item.locale }}</a></td>
+                <td>{{ item.description }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">{{ 'no_languages_found'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    {{ pagination.render()|raw }}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+
+
+{% endblock %}

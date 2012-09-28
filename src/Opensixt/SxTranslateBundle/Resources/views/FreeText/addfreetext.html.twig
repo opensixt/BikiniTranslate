@@ -1,0 +1,24 @@
+{% extends 'OpensixtBikiniTranslateBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'translation_tool'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ 'translation_tool'|trans }}</h3>
+
+    <div class="textblock">{{ 'addfreetext.explanation'|trans }}</div>
+    
+    <form action="{{ path('_sxfreetext_add') }}" method="post" {{ form_enctype(form) }}>
+        <div class="textblock">{{ form_label(form.locale) }} {{ form_widget(form.locale) }}</div>
+        <div class="textblock">{{ form_label(form.headline) }} {{ form_widget(form.headline) }}</div>
+        <div class="textblock">{{ form_label(form.text) }} {{ form_widget(form.text) }}</div>
+
+        <div class="textblock"><input id="btnSearch" type="submit" value="{{ 'freetext.save'|trans }}"/></div>
+
+        {{ form_rest(form) }}
+    </form>
+
+{% endblock %}
+

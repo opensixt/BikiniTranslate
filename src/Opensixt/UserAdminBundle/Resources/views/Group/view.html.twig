@@ -1,0 +1,26 @@
+{% extends 'OpensixtBikiniTranslateBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'group'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ 'group'|trans }}</h3>
+
+    <form action="{{ path('_admin_group_save', {'id': group.getId()}) }}" method="post" {{ form_enctype(form) }}>
+        <div>
+            {{ form_label(form.name) }}
+            {{ form_errors(form.name) }}
+            {{ form_widget(form.name) }}
+        </div>
+        <div>
+            {{ form_label(form.description) }}
+            {{ form_errors(form.description) }}
+            {{ form_widget(form.description) }}
+        </div>
+        {{ form_rest(form) }}
+        <input type="submit" value="{{ 'submit'|trans }}"/>
+    </form>
+
+{% endblock %}

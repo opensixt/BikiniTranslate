@@ -1,0 +1,94 @@
+{% extends 'OpensixtBikiniTranslateBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'translation_tool'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ 'translation_tool'|trans }}</h3>
+
+    <div class="textblock">{{ 'releasetext_explanation'|trans }}</div>
+
+    <form action="{{ path('_translate_releasetext') }}" method="post" {{ form_enctype(form) }}>
+
+        {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
+        {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
+        <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+
+        {% if searchResults is defined %}
+        <table class="list">
+            <thead>
+                <tr>
+                    <th >{{ 'cleantext_resource'|trans }}</th>
+                    <th >{{ 'cleantext_text'|trans }}</th>
+                    <th >{{ 'cleantext_author'|trans }}</th>
+                    <th >{{ 'release'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for item in searchResults %}
+                <tr>
+                    <td>{{ item.resource.name }} ({{ item.locale.locale }})<br/><br/>  </td>
+                    <td>{{ item.target }}</td>
+                    <td>{{ item.user.username }}</td>
+                    <td>{{ form_widget(form['chk_' ~ item.id]) }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">{{ 'no_translation_found'|trans }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        {# navigation #}
+                        {{ searchResults.render()|raw }}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        {% if searchResults is not empty %}
+            <input type="submit" value="{{ 'release'|trans }}" id="btnSaveChanges" />
+        {% endif %}
+
+        {% endif %}
+
+        {{ form_rest(form) }}
+    </form>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        // no conflict mode, use $ in here
+
+        $('#btnSaveChanges').click(function(e) {
+            e.preventDefault();
+
+            var closure = function(buttonSaveChanges) {
+                return function() {
+                    $('#action').val('save');
+                    buttonSaveChanges.form.submit();
+                };
+            };
+
+            bikiniConfirm(
+                '{{ 'confirm_text'|trans }}',
+                '{{ 'confirm_ok'|trans }}',
+                '{{ 'confirm_cancel'|trans }}',
+                closure(this)
+            );
+        });
+
+        $('#btnSearch').click(function() {
+            $('#action').val('search');
+        });
+
+    });
+    </script>
+{% endblock %}

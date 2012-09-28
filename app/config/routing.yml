@@ -1,11 +1,11 @@
-opensixtSxTranslateBundle:
-    resource: "@opensixtSxTranslateBundle/Resources/config/routing.yml"
+OpensixtSxTranslateBundle:
+    resource: "@OpensixtSxTranslateBundle/Resources/config/routing.yml"
     prefix:   /
 
-opensixtUserAdminBundle:
-    resource: "@opensixtUserAdminBundle/Resources/config/routing.yml"
+OpensixtUserAdminBundle:
+    resource: "@OpensixtUserAdminBundle/Resources/config/routing.yml"
     prefix:   /
 
-opensixtBikiniTranslateBundle:
-    resource: "@opensixtBikiniTranslateBundle/Resources/config/routing.yml"
+OpensixtBikiniTranslateBundle:
+    resource: "@OpensixtBikiniTranslateBundle/Resources/config/routing.yml"
     prefix:   /

@@ -1,0 +1,49 @@
+{
+    "name": "opensixt/bikini-translate-bundle",
+    "type": "symfony-bundle",
+    "description": "This bundle provides a translation tool with users and groups ACL",
+    "keywords": ["translate"],
+    "homepage": "http://www.opensixt.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dmitri Mansilia",
+            "email": "dmitri.mansilia@sixt.com"
+        },
+        {
+            "name": "Uwe Pries",
+            "email": "uwe.pries@sixt.de"
+        },
+        {
+            "name": "Paul Seiffert",
+            "email": "paul.seiffert@mayflower.de"
+        },
+        {
+            "name": "OpenSixt",
+            "homepage": "http://www.opensixt.com"
+        }
+    ],
+
+    "require": {
+        "php":                            ">=5.3.2",
+        "symfony/symfony":                ">=2.0,<2.2-dev",
+        "sensio/framework-extra-bundle":  ">=2.0,<2.2-dev",
+        "jms/serializer-bundle":          "0.9.*",
+        "doctrine/fixtures":              "*",
+        "doctrine/migrations":            "*"
+    },
+
+    "autoload": {
+        "psr-0": { 
+            "Opensixt\\BikiniTranslateBundle": "",
+            "Doctrine\\Common\\DataFixtures": "lib/",
+            "Doctrine\\DBAL\\Migrations": "lib"
+        }
+    },
+
+    "target-dir": "Opensixt/BikiniTranslateBundle",
+
+    "extra": {
+    }
+}
+

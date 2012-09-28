@@ -1,0 +1,16 @@
+{% extends 'OpensixtBikiniTranslateBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'admin_home'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h2>{{ 'admin_home'|trans }}</h2>
+
+    {% if app.user.username %}
+        {% set name = app.user.username %}
+        <div class="message">{% trans %} hello %name% {% endtrans %}</div>
+    {% endif %}
+
+{% endblock %}

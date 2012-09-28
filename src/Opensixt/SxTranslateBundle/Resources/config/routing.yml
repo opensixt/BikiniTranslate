@@ -1,0 +1,29 @@
+OpensixtSxTranslateBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: OpensixtSxTranslateBundle:Default:index }
+
+_sxtranslate_getfromts:
+    pattern: /sxtranslate/getfromts/
+    defaults: { _controller: opensixt.sx_translate.controller.import:getFromTsAction}
+
+_sxfreetext_add:
+    pattern: /freetext/add/
+    defaults: { _controller: opensixt.sx_translate.controller.freetext:addAction}
+
+_sxfreetext_edit:
+    pattern: /freetext/edit/{locale}/{page}
+    defaults: { _controller: opensixt.sx_translate.controller.freetext:editAction, locale: 'empty', page: 1 }
+
+_sxfreetext_status:
+    pattern: /freetext/status/{page}
+    defaults: { _controller: opensixt.sx_translate.controller.freetext:statusAction, page: 1 }
+
+_sxmobile_edit:
+    pattern: /mobile/edit/{locale}/{page}
+    defaults: { _controller: opensixt.sx_translate.controller.mobile:editAction, locale: 'empty', page: 1 }
+
+_sxmobile_change:
+    pattern: /mobile/change/{page}
+    defaults: { _controller: opensixt.sx_translate.controller.mobile:changeAction, page: 1 }
+    requirements:
+        page: \d+

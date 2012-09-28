@@ -4,7 +4,7 @@ jms_security_extra:
 
 security:
     encoders:
-        opensixt\BikiniTranslateBundle\Entity\User:
+        Opensixt\BikiniTranslateBundle\Entity\User:
             algorithm:        md5
             encode_as_base64: false
             iterations:       1
@@ -16,7 +16,7 @@ security:
 
     providers:
         main:
-            entity: { class: opensixtBikiniTranslateBundle:User, property: username }
+            entity: { class: OpensixtBikiniTranslateBundle:User, property: username }
 
     firewalls:
 

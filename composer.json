@@ -26,7 +26,7 @@
         "irc": "irc://irc.freenode.org/opensixt"
     },
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": { "Opensixt": "src/" }
     },
     "require": {
         "php": ">=5.3.3",

@@ -1,0 +1,72 @@
+{% extends 'OpensixtBikiniTranslateBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'translation_tool'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ 'translation_tool'|trans }}</h3>
+
+    <div class="textblock">{{ 'statusfreetext.explanation'|trans }}</div>
+
+    <form action="{{ path('_sxfreetext_status') }}" method="post" {{ form_enctype(form) }}>
+
+        {{ form_label(form.mode) }} {{ form_widget(form.mode) }}
+        {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
+        <input type="submit" value="{{ 'submit_page'|trans }}"/>
+        {{ form_rest(form) }}
+    </form>
+
+    {% if searchResults is defined %}
+    <table class="list">
+        <thead>
+            <tr>
+                <th>{{ 'key'|trans }}</th>
+                <th/>
+                <th>
+                    {% if mode_translated == mode %}
+                        {{ 'translation'|trans }}
+                    {% else %}
+                        {{ 'source_lang'|trans }}
+                    {% endif %}
+                </th>
+                <th/>
+                <th/>
+            </tr>
+        </thead>
+        <tbody>
+
+        {% for item in searchResults %}
+            <tr>
+                <td>"{{ item.source }}"</td>
+                <td>({{ item.locale.locale }})</td>
+                <td>
+                    {% if mode_translated == mode %}
+                        <div id="text_{{ item.id }}" class="textItems inline">{{ item.target }}</div>
+                    {% else %}
+                        {{ item.textInCommonLanguage }}
+                    {% endif %}
+                </td>
+                <td>{{ item.user.username }}</td>
+                <td>{{ item.created.date|date('date_format'|trans) }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">{{ 'no_translation_found'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    {# navigation #}
+                    {{ searchResults.render()|raw }}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    {% endif %}
+
+{% endblock %}
+
