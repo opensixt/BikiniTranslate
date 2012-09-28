@@ -1,4 +1,11 @@
 jQuery(document).ready(function($) {
+    // add css class to knpmenu
+    jQuery(document).ready(function($) {
+        $('div.navbar a.dropdown-toggle').next('ul').addClass('dropdown-menu');
+
+        $('aside.sidebar ul').addClass('nav nav-list');
+    });
+
     // symfony flasher
     // wait 5 seconds, then fade out slowly each second.
     // if mouseover was triggered, stop fading out

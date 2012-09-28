@@ -6,6 +6,10 @@
                 <source>date_format</source>
                 <target>d.m.Y</target>
             </trans-unit>
+            <trans-unit id="2">
+                <source>home</source>
+                <target>BikiniTranslate</target>
+            </trans-unit>
             <trans-unit id="5">
                 <source>translation_tool</source>
                 <target>Translation Tool</target>
