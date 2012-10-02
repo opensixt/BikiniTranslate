@@ -29,6 +29,8 @@ class MenuBuilder
         $menu = $this->factory->createItem('root')
             ->setChildrenAttribute('id', 'nav');
 
+        $menu->addChild($this->translator->trans('admin_home'), array('route' => '_user_admin_home'));
+
         if ($this->securityContext->isGranted('ROLE_USER')) {
             //$menu->setCurrentUri($request->getRequestUri());
 

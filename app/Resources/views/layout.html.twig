@@ -11,71 +11,40 @@
         <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
         <link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" type="text/css">
         <link href="{{ asset('/skins/' ~ skin ~ '/css/default.css') }}" type="text/css" rel="stylesheet" />
-        <!--link href="{{ asset('/bundles/opensixtbikinitranslate/css/content.css') }}" type="text/css" rel="stylesheet" />
-        <link href="{{ asset('/bundles/opensixtbikinitranslate/css/menu.css') }}" type="text/css" rel="stylesheet" /-->
         {% block stylesheets %}
         {% endblock %}
     </head>
     <body>
 
-        <section id="wrapper">
+        <div id="wrap">
 
-            <section id="header">
+            <div id="header">
                 <img id="logo_header" src="/skins/{{ skin }}/img/logo_header.png"/>
-            </section>
+            </div>
 
             {{ knp_menu_render('bikini_translate.sidebar_menu', {'template': 'OpensixtBikiniTranslateBundle:Menu:nav.html.twig'}) }}
 
-            <section id="main">
-                {{ wo_render_breadcrumbs() }}
+            <div id="main">
+                {% block breadcrumbs %}
+                    {{ wo_render_breadcrumbs() }}
+                {% endblock %}
                 {% block flash %}{% endblock %}
+                <div id="content">
                 {% block body %}{% endblock %}
-            </section>
+                </div>
+            </div>
 
-            <section id="footer">
-                {% block footer %}
-                    <a href="#">Bikini Translate Policy</a>
-                    <a href="#">Licence</a>
-                    <a href="#">Usage</a>
-                    <a href="https://github.com/opensixt/">opensixt on github</a>
-                {% endblock %}
-            </section>
+            <div id="push"></div>
 
-        </section>
+        </div>
 
-        <section style="display: none;" id="_wrapper">
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <!-- brand class is from bootstrap.css  -->
-                        <a class="brand" href="{{ path('_user_admin_home') }}">BikiniTranslate</a>
-                        <div class="nav-collapse">
-                            <ul class="nav">
-                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                    <li class="dropdown">
-                                        <a href="{{ path('_user_admin_home') }}" class="dropdown-toggle" data-toggle="dropdown">{{ 'admin_home'|trans }} <b class="caret"></b></a>
-                                        {{ knp_menu_render('bikini_translate.sidebar_menu', { 'id': 'foo', 'currentClass': 'dropdown-menu' }) }}
-                                    </li>
-                                    <li><a href="{{ path('_logout') }}">{{ 'logout'|trans }}</a></li>
-                                {% else %}
-                                    <li><a href="{{ path('_login') }}">{{ 'login'|trans }}</a></li>
-                                {% endif %}
-                            </ul>
-                            <form class="navbar-search pull-right">
-                                <input type="text" class="search-query" placeholder="Search">
-                            </form>
-                        </div><!-- /.nav-collapse -->
-                    </div>
-                </div><!-- /navbar-inner -->
-            </div><!-- /navbar -->
-
-            <aside class="sidebar">
-                {% block sidebar %}
-                    {{ knp_menu_render('bikini_translate.sidebar_menu') }}
-                {% endblock %}
-            </aside>
-
-        </section>
+        <div id="footer">
+            <a href="#">Bikini Translate Policy</a>
+            <a href="#">Licence</a>
+            <a href="#">Usage</a>
+            <a class="pull-right" href="https://github.com/opensixt/">opensixt on github</a>
+            <a class="pull-right" href="https://github.com/opensixt/BikiniTranslate">BikiniTranslate on github</a>
+        </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.22/jquery-ui.min.js"></script>
@@ -83,16 +52,7 @@
         <script src="/js/default.js"></script>
         <script>
             jQuery(document).ready(function($) {
-                // add css class to knpmenu
-                jQuery(document).ready(function($) {
-                    $('div.navbar a.dropdown-toggle').next('ul').addClass('dropdown-menu');
-
-                    $('div.navbar ul.dropdown-menu > li').addClass('nav-header');
-
-                    //$('div.navbar ul.dropdown-menu > li > ul').addClass('nav-header');
-
-                    //$('aside.sidebar ul').addClass('nav nav-list');
-                });
+                // 
             });
         </script>
         {% block javascript_includes %}

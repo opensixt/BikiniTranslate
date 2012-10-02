@@ -1,12 +1,35 @@
 /* here goes licence */
 
 /* here goes css */
+
+
+/*
+Sticky Footer by Ryan Fait
+http://ryanfait.com/
+*/
+* {
+    margin: 0;
+}
+html, body {
+    height: 100%;
+}
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -63px; /* the bottom margin is the negative value of the footer's height */
+}
+#push,
+#footer {
+    height: 43px; /* .push must be the same height as .footer */
+}
+/*
+Sticky Footer by Ryan Fait
+http://ryanfait.com/
+*/
+
 body {
     background: #f8feff url(../img/bg_header.png) repeat-x;
-}
-
-#wrapper {
-
 }
 
 #header {
@@ -49,13 +72,30 @@ body {
 
 #main {
     background: url(../img/bg_body.png) repeat-x;
-    min-height: 500px;
+}
+
+#content {
+    margin: 0 10px 40px 25px;
+}
+
+#content h3 {
+    margin-top: 0;
 }
 
 #footer {
     height: 43px;
-    clear:both;
+    clear: both;
     padding-top:20px;
-    color:#959698;
     background: #2e2e2e;
+}
+
+#footer a {
+    display: inline-block;
+    margin: 0 25px;
+    color: #98999b;
+    text-decoration: none;
+}
+
+#footer a:hover, #footer a:active {
+    color: white;
 }
