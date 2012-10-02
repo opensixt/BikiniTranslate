@@ -27,14 +27,18 @@ body {
     margin: 0;
 }
 
-#nav > a {
+#nav > li {
+    display: inline-block;
+}
+
+#nav > li > a {
     display: inline-block;
     color: white;
     text-decoration: none;
     padding: 12px 22px;
 }
 
-#nav > a:hover {
+#nav > li > a:hover {
     background: white url(../img/bg_nav_hover.png) repeat-x;
     color: #26b0df;
 }

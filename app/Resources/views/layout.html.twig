@@ -24,18 +24,7 @@
                 <img id="logo_header" src="/skins/{{ skin }}/img/logo_header.png"/>
             </section>
 
-            <div id="nav">
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <a>{{ 'admin_home'|trans }}</a>
-                    <a href="{{ path('_logout') }}">{{ 'logout'|trans }}</a>
-                {% else %}
-                    <a href="{{ path('_login') }}">{{ 'login'|trans }}</a>
-                {% endif %}
-
-                <form class="navbar-search pull-right">
-                    <input type="text" class="search-query" placeholder="Search">
-                </form>
-            </div>
+            {{ knp_menu_render('bikini_translate.sidebar_menu', {'template': 'OpensixtBikiniTranslateBundle:Menu:nav.html.twig'}) }}
 
             <section id="main">
                 {{ wo_render_breadcrumbs() }}

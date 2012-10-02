@@ -26,7 +26,8 @@ class MenuBuilder
      */
     public function createSidebarMenu(Request $request)
     {
-        $menu = $this->factory->createItem('root');
+        $menu = $this->factory->createItem('root')
+            ->setChildrenAttribute('id', 'nav');
 
         if ($this->securityContext->isGranted('ROLE_USER')) {
             //$menu->setCurrentUri($request->getRequestUri());
@@ -44,7 +45,8 @@ class MenuBuilder
      */
     private function addTranslationMenu(ItemInterface $menu)
     {
-        $translationNode = $menu->addChild($this->translator->trans('menu.translation'));
+        $translationNode = $menu->addChild($this->translator->trans('menu.translation'))
+            ->setAttribute('dropdown', true);
 
         $translationNode->addChild(
             $this->translator->trans('menu.translation.release_text'),

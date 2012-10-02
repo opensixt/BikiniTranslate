@@ -21,7 +21,8 @@ class ConfigureMenuListener
         if ($this->securityContext->isGranted('ROLE_USER')) {
             $menuF = $event->getMenu();
 
-            $menuF = $menuF->addChild($this->translator->trans('menu.freetext'));
+            $menuF = $menuF->addChild($this->translator->trans('menu.freetext'))
+                ->setAttribute('dropdown', true);
 
             $menuF->addChild($this->translator->trans('menu.addfreetext'), array('route' => '_sxfreetext_add'));
             $menuF->addChild($this->translator->trans('menu.editfreetext'), array('route' => '_sxfreetext_edit'));
@@ -32,7 +33,8 @@ class ConfigureMenuListener
         if ($this->securityContext->isGranted('ROLE_USER')) {
             $menuM = $event->getMenu();
 
-            $menuM = $menuM->addChild($this->translator->trans('menu.mobile'));
+            $menuM = $menuM->addChild($this->translator->trans('menu.mobile'))
+                ->setAttribute('dropdown', true);
 
             $menuM->addChild($this->translator->trans('menu.editmobile'), array('route' => '_sxmobile_edit'));
             $menuM->addChild($this->translator->trans('menu.changemobile'), array('route' => '_sxmobile_change'));

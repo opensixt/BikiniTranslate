@@ -20,7 +20,8 @@ class ConfigureMenuListener
         if ($this->securityContext->isGranted('ROLE_ADMIN')) {
             $menu = $event->getMenu();
 
-            $menu = $menu->addChild($this->translator->trans('menu.administration'));
+            $menu = $menu->addChild($this->translator->trans('menu.administration'))
+                ->setAttribute('dropdown', true);
 
             $menu->addChild($this->translator->trans('menu.users'), array('route' => '_admin_userlist'));
             $menu->addChild($this->translator->trans('menu.groups'), array('route' => '_admin_grouplist'));
