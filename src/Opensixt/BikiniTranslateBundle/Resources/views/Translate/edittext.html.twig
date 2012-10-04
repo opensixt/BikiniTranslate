@@ -10,13 +10,13 @@
 
     <div class="textblock alert alert-info fade in"><button class="close" data-dismiss="alert">&times;</button>{{ 'edittext_explanation'|trans }}</div>
 
-    <div>
-        <a href="{{ path('_translate_sendtots', {'locale':locale}) }}">
+    <form class="alert alert-notice form-inline">
+        <a class="btn" href="{{ path('_translate_sendtots', {'locale':locale}) }}">
             {{ 'mnu_sendtots'|trans }}
         </a>
-    </div>
+    </form>
 
-    <form action="{{ path('_translate_edittext', {'locale':locale}) }}" method="post">
+    <form class="alert alert-info form-inline" action="{{ path('_translate_edittext', {'locale':locale}) }}" method="post">
 
     {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
     <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
