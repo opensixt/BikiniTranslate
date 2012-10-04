@@ -8,10 +8,10 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
-    <div class="textblock">{{ 'sendtots_explanation'|trans }}</div>
+    <div class="textblock alert alert-info">{{ 'sendtots_explanation'|trans }}</div>
 
     {% if success is defined%}
-    <div class="textblock">{{ 'sendtots_success'|trans }}</div>
+    <div class="textblock alert alert-info">{{ 'sendtots_success'|trans }}</div>
     {% else %}
     <form action="{{ path('_translate_sendtots', {'locale': locale}) }}" method="post" {{ form_enctype(form) }}>
 
