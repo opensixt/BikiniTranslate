@@ -48,13 +48,13 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="2">{{ 'no_translation_found'|trans }}</td>
+                <td colspan="{% if not currentLangIsCommonLang %}3{% else %}}2{% endif %}">{{ 'no_translation_found'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2">
+                <td colspan="{% if not currentLangIsCommonLang %}3{% else %}}2{% endif %}">
                     {# navigation #}
                     {{ texts.render()|raw }}
                 </td>
