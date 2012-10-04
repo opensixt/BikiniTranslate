@@ -8,7 +8,7 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
-    <div class="textblock alert alert-info">{{ 'cleantext_explanation'|trans }}</div>
+    <div class="textblock alert alert-info"><button class="close">&times;</button>{{ 'cleantext_explanation'|trans }}</div>
 
     <form action="{{ path('_translate_cleantext') }}" method="post" {{ form_enctype(form) }}>
 
@@ -17,7 +17,7 @@
         <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
 
         {% if searchResults is defined %}
-        <table class="list">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th >{{ 'cleantext_resource'|trans }}</th>

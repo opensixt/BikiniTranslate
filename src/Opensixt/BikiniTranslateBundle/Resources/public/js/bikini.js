@@ -2,7 +2,7 @@ jQuery(document).ready(function($) {
     // symfony flasher
     // wait 5 seconds, then fade out slowly each second.
     // if mouseover was triggered, stop fading out
-    $('div.alert').each(function(idx, ele) {
+    $('div.alert:not(.alert-info)').each(function(idx, ele) {
         var $ele = $(ele);
         var callback = function() {
             $ele.fadeOut('slow');
@@ -15,6 +15,10 @@ jQuery(document).ready(function($) {
                 $ele.data('timer', setTimeout(callback, 1000));
             }).data('timer', setTimeout(callback, 5000 + idx * 1000));
         }
+    });
+
+    $('button.close').click(function() {
+        $(this).closest('div.alert').fadeOut();
     });
 });
 

@@ -37,6 +37,11 @@ twig:
         #yui_css:
         #    jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar
 
+knp_paginator:
+    page_range: 5                      # default page range used in pagination control
+    template:
+        pagination: ::sliding.html.twig     # sliding pagination controls template
+
 white_october_breadcrumbs: ~
 
 opensixt_bikini_translate: ~

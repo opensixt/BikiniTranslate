@@ -8,7 +8,7 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
-    <div class="textblock alert alert-info">{{ 'searchstring_explanation'|trans }}</div>
+    <div class="textblock alert alert-info"><button class="close">&times;</button>{{ 'searchstring_explanation'|trans }}</div>
 
     <form action="{{ path('_translate_searchstring') }}" method="post" {{ form_enctype(form) }}>
 
@@ -23,7 +23,7 @@
     </form>
 
     {% if searchResults is defined %}
-    <table class="list">
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>{{ 'results'|trans }}</th>

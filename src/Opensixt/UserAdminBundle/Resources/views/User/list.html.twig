@@ -12,12 +12,13 @@
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
         <input type="submit" value="{{ 'btn_search'|trans }}"/>
 
-        &nbsp;&nbsp;&nbsp;<a href="{{ path('_admin_user_create') }}">{{ 'new_user'|trans }}</a>
         {{ form_rest(form) }}
     </form>
 
+    <a class="btn" href="{{ path('_admin_user_create') }}">{{ 'new_user'|trans }}</a>
+
     <div id="userlist_wrapper">
-        <table id="userlist" class="list">
+        <table id="userlist" class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th style="width:150px">{{ 'username'|trans }}</th>

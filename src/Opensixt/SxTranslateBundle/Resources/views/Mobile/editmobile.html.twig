@@ -8,14 +8,14 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
-    <div class="textblock alert alert-info">{{ 'editmobile.explanation'|trans }}</div>
+    <div class="textblock alert alert-info"><button class="close">&times;</button>{{ 'editmobile.explanation'|trans }}</div>
 
     <form action="{{ path('_sxmobile_edit', {'locale':locale}) }}" method="post">
 
     {{ form_label(form.domain) }} {{ form_widget(form.domain) }}
     <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
 
-    <table class="list">
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>{{ 'key'|trans }}</th>

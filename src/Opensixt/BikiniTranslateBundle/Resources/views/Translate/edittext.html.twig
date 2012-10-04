@@ -8,7 +8,7 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
-    <div class="textblock alert alert-info">{{ 'edittext_explanation'|trans }}</div>
+    <div class="textblock alert alert-info"><button class="close">&times;</button>{{ 'edittext_explanation'|trans }}</div>
 
     <div>
         <a href="{{ path('_translate_sendtots', {'locale':locale}) }}">
@@ -21,7 +21,7 @@
     {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
     <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
 
-    <table class="list">
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>{{ 'source_lang'|trans }}</th>
