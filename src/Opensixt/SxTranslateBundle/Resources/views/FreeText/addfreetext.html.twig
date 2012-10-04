@@ -11,11 +11,11 @@
     <div class="textblock alert alert-info">{{ 'addfreetext.explanation'|trans }}</div>
     
     <form action="{{ path('_sxfreetext_add') }}" method="post" {{ form_enctype(form) }}>
-        <div class="textblock">{{ form_label(form.locale) }} {{ form_widget(form.locale) }}</div>
-        <div class="textblock">{{ form_label(form.headline) }} {{ form_widget(form.headline) }}</div>
-        <div class="textblock">{{ form_label(form.text) }} {{ form_widget(form.text) }}</div>
+        <div>{{ form_label(form.locale) }} {{ form_widget(form.locale) }}</div>
+        <div>{{ form_label(form.headline) }} {{ form_widget(form.headline) }}</div>
+        <div>{{ form_label(form.text) }} {{ form_widget(form.text) }}</div>
 
-        <div class="textblock"><input id="btnSearch" type="submit" value="{{ 'freetext.save'|trans }}"/></div>
+        <div><input id="btnSearch" type="submit" value="{{ 'freetext.save'|trans }}"/></div>
 
         {{ form_rest(form) }}
     </form>
