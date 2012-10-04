@@ -9,6 +9,10 @@ class SecurityController extends Controller
 {
     public function loginAction()
     {
+        $this->get("white_october_breadcrumbs")
+            ->addItem($this->get("translator")->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->get("translator")->trans('login'));
+
         $request = $this->getRequest();
         $session = $request->getSession();
 
