@@ -29,7 +29,14 @@ class MenuBuilder
         $menu = $this->factory->createItem('root')
             ->setChildrenAttribute('id', 'nav');
 
-        $menu->addChild($this->translator->trans('admin_home'), array('route' => '_user_admin_home'));
+        if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $menu->addChild($this->translator->trans('admin_home'), array('route' => '_user_admin_home'));
+            $menu->addChild($this->translator->trans('logout'), array('route' => '_logout'))
+                ->setAttribute('class', 'pull-right');
+        } else {
+            $menu->addChild($this->translator->trans('login'), array('route' => '_login'))
+                ->setAttribute('class', 'pull-right');
+        }
 
         if ($this->securityContext->isGranted('ROLE_USER')) {
             //$menu->setCurrentUri($request->getRequestUri());
