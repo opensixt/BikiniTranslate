@@ -11,7 +11,6 @@
     <div class="textblock alert alert-info"><button class="close">&times;</button>{{ 'searchstring_explanation'|trans }}</div>
 
     <form action="{{ path('_translate_searchstring') }}" method="post" {{ form_enctype(form) }}>
-
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
         {{ form_label(form.mode) }} {{ form_widget(form.mode) }}
@@ -23,7 +22,7 @@
     </form>
 
     {% if searchResults is defined %}
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped table-hover table-condensed">
         <thead>
             <tr>
                 <th>{{ 'results'|trans }}</th>
