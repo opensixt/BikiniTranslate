@@ -8,7 +8,9 @@
 
     <h3>{{ 'groups'|trans }}</h3>
 
-    <a class="btn" href="{{ path('_admin_group_create') }}">{{ 'new_group'|trans }}</a>
+    <form class="alert alert-info form-inline">
+        <a class="btn" href="{{ path('_admin_group_create') }}">{{ 'new_group'|trans }}</a>
+    </form>
 
     <table class="table table-bordered table-striped table-hover table-condensed">
         <thead>

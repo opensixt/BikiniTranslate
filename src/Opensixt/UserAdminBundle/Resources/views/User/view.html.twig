@@ -8,7 +8,7 @@
 
     <h3>{{ 'user'|trans }}</h3>
 
-    <form action="{{ path('_admin_user_save', { 'id': user.getId() }) }}" method="post" {{ form_enctype(form) }}>
+    <form class="form-horizontal alert" action="{{ path('_admin_user_save', { 'id': user.getId() }) }}" method="post" {{ form_enctype(form) }}>
         {% include 'OpensixtUserAdminBundle:User:form.html.twig' %}
     </form>
 

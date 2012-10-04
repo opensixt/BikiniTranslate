@@ -8,15 +8,13 @@
 
     <h3>{{ 'translation_tool'|trans }}</h3>
 
-    <div class="textblock alert alert-info"><button class="close">&times;</button>{{ 'searchstring_explanation'|trans }}</div>
+    <div class="textblock alert alert-info fade in"><button class="close" data-dismiss="alert">&times;</button>{{ 'searchstring_explanation'|trans }}</div>
 
-    <form action="{{ path('_translate_searchstring') }}" method="post" {{ form_enctype(form) }}>
+    <form class="alert alert-notice form-inline" action="{{ path('_translate_searchstring') }}" method="post" {{ form_enctype(form) }}>
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
         {{ form_label(form.mode) }} {{ form_widget(form.mode) }}
-        <br/>
         {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        <br/>
         <input type="submit" value="{{ 'submit_page'|trans }}"/>
         {{ form_rest(form) }}
     </form>

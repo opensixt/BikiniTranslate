@@ -16,10 +16,6 @@ jQuery(document).ready(function($) {
             }).data('timer', setTimeout(callback, 5000 + idx * 1000));
         }
     });
-
-    $('button.close').click(function() {
-        $(this).closest('div.alert').fadeOut();
-    });
 });
 
 function bikiniConfirm(confirmMessage, okLabel, cancelLabel, okCallback, cancelCallback)

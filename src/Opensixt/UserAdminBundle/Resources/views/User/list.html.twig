@@ -5,17 +5,13 @@
 {% endblock %}
 
 {% block body %}
-
-    <h3>{{ 'user_list'|trans }}</h3>
-
-    <form action="{{ path('_admin_userlist') }}" method="get" {{ form_enctype(form) }}>
+    <form class="alert alert-info form-inline" action="{{ path('_admin_userlist') }}" method="get" {{ form_enctype(form) }}>
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
-        <input type="submit" value="{{ 'btn_search'|trans }}"/>
+        <input class="btn" type="submit" value="{{ 'btn_search'|trans }}"/>
 
         {{ form_rest(form) }}
+        <a class="btn pull-right" href="{{ path('_admin_user_create') }}">{{ 'new_user'|trans }}</a>
     </form>
-
-    <a class="btn" href="{{ path('_admin_user_create') }}">{{ 'new_user'|trans }}</a>
 
     <div id="userlist_wrapper">
         <table id="userlist" class="table table-bordered table-striped table-hover table-condensed">
