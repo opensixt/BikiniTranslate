@@ -30,11 +30,11 @@ class UserController extends AbstractController
      */
     public function listAction($page = 1)
     {
+        $this->requireAdminUser();
+
         $this->breadcrumbs
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
             ->addItem($this->translator->trans('user_list'));
-
-        $this->requireAdminUser();
 
         $searchTerm = $this->request->get('search', '');
 
@@ -62,7 +62,6 @@ class UserController extends AbstractController
      */
     public function viewAction($id)
     {
-        // Simple example
         $this->breadcrumbs
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
             ->addItem($this->translator->trans('user_list'), $this->generateUrl('_admin_userlist'))
@@ -133,7 +132,6 @@ class UserController extends AbstractController
     {
         $this->requireAdminUser();
 
-        // Simple example
         $this->breadcrumbs
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
             ->addItem($this->translator->trans('user_list'), $this->generateUrl('_admin_userlist'))

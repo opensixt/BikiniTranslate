@@ -29,6 +29,10 @@ class GroupController extends AbstractController
     {
         $this->requireAdminUser();
 
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('groups'));
+
         $query = $this->getGroupRepository()
                       ->getQueryForAllGroups();
         $pagination = $this->paginator->paginate($query, $page, $this->paginationLimit);
@@ -50,8 +54,13 @@ class GroupController extends AbstractController
         $group = $this->requireGroupWithId($id);
 
         if (!$this->securityContext->isGranted('VIEW', $group)) {
-            throw new AccessDeniedException();
+            //throw new AccessDeniedException();
         }
+
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('groups'), $this->generateUrl('_admin_grouplist'))
+            ->addItem($this->translator->trans('group'));
 
         $form = $this->getGroupEditFormForGroup($group);
 
@@ -106,6 +115,11 @@ class GroupController extends AbstractController
     public function createAction()
     {
         $this->requireAdminUser();
+
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('groups'), $this->generateUrl('_admin_grouplist'))
+            ->addItem($this->translator->trans('create_group'));
 
         $form = $this->getGroupEditFormForGroup();
 
