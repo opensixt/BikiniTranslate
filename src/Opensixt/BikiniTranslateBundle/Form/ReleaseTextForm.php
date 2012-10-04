@@ -80,6 +80,6 @@ class ReleaseTextForm extends AbstractType
             'locales'        => array(),
             'searchLanguage' => 0,
             'ids'            => array(),
-            );
+        );
     }
 }
