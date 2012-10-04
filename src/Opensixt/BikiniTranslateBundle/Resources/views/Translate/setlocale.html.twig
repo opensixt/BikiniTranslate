@@ -10,7 +10,7 @@
 
     <form action="{{ path('_translate_setlocale') }}" method="post" {{ form_enctype(form) }}>
         {{ form_rest(form) }}
-        <input type="submit" value="{{ 'save_locale'|trans }}"/>
+        <input class="btn" type="submit" value="{{ 'save_locale'|trans }}"/>
     </form>
 
 {% endblock %}

@@ -54,7 +54,7 @@ class GroupController extends AbstractController
         $group = $this->requireGroupWithId($id);
 
         if (!$this->securityContext->isGranted('VIEW', $group)) {
-            //throw new AccessDeniedException();
+            throw new AccessDeniedException();
         }
 
         $this->breadcrumbs

@@ -28,6 +28,10 @@ class ResourceController extends AbstractController
     {
         $this->requireAdminUser();
 
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('resources'));
+
         $query = $this->getResourceRepository()->getQueryForAllResources();
         $pagination = $this->paginator->paginate(
             $query,
@@ -53,6 +57,11 @@ class ResourceController extends AbstractController
         if (!$this->securityContext->isGranted('VIEW', $resource)) {
             throw new AccessDeniedException();
         }
+
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('resources'), $this->generateUrl('_admin_reslist'))
+            ->addItem($this->translator->trans('resource'));
 
         $form = $this->getResourceEditFormForResource($resource);
 
@@ -106,6 +115,11 @@ class ResourceController extends AbstractController
     public function createAction()
     {
         $this->requireAdminUser();
+
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('resources'), $this->generateUrl('_admin_reslist'))
+            ->addItem($this->translator->trans('create_resource'));
 
         $form = $this->getResourceEditFormForResource();
 

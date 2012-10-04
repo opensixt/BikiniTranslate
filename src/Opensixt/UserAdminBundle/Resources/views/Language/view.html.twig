@@ -6,8 +6,6 @@
 
 {% block body %}
 
-    <h3>{{ 'language'|trans }}</h3>
-
     <form action="{{ path('_admin_language_save', {'id': language.getId()}) }}" method="post" {{ form_enctype(form) }}>
         <div>
             {{ form_label(form.locale) }}
@@ -20,7 +18,7 @@
             {{ form_widget(form.description) }}
         </div>
         {{ form_rest(form) }}
-        <input type="submit" value="{{ 'submit'|trans }}"/>
+        <input class="btn" type="submit" value="{{ 'submit'|trans }}"/>
     </form>
 
 {% endblock %}

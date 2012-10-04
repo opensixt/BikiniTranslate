@@ -28,6 +28,10 @@ class LanguageController extends AbstractController
     {
         $this->requireAdminUser();
 
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('languages'));
+
         $query = $this->getLanguageRepository()
                       ->getQueryForAllLanguages();
         $pagination = $this->paginator->paginate($query, $page, $this->paginationLimit);
@@ -50,6 +54,11 @@ class LanguageController extends AbstractController
         if (!$this->securityContext->isGranted('VIEW', $language)) {
             throw new AccessDeniedException();
         }
+
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('resources'), $this->generateUrl('_admin_langlist'))
+            ->addItem($this->translator->trans('language'));
 
         $form = $this->getLanguageEditFormForLanguage($language);
 
@@ -103,6 +112,11 @@ class LanguageController extends AbstractController
     public function createAction()
     {
         $this->requireAdminUser();
+
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('languages'), $this->generateUrl('_admin_langlist'))
+            ->addItem($this->translator->trans('create_language'));
 
         $form = $this->getLanguageEditFormForLanguage();
 
