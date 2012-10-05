@@ -70,6 +70,14 @@ body {
     margin: 8px 6px 0 0;
 }
 
+.breadcrumb a {
+    text-decoration: none;
+}
+
+.breadcrumb li.last {
+    font-weight: bold;
+}
+
 #main {
     background: url(../img/bg_body.png) repeat-x;
 }
