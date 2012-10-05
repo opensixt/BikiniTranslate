@@ -40,7 +40,7 @@ twig:
 knp_paginator:
     page_range: 5                      # default page range used in pagination control
     template:
-        pagination: ::sliding.html.twig     # sliding pagination controls template
+        pagination: KnpPaginatorBundle::sliding.html.twig     # sliding pagination controls template
 
 white_october_breadcrumbs: ~
 

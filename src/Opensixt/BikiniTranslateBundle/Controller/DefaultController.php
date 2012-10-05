@@ -27,6 +27,6 @@ class DefaultController extends Controller
             ->addItem($this->get('translator')->trans('home'), $this->generateUrl('_home'))
             ->addItem($this->get('translator')->trans('admin_home'), $this->generateUrl('_user_admin_home'));
 
-        return $this->render('::index.html.twig');
+        return $this->render('::admin.html.twig');
     }
 }
