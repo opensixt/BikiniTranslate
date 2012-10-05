@@ -12,6 +12,10 @@ _login_check:
 _logout:
     pattern: /logout
 
+_user_admin_home:
+    pattern: /admin/
+    defaults: { _controller: OpensixtBikiniTranslateBundle:Default:admin }
+
 _translate_home:
     pattern: /translate/
     defaults: { _controller: OpensixtBikiniTranslateBundle:Translate:index }

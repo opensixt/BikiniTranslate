@@ -1,7 +1,3 @@
-_user_admin_home:
-    pattern: /admin/
-    defaults: { _controller: OpensixtUserAdminBundle:Default:index }
-
 _admin_userlist:
     pattern: /admin/user/list/{page}
     defaults: { _controller: opensixt.user_admin.controller.user:listAction, page: 1 }
