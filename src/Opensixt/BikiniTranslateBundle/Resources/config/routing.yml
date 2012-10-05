@@ -1,9 +1,6 @@
 _home:
     pattern: /
     defaults: { _controller: OpensixtBikiniTranslateBundle:Default:index, page: 'index' }
-_page:
-    pattern: /{page}.html
-    defaults: { _controller: OpensixtBikiniTranslateBundle:Default:index, page: 'index' }
 
 _login:
     pattern:  /login
