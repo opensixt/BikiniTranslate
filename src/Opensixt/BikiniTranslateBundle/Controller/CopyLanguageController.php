@@ -32,7 +32,7 @@ class CopyLanguageController extends AbstractController
      *
      * @return Response A Response instance
      */
-    public function copylanguageAction()
+    public function indexAction()
     {
         $resources = $this->getUserResources(); // available resources
         $locales = $this->getUserLocales(); // available languages

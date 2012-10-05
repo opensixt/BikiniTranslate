@@ -32,7 +32,7 @@ class ChangeTextController extends AbstractController
      * @param int $page
      * @return Response A Response instance
      */
-    public function changetextAction($page)
+    public function indexAction($page)
     {
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();

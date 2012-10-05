@@ -31,7 +31,7 @@ class CleanTextController extends AbstractController
      *
      * @return Response A Response instance
      */
-    public function cleantextAction($page)
+    public function indexAction($page)
     {
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();

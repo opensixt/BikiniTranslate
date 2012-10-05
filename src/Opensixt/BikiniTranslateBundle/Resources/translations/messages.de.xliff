@@ -176,7 +176,7 @@
             </trans-unit>
             <trans-unit id="250">
                 <source>menu.translation</source>
-                <target>Übersetzungs Tool</target>
+                <target>Übersetzungs-Tool</target>
             </trans-unit>
             <trans-unit id="251">
                 <source>menu.translation.release_text</source>

@@ -34,7 +34,7 @@ class SendToTranslationServiceController extends AbstractController
      *
      * @param string $locale
      */
-    public function sendtotsAction($locale)
+    public function indexAction($locale)
     {
         $languageId = $this->getLanguageId($locale);
         if (!$languageId) {

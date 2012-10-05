@@ -9,7 +9,7 @@
         <div class="error">{{ error.message }}</div>
     {% endif %}
 
-    <form action="{{ path('_login_check') }}" method="POST">
+    <form class="alert alert-info" style="display: inline-block;" action="{{ path('_login_check') }}" method="POST">
         <table>
             <tr>
                 <td>

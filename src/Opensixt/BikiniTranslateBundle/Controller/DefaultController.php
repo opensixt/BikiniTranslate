@@ -15,6 +15,6 @@ class DefaultController extends Controller
      */
     public function indexAction($page)
     {
-        return $this->render('OpensixtBikiniTranslateBundle:Default:index.html.twig', array('page' => $page));
+        return $this->redirect($this->generateUrl('_user_admin_home'));
     }
 }

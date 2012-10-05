@@ -50,6 +50,7 @@ services:
             router: @router
             toolLanguage: %tool_language%
             bikiniFlash: @opensixt.bikini_translate.sevices.flash
+            breadcrumbs: @white_october_breadcrumbs
 
     opensixt.bikini_translate.controller.edittext:
         class: %opensixt.bikini_translate.controller.edittext.class%

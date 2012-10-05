@@ -25,8 +25,12 @@ class SetLocaleController extends AbstractController
      *
      * @return Response A Response instance
      */
-    public function setlocaleAction()
+    public function indexAction()
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('please_choose_locale'));
+
         $locales = $this->getUserLocales();
         if (count($locales) == 1) {
             return $this->redirect(

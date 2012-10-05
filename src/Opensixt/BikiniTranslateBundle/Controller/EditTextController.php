@@ -35,8 +35,13 @@ class EditTextController extends AbstractController
      * @param int $page
      * @return Response A Response instance
      */
-    public function edittextAction($locale, $page = 1)
+    public function indexAction($locale, $page = 1)
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.translation'), $this->generateUrl('_translate_releasetext'))
+            ->addItem($this->translator->trans('menu.translation.edit_text'));
+
         $languageId = $this->getLanguageId($locale);
         if (!$languageId) {
             // save current ruote in session (for comeback)

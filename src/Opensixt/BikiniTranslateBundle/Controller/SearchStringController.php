@@ -34,7 +34,7 @@ class SearchStringController extends AbstractController
      * @param int $page
      * @return Response A Response instance
      */
-    public function searchstringAction($page = 1)
+    public function indexAction($page = 1)
     {
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();

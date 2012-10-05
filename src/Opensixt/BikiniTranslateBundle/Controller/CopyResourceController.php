@@ -32,7 +32,7 @@ class CopyResourceController extends AbstractController
      *
      * @return Response A Response instance
      */
-    public function copyresourceAction()
+    public function indexAction()
     {
         $resources = $this->getUserResources(); // available resources
         $locales = $this->getUserLocales(); // available languages

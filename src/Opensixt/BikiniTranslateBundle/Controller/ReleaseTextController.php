@@ -32,8 +32,13 @@ class ReleaseTextController extends AbstractController
      *
      * @return Response A Response instance
      */
-    public function releasetextAction($page)
+    public function indexAction($page)
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.translation'), $this->generateUrl('_translate_releasetext'))
+            ->addItem($this->translator->trans('menu.translation.release_text'));
+
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
 
