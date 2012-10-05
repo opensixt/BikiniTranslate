@@ -52,6 +52,7 @@
             </tr>
         {% endfor %}
         </tbody>
+        {% if texts|length %}
         <tfoot>
             <tr>
                 <td colspan="{% if not currentLangIsCommonLang %}3{% else %}}2{% endif %}">
@@ -60,6 +61,7 @@
                 </td>
             </tr>
         </tfoot>
+        {% endif %}
     </table>
 
     {% if texts is not empty %}

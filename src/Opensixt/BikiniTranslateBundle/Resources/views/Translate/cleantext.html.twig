@@ -43,6 +43,7 @@
                 </tr>
             {% endfor %}
             </tbody>
+            {% if searchResults|length %}
             <tfoot>
                 <tr>
                     <td colspan="4">
@@ -51,6 +52,7 @@
                     </td>
                 </tr>
             </tfoot>
+            {% endif %}
         </table>
 
         {% if searchResults is not empty %}

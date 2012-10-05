@@ -35,6 +35,7 @@
                 </tr>
             </tbody>
             {% endfor %}
+            {% if pagination|length %}
             <tfoot>
                 <tr>
                     <td colspan="3">
@@ -42,6 +43,7 @@
                     </td>
                 </tr>
             </tfoot>
+            {% endif %}
         </table>
     </div>
 

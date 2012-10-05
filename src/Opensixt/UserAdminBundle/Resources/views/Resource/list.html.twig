@@ -29,10 +29,11 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="2">{{ 'no_resources_found'|trans }}</td>
+                <td colspan="3">{{ 'no_resources_found'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
+        {% if pagination|length %}
         <tfoot>
             <tr>
                 <td colspan="3">
@@ -40,6 +41,7 @@
                 </td>
             </tr>
         </tfoot>
+        {% endif %}
     </table>
 
 {% endblock %}

@@ -33,6 +33,7 @@
             </tr>
         {% endfor %}
         </tbody>
+        {% if texts|length %}
         <tfoot>
             <tr>
                 <td colspan="2">
@@ -41,6 +42,7 @@
                 </td>
             </tr>
         </tfoot>
+        {% endif %}
     </table>
 
     {% if texts is not empty %}

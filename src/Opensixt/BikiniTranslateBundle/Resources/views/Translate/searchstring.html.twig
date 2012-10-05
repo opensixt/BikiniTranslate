@@ -51,6 +51,7 @@
             </tr>
         {% endfor %}
         </tbody>
+        {% if searchResults|length %}
         <tfoot>
             <tr>
                 <td colspan="3">
@@ -59,6 +60,7 @@
                 </td>
             </tr>
         </tfoot>
+        {% endif %}
     </table>
     {% endif %}
 
