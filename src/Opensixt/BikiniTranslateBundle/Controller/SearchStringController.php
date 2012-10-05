@@ -36,6 +36,11 @@ class SearchStringController extends AbstractController
      */
     public function indexAction($page = 1)
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.translation'), $this->generateUrl('_translate_releasetext'))
+            ->addItem($this->translator->trans('menu.translation.search_string'));
+
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
         $mode = array(
