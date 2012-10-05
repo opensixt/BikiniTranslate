@@ -14,13 +14,14 @@
 
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
         {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+        <input class="btn" id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
 
         {% if searchResults is defined %}
         <table class="table table-bordered table-striped table-hover table-condensed">
             <thead>
                 <tr>
                     <th >{{ 'cleantext_resource'|trans }}</th>
+                    <th >{{ 'cleantext_language'|trans }}</th>
                     <th >{{ 'cleantext_text'|trans }}</th>
                     <th >{{ 'cleantext_author'|trans }}</th>
                     <th >{{ 'cleantext_date'|trans }}</th>
@@ -31,7 +32,8 @@
 
             {% for item in searchResults %}
                 <tr>
-                    <td>{{ item.resource.name }} ({{ item.locale.locale }})<br/><br/>  </td>
+                    <td>{{ item.resource.name }}</td>
+                    <td>{{ item.locale.locale }}</td>
                     <td>{{ item.target }}</td>
                     <td>{{ item.user.username }}</td>
                     <td>{{ item.expiryDate|date('date_format'|trans) }}</td>

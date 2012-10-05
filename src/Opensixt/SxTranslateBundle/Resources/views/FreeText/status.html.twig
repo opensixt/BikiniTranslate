@@ -19,7 +19,7 @@
     </form>
 
     {% if searchResults is defined %}
-    <table class="list">
+    <table class="table table-bordered table-striped table-hover table-condensed">
         <thead>
             <tr>
                 <th>{{ 'key'|trans }}</th>
@@ -53,14 +53,14 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="2">{{ 'no_translation_found'|trans }}</td>
+                <td colspan="5">{{ 'no_translation_found'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
         {% if searchResults|length %}
         <tfoot>
             <tr>
-                <td colspan="2">
+                <td colspan="5">
                     {# navigation #}
                     {{ searchResults.render()|raw }}
                 </td>
