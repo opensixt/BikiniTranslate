@@ -36,7 +36,7 @@ class ReleaseTextController extends AbstractController
     {
         $this->breadcrumbs
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
-            ->addItem($this->translator->trans('menu.translation'), $this->generateUrl('_translate_releasetext'))
+            ->addItem($this->translator->trans('menu.translation'))
             ->addItem($this->translator->trans('menu.translation.release_text'));
 
         $resources = $this->getUserResources();
