@@ -56,6 +56,11 @@ class MobileController extends AbstractController
      */
     public function editAction($locale, $page = 1)
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.mobile'))
+            ->addItem($this->translator->trans('menu.editmobile'));
+
         $languageId = $this->getLanguageId($locale);
         if (!$languageId) {
             // save current ruote in session (for comeback)
@@ -141,6 +146,11 @@ class MobileController extends AbstractController
      */
     public function changeAction($page)
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.mobile'))
+            ->addItem($this->translator->trans('menu.changemobile'));
+
         $domains = $this->getDomains();
         $locales = $this->getUserLocales();
 

@@ -62,6 +62,7 @@ class HandleMobile extends EditText
         if (empty($this->paginationLimit)) {
             $this->paginationLimit = PHP_INT_MAX;
         }
+
         $data = $this->paginator->paginate($query, $page, $this->paginationLimit);
 
         if (count($searchDomains) == 1) {

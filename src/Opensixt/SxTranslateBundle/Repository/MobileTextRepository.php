@@ -50,8 +50,10 @@ class MobileTextRepository extends TextRepository
             default:
                 parent::setQueryParameters($query);
 
-                $query->andWhere('m.domainId' . ' IN (?99)')
-                    ->setParameter(99, $this->domains);
+                if (count($this->domains)) {
+                    $query->andWhere('m.domainId' . ' IN (?99)')
+                        ->setParameter(99, $this->domains);
+                }
 
                 break;
         }
