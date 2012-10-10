@@ -41,6 +41,11 @@ class FreeTextController extends AbstractController
      */
     public function addAction()
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.freetext'))
+            ->addItem($this->translator->trans('menu.addfreetext'));
+
         $locales = $this->getUserLocales();
 
         $flipLocales = array_flip($locales);
@@ -133,6 +138,11 @@ class FreeTextController extends AbstractController
      */
     public function editAction($locale, $page = 1)
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.freetext'))
+            ->addItem($this->translator->trans('menu.editfreetext'));
+
         $languageId = $this->getLanguageId($locale);
         if (!$languageId) {
             // save current ruote in session (for comeback)
@@ -197,6 +207,11 @@ class FreeTextController extends AbstractController
      */
     public function statusAction($page)
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.freetext'))
+            ->addItem($this->translator->trans('menu.statusfreetext'));
+
         $locales = $this->getUserLocales();
         $translator = $this->translator;
         $mode = array(
