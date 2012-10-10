@@ -90,6 +90,23 @@ body {
     margin-top: 0;
 }
 
+#content form tr td {
+    padding: 5px inherit;
+}
+
+#content form label {
+    display: inline-block;
+    margin: 5px 5px 0 5px;
+}
+
+#content form input[type="radio"], #content form input[type="checkbox"] {
+    margin: 0;
+}
+
+#content form table td label {
+    white-space: nowrap;
+}
+
 #footer {
     height: 43px;
     clear: both;

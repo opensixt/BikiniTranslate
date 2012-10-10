@@ -23,6 +23,8 @@ twig:
     strict_variables: %kernel.debug%
     globals:
         skin: %skin%
+    form:
+        resources: ['form_table_layout.html.twig']
 
 # Assetic Configuration
 #assetic:
