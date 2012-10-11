@@ -6,27 +6,25 @@
 
 {% block body %}
 
-    <h3>{{ 'translation_tool'|trans }}</h3>
-
     <div class="textblock alert alert-info fade in"><button class="close" data-dismiss="alert">&times;</button>{{ 'copylanguage_explanation'|trans }}</div>
 
     <form action="{{ path('_translate_copyresource') }}" method="post" {{ form_enctype(form) }}>
 
-        {{ form_label(form.res_from) }} {{ form_widget(form.res_from) }}
-        {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        {{ form_label(form.res_to) }} {{ form_widget(form.res_to) }}
-        <input id="btnCopyContent" type="submit" value="{{ 'submit_page'|trans }}"/>
+        <div class="alert alert-notice">
+            {{ form_label(form.res_from) }} {{ form_widget(form.res_from) }}
+            {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
+            {{ form_label(form.res_to) }} {{ form_widget(form.res_to) }}
+            <input class="btn" id="btnCopyContent" type="submit" value="{{ 'submit_page'|trans }}"/>
+        </div>
 
         {% if translateMade is defined and translateMade == 'done' %}
-            <br/>
-            <br/>
             {% if translationsCount is defined and translationsCount > 0 %}
-                <div class="alert permanent notice">
+                <div class="alert alert-success permanent">
                     {% set count = translationsCount %}
                     {% trans %}copy_res_success %count%{% endtrans %}
                 </div>
             {% else %}
-                <div class="alert permanent">
+                <div class="alert alert-notice permanent">
                     {{ 'copy_nothing'|trans }}
                 </div>
             {% endif %}

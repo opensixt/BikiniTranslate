@@ -34,6 +34,11 @@ class ChangeTextController extends AbstractController
      */
     public function indexAction($page)
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.translation'))
+            ->addItem($this->translator->trans('menu.translation.change_text'));
+
         $resources = $this->getUserResources();
         $locales = $this->getUserLocales();
 

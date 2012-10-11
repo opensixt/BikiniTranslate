@@ -10,9 +10,11 @@
 
     <form class="form-inline" action="{{ path('_translate_releasetext') }}" method="post" {{ form_enctype(form) }}>
 
-        {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
-        {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+        <div class="alert alert-notice form-inline">
+            {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
+            {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
+            <input class="btn" id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+        </div>
 
         {% if searchResults is defined %}
         <table class="table table-bordered table-striped table-hover table-condensed" style="margin-top:20px;">

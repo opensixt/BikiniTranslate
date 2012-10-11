@@ -34,6 +34,11 @@ class CopyResourceController extends AbstractController
      */
     public function indexAction()
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.translation'))
+            ->addItem($this->translator->trans('menu.translation.copy_resource'));
+
         $resources = $this->getUserResources(); // available resources
         $locales = $this->getUserLocales(); // available languages
 

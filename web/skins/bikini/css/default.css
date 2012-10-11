@@ -32,6 +32,10 @@ body {
     background: #f8feff url(../img/bg_header.png) repeat-x;
 }
 
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    margin-bottom: 0;
+}
+
 #header {
     border-bottom: 1px solid white;
     height: 116px;
@@ -80,6 +84,11 @@ body {
 
 #main {
     background: url(../img/bg_body.png) repeat-x;
+}
+
+#main ul.flash {
+    list-style: none;
+    padding: 0;
 }
 
 #content {

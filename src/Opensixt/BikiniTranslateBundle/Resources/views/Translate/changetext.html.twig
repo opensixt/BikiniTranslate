@@ -6,16 +6,14 @@
 
 {% block body %}
 
-    <h3>{{ 'translation_tool'|trans }}</h3>
-
     <div class="textblock alert alert-info fade in"><button class="close" data-dismiss="alert">&times;</button>{{ 'changetext_explanation'|trans }}</div>
 
-    <form action="{{ path('_translate_changetext') }}" method="post" {{ form_enctype(form) }}>
+    <form class="alert alert-notice form-inline" action="{{ path('_translate_changetext') }}" method="post" {{ form_enctype(form) }}>
 
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
         {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        <input id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+        <input class="btn" id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
 
         {% if searchResults is defined %}
         <table class="table table-bordered table-striped table-hover table-condensed">

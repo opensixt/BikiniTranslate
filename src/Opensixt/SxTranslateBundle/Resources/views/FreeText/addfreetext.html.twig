@@ -10,7 +10,7 @@
     
     <form class="form-horizontal alert" action="{{ path('_sxfreetext_add') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
-        <div><input id="btnSearch" type="submit" value="{{ 'freetext.save'|trans }}"/></div>
+        <div><input class="btn" id="btnSearch" type="submit" value="{{ 'freetext.save'|trans }}"/></div>
         {{ form_rest(form) }}
     </form>
 
