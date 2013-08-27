@@ -57,7 +57,7 @@
             <tr>
                 <td colspan="{% if not currentLangIsCommonLang %}3{% else %}}2{% endif %}">
                     {# navigation #}
-                    {{ texts.render()|raw }}
+                    {{ knp_pagination_render(texts)|raw }}
                 </td>
             </tr>
         </tfoot>
