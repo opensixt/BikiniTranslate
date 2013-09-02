@@ -48,6 +48,8 @@ class InitControllerAclCommand extends ContainerAwareCommand
         '_sxfreetext_status',
         '_sxmobile_edit',
         '_sxmobile_change',
+        '_admin_user',
+        '_admin_userlist',
     );
 
     /**
@@ -56,7 +58,6 @@ class InitControllerAclCommand extends ContainerAwareCommand
      * @var array
      */
     private $adminRoutes = array(
-        '_admin_userlist',
         '_admin_user_create',
         '_admin_user_save_new',
         '_admin_grouplist',

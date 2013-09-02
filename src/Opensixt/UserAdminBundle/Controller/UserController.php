@@ -30,7 +30,6 @@ class UserController extends AbstractController
      */
     public function listAction($page = 1)
     {
-        $this->requireAdminUser();
 
         $this->breadcrumbs
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
@@ -38,8 +37,17 @@ class UserController extends AbstractController
 
         $searchTerm = $this->request->get('search', '');
 
-        $query = $this->getUserRepository()
-                      ->getQueryForUserSearch($searchTerm);
+        $currentUser = null;
+        if (!$this->isAdminUser()) {
+            $currentUser = $this->securityContext->getToken()->getUser()->getId();
+        }
+
+        // only user with admin role can see complete user list, otherwise only himself
+        $query = $this->getUserRepository()->getQueryForUserSearch(
+            $searchTerm,
+            $currentUser
+        );
+
         $pagination = $this->paginator->paginate($query, $page, $this->paginationLimit);
 
         /** @var $form UserSearchForm|\Symfony\Component\Form\FormInterface */
@@ -167,6 +175,7 @@ class UserController extends AbstractController
             // flash success message
             $this->bikiniFlash->successSave();
 
+            // ACL
             $this->aclHelper->initAclForNewUser($user);
 
             return $this->redirect($this->generateUrl('_admin_userlist'));

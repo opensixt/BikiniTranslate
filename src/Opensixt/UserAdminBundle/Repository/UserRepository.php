@@ -19,9 +19,10 @@ class UserRepository extends EntityRepository
 
     /**
      * @param string $searchTerm
+     * @param int $userId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getQueryForUserSearch($searchTerm)
+    public function getQueryForUserSearch($searchTerm, $userId)
     {
         $q = $this->createQueryBuilder('u')
             ->select('u')
@@ -33,6 +34,11 @@ class UserRepository extends EntityRepository
             $q->where(self::USER_NAME . ' LIKE ?1')
               ->orWhere(self::USER_EMAIL . ' LIKE ?1')
               ->setParameter(1, $searchTerm);
+        }
+
+        if (!empty($userId) && intval($userId)) {
+            $q->where(self::USER_ID . '= ?2')
+              ->setParameter(2, $userId);
         }
         return $q;
     }
