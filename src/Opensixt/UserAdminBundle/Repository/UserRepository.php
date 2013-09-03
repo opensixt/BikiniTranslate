@@ -28,7 +28,10 @@ class UserRepository extends EntityRepository
             ->select('u')
             ->orderBy(self::USER_NAME, 'ASC');
 
-        if (!empty($searchTerm)) {
+        if (!empty($userId) && intval($userId)) {
+            $q->where(self::USER_ID . '= ?2')
+              ->setParameter(2, $userId);
+        } elseif (!empty($searchTerm)) {
             $searchTerm = '%' . $searchTerm . '%';
 
             $q->where(self::USER_NAME . ' LIKE ?1')
@@ -36,10 +39,6 @@ class UserRepository extends EntityRepository
               ->setParameter(1, $searchTerm);
         }
 
-        if (!empty($userId) && intval($userId)) {
-            $q->where(self::USER_ID . '= ?2')
-              ->setParameter(2, $userId);
-        }
         return $q;
     }
 }
