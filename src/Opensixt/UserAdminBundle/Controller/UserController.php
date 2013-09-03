@@ -70,6 +70,14 @@ class UserController extends AbstractController
      */
     public function viewAction($id)
     {
+        // non admin user can view only himself
+        if (!$this->isAdminUser()) {
+            $currentUser = $this->securityContext->getToken()->getUser()->getId();
+            if ($currentUser != $id) {
+                throw new AccessDeniedException();
+            }
+        }
+
         $this->breadcrumbs
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
             ->addItem($this->translator->trans('user_list'), $this->generateUrl('_admin_userlist'))
