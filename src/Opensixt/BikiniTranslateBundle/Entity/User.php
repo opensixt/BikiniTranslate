@@ -216,8 +216,12 @@ class User implements AdvancedUserInterface
      */
     public function setPassword($password)
     {
-        $encoder = new MessageDigestPasswordEncoder('md5', false, 1);
+        // do not set an empty value as a password
+        if (strlen(trim($password)) == 0) {
+            return;
+        }
 
+        $encoder = new MessageDigestPasswordEncoder('md5', false, 1);
         $this->password = $encoder->encodePassword($password, $this->getSalt());
     }
 

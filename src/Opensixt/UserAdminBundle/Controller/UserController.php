@@ -118,10 +118,6 @@ class UserController extends AbstractController
         $form->bind($this->request);
 
         if ($form->isValid()) {
-            $newPassword = $form->getData()->getPassword();
-            if (!empty($newPassword)) {
-                $user->setPassword($newPassword);
-            }
 
             $this->em->persist($user);
             $this->em->flush();
