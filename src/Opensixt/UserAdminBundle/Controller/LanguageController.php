@@ -51,7 +51,7 @@ class LanguageController extends AbstractController
     {
         $language = $this->requireLanguageWithId($id);
 
-        if (!$this->securityContext->isGranted('VIEW', $language)) {
+        if (!$this->isAdminUser()) {
             throw new AccessDeniedException();
         }
 
@@ -80,7 +80,7 @@ class LanguageController extends AbstractController
     {
         $language = $this->requireLanguageWithId($id);
 
-        if (!$this->securityContext->isGranted('EDIT', $language)) {
+        if (!$this->isAdminUser()) {
             throw new AccessDeniedException();
         }
 

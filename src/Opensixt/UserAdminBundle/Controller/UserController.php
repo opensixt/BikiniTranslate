@@ -109,7 +109,7 @@ class UserController extends AbstractController
     {
         $user = $this->requireUserWithId($id);
 
-        if (!$this->securityContext->isGranted('EDIT', $user)) {
+        if (!$this->isAdminUser()) {
             throw new AccessDeniedException();
         }
 

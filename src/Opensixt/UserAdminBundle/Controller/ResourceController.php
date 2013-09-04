@@ -54,7 +54,7 @@ class ResourceController extends AbstractController
     {
         $resource = $this->requireResourceWithId($id);
 
-        if (!$this->securityContext->isGranted('VIEW', $resource)) {
+        if (!$this->isAdminUser()) {
             throw new AccessDeniedException();
         }
 
@@ -83,7 +83,7 @@ class ResourceController extends AbstractController
     {
         $resource = $this->requireResourceWithId($id);
 
-        if (!$this->securityContext->isGranted('EDIT', $resource)) {
+        if (!$this->isAdminUser()) {
             throw new AccessDeniedException();
         }
 
