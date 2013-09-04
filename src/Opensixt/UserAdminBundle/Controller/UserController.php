@@ -107,11 +107,9 @@ class UserController extends AbstractController
      */
     public function saveAction($id)
     {
-        $user = $this->requireUserWithId($id);
+        $this->requireAdminUser();
 
-        if (!$this->isAdminUser()) {
-            throw new AccessDeniedException();
-        }
+        $user = $this->requireUserWithId($id);
 
         $form = $this->getEditUserFormForUser($user);
 

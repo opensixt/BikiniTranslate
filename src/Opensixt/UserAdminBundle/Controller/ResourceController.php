@@ -54,9 +54,7 @@ class ResourceController extends AbstractController
     {
         $resource = $this->requireResourceWithId($id);
 
-        if (!$this->isAdminUser()) {
-            throw new AccessDeniedException();
-        }
+        $this->requireAdminUser();
 
         $this->breadcrumbs
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
@@ -83,9 +81,7 @@ class ResourceController extends AbstractController
     {
         $resource = $this->requireResourceWithId($id);
 
-        if (!$this->isAdminUser()) {
-            throw new AccessDeniedException();
-        }
+        $this->requireAdminUser();
 
         $form = $this->getResourceEditFormForResource($resource);
         $form->bind($this->request);

@@ -51,9 +51,7 @@ class LanguageController extends AbstractController
     {
         $language = $this->requireLanguageWithId($id);
 
-        if (!$this->isAdminUser()) {
-            throw new AccessDeniedException();
-        }
+        $this->requireAdminUser();
 
         $this->breadcrumbs
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
@@ -80,9 +78,7 @@ class LanguageController extends AbstractController
     {
         $language = $this->requireLanguageWithId($id);
 
-        if (!$this->isAdminUser()) {
-            throw new AccessDeniedException();
-        }
+        $this->requireAdminUser();
 
         $form = $this->getLanguageEditFormForLanguage($language);
         $form->bind($this->request);
