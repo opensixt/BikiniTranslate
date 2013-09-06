@@ -6,67 +6,103 @@
 
 {% block body %}
 
-    <div class="textblock alert alert-info fade in"><button class="close" data-dismiss="alert">&times;</button> {{ 'statusfreetext.explanation'|trans }}</div>
+    <div class="textblock alert alert-info fade in">
+        {{ 'statusfreetext.explanation'|trans }}
+    </div>
 
-    <form class="form-horizontal alert" action="{{ path('_sxfreetext_status') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('_sxfreetext_status') }}" method="post" {{ form_enctype(form) }}>
 
-        {{ form_label(form.mode) }} {{ form_widget(form.mode) }}
-        {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        <input class="btn" type="submit" value="{{ 'submit_page'|trans }}"/>
-        {{ form_rest(form) }}
-    </form>
+        <div class="form-horizontal alert">
+            {{ form_label(form.mode) }} {{ form_widget(form.mode) }}
+            {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
+            <input class="btn" type="submit" value="{{ 'submit_page'|trans }}"/>
+            {{ form_rest(form) }}
+        </div>
 
-    {% if searchResults is defined %}
-    <table class="table table-bordered table-striped table-hover table-condensed">
-        <thead>
-            <tr>
-                <th>{{ 'key'|trans }}</th>
-                <th/>
-                <th>
-                    {% if mode_translated == mode %}
-                        {{ 'translation'|trans }}
-                    {% else %}
-                        {{ 'source_lang'|trans }}
-                    {% endif %}
-                </th>
-                <th/>
-                <th/>
-            </tr>
-        </thead>
-        <tbody>
+        {% if searchResults is defined %}
+        <table class="table table-bordered table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>{{ 'key'|trans }}</th>
+                    <th/>
+                    <th>
+                        {% if mode_translated == mode %}
+                            {{ 'translation'|trans }}
+                        {% else %}
+                            {{ 'source_lang'|trans }}
+                        {% endif %}
+                    </th>
+                    <th/>
+                    <th/>
+                    <th/>
+                </tr>
+            </thead>
+            <tbody>
 
-        {% for item in searchResults %}
-            <tr>
-                <td>"{{ item.source }}"</td>
-                <td>({{ item.locale.locale }})</td>
-                <td>
-                    {% if mode_translated == mode %}
-                        <div id="text_{{ item.id }}" class="textItems inline">{{ item.target }}</div>
-                    {% else %}
-                        {{ item.textInCommonLanguage }}
-                    {% endif %}
-                </td>
-                <td>{{ item.user.username }}</td>
-                <td>{{ item.created.date|date('date_format'|trans) }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">{{ 'no_translation_found'|trans }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-        {% if searchResults|length %}
-        <tfoot>
-            <tr>
-                <td colspan="5">
-                    {# navigation #}
-                    {{ knp_pagination_render(searchResults)|raw }}
-                </td>
-            </tr>
-        </tfoot>
+            {% for item in searchResults %}
+                <tr>
+                    <td>"{{ item.source }}"</td>
+                    <td>({{ item.locale.locale }})</td>
+                    <td>
+                        {% if mode_translated == mode %}
+                            <div id="text_{{ item.id }}" class="textItems inline">{{ item.target }}</div>
+                        {% else %}
+                            {{ item.textInCommonLanguage }}
+                        {% endif %}
+                    </td>
+                    <td>{{ item.user.username }}</td>
+                    <td>{{ item.created.date|date('date_format'|trans) }}</td>
+                    <td><input type="checkbox" name="{{ 'deltext[' ~ item.id ~ ']' }}"/></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">{{ 'no_translation_found'|trans }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            {% if searchResults|length %}
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        {# navigation #}
+                        {{ knp_pagination_render(searchResults)|raw }}
+                    </td>
+                </tr>
+            </tfoot>
+            {% endif %}
+        </table>
         {% endif %}
-    </table>
+
+    {% if searchResults is defined and searchResults is not empty %}
+        <input class="btn" type="submit" value="{{ 'freetext.delete'|trans }}" id="btnDeleteFreetexts" />
     {% endif %}
+    &nbsp;&nbsp;&nbsp;<a class="btn" href="{{ path('_sxfreetext_add') }}">{{ 'freetext.add_new_freetext'|trans }}</a>
+
+    {{ form_rest(form) }}
+    </form>
 
 {% endblock %}
 
+
+{% block javascripts %}
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        // no conflict mode, use $ in here
+
+        var $buttonDelFreetext = $('#btnDeleteFreetexts');
+
+        $buttonDelFreetext.click(function(e) {
+            e.preventDefault();
+
+            bikiniConfirm(
+                '{{ 'freetext.delete_confirm_text'|trans }}',
+                '{{ 'confirm_ok'|trans }}',
+                '{{ 'confirm_cancel'|trans }}',
+                function() {
+                    $buttonDelFreetext.get(0).form.submit();
+                }
+            );
+        });
+    });
+    </script>
+{% endblock %}

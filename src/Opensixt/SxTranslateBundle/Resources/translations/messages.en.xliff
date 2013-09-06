@@ -90,6 +90,18 @@
                 <source>with_domain</source>
                 <target>with domain</target>
             </trans-unit>
+            <trans-unit id="sxTranslate_23">
+                <source>freetext.delete</source>
+                <target>Delete</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_24">
+                <source>freetext.add_new_freetext</source>
+                <target>New freetext</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_25">
+                <source>freetext.delete_confirm_text</source>
+                <target>Delete selected texts</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -219,6 +219,18 @@ class FreeTextController extends AbstractController
             Text::NOT_TRANSLATED => $translator->trans('not_translated'),
         );
 
+        // delete texts
+        if ($this->request->getMethod() == 'POST') {
+            $formData = $this->getRequestData($this->request);
+
+            if (!empty($formData['deltext'])) {
+                $textsToDel = $formData['deltext'];
+
+                $this->handleFreeText->deleteTexts(array_keys($textsToDel));
+                $this->bikiniFlash->successSave();
+            }
+        }
+
         // retrieve request parameters
         $searchMode     = $this->getFieldFromRequest('mode');
         $searchLanguage = $this->getFieldFromRequest('locale');

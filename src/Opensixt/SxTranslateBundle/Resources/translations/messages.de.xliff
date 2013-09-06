@@ -90,6 +90,18 @@
                 <source>with_domain</source>
                 <target>in der Domain</target>
             </trans-unit>
+            <trans-unit id="sxTranslate_23">
+                <source>freetext.delete</source>
+                <target>Löschen</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_24">
+                <source>freetext.add_new_freetext</source>
+                <target>Neuer Freetext</target>
+            </trans-unit>
+            <trans-unit id="sxTranslate_25">
+                <source>freetext.delete_confirm_text</source>
+                <target>Die ausgewählte texte werden gelöscht</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
