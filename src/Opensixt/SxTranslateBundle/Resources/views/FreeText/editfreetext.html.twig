@@ -6,7 +6,9 @@
 
 {% block body %}
 
-    <div class="textblock alert alert-info fade in"><button class="close" data-dismiss="alert">&times;</button>{{ 'editfreetext.explanation'|trans }}</div>
+    <div class="textblock alert alert-info fade in">
+        {{ 'editfreetext.explanation'|trans }}
+    </div>
 
     <form class="form-horizontal alert" action="{{ path('_sxfreetext_edit', {'locale':locale}) }}" method="post">
 
@@ -46,6 +48,7 @@
     {% if texts is not empty %}
         <input class="btn" type="submit" value="{{ 'freetext.save'|trans }}" id="btnSaveTranslations" />
     {% endif %}
+    &nbsp;&nbsp;&nbsp;<a class="btn" href="{{ path('_sxfreetext_add') }}">{{ 'freetext.add_new_freetext'|trans }}</a>
 
     {{ form_rest(form) }}
 
