@@ -10,7 +10,11 @@
         <input class="btn" type="submit" value="{{ 'btn_search'|trans }}"/>
 
         {{ form_rest(form) }}
+
+        {% if isAdmin %}
         <a class="btn pull-right" href="{{ path('_admin_user_create') }}">{{ 'new_user'|trans }}</a>
+        {% endif %}
+
     </form>
 
     <div id="userlist_wrapper">

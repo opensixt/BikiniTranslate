@@ -58,7 +58,8 @@ class UserController extends AbstractController
             'OpensixtUserAdminBundle:User:list.html.twig',
             array(
                 'form' => $form->createView(),
-                'pagination' => $pagination
+                'pagination' => $pagination,
+                'isAdmin' => $this->isAdminUser(),
             )
         );
     }
