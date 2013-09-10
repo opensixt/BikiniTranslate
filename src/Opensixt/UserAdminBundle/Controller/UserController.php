@@ -227,6 +227,12 @@ class UserController extends AbstractController
         }
 
         return $this->formFactory
-            ->create(new UserEditForm(), $user, array('intention' => $intention));
+            ->create(
+                new UserEditForm($this->securityContext),
+                $user,
+                array(
+                    'intention' => $intention,
+                )
+            );
     }
 }

@@ -7,21 +7,58 @@ use Opensixt\BikiniTranslateBundle\Entity\Group;
 use Opensixt\BikiniTranslateBundle\Entity\Role;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 use \Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use \Symfony\Component\Form\CallbackValidator;
 use \Symfony\Component\Form\FormError;
 
 class UserEditForm extends AbstractType
 {
+    private $securityContext;
+
+    public function __construct(SecurityContext $securityContext)
+    {
+        $this->securityContext = $securityContext;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('username', 'text', array('label' => 'username'))
-                ->add('email', 'email', array('label' => 'email'))
-                ->add('isactive', 'checkbox', array('label' => 'active', 'value' => 1, 'required' => false))
+
+        $disableFields = true;
+        if ($this->securityContext->isGranted('ROLE_ADMIN')) {
+            $disableFields = false;
+        }
+
+        $builder->add(
+                    'username',
+                    'text',
+                    array(
+                        'label'    => 'username',
+                        'disabled' => $disableFields,
+                    )
+                )
+                ->add(
+                    'email',
+                    'email',
+                    array(
+                        'label' => 'email',
+                        'disabled' => $disableFields,
+                    )
+                )
+                ->add(
+                    'isactive',
+                        'checkbox',
+                        array(
+                            'label' => 'active',
+                            'value' => 1,
+                            'required' => false,
+                            'disabled' => $disableFields,
+                        )
+                )
                 ->add(
                     'userroles',
                     'entity',
@@ -30,7 +67,8 @@ class UserEditForm extends AbstractType
                         'class' => Role::ENTITY_ROLE,
                         'property' => 'label',
                         'multiple' => true,
-                        'expanded' => true
+                        'expanded' => true,
+                        'disabled' => $disableFields,
                     )
                 )
                 ->add(
@@ -41,7 +79,8 @@ class UserEditForm extends AbstractType
                         'class' => Language::ENTITY_LANGUAGE,
                         'property' => 'locale',
                         'multiple' => true,
-                        'expanded' => true
+                        'expanded' => true,
+                        'disabled' => $disableFields,
                     )
                 )
                 ->add(
@@ -52,7 +91,8 @@ class UserEditForm extends AbstractType
                         'class' => Group::ENTITY_GROUP,
                         'property' => 'name',
                         'multiple' => true,
-                        'expanded' => true
+                        'expanded' => true,
+                        'disabled' => $disableFields,
                     )
                 )
                 ->add(
@@ -63,7 +103,7 @@ class UserEditForm extends AbstractType
                         'required' => 'create' === $options['intention'],
                         'invalid_message' => 'Passwords have to be equal',
                         'first_options' => array('label' => 'new_password'),
-                        'second_options' => array('label' => 'confirm_password')
+                        'second_options' => array('label' => 'confirm_password'),
                     )
                 );
     }
