@@ -14,9 +14,10 @@
         </a>
     </form>
 
-    <form class="form-inline" action="{{ path('_translate_edittext', {'locale':locale}) }}" method="post">
+    <form class="form-inline" action="{{ path('_translate_edittext') }}" method="post">
 
     <div class="alert alert-notice form-inline">
+        {{ form_label(form.languageId) }} {{ form_widget(form.languageId) }}
         {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
         <input class="btn" id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
     </div>

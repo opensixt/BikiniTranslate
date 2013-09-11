@@ -75,6 +75,8 @@ class EditText extends HandleText
             $data->setParam('resource', $searchResources[0]);
         }
 
+        $data->setParam('languageId', $locale);
+
         // set messages in common language for any text in $translations
         $this->textRepository->setMessagesInCommonLanguage($data);
 

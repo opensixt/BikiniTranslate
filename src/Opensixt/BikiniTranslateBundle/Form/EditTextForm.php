@@ -19,6 +19,16 @@ class EditTextForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
+            'languageId',
+            'choice',
+            array(
+                'label'       => 'language',
+                'choices'     => $options['locales'],
+                'required'    => true,
+                'data'        => $options['searchLanguage']
+            )
+        )
+        ->add(
             'resource',
             'choice',
             array(
@@ -65,6 +75,8 @@ class EditTextForm extends AbstractType
     {
         return array(
             'ids'            => array(),
+            'locales'        => array(),
+            'searchLanguage' => 0,
             'resources'      => array(),
             'searchResource' => 0,
         );

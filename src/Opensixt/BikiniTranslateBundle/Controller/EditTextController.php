@@ -35,14 +35,21 @@ class EditTextController extends AbstractController
      * @param int $page
      * @return Response A Response instance
      */
-    public function indexAction($locale, $page = 1)
+    public function indexAction($page = 1)
     {
         $this->breadcrumbs
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
             ->addItem($this->translator->trans('menu.translation'))
             ->addItem($this->translator->trans('menu.translation.edit_text'));
 
-        $languageId = $this->getLanguageId($locale);
+        $locales = $this->getUserLocales();
+        $locale  = $this->getFieldFromRequest('locale');
+        $languageId = $this->getFieldFromRequest('languageId');
+
+        if (empty($languageId) && !empty($locale)) {
+            $languageId = $this->getLanguageId($locale);
+        }
+
         if (!$languageId) {
             // save current ruote in session (for comeback)
             $this->session->set('targetRoute', self::CURRENT_ROUTE);
@@ -50,8 +57,13 @@ class EditTextController extends AbstractController
             return $this->redirect($this->generateUrl('_translate_setlocale'));
         }
 
-        $currentLangIsCommonLang = $this->editText
-            ->compareCommonAndCurrentLocales($languageId);
+        if (empty($locale)) {
+            $locale = $locales[$languageId];
+        }
+
+        $currentLangIsCommonLang = $this->editText->compareCommonAndCurrentLocales(
+            $languageId
+        );
 
         $resources = $this->getUserResources(); // all available resources
 
@@ -102,6 +114,8 @@ class EditTextController extends AbstractController
                 new EditTextForm(),
                 null,
                 array(
+                    'searchLanguage' => $languageId,
+                    'locales'        => $locales,
                     'searchResource' => $searchResource,
                     'resources'      => $resources,
                     'ids'            => $ids,

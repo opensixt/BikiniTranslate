@@ -25,8 +25,8 @@ _translate_setlocale:
     defaults: { _controller: opensixt.bikini_translate.controller.setlocale:indexAction }
 
 _translate_edittext:
-    pattern: /translate/edittext/{locale}/{page}
-    defaults: { _controller: opensixt.bikini_translate.controller.edittext:indexAction, locale: 'empty', page: 1 }
+    pattern: /translate/edittext/{page}
+    defaults: { _controller: opensixt.bikini_translate.controller.edittext:indexAction, page: 1 }
     requirements:
         page: \d+
 
