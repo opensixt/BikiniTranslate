@@ -8,12 +8,14 @@
 
     <div class="textblock alert alert-info fade in">{{ 'changetext_explanation'|trans }}</div>
 
-    <form class="alert alert-notice form-inline" action="{{ path('_translate_changetext') }}" method="post" {{ form_enctype(form) }}>
+    <form class="form-inline" action="{{ path('_translate_changetext') }}" method="post" {{ form_enctype(form) }}>
 
-        {{ form_label(form.search) }} {{ form_widget(form.search) }}
-        {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
-        {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        <input class="btn" id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+        <div class="alert alert-notice form-inline">
+            {{ form_label(form.search) }} {{ form_widget(form.search) }}
+            {{ form_label(form.resource) }} {{ form_widget(form.resource) }}
+            {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
+            <input class="btn" id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+        </div>
 
         {% if searchResults is defined %}
         <table class="table table-bordered table-striped table-hover table-condensed">
@@ -27,7 +29,10 @@
 
             {% for item in searchResults %}
                 <tr>
-                    <td>{{ item.resource.name }} ({{ item.locale.locale }}):<br/><br/> {{ item.target }} </td>
+                    <td>
+                        <div class="infolabel">{{ item.resource.name }}</div>
+                        <div class="databox">{{ item.target }}</div>
+                    </td>
                     <td>{{ form_widget(form['text_' ~ item.id]) }}</td>
                 </tr>
             {% else %}

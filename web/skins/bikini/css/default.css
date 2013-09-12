@@ -116,6 +116,26 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     white-space: nowrap;
 }
 
+.databox {
+    margin: 0 0 5px 8px;
+}
+
+.infolabel {
+    margin: 0 0 10px 2px;
+    font-style: italic;
+    color: #26b0df;
+    font-weight: bold;
+}
+
+.suggestion {
+    margin: 10px 0 5px 8px;
+}
+
+.suggestion a {
+    font-style: italic;
+    color: #26b0df;
+}
+
 #footer {
     height: 43px;
     clear: both;

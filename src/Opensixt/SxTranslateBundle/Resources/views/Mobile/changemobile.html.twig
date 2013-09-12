@@ -8,12 +8,14 @@
 
     <div class="textblock alert alert-info fade in"><button class="close" data-dismiss="alert">&times;</button>{{ 'changemobile.explanation'|trans }}</div>
 
-    <form class="form-horizontal alert" action="{{ path('_sxmobile_change') }}" method="post" {{ form_enctype(form) }}>
+    <form class="form-horizontal" action="{{ path('_sxmobile_change') }}" method="post" {{ form_enctype(form) }}>
 
-        {{ form_label(form.search) }} {{ form_widget(form.search) }}
-        {{ form_label(form.domain) }} {{ form_widget(form.domain) }}
-        {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
-        <input class="btn" id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+        <div class="alert alert-notice form-inline">
+            {{ form_label(form.search) }} {{ form_widget(form.search) }}
+            {{ form_label(form.domain) }} {{ form_widget(form.domain) }}
+            {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
+            <input class="btn" id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+        </div>
 
         {% if searchResults is defined %}
         <table class="table table-bordered table-striped table-hover table-condensed">
@@ -28,8 +30,11 @@
 
             {% for item in searchResults %}
                 <tr>
-                    <td>{{ item.domain.name }} ({{ item.text.locale.locale }})<br/><br/>{{ item.text.source }}</td>
-                    <td>{{ item.text.target }}</td>
+                    <td>
+                        <div class="infolabel">{{ item.domain.name }}</div>
+                        <div class="databox">{{ item.text.source }}</div>
+                    </td>
+                    <td><div class="databox">{{ item.text.target }}</div></td>
                     <td>{{ form_widget(form['text_' ~ item.text.id]) }}</td>
                 </tr>
             {% else %}

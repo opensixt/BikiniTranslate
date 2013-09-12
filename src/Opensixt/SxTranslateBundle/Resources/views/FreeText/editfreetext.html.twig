@@ -10,7 +10,7 @@
         {{ 'editfreetext.explanation'|trans }}
     </div>
 
-    <form class="form-horizontal alert" action="{{ path('_sxfreetext_edit', {'locale':locale}) }}" method="post">
+    <form class="form-horizontal" action="{{ path('_sxfreetext_edit', {'locale':locale}) }}" method="post">
 
     <table class="table table-bordered table-striped table-hover table-condensed">
         <thead>
@@ -23,7 +23,7 @@
         {% for item in texts %}
             <tr id="item_{{ item.id }}">
                 <td>
-                    {{ item.source }}
+                    <div class="databox">{{ item.source }}</div>
                 </td>
                 <td>{{ form_widget(form['text_' ~ item.id]) }}</td>
             </tr>

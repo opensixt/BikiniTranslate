@@ -8,10 +8,12 @@
 
     <div class="textblock alert alert-info fade in"><button class="close" data-dismiss="alert">&times;</button>{{ 'editmobile.explanation'|trans }}</div>
 
-    <form class="form-horizontal alert" action="{{ path('_sxmobile_edit', {'locale':locale}) }}" method="post">
+    <form class="form-horizontal" action="{{ path('_sxmobile_edit', {'locale':locale}) }}" method="post">
 
-    {{ form_label(form.domain) }} {{ form_widget(form.domain) }}
-    <input class="btn" id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+    <div class="alert alert-notice form-inline">
+        {{ form_label(form.domain) }} {{ form_widget(form.domain) }}
+        <input class="btn" id="btnSearch" type="submit" value="{{ 'submit_page'|trans }}"/>
+    </div>
 
     <table class="table table-bordered table-striped table-hover table-condensed" style="margin-top: 20px;">
         <thead>
@@ -27,7 +29,7 @@
         {% for item in texts %}
             {% set foo = item.text.id %}
             <tr id="item_{{ item.text.id }}">
-                <td>{{ item.text.source }}</td>
+                <td><div class="databox">{{ item.text.source }}</div></td>
                 {% if not currentLangIsCommonLang %}
                 <td>{{ item.text.textInCommonLanguage }}</td>
                 {% endif %}

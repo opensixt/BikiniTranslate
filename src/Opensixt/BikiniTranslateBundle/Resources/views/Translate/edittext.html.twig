@@ -36,10 +36,10 @@
         {% for item in texts %}
             <tr id="item_{{ item.id }}">
                 <td>
-                    {{ item.resource.name }}<br/><br/>
-                    {{ item.source }}
+                    <div class="infolabel">{{ item.resource.name }}</div>
+                    <div class="databox">{{ item.source }}</div>
                     {% if item.suggestions|length > 0 %}
-                    <br/><br/><a class="suggestion" href="#">{{ 'suggestions'|trans }}</a>
+                    <div class="suggestion"><a href="#">{{ 'suggestions'|trans }}</a></div>
                     {% endif %}
                 </td>
                 {% if not currentLangIsCommonLang %}
