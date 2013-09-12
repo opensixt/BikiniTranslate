@@ -32,11 +32,11 @@
 
             {% for item in searchResults %}
                 <tr>
-                    <td>{{ item.resource.name }}</td>
-                    <td>{{ item.locale.locale }}</td>
-                    <td>{{ item.target }}</td>
-                    <td>{{ item.user.username }}</td>
-                    <td>{{ item.expiryDate|date('date_format'|trans) }}</td>
+                    <td><div class="infolabel">{{ item.resource.name }}</div></td>
+                    <td><div class="databox">{{ item.locale.locale }}</div></td>
+                    <td><div class="databox">{{ item.target }}</div></td>
+                    <td><div class="databox">{{ item.user.username }}</div></td>
+                    <td><div class="databox">{{ item.expiryDate|date('date_format'|trans) }}</div></td>
                     <td>{{ form_widget(form['chk_' ~ item.id]) }}</td>
                 </tr>
             {% else %}
