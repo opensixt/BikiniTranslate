@@ -42,8 +42,9 @@ class BikiniExport
                         'xmlns' => 'urn:oasis:names:tc:xliff:document:1.1',
                     );
                     $this->xliffFileAttributes = array (
-                        'datatype' => 'xml/html',
-                        'original' => 'PID-TRANSLATED',
+                        'source-language' => 'de-DE',
+                        'datatype'        => 'xml/html',
+                        'original'        => 'PID-TRANSLATED',
                     );
                     $this->xliffSourceAttributes = array (
                         'xml:lang' => str_replace('_', '-', $this->sourceLanguage),
@@ -89,7 +90,7 @@ class BikiniExport
 
         $ret = '';
         if (count($data)) {
-            $dom = new \DOMDocument('1.0', "UTF-8");
+            $dom = new \DOMDocument('1.0', "utf-8");
 
             $dom->preserveWhiteSpace = false;
             $dom->formatOutput = true;
