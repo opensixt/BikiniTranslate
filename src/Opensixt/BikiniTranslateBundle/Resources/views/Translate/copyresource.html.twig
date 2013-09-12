@@ -19,12 +19,12 @@
 
         {% if translateMade is defined and translateMade == 'done' %}
             {% if translationsCount is defined and translationsCount > 0 %}
-                <div class="alert alert-success permanent">
+                <div class="alert-success permanent">
                     {% set count = translationsCount %}
                     {% trans %}copy_res_success %count%{% endtrans %}
                 </div>
             {% else %}
-                <div class="alert alert-notice permanent">
+                <div class="alert-notice permanent">
                     {{ 'copy_nothing'|trans }}
                 </div>
             {% endif %}

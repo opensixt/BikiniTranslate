@@ -17,15 +17,13 @@
         </div>
 
         {% if translateMade is defined and translateMade == 'done' %}
-            <br/>
-            <br/>
             {% if translationsCount is defined and translationsCount > 0 %}
-                <div class="alert permanent notice">
+                <div class="permanent notice">
                     {% set count = translationsCount %}
                     {% trans %}copy_lang_success %count%{% endtrans %}
                 </div>
             {% else %}
-                <div class="alert permanent">
+                <div class="permanent">
                     {{ 'copy_nothing'|trans }}
                 </div>
             {% endif %}
