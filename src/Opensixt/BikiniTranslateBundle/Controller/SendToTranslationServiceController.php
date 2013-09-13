@@ -36,6 +36,11 @@ class SendToTranslationServiceController extends AbstractController
      */
     public function indexAction($locale)
     {
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('menu.translation'))
+            ->addItem($this->translator->trans('menu.translation.send_to_ts'));
+
         $languageId = $this->getLanguageId($locale);
         if (!$languageId) {
             // save current ruote in session (for comeback)

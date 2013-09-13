@@ -206,6 +206,10 @@
                 <source>menu.translation.copy_resource</source>
                 <target>Copy resource content</target>
             </trans-unit>
+            <trans-unit id="258">
+                <source>menu.translation.send_to_ts</source>
+                <target>Send to Translation Service</target>
+            </trans-unit>
             <trans-unit id="260">
                 <source>suggestions</source>
                 <target>Suggestions</target>
