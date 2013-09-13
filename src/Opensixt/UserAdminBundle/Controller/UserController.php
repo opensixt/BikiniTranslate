@@ -5,6 +5,7 @@ namespace Opensixt\UserAdminBundle\Controller;
 use Opensixt\UserAdminBundle\Form\UserSearchForm;
 use Opensixt\UserAdminBundle\Form\UserEditForm;
 use Opensixt\BikiniTranslateBundle\Entity\User;
+use Opensixt\BikiniTranslateBundle\Entity\Text;
 
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -85,6 +86,7 @@ class UserController extends AbstractController
             ->addItem($this->translator->trans('user'));
 
         $user = $this->requireUserWithId($id);
+        $countNotTranslatedTexts = $this->getCountNotTranslatedTexts($user);
 
         if (!$this->securityContext->isGranted('VIEW', $user)) {
             throw new AccessDeniedException();
@@ -96,7 +98,8 @@ class UserController extends AbstractController
             'OpensixtUserAdminBundle:User:view.html.twig',
             array(
                 'user' => $user,
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'countNotTranslatedTexts' => $countNotTranslatedTexts,
             )
         );
     }
@@ -235,5 +238,22 @@ class UserController extends AbstractController
                     'intention' => $intention,
                 )
             );
+    }
+
+    /**
+     *
+     * @param \Opensixt\BikiniTranslateBundle\Entity\User $user
+     */
+    private function getCountNotTranslatedTexts($user) {
+
+        $userLocales = $user->getUserLanguages();
+        $locales = array();
+        foreach ($userLocales as $locale) {
+            $locales[] = $locale->getId();
+        }
+
+        $textRep = $this->em->getRepository(Text::ENTITY_TEXT);
+
+        return $textRep->getCountNotTranslatedTexts($locales);
     }
 }

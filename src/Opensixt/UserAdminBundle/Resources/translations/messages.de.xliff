@@ -198,6 +198,10 @@
                 <source>btn_search</source>
                 <target>Ok</target>
             </trans-unit>
+            <trans-unit id="215">
+                <source>not_translated_texts</source>
+                <target>Nicht übersetzte Texte:</target>
+            </trans-unit>
 
         </body>
     </file>

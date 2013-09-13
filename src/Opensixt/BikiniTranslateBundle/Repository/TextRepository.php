@@ -838,4 +838,38 @@ class TextRepository extends EntityRepository
 
         return current($result);
     }
+
+
+    /**
+     * Get count of not translated texts by locales
+     *
+     * @param array $locales
+     * @return int
+     */
+    public function getCountNotTranslatedTexts($locales)
+    {
+        $contents = array();
+        if (!empty($locales) && is_array($locales)) {
+            $this->setTask(self::TASK_MISSING_TRANS_BY_LANG);
+
+            $query = $this->createQueryBuilder('t')->select('t');
+
+            $query->where(self::FIELD_TRANSLATION_TYPE . ' = ?1')
+                    ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_EXPIRY_DATE . ' IS NULL')
+                    ->andWhere(self::FIELD_TRANSLATE_ME . ' = 1')
+                    ->andWhere(self::FIELD_RELEASED . ' = 1')
+                    ->andWhere(self::FIELD_DONTTRANSLATE . ' IS NULL OR ' . self::FIELD_DONTTRANSLATE . ' = 0')
+                    // just get the unflagged translations
+                    // 0 = open state, 1 = already sent to translation service
+                    ->andWhere(self::FIELD_TS . ' IS NULL OR ' . self::FIELD_TS . ' = 0')
+                    ->setParameter(1, $this->translationType);
+
+            $query->andWhere(self::FIELD_LOCALE . ' in (?2)')
+                ->setParameter(2, $locales);
+
+            $contents = $query->getQuery()->getResult();
+        }
+        return count($contents);
+    }
 }
