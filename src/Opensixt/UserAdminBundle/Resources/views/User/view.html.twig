@@ -6,7 +6,9 @@
 
 {% block body %}
 
-    <div class="textblock alert alert-info fade in"><button class="close" data-dismiss="alert">&times;</button>{{ 'not_translated_texts'|trans }} {{ countNotTranslatedTexts }}</div>
+    {% if countNotTranslatedTexts > 0 %}
+    <div class="textblock alert alert-danger fade in">{{ 'not_translated_texts'|trans }} {{ countNotTranslatedTexts }}</div>
+    {% endif%}
 
     <form class="form-horizontal alert" action="{{ path('_admin_user_save', { 'id': user.getId() }) }}" method="post" {{ form_enctype(form) }}>
         {% include 'OpensixtUserAdminBundle:User:form.html.twig' %}
