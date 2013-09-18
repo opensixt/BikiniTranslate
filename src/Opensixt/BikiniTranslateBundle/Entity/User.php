@@ -444,7 +444,10 @@ class User implements AdvancedUserInterface
         return $this->isactive;
     }
 
-    /** @ORM\PrePersist */
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate()
+     */
     public function onPrePersist()
     {
         $this->setUpdated(new \DateTime());

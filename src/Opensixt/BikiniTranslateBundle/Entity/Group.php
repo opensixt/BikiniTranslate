@@ -190,7 +190,10 @@ class Group
         return $this->resources;
     }
 
-    /** @ORM\PrePersist */
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate()
+     */
     public function onPrePersist()
     {
         $this->setUpdated(new \DateTime());

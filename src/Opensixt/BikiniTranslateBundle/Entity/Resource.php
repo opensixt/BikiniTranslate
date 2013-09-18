@@ -185,7 +185,10 @@ class Resource
         return $this->visibility;
     }
 
-    /** @ORM\PrePersist */
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate()
+     */
     public function onPrePersist()
     {
         $this->setUpdated(new \DateTime());

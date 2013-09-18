@@ -158,7 +158,10 @@ class Language
         return $this->description;
     }
 
-    /** @ORM\PrePersist */
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate()
+     */
     public function onPrePersist()
     {
         $this->setUpdated(new \DateTime());

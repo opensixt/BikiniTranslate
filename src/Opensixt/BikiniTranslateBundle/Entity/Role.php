@@ -166,7 +166,10 @@ class Role extends BaseRole
         return $this->label;
     }
 
-    /** @ORM\PrePersist */
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate()
+     */
     public function onPrePersist()
     {
         $this->setUpdated(new \DateTime());
