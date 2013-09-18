@@ -65,7 +65,7 @@ class UserEditForm extends AbstractType
                     array(
                         'label' => 'roles',
                         'class' => Role::ENTITY_ROLE,
-                        'property' => 'label',
+                        'property' => 'name',
                         'multiple' => true,
                         'expanded' => true,
                         'disabled' => $disableFields,
