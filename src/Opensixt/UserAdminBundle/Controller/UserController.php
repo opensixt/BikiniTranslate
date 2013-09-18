@@ -114,6 +114,7 @@ class UserController extends AbstractController
         $this->requireAdminUser();
 
         $user = $this->requireUserWithId($id);
+        $countNotTranslatedTexts = $this->getCountNotTranslatedTexts($user);
 
         $form = $this->getEditUserFormForUser($user);
 
@@ -134,7 +135,8 @@ class UserController extends AbstractController
             'OpensixtUserAdminBundle:User:view.html.twig',
             array(
                 'user' => $user,
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'countNotTranslatedTexts' => $countNotTranslatedTexts,
             )
         );
     }
