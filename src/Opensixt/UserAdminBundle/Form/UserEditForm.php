@@ -5,6 +5,7 @@ namespace Opensixt\UserAdminBundle\Form;
 use Opensixt\BikiniTranslateBundle\Entity\Language;
 use Opensixt\BikiniTranslateBundle\Entity\Group;
 use Opensixt\BikiniTranslateBundle\Entity\Role;
+use Opensixt\BikiniTranslateBundle\Repository\LanguageRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -77,6 +78,10 @@ class UserEditForm extends AbstractType
                     array(
                         'label' => 'languages',
                         'class' => Language::ENTITY_LANGUAGE,
+                        'query_builder' => function(LanguageRepository $lr) {
+                            return $lr->createQueryBuilder('l')
+                                ->orderBy('l.locale', 'ASC');
+                        },
                         'property' => 'locale',
                         'multiple' => true,
                         'expanded' => true,
