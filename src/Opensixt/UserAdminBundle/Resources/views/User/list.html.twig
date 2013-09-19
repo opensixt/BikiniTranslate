@@ -5,18 +5,17 @@
 {% endblock %}
 
 {% block body %}
+
+    {% if isAdmin %}
     <form class="alert alert-info form-inline" action="{{ path('_admin_userlist') }}" method="get" {{ form_enctype(form) }}>
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
         {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
         <input class="btn" type="submit" value="{{ 'btn_search'|trans }}"/>
 
         {{ form_rest(form) }}
-
-        {% if isAdmin %}
         <a class="btn pull-right" href="{{ path('_admin_user_create') }}">{{ 'new_user'|trans }}</a>
-        {% endif %}
-
     </form>
+    {% endif %}
 
     <div id="userlist_wrapper">
         <table id="userlist" class="table table-bordered table-striped table-hover table-condensed">
