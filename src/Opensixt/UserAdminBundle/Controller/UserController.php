@@ -126,6 +126,11 @@ class UserController extends AbstractController
     {
         $this->requireAdminUser();
 
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('user_list'), $this->generateUrl('_admin_userlist'))
+            ->addItem($this->translator->trans('user'));
+
         $user = $this->requireUserWithId($id);
         $countNotTranslatedTexts = $this->getCountNotTranslatedTexts($user);
 
