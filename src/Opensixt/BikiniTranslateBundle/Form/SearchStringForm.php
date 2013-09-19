@@ -89,6 +89,6 @@ class SearchStringForm extends AbstractType
             'preferredChoices' => '',
             'mode'             => array(),
             'searchMode'       => 0,
-            );
+       );
     }
 }
