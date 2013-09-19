@@ -856,7 +856,6 @@ class TextRepository extends EntityRepository
         return current($result);
     }
 
-
     /**
      * Get count of not translated texts by locales
      *

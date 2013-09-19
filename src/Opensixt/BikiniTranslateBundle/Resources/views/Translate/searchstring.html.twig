@@ -27,6 +27,7 @@
                 <th>{{ 'resource'|trans }}</th>
                 <th>{{ 'language'|trans }}</th>
                 <th>{{ 'translation'|trans }}</th>
+                <th>{{ 'updated'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -42,6 +43,7 @@
                 <td>
                     <div id="text_{{ item.id }}" class="textItems clickable inline">{{ item.target }}</div>
                 </td>
+                <td>{{ item.updated|date('date_format'|trans) }} {{ 'changed_by'|trans }} {{ item.user.username }}</td>
             </tr>
         {% else %}
             <tr>

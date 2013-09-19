@@ -254,6 +254,14 @@
                 <source>visibility</source>
                 <target>Sichtbarkeit</target>
             </trans-unit>
+            <trans-unit id="309">
+                <source>changed_by</source>
+                <target>von</target>
+            </trans-unit>
+            <trans-unit id="313">
+                <source>updated</source>
+                <target>Geändert</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
