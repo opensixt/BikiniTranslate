@@ -19,24 +19,34 @@ class UserRepository extends EntityRepository
 
     /**
      * @param string $searchTerm
+     * @param int $languageId
      * @param int $userId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getQueryForUserSearch($searchTerm, $userId)
+    public function getQueryForUserSearch($searchTerm, $languageId, $userId)
     {
         $q = $this->createQueryBuilder('u')
-            ->select('u')
+            ->select('u, l')
+            ->leftJoin('u.userLanguages', 'l')
             ->orderBy(self::USER_NAME, 'ASC');
 
         if (!empty($userId) && intval($userId)) {
             $q->where(self::USER_ID . '= ?2')
               ->setParameter(2, $userId);
-        } elseif (!empty($searchTerm)) {
-            $searchTerm = '%' . $searchTerm . '%';
+        } else {
+            if (!empty($languageId)) {
+                $q->andWhere('l.id = ?4')
+                ->setParameter(4, $languageId);
+            }
 
-            $q->where(self::USER_NAME . ' LIKE ?1')
-              ->orWhere(self::USER_EMAIL . ' LIKE ?1')
-              ->setParameter(1, $searchTerm);
+            if (!empty($searchTerm)) {
+                $searchTerm = '%' . $searchTerm . '%';
+
+                $q->where(self::USER_NAME . ' LIKE ?1')
+                ->orWhere(self::USER_EMAIL . ' LIKE ?1')
+                ->setParameter(1, $searchTerm);
+            }
+
         }
 
         return $q;

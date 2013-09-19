@@ -7,6 +7,7 @@
 {% block body %}
     <form class="alert alert-info form-inline" action="{{ path('_admin_userlist') }}" method="get" {{ form_enctype(form) }}>
         {{ form_label(form.search) }} {{ form_widget(form.search) }}
+        {{ form_label(form.locale) }} {{ form_widget(form.locale) }}
         <input class="btn" type="submit" value="{{ 'btn_search'|trans }}"/>
 
         {{ form_rest(form) }}

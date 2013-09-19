@@ -33,6 +33,17 @@ class UserSearchForm extends AbstractType
                 'trim'        => true,
                 'required'    => false
             )
+        )
+        ->add(
+            'locale',
+            'choice',
+            array(
+                'label'       => 'language',
+                'empty_value' => 'all_values',
+                'choices'     => $options['locales'],
+                'required'    => false,
+                'data'        => $options['searchLanguage']
+            )
         );
     }
 
@@ -44,5 +55,19 @@ class UserSearchForm extends AbstractType
     public function getName()
     {
         return '';
+    }
+
+    /**
+     * Define default values in option array
+     *
+     * @param array $options
+     * @return array
+     */
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+            'locales'          => array(),
+            'searchLanguage'   => 0,
+        );
     }
 }

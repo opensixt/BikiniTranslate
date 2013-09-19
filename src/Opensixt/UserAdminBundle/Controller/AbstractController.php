@@ -72,6 +72,58 @@ abstract class AbstractController
     }
 
     /**
+     * Returns array of locales for logged user
+     *
+     * @return array
+     */
+    protected function getUserLocales()
+    {
+        $userdata = $this->securityContext->getToken()->getUser();
+        $locales = $userdata->getUserLanguages();
+
+        foreach ($locales as $locale) {
+            $userLang[$locale->getId()] = $locale->getLocale();
+        }
+
+        uasort(
+            $userLang,
+            // @codingStandardsIgnoreStart
+            function ($a, $b) {
+            // @codingStandardsIgnoreEnd
+                return strcmp($a, $b);
+            }
+        );
+
+        return $userLang;
+    }
+
+    /**
+     * Retrieves a field value from Request by fieldname
+     * if it doesn't exist, return empty string
+     *
+     * @param string $fieldName
+     * @return mixed
+     */
+    protected function getFieldFromRequest($fieldName)
+    {
+        $fieldValue = '';
+        if ($this->request->getMethod() == 'POST') {
+            $formData = $this->request->get('form'); // form fields
+            if (!empty($formData[$fieldName])) {
+                $fieldValue = $formData[$fieldName];
+            } else {
+                $fieldValue = $this->request->get($fieldName, '');
+            }
+        } elseif ($this->request->getMethod() == 'GET') {
+            if ($this->request->get($fieldName)) {
+                $fieldValue = urldecode($this->request->get($fieldName));
+            }
+        }
+
+        return $fieldValue;
+    }
+
+    /**
      * @return bool
      */
     protected function isAdminUser()

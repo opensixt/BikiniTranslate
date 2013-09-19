@@ -36,16 +36,20 @@ class UserController extends AbstractController
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
             ->addItem($this->translator->trans('user_list'));
 
-        $searchTerm = $this->request->get('search', '');
+        $searchTerm     = $this->request->get('search', '');
+        $searchLanguage = $this->getFieldFromRequest('locale');
 
         $currentUser = null;
         if (!$this->isAdminUser()) {
             $currentUser = $this->securityContext->getToken()->getUser()->getId();
         }
 
+        $locales = $this->getUserLocales();
+
         // only user with admin role can see complete user list, otherwise only himself
         $query = $this->getUserRepository()->getQueryForUserSearch(
             $searchTerm,
+            $searchLanguage,
             $currentUser
         );
 
@@ -53,7 +57,16 @@ class UserController extends AbstractController
 
         /** @var $form UserSearchForm|\Symfony\Component\Form\FormInterface */
         $form = $this->formFactory
-                     ->create(new UserSearchForm($this->translator), array('search' => $searchTerm));
+            ->create(
+                new UserSearchForm($this->translator),
+                array(
+                    'search'  => $searchTerm,
+                ),
+                array(
+                    'locales'        => $locales,
+                    'searchLanguage' => $searchLanguage,
+                )
+            );
 
         return $this->templating->renderResponse(
             'OpensixtUserAdminBundle:User:list.html.twig',
