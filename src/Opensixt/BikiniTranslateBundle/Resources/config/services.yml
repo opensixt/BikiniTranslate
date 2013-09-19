@@ -127,6 +127,7 @@ services:
         arguments: [@doctrine]
         properties:
             paginator: @knp_paginator
+            securityContext: @security.context
             commonLanguage: %common_language%
             exportChunkLimit: %export_chunk_limit%
             paginationLimit: %opensixt.bikini_translate.intermediate.edittext.pagination_limit%
@@ -136,6 +137,7 @@ services:
         arguments: [@doctrine]
         properties:
             paginator: @knp_paginator
+            securityContext: @security.context
             paginationLimit: %opensixt.bikini_translate.intermediate.searchstring.pagination_limit%
 
     opensixt.bikini_translate.intermediate.flaggedtext:
@@ -143,6 +145,7 @@ services:
         arguments: [@doctrine]
         properties:
             paginator: @knp_paginator
+            securityContext: @security.context
             paginationLimit: %opensixt.bikini_translate.intermediate.flaggedtext.pagination_limit%
 
     opensixt.bikini_translate.intermediate.copydomain:

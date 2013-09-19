@@ -91,6 +91,7 @@ abstract class HandleText
      */
     public function updateTexts(array $texts)
     {
+        $this->textRepository->setUserId($this->securityContext->getToken()->getUser()->getId());
         $this->textRepository->updateTexts($texts);
     }
 

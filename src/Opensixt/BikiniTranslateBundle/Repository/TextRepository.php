@@ -74,6 +74,9 @@ class TextRepository extends EntityRepository
     /** @var boolean */
     protected $translated;
 
+    /** @var int */
+    protected $userId;
+
     /**
      *
      * @param string $task
@@ -158,6 +161,16 @@ class TextRepository extends EntityRepository
     public function setTranslated($flag)
     {
         $this->translated = $flag;
+    }
+
+    /**
+     * Sets userId
+     *
+     * @param int $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
     }
 
     /**
@@ -718,6 +731,10 @@ class TextRepository extends EntityRepository
                 }
 
                 $objText->setTarget($text);
+                if (!empty($this->userId)) {
+                    $objText->setUserId($this->userId);
+                }
+
                 if ($translationService === true) {
                     // set texts as not released and translated
                     $objText->setReleased(false);
