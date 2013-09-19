@@ -7,6 +7,10 @@
                 <target>d.m.Y</target>
             </trans-unit>
             <trans-unit id="2">
+                <source>date_format_full</source>
+                <target>d.m.Y H:i</target>
+            </trans-unit>
+            <trans-unit id="3">
                 <source>home</source>
                 <target>BikiniTranslate</target>
             </trans-unit>
@@ -260,7 +264,7 @@
             </trans-unit>
             <trans-unit id="313">
                 <source>updated</source>
-                <target>Geändert</target>
+                <target>Zuletzt geändert</target>
             </trans-unit>
         </body>
     </file>
