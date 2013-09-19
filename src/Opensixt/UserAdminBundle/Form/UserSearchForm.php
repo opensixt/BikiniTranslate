@@ -44,6 +44,17 @@ class UserSearchForm extends AbstractType
                 'required'    => false,
                 'data'        => $options['searchLanguage']
             )
+        )
+        ->add(
+            'group',
+            'choice',
+            array(
+                'label'       => 'group',
+                'empty_value' => 'all_values',
+                'choices'     => $options['groups'],
+                'required'    => false,
+                'data'        => $options['searchGroup']
+            )
         );
     }
 
@@ -66,8 +77,10 @@ class UserSearchForm extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'locales'          => array(),
-            'searchLanguage'   => 0,
+            'locales'        => array(),
+            'searchLanguage' => 0,
+            'groups'         => array(),
+            'searchGroup'    => 0,
         );
     }
 }
