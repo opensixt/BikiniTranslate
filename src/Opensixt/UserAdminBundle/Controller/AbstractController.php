@@ -6,6 +6,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Opensixt\BikiniTranslateBundle\Entity\Language;
 use Opensixt\BikiniTranslateBundle\Entity\Group;
+use Opensixt\BikiniTranslateBundle\Entity\Role;
 
 abstract class AbstractController
 {
@@ -111,6 +112,32 @@ abstract class AbstractController
 
         foreach ($groups as $group) {
             $list[$group->getId()] = strtolower($group->getName());
+        }
+
+        uasort(
+            $list,
+            // @codingStandardsIgnoreStart
+            function ($a, $b) {
+            // @codingStandardsIgnoreEnd
+                return strcmp($a, $b);
+            }
+        );
+
+        return $list;
+    }
+
+    /**
+     * Returns array of roles
+     *
+     * @return array
+     */
+    protected function getRoles()
+    {
+        $roleRepository = $this->em->getRepository(Role::ENTITY_ROLE);
+        $roles = $roleRepository->findAll();
+
+        foreach ($roles as $role) {
+            $list[$role->getId()] = $role->getName();
         }
 
         uasort(

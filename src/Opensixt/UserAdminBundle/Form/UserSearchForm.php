@@ -55,6 +55,17 @@ class UserSearchForm extends AbstractType
                 'required'    => false,
                 'data'        => $options['searchGroup']
             )
+        )
+        ->add(
+            'role',
+            'choice',
+            array(
+                'label'       => 'role',
+                'empty_value' => 'all_values',
+                'choices'     => $options['roles'],
+                'required'    => false,
+                'data'        => $options['searchRole']
+            )
         );
     }
 
@@ -81,6 +92,8 @@ class UserSearchForm extends AbstractType
             'searchLanguage' => 0,
             'groups'         => array(),
             'searchGroup'    => 0,
+            'roles'          => array(),
+            'searchRole'     => 0,
         );
     }
 }

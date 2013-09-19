@@ -39,6 +39,7 @@ class UserController extends AbstractController
         $searchTerm     = $this->request->get('search', '');
         $searchLanguage = $this->getFieldFromRequest('locale');
         $searchGroup    = $this->getFieldFromRequest('group');
+        $searchRole     = $this->getFieldFromRequest('role');
 
         $currentUser = null;
         if (!$this->isAdminUser()) {
@@ -47,6 +48,7 @@ class UserController extends AbstractController
 
         $locales = $this->getLocales();
         $groups = $this->getGroups();
+        $roles = $this->getRoles();
 
         $searchParam = array();
         if (!empty($searchLanguage)) {
@@ -54,6 +56,9 @@ class UserController extends AbstractController
         }
         if (!empty($searchGroup)) {
             $searchParam['groupId'] = $searchGroup;
+        }
+        if (!empty($searchRole)) {
+            $searchParam['roleId'] = $searchRole;
         }
 
         // only user with admin role can see complete user list, otherwise only himself
@@ -77,6 +82,8 @@ class UserController extends AbstractController
                     'searchLanguage' => $searchLanguage,
                     'groups'         => $groups,
                     'searchGroup'    => $searchGroup,
+                    'roles'          => $roles,
+                    'searchRole'     => $searchRole,
                 )
             );
 

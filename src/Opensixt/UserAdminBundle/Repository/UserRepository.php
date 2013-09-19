@@ -26,9 +26,10 @@ class UserRepository extends EntityRepository
     public function getQueryForUserSearch($searchTerm, $searchParam, $userId)
     {
         $q = $this->createQueryBuilder('u')
-            ->select('u, l, g')
+            ->select('u, l, g, r')
             ->leftJoin('u.userLanguages', 'l')
             ->leftJoin('u.userGroups', 'g')
+            ->leftJoin('u.userRoles', 'r')
             ->orderBy(self::USER_NAME, 'ASC');
 
         if (!empty($userId) && intval($userId)) {
@@ -42,6 +43,10 @@ class UserRepository extends EntityRepository
             if (!empty($searchParam['groupId'])) {
                 $q->andWhere('g.id = ?5')
                 ->setParameter(5, $searchParam['groupId']);
+            }
+            if (!empty($searchParam['roleId'])) {
+                $q->andWhere('r.id = ?6')
+                ->setParameter(6, $searchParam['roleId']);
             }
 
             if (!empty($searchTerm)) {
