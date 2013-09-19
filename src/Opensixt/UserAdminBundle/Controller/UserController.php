@@ -44,7 +44,7 @@ class UserController extends AbstractController
             $currentUser = $this->securityContext->getToken()->getUser()->getId();
         }
 
-        $locales = $this->getUserLocales();
+        $locales = $this->getLocales();
 
         // only user with admin role can see complete user list, otherwise only himself
         $query = $this->getUserRepository()->getQueryForUserSearch(

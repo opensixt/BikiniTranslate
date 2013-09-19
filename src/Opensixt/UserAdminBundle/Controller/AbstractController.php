@@ -4,6 +4,7 @@ namespace Opensixt\UserAdminBundle\Controller;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Opensixt\BikiniTranslateBundle\Entity\Language;
 
 abstract class AbstractController
 {
@@ -76,17 +77,17 @@ abstract class AbstractController
      *
      * @return array
      */
-    protected function getUserLocales()
+    protected function getLocales()
     {
-        $userdata = $this->securityContext->getToken()->getUser();
-        $locales = $userdata->getUserLanguages();
+        $languageRepository = $this->em->getRepository(Language::ENTITY_LANGUAGE);
+        $languages = $languageRepository->findAll();//$this->getUserLocales();
 
-        foreach ($locales as $locale) {
-            $userLang[$locale->getId()] = $locale->getLocale();
+        foreach ($languages as $locale) {
+            $locales[$locale->getId()] = $locale->getLocale();
         }
 
         uasort(
-            $userLang,
+            $locales,
             // @codingStandardsIgnoreStart
             function ($a, $b) {
             // @codingStandardsIgnoreEnd
@@ -94,7 +95,7 @@ abstract class AbstractController
             }
         );
 
-        return $userLang;
+        return $locales;
     }
 
     /**
