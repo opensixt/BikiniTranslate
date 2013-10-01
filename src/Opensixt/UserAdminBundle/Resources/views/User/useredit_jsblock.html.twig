@@ -1,0 +1,28 @@
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        // no conflict mode, use $ in here
+
+        $('#userroles_1').click(function(e) {
+            $("form :input").each(function(){
+                id = $(this).attr('id');
+                if (id != null) {
+                    var n=id.indexOf("userlanguages");
+                    if (n >= 0) {
+
+                        // If userrole 'Admin' selected, check all of languages
+                        var lng_checked = false;
+                        if ($('#userroles_1').prop('checked')) {
+                            lng_checked = true;
+                        }
+
+                        $('#' + id).attr('checked', lng_checked);
+
+                    }
+                }
+
+            });
+
+        });
+    });
+
+    </script>
