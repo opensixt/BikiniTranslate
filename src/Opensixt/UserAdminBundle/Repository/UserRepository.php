@@ -35,7 +35,16 @@ class UserRepository extends EntityRepository
         if (!empty($userId) && intval($userId)) {
             $q->where(self::USER_ID . '= ?2')
               ->setParameter(2, $userId);
+
         } else {
+            if (!empty($searchTerm)) {
+                $searchTerm = '%' . $searchTerm . '%';
+
+                $q->where(self::USER_NAME . ' LIKE ?1')
+                ->orWhere(self::USER_EMAIL . ' LIKE ?1')
+                ->setParameter(1, $searchTerm);
+            }
+
             if (!empty($searchParam['languageId'])) {
                 $q->andWhere('l.id = ?4')
                 ->setParameter(4, $searchParam['languageId']);
@@ -48,15 +57,6 @@ class UserRepository extends EntityRepository
                 $q->andWhere('r.id = ?6')
                 ->setParameter(6, $searchParam['roleId']);
             }
-
-            if (!empty($searchTerm)) {
-                $searchTerm = '%' . $searchTerm . '%';
-
-                $q->where(self::USER_NAME . ' LIKE ?1')
-                ->orWhere(self::USER_EMAIL . ' LIKE ?1')
-                ->setParameter(1, $searchTerm);
-            }
-
         }
 
         return $q;
