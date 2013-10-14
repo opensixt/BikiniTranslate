@@ -112,9 +112,7 @@
         $('div.textsByHash').click(function() {
 
             var hash = $(this).attr('id').replace('hash_', '');
-
             var currentLocale = $(this).text().trim();
-
 
             if ($(".localesPlus" + hash)[0]) {
                 // if second click, hide other locales
