@@ -227,6 +227,31 @@ class TextRepository extends EntityRepository
     }
 
     /**
+     *
+     * @param string $hash
+     * @return ArrayCollection
+     */
+    public function getTextsByHash($hash)
+    {
+        $messages = new ArrayCollection;
+
+        if (strlen(trim($hash))) {
+            $query = $this->getBaseQuery();
+
+            $query->andWhere(self::FIELD_HASH . ' =  ?1')
+                ->setParameter(1, $hash)
+                ->andWhere(self::FIELD_DELETED_DATE . ' IS NULL')
+                ->andWhere(self::FIELD_TRANSLATE_ME . ' = 0')
+                ->andWhere(self::FIELD_RELEASED . ' = 1')
+                ->addOrderBy('l.locale', 'DESC');
+
+            $messages = $query->getQuery()->getResult();
+        }
+
+        return $messages;
+    }
+
+    /**
      * Copy language ($langFrom) contents to another language ($langTo)
      * for available resources.
      *

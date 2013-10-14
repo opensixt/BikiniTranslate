@@ -137,6 +137,7 @@ services:
         arguments: [@doctrine]
         properties:
             paginator: @knp_paginator
+            translator: @translator
             securityContext: @security.context
             paginationLimit: %opensixt.bikini_translate.intermediate.searchstring.pagination_limit%
 

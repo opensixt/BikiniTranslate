@@ -1,5 +1,4 @@
 <?php
-
 namespace Opensixt\BikiniTranslateBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -43,5 +42,18 @@ class AjaxResponderController extends AbstractController
         }
 
         return new Response(json_encode($result));
+    }
+
+    /**
+     * Gets json array of texts by hash
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getalltextsbyhashAction()
+    {
+        $hash = $this->getFieldFromRequest('hash');
+        $texts = $this->searcher->getTextsByHash($hash);
+
+        return new Response(json_encode($texts));
     }
 }

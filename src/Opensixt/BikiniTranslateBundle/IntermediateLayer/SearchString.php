@@ -89,4 +89,27 @@ class SearchString extends HandleText
 
         return $data;
     }
+
+    /**
+     *
+     * @param string $hash
+     * @return array
+     */
+    public function getTextsByHash($hash)
+    {
+        $textObjects = $this->textRepository->getTextsByHash($hash);
+        $texts = array();
+        foreach ($textObjects as $text) {
+            $data = array(
+                'id'      => $text->getId(),
+                'target'  => $text->getTarget(),
+                'locale'  => $text->getLocale()->getLocale(),
+                'user'    => $text->getUser()->getUsername(),
+                'updated' => $text->getUpdated()->format($this->translator->trans('date_format_full')),
+            );
+            $texts[] = $data;
+        }
+
+        return $texts;
+    }
 }

@@ -69,3 +69,7 @@ _translate_sendtots:
 _translate_ajax_savetext:
     pattern: /translate/savetext/
     defaults: { _controller: opensixt.bikini_translate.controller.ajaxresponder:savetextAction}
+
+_translate_ajax_gettextsbyhash:
+    pattern: /translate/gettextsbyhash/
+    defaults: { _controller: opensixt.bikini_translate.controller.ajaxresponder:getalltextsbyhashAction}

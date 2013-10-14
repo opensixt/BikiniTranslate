@@ -37,6 +37,7 @@ class InitControllerAclCommand extends ContainerAwareCommand
         '_translate_releasetext',
         '_translate_sendtots',
         '_translate_ajax_savetext',
+        '_translate_ajax_gettextsbyhash',
         '_wdt',
         '_profiler',
         '_internal', // needed for _profiler

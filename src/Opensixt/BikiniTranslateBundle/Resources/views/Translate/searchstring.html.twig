@@ -18,7 +18,7 @@
     </form>
 
     {% if searchResults is defined %}
-    <table class="table table-bordered table-striped table-hover table-condensed">
+    <table id="resultTable" class="table table-bordered table-striped table-hover table-condensed">
         <thead>
             <tr>
                 <th colspan="3">{{ 'results'|trans }}</th>
@@ -33,12 +33,14 @@
         <tbody>
 
         {% for item in searchResults %}
-            <tr>
+            <tr id="{{ item.hash }}">
                 <td>
                     {{ item.resource.name }}
                 </td>
                 <td>
-                    {{ item.locale.locale }}
+                    <div id='hash_{{ item.hash }}' class="textsByHash clickable inline">
+                        <a href="#">{{ item.locale.locale }}</a>
+                    </div>
                 </td>
                 <td>
                     <div id="text_{{ item.id }}" class="textItems clickable inline">{{ item.target }}</div>
@@ -71,7 +73,11 @@
     jQuery(document).ready(function($) {
         // no conflict mode, use $ in here
 
-        $('div.textItems').click(function() {
+        $('div.textItems').live('click', function(event) {
+
+            event.stopPropagation();
+            event.preventDefault();
+
             var id = $(this).attr('id').replace('text_', '');
 
             var text = $(this).html();
@@ -86,7 +92,7 @@
 
         $('a.savetext').live('click', function(event) {
             event.stopPropagation();
-            event.preventDefault();
+            //event.preventDefault();
 
             var text = $(this).prev("textarea");
             $.post('{{ path('_translate_ajax_savetext') }}',
@@ -101,6 +107,47 @@
                },
                'json'
            );
+        });
+
+        $('div.textsByHash').click(function() {
+
+            var hash = $(this).attr('id').replace('hash_', '');
+
+            var currentLocale = $(this).text().trim();
+
+
+            if ($(".localesPlus" + hash)[0]) {
+                // if second click, hide other locales
+                $("tr.localesPlus" + hash).remove();
+
+            } else {
+                // show other locales for hash
+                $.post('{{ path('_translate_ajax_gettextsbyhash') }}',
+                    {
+                        'hash': hash
+                    },
+                    function(data) {
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                // show all locales accept of current
+                                if (currentLocale != data[i]['locale']) {
+
+                                    newrow = '<tr class="localesPlus' + hash + ' alert-info">' +
+                                                '<td></td>' +
+                                                '<td>' + data[i]['locale'] + '</td>' +
+                                                '<td><div id="text_' + data[i]['id'] + '" class="textItems clickable inline">' + data[i]['target'] + '</div></td>' +
+                                                '<td>' + data[i]['updated'] + ', ' + data[i]['user'] + '</td>' +
+                                            '</tr>';
+                                    $("#" + hash).after(newrow);
+                                }
+                            }
+                        }
+
+                    },
+                    'json'
+                );
+            }
+
         });
 
     });
