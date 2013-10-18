@@ -30,9 +30,17 @@ class BikiniFlash
      */
     public function errorEmptyRequiredFields()
     {
+        $this->error($this->translator->trans('error_empty_required_fields'));
+    }
+
+    /**
+     * Set error flash
+     */
+    public function error($message)
+    {
         $this->session->getFlashBag()->add(
             'error',
-            $this->translator->trans('error_empty_required_fields')
+            $message
         );
     }
 }
