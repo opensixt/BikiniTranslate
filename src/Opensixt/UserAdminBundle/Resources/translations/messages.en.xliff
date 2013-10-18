@@ -202,6 +202,14 @@
                 <source>not_translated_texts</source>
                 <target>Not translated texts:</target>
             </trans-unit>
+            <trans-unit id="220">
+                <source>password:first:Passwords have to be equal</source>
+                <target>Passwords have to be equal</target>
+            </trans-unit>
+            <trans-unit id="225">
+                <source>username:This value is too short. It should have 3 characters or more.</source>
+                <target>The value of username is too short. It should have 3 characters or more.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

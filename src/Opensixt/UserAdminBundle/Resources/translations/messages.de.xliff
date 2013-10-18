@@ -202,6 +202,14 @@
                 <source>not_translated_texts</source>
                 <target>Nicht übersetzte Texte:</target>
             </trans-unit>
+            <trans-unit id="220">
+                <source>password:first:Passwords have to be equal</source>
+                <target>Passwörter stimmen nicht überein</target>
+            </trans-unit>
+            <trans-unit id="225">
+                <source>username:This value is too short. It should have 3 characters or more.</source>
+                <target>Der Username ist zu kurz. Mindestlänge - 3 Zeichen</target>
+            </trans-unit>
 
         </body>
     </file>

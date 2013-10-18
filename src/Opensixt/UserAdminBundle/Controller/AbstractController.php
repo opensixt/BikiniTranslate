@@ -1,5 +1,4 @@
 <?php
-
 namespace Opensixt\UserAdminBundle\Controller;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -184,5 +183,32 @@ abstract class AbstractController
     protected function isAdminUser()
     {
         return $this->securityContext->isGranted('ROLE_ADMIN');
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\Form\Form $form
+     * @return array
+     */
+    protected function getErrorMessages(\Symfony\Component\Form\Form $form)
+    {
+        $errors = array();
+
+        if ($form->hasChildren()) {
+            foreach ($form->getChildren() as $child) {
+                if (!$child->isValid()) {
+                    $err = $this->getErrorMessages($child);
+                    foreach ($err as $e) {
+                        $errors[] = $child->getName() . ':' . $e;
+                    }
+                }
+            }
+        } else {
+            foreach ($form->getErrors() as $key => $error) {
+                $errors[] = $error->getMessage();
+            }
+        }
+
+        return $errors;
     }
 }

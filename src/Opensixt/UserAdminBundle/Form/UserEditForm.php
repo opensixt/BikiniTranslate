@@ -35,82 +35,82 @@ class UserEditForm extends AbstractType
         }
 
         $builder->add(
-                    'username',
-                    'text',
+                'username',
+                'text',
+                array(
+                    'label'    => 'username',
+                    'disabled' => $disableFields,
+                )
+            )
+            ->add(
+                'email',
+                'email',
+                array(
+                    'label' => 'email',
+                    'disabled' => $disableFields,
+                )
+            )
+            ->add(
+                'isactive',
+                    'checkbox',
                     array(
-                        'label'    => 'username',
+                        'label' => 'active',
+                        'value' => 1,
+                        'required' => false,
                         'disabled' => $disableFields,
                     )
+            )
+            ->add(
+                'userroles',
+                'entity',
+                array(
+                    'label' => 'roles',
+                    'class' => Role::ENTITY_ROLE,
+                    'property' => 'name',
+                    'multiple' => true,
+                    'expanded' => true,
+                    'disabled' => $disableFields,
                 )
-                ->add(
-                    'email',
-                    'email',
-                    array(
-                        'label' => 'email',
-                        'disabled' => $disableFields,
-                    )
+            )
+            ->add(
+                'userlanguages',
+                'entity',
+                array(
+                    'label' => 'languages',
+                    'class' => Language::ENTITY_LANGUAGE,
+                    'query_builder' => function(LanguageRepository $lr) {
+                        return $lr->createQueryBuilder('l')
+                            ->orderBy('l.locale', 'ASC');
+                    },
+                    'property' => 'locale',
+                    'multiple' => true,
+                    'expanded' => true,
+                    'disabled' => $disableFields,
                 )
-                ->add(
-                    'isactive',
-                        'checkbox',
-                        array(
-                            'label' => 'active',
-                            'value' => 1,
-                            'required' => false,
-                            'disabled' => $disableFields,
-                        )
+            )
+            ->add(
+                'usergroups',
+                'entity',
+                array(
+                    'label' => 'groups',
+                    'class' => Group::ENTITY_GROUP,
+                    'property' => 'name',
+                    'multiple' => true,
+                    'expanded' => true,
+                    'disabled' => $disableFields,
                 )
-                ->add(
-                    'userroles',
-                    'entity',
-                    array(
-                        'label' => 'roles',
-                        'class' => Role::ENTITY_ROLE,
-                        'property' => 'name',
-                        'multiple' => true,
-                        'expanded' => true,
-                        'disabled' => $disableFields,
-                    )
+            )
+            ->add(
+                'password',
+                'repeated',
+                array(
+                    'type' => 'password',
+                    'required' => 'create' === $options['intention'],
+                    'invalid_message' => 'Passwords have to be equal',
+                    'first_options' => array('label' => 'new_password'),
+                    'second_options' => array('label' => 'confirm_password'),
                 )
-                ->add(
-                    'userlanguages',
-                    'entity',
-                    array(
-                        'label' => 'languages',
-                        'class' => Language::ENTITY_LANGUAGE,
-                        'query_builder' => function(LanguageRepository $lr) {
-                            return $lr->createQueryBuilder('l')
-                                ->orderBy('l.locale', 'ASC');
-                        },
-                        'property' => 'locale',
-                        'multiple' => true,
-                        'expanded' => true,
-                        'disabled' => $disableFields,
-                    )
-                )
-                ->add(
-                    'usergroups',
-                    'entity',
-                    array(
-                        'label' => 'groups',
-                        'class' => Group::ENTITY_GROUP,
-                        'property' => 'name',
-                        'multiple' => true,
-                        'expanded' => true,
-                        'disabled' => $disableFields,
-                    )
-                )
-                ->add(
-                    'password',
-                    'repeated',
-                    array(
-                        'type' => 'password',
-                        'required' => 'create' === $options['intention'],
-                        'invalid_message' => 'Passwords have to be equal',
-                        'first_options' => array('label' => 'new_password'),
-                        'second_options' => array('label' => 'confirm_password'),
-                    )
-                );
+            );
     }
 
     /**

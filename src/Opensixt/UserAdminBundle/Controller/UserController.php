@@ -31,7 +31,6 @@ class UserController extends AbstractController
      */
     public function listAction($page = 1)
     {
-
         $this->breadcrumbs
             ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
             ->addItem($this->translator->trans('user_list'));
@@ -154,7 +153,6 @@ class UserController extends AbstractController
         $countNotTranslatedTexts = $this->getCountNotTranslatedTexts($user);
 
         $form = $this->getEditUserFormForUser($user);
-
         $form->bind($this->request);
 
         if ($form->isValid()) {
@@ -162,10 +160,16 @@ class UserController extends AbstractController
             $this->em->persist($user);
             $this->em->flush();
 
+            // ACl for new user will be created in /Opensixt/BikiniTranslateBundle/AclHelper/User.php
+
             // flash success message
             $this->bikiniFlash->successSave();
 
-            return $this->redirect($this->generateUrl('_admin_user', array('id' => $id)));
+        } else {
+            $errors = $this->getErrorMessages($form);
+            foreach ($errors as $e) {
+                $this->bikiniFlash->error($this->translator->trans($e));
+            }
         }
 
         return $this->templating->renderResponse(
@@ -207,8 +211,12 @@ class UserController extends AbstractController
     {
         $this->requireAdminUser();
 
-        $form = $this->getEditUserFormForUser();
+        $this->breadcrumbs
+            ->addItem($this->translator->trans('home'), $this->generateUrl('_home'))
+            ->addItem($this->translator->trans('user_list'), $this->generateUrl('_admin_userlist'))
+            ->addItem($this->translator->trans('create_user'));
 
+        $form = $this->getEditUserFormForUser();
         $form->bind($this->request);
 
         if ($form->isValid()) {
@@ -224,6 +232,12 @@ class UserController extends AbstractController
             $this->aclHelper->initAclForNewUser($user);
 
             return $this->redirect($this->generateUrl('_admin_userlist'));
+
+        } else {
+            $errors = $this->getErrorMessages($form);
+            foreach ($errors as $e) {
+                $this->bikiniFlash->error($this->translator->trans($e));
+            }
         }
 
         return $this->templating->renderResponse(
@@ -283,8 +297,8 @@ class UserController extends AbstractController
      *
      * @param \Opensixt\BikiniTranslateBundle\Entity\User $user
      */
-    private function getCountNotTranslatedTexts($user) {
-
+    private function getCountNotTranslatedTexts($user)
+    {
         $userLocales = $user->getUserLanguages();
         $locales = array();
         foreach ($userLocales as $locale) {
