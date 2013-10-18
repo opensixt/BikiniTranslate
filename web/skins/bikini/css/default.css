@@ -116,6 +116,10 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     white-space: nowrap;
 }
 
+#flash_content {
+    margin: 0 10px 10px 15px;
+}
+
 .databox {
     margin: 0 0 5px 8px;
 }
