@@ -47,8 +47,7 @@ class CopyLanguageController extends AbstractController
         $lang['to']   = $this->getFieldFromRequest('lang_to');
 
         // if set source and destination locale
-        if (!empty($lang['from']) && !empty($lang['to'])
-                && $lang['from'] != $lang['to']) {
+        if (!empty($lang['from']) && !empty($lang['to']) && $lang['from'] != $lang['to']) {
 
             $translationsCount = $this->searcher->copyLanguage(
                 $lang['from'],

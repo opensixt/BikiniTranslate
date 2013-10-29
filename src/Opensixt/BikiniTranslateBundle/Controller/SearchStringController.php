@@ -73,8 +73,7 @@ class SearchStringController extends AbstractController
         $preferredChoices = array();
 
         // if tool_language (default language) is set
-        if (!empty($this->toolLanguage)
-                && isset($locales_flip[$this->toolLanguage])) {
+        if (!empty($this->toolLanguage) && isset($locales_flip[$this->toolLanguage])) {
             $preferredChoices = array($locales_flip[$this->toolLanguage]);
         }
 

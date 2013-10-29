@@ -47,8 +47,7 @@ class CopyResourceController extends AbstractController
         $res['to']      = $this->getFieldFromRequest('res_to');
         $searchLanguage = $this->getFieldFromRequest('locale');
 
-        if (!empty($res['from']) && !empty($res['to'])
-                && $res['from'] != $res['to']) {
+        if (!empty($res['from']) && !empty($res['to']) && $res['from'] != $res['to']) {
             // if set source and destination locale
 
             if (!empty($searchLanguage)) {
